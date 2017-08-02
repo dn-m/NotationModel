@@ -24,7 +24,7 @@ class PitchSpellingsTests: XCTestCase {
     func testMiddleCPitchSpelling() {
         XCTAssertEqual(
             PitchSpellings.defaultSpelling(forPitchClass: Pitch.middleC.class)!,
-            PitchSpelling(.c)
+            Pitch.Spelling(.c)
         )
     }
 }

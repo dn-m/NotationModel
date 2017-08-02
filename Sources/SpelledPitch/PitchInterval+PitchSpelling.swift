@@ -1,5 +1,5 @@
 //
-//  PitchInterval+PitchSpelling.swift
+//  PitchInterval+Pitch.Spelling.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 5/19/16.

@@ -6,9 +6,11 @@
 //
 //
 
-/// Interface for single `Pitch`-like types that can have a `PitchSpelling`.
+import Pitch
+
+/// Interface for single `Pitch`-like types that can have a `Pitch.Spelling`.
 public protocol Spelled {
     
-    /// The `PitchSpelling` value for a `Spelled` type.
-    var spelling: PitchSpelling { get }
+    /// The `Pitch.Spelling` value for a `Spelled` type.
+    var spelling: Pitch.Spelling { get }
 }

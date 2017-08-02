@@ -124,7 +124,7 @@ public struct RelativeNamedInterval: NamedInterval {
         let (a,b) = ordered(a,b)
 
         // Given the ordered `SpelledPitchClass` values, retrieve the difference in steps of
-        // the `PitchSpelling.letterName` properties, and the difference between the
+        // the `Pitch.Spelling.letterName` properties, and the difference between the
         // `noteNumber` properties.
         let (steps, interval) = stepsAndInterval(a,b)
         

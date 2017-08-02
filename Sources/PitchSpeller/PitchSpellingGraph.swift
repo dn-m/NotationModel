@@ -6,15 +6,16 @@
 //
 //
 
+import Pitch
 import SpelledPitch
 
 // MARK: - Typealiases
 
-/// Single `PitchSpelling` value.
-typealias Node = PitchSpelling
+/// Single `Pitch.Spelling` value.
+typealias Node = Pitch.Spelling
 
-/// Pair of `PitchSpelling` values.
-typealias Edge = (PitchSpelling, PitchSpelling)
+/// Pair of `Pitch.Spelling` values.
+typealias Edge = (Pitch.Spelling, Pitch.Spelling)
 
-/// All `PitchSpelling` values comprising a graph.
-typealias Graph = [PitchSpelling]
+/// All `Pitch.Spelling` values comprising a graph.
+typealias Graph = [Pitch.Spelling]

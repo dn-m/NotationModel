@@ -44,32 +44,32 @@ class RelativeNamedIntervalTests: XCTestCase {
     }
     
     func testInitUnisonSamePitchClass() {
-        let a = SpelledPitchClass(0, PitchSpelling(.c))
-        let b = SpelledPitchClass(0, PitchSpelling(.c))
+        let a = SpelledPitchClass(0, Pitch.Spelling(.c))
+        let b = SpelledPitchClass(0, Pitch.Spelling(.c))
         let result = RelativeNamedInterval(a,b)
         let expected = RelativeNamedInterval(.perfect, .unison)
         XCTAssertEqual(result, expected)
     }
     
     func testCASharpAugmentedSixthDiminishedThird() {
-        let a = SpelledPitchClass(0, PitchSpelling(.c))
-        let b = SpelledPitchClass(10, PitchSpelling(.a, .sharp))
+        let a = SpelledPitchClass(0, Pitch.Spelling(.c))
+        let b = SpelledPitchClass(10, Pitch.Spelling(.a, .sharp))
         let result = RelativeNamedInterval(a,b)
         let expected = RelativeNamedInterval(.diminished, .third)
         XCTAssertEqual(result, expected)
     }
     
     func testDFSharpMajorThird() {
-        let a = SpelledPitchClass(2, PitchSpelling(.d))
-        let b = SpelledPitchClass(6, PitchSpelling(.f, .sharp))
+        let a = SpelledPitchClass(2, Pitch.Spelling(.d))
+        let b = SpelledPitchClass(6, Pitch.Spelling(.f, .sharp))
         let result = RelativeNamedInterval(a,b)
         let expected = RelativeNamedInterval(.major, .third)
         XCTAssertEqual(result, expected)
     }
     
     func testBFlatDSharpAugmentedThird() {
-        let a = SpelledPitchClass(10, PitchSpelling(.b, .flat))
-        let b = SpelledPitchClass(3, PitchSpelling(.d, .sharp))
+        let a = SpelledPitchClass(10, Pitch.Spelling(.b, .flat))
+        let b = SpelledPitchClass(3, Pitch.Spelling(.d, .sharp))
         let result = RelativeNamedInterval(a,b)
         let expected = RelativeNamedInterval(.augmented, .third)
         XCTAssertEqual(result, expected)

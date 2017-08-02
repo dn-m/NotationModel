@@ -9,7 +9,7 @@
 import Foundation
 import Pitch
 
-/// Structure that wraps a `Pitch` with a `PitchSpelling`.
+/// Structure that wraps a `Pitch` with a `Pitch.Spelling`.
 public struct SpelledPitch: Spelled {
     
     // MARK: - Instance Properties
@@ -17,8 +17,8 @@ public struct SpelledPitch: Spelled {
     /// `Pitch`.
     public let pitch: Pitch
     
-    /// `PitchSpelling`.
-    public let spelling: PitchSpelling
+    /// `Pitch.Spelling`.
+    public let spelling: Pitch.Spelling
     
     /// `Octave`.
     public var octave: Int {
@@ -44,15 +44,15 @@ public struct SpelledPitch: Spelled {
     /**
      Create a `SpelledPitch` with a given `pitch` and `spelling`.
      
-     - TODO: ensure `PitchSpelling` is valid for given `pitch`.
+     - TODO: ensure `Pitch.Spelling` is valid for given `pitch`.
      */
-    public init(pitch: Pitch, spelling: PitchSpelling) {
+    public init(pitch: Pitch, spelling: Pitch.Spelling) {
         self.pitch = pitch
         self.spelling = spelling
     }
     
     /// Create a `SpelledPitch` with a given `pitch` and `spelling`, without argument labels.
-    public init(_ pitch: Pitch, _ spelling: PitchSpelling) {
+    public init(_ pitch: Pitch, _ spelling: Pitch.Spelling) {
         self.pitch = pitch
         self.spelling = spelling
     }

@@ -16,9 +16,9 @@ import Pitch
 /// more or less egregious offences.
 ///
 /// The `Input` can be any of the following:
-/// - `Node` (aka `Pitch.Spelling`)
-/// - `Edge` (aka `(Pitch.Spelling, Pitch.Spelling)`)
-/// - `Graph` (aka `[Pitch.Spelling]`)
+/// - `Node` (aka `PitchSpelling`)
+/// - `Edge` (aka `(PitchSpelling, PitchSpelling)`)
+/// - `Graph` (aka `[PitchSpelling]`)
 //typealias Rule<Input> = (Float) -> (Input) -> Float
 
 // MARK: - Rule collections
@@ -74,7 +74,7 @@ public struct PitchClassSetSpeller {
     enum CostError: Error { case thresholdExceeded }
     
     struct SpellingContext {
-        let spelling: Pitch.Spelling
+        let spelling: PitchSpelling
         let totalCost: Float
         let nodeEdgeCost: Float
     }

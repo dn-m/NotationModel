@@ -17,24 +17,24 @@ public struct SpelledPitchClass: Spelled {
     public let pitchClass: Pitch.Class
     
     /// Spelling.
-    public let spelling: PitchSpelling
+    public let spelling: Pitch.Spelling
     
     // MARK: - Initializers
     
     /// Create a `SpelledPitchClass` (with argument labels).
-    public init(pitchClass: Pitch.Class, spelling: PitchSpelling) {
+    public init(pitchClass: Pitch.Class, spelling: Pitch.Spelling) {
         self.pitchClass = pitchClass
         self.spelling = spelling
     }
     
     /// Create a `SpelledPitchClass` (without argument labels).
-    public init(_ pitchClass: Pitch.Class, _ spelling: PitchSpelling) {
+    public init(_ pitchClass: Pitch.Class, _ spelling: Pitch.Spelling) {
         self.pitchClass = pitchClass
         self.spelling = spelling
     }
     
-    // FIXME: Refine relationship between `PitchSpelling` and `SpelledPitchClass`.
-    public init(_ spelling: PitchSpelling) {
+    // FIXME: Refine relationship between `Pitch.Spelling` and `SpelledPitchClass`.
+    public init(_ spelling: Pitch.Spelling) {
         self.spelling = spelling
         self.pitchClass = spelling.pitchClass
     }

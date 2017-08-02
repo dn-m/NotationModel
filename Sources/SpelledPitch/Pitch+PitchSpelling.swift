@@ -1,5 +1,5 @@
 //
-//  Pitch+PitchSpelling.swift
+//  Pitch+Pitch.Spelling.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 5/2/16.
@@ -24,14 +24,14 @@ extension Pitch {
         return spellings.any { $0.quarterStep == .natural && $0.eighthStep == .none }
     }
  
-    /// All `PitchSpelling` structures available for this `Pitch`.
-    public var spellings: [PitchSpelling] {
+    /// All `Pitch.Spelling` structures available for this `Pitch`.
+    public var spellings: [Pitch.Spelling] {
         return self.class.spellings
     }
     
     /// - TODO: Encapsulate this logic within `PitchSpellings` `struct`.
     // FIXME: Use single chain of `.filter`s
-    public var spellingsWithoutUnconventionalEnharmonics: [PitchSpelling] {
+    public var spellingsWithoutUnconventionalEnharmonics: [Pitch.Spelling] {
 
         return spellings.lazy
             // c flat
@@ -46,8 +46,8 @@ extension Pitch {
             .filter { !($0.quarterStep == .doubleSharp || $0.quarterStep == .doubleFlat) }
     }
     
-    /// The first available `PitchSpelling` for this `Pitch`, if present. Otherwise `nil`.
-    public var defaultSpelling: PitchSpelling {
+    /// The first available `Pitch.Spelling` for this `Pitch`, if present. Otherwise `nil`.
+    public var defaultSpelling: Pitch.Spelling {
         return PitchSpellings.defaultSpelling(forPitchClass: self.class)!
     }
     
@@ -69,16 +69,16 @@ extension Pitch {
     // MARK: - Instance Methods
     
     
-    /// - returns: `SpelledPitch` with the given `PitchSpelling`,
-    /// if the given `PitchSpelling` is valid for the `PitchClass` of the given `pitch`.
+    /// - returns: `SpelledPitch` with the given `Pitch.Spelling`,
+    /// if the given `Pitch.Spelling` is valid for the `PitchClass` of the given `pitch`.
     ///
-    /// - throws: `PitchSpelling.Error.InvalidPitchSpellingForPitch` if the given `spelling` is
+    /// - throws: `Pitch.Spelling.Error.InvalidPitchSpellingForPitch` if the given `spelling` is
     /// not appropriate for this `Pitch`.
     ///
-    public func spelled(with spelling: PitchSpelling) throws -> SpelledPitch {
+    public func spelled(with spelling: Pitch.Spelling) throws -> SpelledPitch {
         
         guard spelling.isValid(for: self) else {
-            throw PitchSpelling.SpellingError.invalidSpelling(self, spelling)
+            throw Pitch.Spelling.Error.invalidSpelling(self, spelling)
         }
         
         return SpelledPitch(pitch: self, spelling: spelling)

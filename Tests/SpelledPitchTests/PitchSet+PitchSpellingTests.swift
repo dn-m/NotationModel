@@ -21,7 +21,7 @@ class PitchSet_PitchSpellingTests: XCTestCase {
         let pitchSet: Set<Pitch> = [60]
         XCTAssertEqual(
             pitchSet.spelledWithDefaultSpelling(),
-            [SpelledPitch(60, PitchSpelling(.c))]
+            [SpelledPitch(60, Pitch.Spelling(.c))]
         )
     }
     
@@ -30,9 +30,9 @@ class PitchSet_PitchSpellingTests: XCTestCase {
         XCTAssertEqual(
             pitchSet.spelledWithDefaultSpelling(),
             [
-                SpelledPitch(60, PitchSpelling(.c)),
-                SpelledPitch(61, PitchSpelling(.c, .sharp)),
-                SpelledPitch(70, PitchSpelling(.b, .flat))
+                SpelledPitch(60, Pitch.Spelling(.c)),
+                SpelledPitch(61, Pitch.Spelling(.c, .sharp)),
+                SpelledPitch(70, Pitch.Spelling(.b, .flat))
             ]
         )
     }

@@ -7,21 +7,22 @@
 //
 
 import Math
+import Pitch
 
 /**
- Pair of two `PitchSpelling` objects.
+ Pair of two `Pitch.Spelling` objects.
  
  - TODO: Consider transfering concerns to `SpelledDyad`.
  */
 public struct PitchSpellingDyad {
 
-    internal let a: PitchSpelling
-    internal let b: PitchSpelling
+    internal let a: Pitch.Spelling
+    internal let b: Pitch.Spelling
 
     // MARK: - Instance Properties
     
     /**
-    `true` if `quarterStep` values of both `PitchSpelling` objects are equivalent.
+    `true` if `quarterStep` values of both `Pitch.Spelling` objects are equivalent.
      Otherwise `false`.
      */
     public var isCoarseMatching: Bool {
@@ -29,7 +30,7 @@ public struct PitchSpellingDyad {
     }
     
     /**
-     `true` if `quarterStep.direction` value of either `PitchSpelling` is `natural` or if
+     `true` if `quarterStep.direction` value of either `Pitch.Spelling` is `natural` or if
      `isCoarseCoarseCompatible`. Otherwise `false`.
      */
     public var isCoarseCompatible: Bool {
@@ -37,7 +38,7 @@ public struct PitchSpellingDyad {
     }
     
     /**
-    `true` if `quarterStep.direction` values of both `PitchSpelling` values are equivalent.
+    `true` if `quarterStep.direction` values of both `Pitch.Spelling` values are equivalent.
      Otherwise `false`.
      */
     public var isCoarseDirectionMatching: Bool {
@@ -45,7 +46,7 @@ public struct PitchSpellingDyad {
     }
     
     /**
-     `true` if `quarterStep.direction` value of either `PitchSpelling` is `natural` or if
+     `true` if `quarterStep.direction` value of either `Pitch.Spelling` is `natural` or if
      `isCoarseDirectionMatching`. Otherwise `false`.
      */
     public var isCoarseDirectionCompatible: Bool {
@@ -53,7 +54,7 @@ public struct PitchSpellingDyad {
     }
     
     /**
-     `true` if `quarterStep.resolution` values of both `PitchSpelling` values are equivalent.
+     `true` if `quarterStep.resolution` values of both `Pitch.Spelling` values are equivalent.
      Otherwise `false`.
     */
     public var isCoarseResolutionMatching: Bool {
@@ -61,7 +62,7 @@ public struct PitchSpellingDyad {
     }
     
     /**
-     `true` if `quarterStep.direction` value of either `PitchSpelling` is `natural` or if
+     `true` if `quarterStep.direction` value of either `Pitch.Spelling` is `natural` or if
      `isCoarseResolutionMatching`. Otherwise `false`.
      */
     public var isCoarseResolutionCompatible: Bool {
@@ -69,7 +70,7 @@ public struct PitchSpellingDyad {
     }
     
     /**
-     `true` if the `letterName` values of both `PitchSpelling` values are equivalent. 
+     `true` if the `letterName` values of both `Pitch.Spelling` values are equivalent. 
      Otherwise, `false.
      */
     public var isLetterNameMatching: Bool {
@@ -77,7 +78,7 @@ public struct PitchSpellingDyad {
     }
     
     /**
-     `true if `eighthStep` values of `PitchSpelling` objects are equivalent. Otherwise `false`.
+     `true if `eighthStep` values of `Pitch.Spelling` objects are equivalent. Otherwise `false`.
      */
     public var isFineMatching: Bool {
         return a.eighthStep == b.eighthStep
@@ -96,17 +97,17 @@ public struct PitchSpellingDyad {
         return isFineMatching
     }
     
-    /// Mean of `spellingDistance` values of both `PitchSpelling` objects.
+    /// Mean of `spellingDistance` values of both `Pitch.Spelling` objects.
     public var meanSpellingDistance: Float {
         return mean(Float(a.spellingDistance), Float(b.spellingDistance))
     }
     
-    /// Mean of `quarterStep.distance` values of both `PitchSpelling objects.
+    /// Mean of `quarterStep.distance` values of both `Pitch.Spelling objects.
     public var meanCoarseDistance: Float {
         return mean(Float(a.quarterStep.distance), Float(b.quarterStep.distance))
     }
     
-    /// Amount of steps between two `PitchSpelling` objects.
+    /// Amount of steps between two `Pitch.Spelling` objects.
     internal var steps: Int {
         let difference = b.letterName.steps - a.letterName.steps
         return abs(difference % 7)
@@ -128,9 +129,9 @@ public struct PitchSpellingDyad {
     // MARK: - Initializers
     
     /**
-     Create a `PitchSpellingDyad` with two `PitchSpelling` objects.
+     Create a `PitchSpellingDyad` with two `Pitch.Spelling` objects.
      */
-    public init(_ a: PitchSpelling, _ b: PitchSpelling) {
+    public init(_ a: Pitch.Spelling, _ b: Pitch.Spelling) {
         self.a = a
         self.b = b
     }

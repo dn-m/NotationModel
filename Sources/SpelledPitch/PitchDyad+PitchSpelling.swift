@@ -1,5 +1,5 @@
 //
-//  PitchDyad+PitchSpelling.swift
+//  PitchDyad+Pitch.Spelling.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 5/3/16.
