@@ -32,26 +32,18 @@ extension Pitch {
     /// - TODO: Encapsulate this logic within `PitchSpellings` `struct`.
     // FIXME: Use single chain of `.filter`s
     public var spellingsWithoutUnconventionalEnharmonics: [PitchSpelling] {
-        var spellings = self.spellings
-        
-        // c flat
-        spellings = spellings.filter { !($0.letterName == .c && $0.quarterStep == .flat) }
-        
-        // f flat
-        spellings = spellings.filter { !($0.letterName == .f && $0.quarterStep == .flat) }
-        
-        // e sharp
-        spellings = spellings.filter { !($0.letterName == .e && $0.quarterStep == .sharp) }
-        
-        // b sharp
-        spellings = spellings.filter { !($0.letterName == .b && $0.quarterStep == .sharp) }
-        
-        // double flats and sharps
-        spellings = spellings.filter {
-            !($0.quarterStep == .doubleSharp || $0.quarterStep == .doubleFlat)
-        }
-        
-        return spellings
+
+        return spellings.lazy
+            // c flat
+            .filter { !($0.letterName == .c && $0.quarterStep == .flat) }
+            // f flat
+            .filter { !($0.letterName == .f && $0.quarterStep == .flat) }
+            // e sharp
+            .filter { !($0.letterName == .e && $0.quarterStep == .sharp) }
+            // b sharp
+            .filter { !($0.letterName == .b && $0.quarterStep == .sharp) }
+            // double flats and sharps
+            .filter { !($0.quarterStep == .doubleSharp || $0.quarterStep == .doubleFlat) }
     }
     
     /// The first available `PitchSpelling` for this `Pitch`, if present. Otherwise `nil`.

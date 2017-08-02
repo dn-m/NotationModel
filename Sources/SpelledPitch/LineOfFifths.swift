@@ -6,14 +6,12 @@
 //
 //
 
-import Foundation
-
 internal struct LineOfFifths {
     
     internal typealias Position = Int
     internal typealias Distance = Int
     
-    fileprivate static let positionByPitchSpelling: [PitchSpelling: Position] = [
+    private static let positionByPitchSpelling: [PitchSpelling: Position] = [
         PitchSpelling(.f, .doubleFlat): -14,
         PitchSpelling(.c, .doubleFlat): -13,
         PitchSpelling(.g, .doubleFlat): -12,
