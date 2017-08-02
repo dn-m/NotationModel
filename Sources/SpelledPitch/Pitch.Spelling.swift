@@ -98,10 +98,8 @@ extension Pitch {
 
         // MARK: - Instance Methods
 
-        /**
-         - returns: `true` if this `Pitch.Spelling` can be applied to the given `Pitch`.
-         Otherwise, `false`.
-         */
+        /// - Returns: `true` if this `Pitch.Spelling` can be applied to the given `Pitch`.
+        /// Otherwise, `false`.
         public func isValid(for pitch: Pitch) -> Bool {
             return pitch.spellings.contains(self)
         }
@@ -200,30 +198,30 @@ extension Pitch.Spelling {
      */
     public enum QuarterStepModifier: Double, Comparable {
 
-        internal enum Direction: Double, Comparable {
+        public enum Direction: Double, Comparable {
             case none = 0
             case up = 1
             case down = -1
         }
 
-        internal enum Resolution: Double, Comparable {
+        public enum Resolution: Double, Comparable {
             case halfStep = 0
             case quarterStep = 0.5
         }
 
-        internal var direction: Direction {
+        public var direction: Direction {
             return self == .natural ? .none : rawValue > 0 ? .up : .down
         }
 
-        internal var distance: Double {
+        public var distance: Double {
             return abs(rawValue)
         }
 
-        internal var resolution: Resolution {
+        public var resolution: Resolution {
             return rawValue.truncatingRemainder(dividingBy: 1) == 0 ? .halfStep : .quarterStep
         }
 
-        internal var quantizedToHalfStep: QuarterStepModifier {
+        public var quantizedToHalfStep: QuarterStepModifier {
             switch direction {
             case .none: return .natural
             case .up: return .sharp
@@ -344,9 +342,9 @@ extension Pitch.Spelling {
 
 
 extension Pitch.Spelling: Hashable {
-    
+
     // MARK: - Hashable
-    
+
     /// Hash value of `PitchSpelling`.
     //
     // FIXME: Use more efficient hashing strategy
@@ -405,7 +403,8 @@ extension Pitch.Spelling {
 
     // MARK: - Spelling Distance
 
-    internal var spellingDistance: LineOfFifths.Distance {
+    public var spellingDistance: LineOfFifths.Distance {
         return LineOfFifths.distance(ofPitchSpelling: self)
     }
 }
+

@@ -139,3 +139,4 @@ extension NamedIntervalQuality: Equatable {
         return lhs.rawValue == rhs.rawValue
     }
 }
+

@@ -23,7 +23,7 @@ let package = Package(
 
         // Tests
         .testTarget(name: "PlotModelTests"),
-        .testTarget(name: "SpelledPitchTests"),
+        .testTarget(name: "SpelledPitchTests", dependencies: ["SpelledPitch"]),
         .testTarget(name: "PitchSpellerTests")
     ]
 )

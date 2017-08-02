@@ -4,14 +4,13 @@
 //
 //  Created by James Bean on 8/11/16.
 //
-//
 
 import XCTest
 import Pitch
-@testable import SpelledPitch
+import SpelledPitch
 
 class SpelledDyadTests: XCTestCase {
-    
+
     func testInitSorted() {
         let higher = SpelledPitch(60, Pitch.Spelling(.c))
         let lower = SpelledPitch(57, Pitch.Spelling(.a))
@@ -19,7 +18,7 @@ class SpelledDyadTests: XCTestCase {
         XCTAssertEqual(higher, spelledDyad.higher)
         XCTAssertEqual(lower, spelledDyad.lower)
     }
-    
+
     func assertRelativeNamedInterval(
         for dyad: SpelledDyad,
         equals interval: RelativeNamedInterval?
@@ -27,7 +26,7 @@ class SpelledDyadTests: XCTestCase {
     {
         XCTAssertEqual(dyad.relativeInterval, interval)
     }
-    
+
     func assertAbsoluteInterval(
         for dyad: SpelledDyad,
         equals interval: AbsoluteNamedInterval?
@@ -35,7 +34,7 @@ class SpelledDyadTests: XCTestCase {
     {
         XCTAssertEqual(dyad.absoluteInterval, interval)
     }
-    
+
     let cflat = SpelledPitch(59, Pitch.Spelling(.c, .flat))
     let c = SpelledPitch(60, Pitch.Spelling(.c))
     let ddoubleflat = SpelledPitch(60, Pitch.Spelling(.d, .doubleFlat))
@@ -50,30 +49,30 @@ class SpelledDyadTests: XCTestCase {
     let bdoubleflat = SpelledPitch(69, Pitch.Spelling(.b, .doubleFlat))
     let bflat = SpelledPitch(70, Pitch.Spelling(.b, .flat))
     let gdoublesharp = SpelledPitch(81, Pitch.Spelling(.g, .doubleSharp))
-    
+
     func testRelativeNamedIntervalPerfectUnison() {
         let spelledDyad = SpelledDyad(c,c)
         assertRelativeNamedInterval(for: spelledDyad, equals: RelativeNamedInterval(.perfect, .unison))
     }
-    
+
     func testRelativeNamedIntervalMinorSecond() {
         assertRelativeNamedInterval(for: SpelledDyad(c, dflat), equals: RelativeNamedInterval(.minor, .second))
     }
-    
+
     func testRelativeNamedIntervalAugmentedFourth() {
         assertRelativeNamedInterval(
             for: SpelledDyad(c, fsharp),
             equals: RelativeNamedInterval(.augmented, .fourth)
         )
     }
-    
+
     func testRelativeNamedIntervalDiminishedFourth() {
         assertRelativeNamedInterval(
             for: SpelledDyad(fsharp, bflat),
             equals: RelativeNamedInterval(.diminished, .fourth)
         )
     }
-    
+
     func testRelativeNamedIntervalDoubleDiminishedFourth() {
         let quality = RelativeNamedInterval.Quality.diminished[.double]!
         assertRelativeNamedInterval(
@@ -81,7 +80,7 @@ class SpelledDyadTests: XCTestCase {
             equals: RelativeNamedInterval(quality, .fourth)
         )
     }
-    
+
     func testRelativeNamedIntervalDiminishedSecond() {
         assertRelativeNamedInterval(
             for: SpelledDyad(c, ddoubleflat),
@@ -95,7 +94,7 @@ class SpelledDyadTests: XCTestCase {
             equals: RelativeNamedInterval(.augmented, .second)
         )
     }
-    
+
     func testDiminishedThird() {
         assertRelativeNamedInterval(
             for: SpelledDyad(dsharp, f),
@@ -103,7 +102,7 @@ class SpelledDyadTests: XCTestCase {
         )
     }
 
-    
+
 //    func testRelativeNamedIntervalDoubleDiminishedSecond() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(csharp, ddoubleflat),
@@ -122,14 +121,14 @@ class SpelledDyadTests: XCTestCase {
 //            equals: RelativeNamedInterval(.augmented, .fifth)
 //        )
 //    }
-    
+
 //    func testDoubleAugmentedSixth() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(bflat, gdoublesharp),
 //            equals: RelativeNamedInterval(.double, .augmented, .sixth)
 //        )
 //    }
-//    
+//
 //    func testTripleDiminishedUnison() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(cdoublesharp, cflat),
@@ -138,3 +137,4 @@ class SpelledDyadTests: XCTestCase {
 //    }
 
 }
+

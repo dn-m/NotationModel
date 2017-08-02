@@ -8,7 +8,7 @@
 
 import XCTest
 import Pitch
-@testable import SpelledPitch
+import SpelledPitch
 
 class DyadTests: XCTestCase {
 
@@ -16,7 +16,7 @@ class DyadTests: XCTestCase {
         let dyad = Dyad<Pitch>(60, 60.5)
         XCTAssertEqual(dyad.finestResolution, 0.5)
     }
-    
+
     func testFinestResolutionEighthTone() {
         let dyad = Dyad<Pitch>(60, 60.25)
         XCTAssertEqual(dyad.finestResolution, 0.25)

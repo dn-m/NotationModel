@@ -11,12 +11,12 @@ import Pitch
 import SpelledPitch
 
 class PitchSet_PitchSpellingTests: XCTestCase {
-    
+
     func testEmptyEmpty() {
         let pitchSet: Set<Pitch> = []
         XCTAssertEqual(pitchSet.spelledWithDefaultSpelling(), [])
     }
-    
+
     func testMiddleC() {
         let pitchSet: Set<Pitch> = [60]
         XCTAssertEqual(
@@ -24,7 +24,7 @@ class PitchSet_PitchSpellingTests: XCTestCase {
             [SpelledPitch(60, Pitch.Spelling(.c))]
         )
     }
-    
+
     func testPitchSet() {
         let pitchSet: Set<Pitch> = [60, 61, 70]
         XCTAssertEqual(

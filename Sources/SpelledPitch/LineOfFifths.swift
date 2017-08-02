@@ -8,10 +8,10 @@
 
 import Pitch
 
-internal struct LineOfFifths {
+public struct LineOfFifths {
     
-    internal typealias Position = Int
-    internal typealias Distance = Int
+    public typealias Position = Int
+    public typealias Distance = Int
     
     private static let positionByPitchSpelling: [Pitch.Spelling: Position] = [
         Pitch.Spelling(.f, .doubleFlat): -14,
@@ -44,17 +44,18 @@ internal struct LineOfFifths {
         Pitch.Spelling(.b, .doubleSharp): 14
     ]
     
-    internal static func position(ofPitchSpelling pitchSpelling: Pitch.Spelling) -> Position {
+    public static func position(ofPitchSpelling pitchSpelling: Pitch.Spelling) -> Position {
         return positionByPitchSpelling[pitchSpelling.quantized(to: .halfStep)] ?? 0
     }
     
-    internal static func distance(ofPitchSpelling pitchSpelling: Pitch.Spelling)
+    public static func distance(ofPitchSpelling pitchSpelling: Pitch.Spelling)
         -> Position
     {
         return abs(position(ofPitchSpelling: pitchSpelling))
     }
     
-    internal static func distance(between a: Pitch.Spelling, and b: Pitch.Spelling) -> Distance {
+    public static func distance(between a: Pitch.Spelling, and b: Pitch.Spelling) -> Distance {
         return position(ofPitchSpelling: a) - position(ofPitchSpelling: b)
     }
 }
+

@@ -25,3 +25,4 @@ extension Dyad where Element == Pitch {
         return min(higher.resolution, lower.resolution)
     }
 }
+

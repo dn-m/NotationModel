@@ -71,3 +71,4 @@ private let intervalClassOrderedBySpellingPriority: [UnorderedInterval<Pitch.Cla
     // neutral third up / down
     03.50, 08.50,
 ]
+

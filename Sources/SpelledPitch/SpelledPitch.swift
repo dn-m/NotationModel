@@ -6,7 +6,7 @@
 //
 //
 
-import Foundation
+import Darwin
 import Pitch
 
 /// Structure that wraps a `Pitch` with a `Pitch.Spelling`.
@@ -105,3 +105,4 @@ public func < (lhs: SpelledPitch, rhs: SpelledPitch) -> Bool {
     if lhs.octave == rhs.octave { return lhs.spelling < rhs.spelling }
     return lhs.pitch < rhs.pitch
 }
+

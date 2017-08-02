@@ -32,6 +32,8 @@ public struct SpelledDyad {
     
     /// - returns: Absolute named interval, which honors ordering of `SpelledPitch` values
     /// contained herein.
+    //
+    // FIXME: Implement
     public var absoluteInterval: AbsoluteNamedInterval {
         fatalError()
     }
@@ -45,3 +47,4 @@ public struct SpelledDyad {
         self.higher = higher
     }
 }
+

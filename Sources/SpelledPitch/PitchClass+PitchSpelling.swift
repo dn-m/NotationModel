@@ -20,3 +20,4 @@ extension Pitch.Class {
         return UnorderedInterval<Pitch.Class>(noteNumber: noteNumber).spellingPriority
     }
 }
+

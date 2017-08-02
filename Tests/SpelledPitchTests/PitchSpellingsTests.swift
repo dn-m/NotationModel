@@ -7,9 +7,8 @@
 //
 
 import XCTest
-import StructureWrapping
 import Pitch
-@testable import SpelledPitch
+import SpelledPitch
 
 class PitchSpellingsTests: XCTestCase {
 
@@ -20,7 +19,7 @@ class PitchSpellingsTests: XCTestCase {
             )
         }
     }
-    
+
     func testMiddleCPitchSpelling() {
         XCTAssertEqual(
             PitchSpellings.defaultSpelling(forPitchClass: Pitch.middleC.class)!,

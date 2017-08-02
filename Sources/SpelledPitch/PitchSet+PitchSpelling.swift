@@ -12,7 +12,8 @@ extension Set where Element == Pitch {
     
     /// - returns: A `SpelledPitchSet` with the values of self spelled with the default
     /// `Pitch.Spelling` value.
-    public func spelledWithDefaultSpelling() -> SpelledPitchSet {
-        return SpelledPitchSet(map { $0.spelledWithDefaultSpelling() })
+    public func spelledWithDefaultSpelling() -> Set<SpelledPitch> {
+        return Set<SpelledPitch>(map { $0.spelledWithDefaultSpelling() })
     }
 }
+

@@ -9,10 +9,10 @@
 import Pitch
 
 // FIXME: Implement with `enum` to avoid initialization
-internal struct PitchSpellings {
+public enum PitchSpellings {
     
     /// - FIXME: Ensure this is exhaustive and correct!
-    fileprivate static let spellingsByPitchClass: [Pitch.Class: [Pitch.Spelling]] = [
+    private static let spellingsByPitchClass: [Pitch.Class: [Pitch.Spelling]] = [
         
         00.00: [
             Pitch.Spelling(.c),
@@ -296,13 +296,12 @@ internal struct PitchSpellings {
         ]
     ]
     
-    internal static func spellings(forPitchClass pitchClass: Pitch.Class) -> [Pitch.Spelling]? {
+    public static func spellings(forPitchClass pitchClass: Pitch.Class) -> [Pitch.Spelling]? {
         return PitchSpellings.spellingsByPitchClass[pitchClass]
     }
     
-    internal static func defaultSpelling(forPitchClass pitchClass: Pitch.Class)
-        -> Pitch.Spelling?
-    {
+    public static func defaultSpelling(forPitchClass pitchClass: Pitch.Class) -> Pitch.Spelling? {
         return spellings(forPitchClass: pitchClass)?.first
     }
 }
+

@@ -8,7 +8,7 @@
 
 import XCTest
 import Pitch
-@testable import SpelledPitch
+import SpelledPitch
 
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
@@ -28,7 +28,7 @@ class IntervalClass_PitchSpellingTests: XCTestCase {
         let p8: UnorderedInterval<Pitch.Class> = 0
         XCTAssert(p8.spellingPriority < p5.spellingPriority)
     }
-    
+
     func testPerfectFifthLessComplexThanMajorThird() {
         let p5: UnorderedInterval<Pitch.Class> = 7
         let M3: UnorderedInterval<Pitch.Class> = 4
