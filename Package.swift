@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "NotationModel",
     products: [
-        .library(name: "PlotModel", targets: ["PlotModel"])
+        .library(name: "PlotModel", targets: ["PlotModel"]),
+        .library(name: "SpelledPitch", targets: ["SpelledPitch"])
     ],
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", .branch("master")),
@@ -16,8 +17,10 @@ let package = Package(
     targets: [
         // Sources
         .target(name: "PlotModel", dependencies: ["StructureWrapping", "DictionaryProtocol"]),
+        .target(name: "SpelledPitch", dependencies: ["Pitch"]),
 
         // Tests
-        .testTarget(name: "PlotModelTests")
+        .testTarget(name: "PlotModelTests"),
+        .testTarget(name: "SpelledPitchTests")
     ]
 )
