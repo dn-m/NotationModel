@@ -8,7 +8,8 @@ let package = Package(
     products: [
         .library(name: "PlotModel", targets: ["PlotModel"]),
         .library(name: "SpelledPitch", targets: ["SpelledPitch"]),
-        .library(name: "PitchSpeller", targets: ["PitchSpeller"])
+        .library(name: "PitchSpeller", targets: ["PitchSpeller"]),
+        .library(name: "BeamedRhythm", targets: ["BeamedRhythm"])
     ],
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", .branch("master")),
@@ -20,10 +21,14 @@ let package = Package(
         .target(name: "PlotModel", dependencies: ["StructureWrapping", "DictionaryProtocol"]),
         .target(name: "SpelledPitch", dependencies: ["Pitch"]),
         .target(name: "PitchSpeller", dependencies: ["SpelledPitch"]),
+        .target(name: "BeamedRhythm", dependencies: ["Rhythm"]),
+        .target(name: "RhythmBeamer", dependencies: ["BeamedRhythm"]),
 
         // Tests
         .testTarget(name: "PlotModelTests"),
         .testTarget(name: "SpelledPitchTests", dependencies: ["SpelledPitch"]),
-        .testTarget(name: "PitchSpellerTests")
+        .testTarget(name: "PitchSpellerTests", dependencies: ["PitchSpeller"]),
+        .testTarget(name: "BeamedRhythmTests", dependencies: ["BeamedRhythm"]),
+        .testTarget(name: "RhythmBeamerTests", dependencies: ["RhythmBeamer"])
     ]
 )

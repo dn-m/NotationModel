@@ -14,13 +14,13 @@ class PitchSet_PitchSpellingTests: XCTestCase {
 
     func testEmptyEmpty() {
         let pitchSet: Set<Pitch> = []
-        XCTAssertEqual(pitchSet.spelledWithDefaultSpelling(), [])
+        XCTAssertEqual(pitchSet.spelledWithDefaultSpelling, [])
     }
 
     func testMiddleC() {
         let pitchSet: Set<Pitch> = [60]
         XCTAssertEqual(
-            pitchSet.spelledWithDefaultSpelling(),
+            pitchSet.spelledWithDefaultSpelling,
             [SpelledPitch(60, Pitch.Spelling(.c))]
         )
     }
@@ -28,7 +28,7 @@ class PitchSet_PitchSpellingTests: XCTestCase {
     func testPitchSet() {
         let pitchSet: Set<Pitch> = [60, 61, 70]
         XCTAssertEqual(
-            pitchSet.spelledWithDefaultSpelling(),
+            pitchSet.spelledWithDefaultSpelling,
             [
                 SpelledPitch(60, Pitch.Spelling(.c)),
                 SpelledPitch(61, Pitch.Spelling(.c, .sharp)),

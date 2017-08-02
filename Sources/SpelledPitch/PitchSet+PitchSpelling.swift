@@ -12,7 +12,7 @@ extension Set where Element == Pitch {
     
     /// - returns: A `SpelledPitchSet` with the values of self spelled with the default
     /// `Pitch.Spelling` value.
-    public var spelledWithDefaultSpellin: Set<SpelledPitch> {
+    public var spelledWithDefaultSpelling: Set<SpelledPitch> {
         return Swift.Set(map { $0.spelledWithDefaultSpelling })
     }
 }

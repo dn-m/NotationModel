@@ -9,6 +9,7 @@
 import XCTest
 import Pitch
 import SpelledPitch
+import PitchSpeller
 
 class DyadTests: XCTestCase {
 
