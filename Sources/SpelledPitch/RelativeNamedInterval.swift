@@ -140,11 +140,10 @@ public struct RelativeNamedInterval: NamedInterval {
     }
 }
 
-// FIXME: Get rid of `_ =` with update in Collections API
 private func ordered (_ a: SpelledPitchClass, _ b: SpelledPitchClass)
     -> (SpelledPitchClass, SpelledPitchClass)
 {
-    let (a,b,_) = swapped(a, b, if: { mod(steps(a,b), 7) > mod(steps(b,a), 7) })
+    let (a,b,_) = swapped(a, b) { mod(steps(a,b), 7) > mod(steps(b,a), 7) }
     return (a,b)
 }
 

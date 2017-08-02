@@ -1,5 +1,5 @@
 //
-//  Pitch.Spelling+QuarterStepModifier.swift
+//  RawRepresentableComparable.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 5/3/16.
@@ -19,4 +19,3 @@ extension RawRepresentable where RawValue: Comparable {
         return lhs.rawValue < rhs.rawValue
     }
 }
-

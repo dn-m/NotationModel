@@ -14,4 +14,3 @@ public protocol Spelled {
     /// The `Pitch.Spelling` value for a `Spelled` type.
     var spelling: Pitch.Spelling { get }
 }
-

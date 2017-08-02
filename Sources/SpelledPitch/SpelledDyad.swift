@@ -47,4 +47,3 @@ public struct SpelledDyad {
         self.higher = higher
     }
 }
-

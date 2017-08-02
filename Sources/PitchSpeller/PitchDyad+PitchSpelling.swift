@@ -7,7 +7,9 @@
 //
 
 import Pitch
+import SpelledPitch
 
+// FIXME: Move to PitchSpeller
 extension Dyad where Element == Pitch {
     
     /// - returns: `true` if either `Pitch` value contained herein has a resolution of `0.25`
@@ -25,4 +27,3 @@ extension Dyad where Element == Pitch {
         return min(higher.resolution, lower.resolution)
     }
 }
-

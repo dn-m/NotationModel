@@ -1,5 +1,5 @@
 //
-//  PitchClass+Pitch.Spelling.swift
+//  Pitch.Class+Pitch.Spelling.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 5/26/16.
@@ -20,4 +20,3 @@ extension Pitch.Class {
         return UnorderedInterval<Pitch.Class>(noteNumber: noteNumber).spellingPriority
     }
 }
-

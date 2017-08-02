@@ -72,4 +72,3 @@ public func == (lhs: SpelledPitchClass, rhs: SpelledPitchClass) -> Bool {
 public func < (lhs: SpelledPitchClass, rhs: SpelledPitchClass) -> Bool {
     return lhs.pitchClass < rhs.pitchClass
 }
-

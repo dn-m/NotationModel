@@ -257,6 +257,7 @@ extension Pitch.Spelling {
         case doubleFlat = -2.0
     }
 
+    // FIXME: Move to PitchSpeller
     internal func isCompatible(withCoarseDirection direction: QuarterStepModifier.Direction)
         -> Bool
     {
@@ -407,4 +408,3 @@ extension Pitch.Spelling {
         return LineOfFifths.distance(ofPitchSpelling: self)
     }
 }
-

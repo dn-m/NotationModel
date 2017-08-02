@@ -87,22 +87,20 @@ public func == (lhs: SpelledPitch, rhs: SpelledPitch) -> Bool {
     return lhs.pitch == rhs.pitch && lhs.spelling == rhs.spelling
 }
 
-extension SpelledPitch: Comparable { }
+extension SpelledPitch: Comparable {
 
-// MARK: - Comparable
+    /**
+     - returns: `true` if the `pitch` value of the `SpelledPitch` value on the left is less than
+     that of the `SpelledPitch` value on the right. Otherwise, `false`.
 
-/**
- - returns: `true` if the `pitch` value of the `SpelledPitch` value on the left is less than
- that of the `SpelledPitch` value on the right. Otherwise, `false`.
- 
- - note: In the case that both values are in the same octave, `true` is returned if the 
- spelling of the `SpelledPitch` value on the left is less than that of the `SpelledPitch` on
- the right. This manages extreme scenarios such as (c#, dbb), which should have a named 
- interval of a double diminished second, not a double augmented seventh.
- */
-public func < (lhs: SpelledPitch, rhs: SpelledPitch) -> Bool {
-    // manage extreme reacharound scenarios (c#, ddoubleflat) => double diminished second
-    if lhs.octave == rhs.octave { return lhs.spelling < rhs.spelling }
-    return lhs.pitch < rhs.pitch
+     - note: In the case that both values are in the same octave, `true` is returned if the
+     spelling of the `SpelledPitch` value on the left is less than that of the `SpelledPitch` on
+     the right. This manages extreme scenarios such as (c#, dbb), which should have a named
+     interval of a double diminished second, not a double augmented seventh.
+     */
+    public static func < (lhs: SpelledPitch, rhs: SpelledPitch) -> Bool {
+        // manage extreme reacharound scenarios (c#, ddoubleflat) => double diminished second
+        if lhs.octave == rhs.octave { return lhs.spelling < rhs.spelling }
+        return lhs.pitch < rhs.pitch
+    }
 }
-

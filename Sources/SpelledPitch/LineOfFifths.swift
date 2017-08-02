@@ -8,6 +8,7 @@
 
 import Pitch
 
+// FIXME: Move to PitchSpeller
 public struct LineOfFifths {
     
     public typealias Position = Int
