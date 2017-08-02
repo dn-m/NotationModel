@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Math",
+        "repositoryURL": "https://github.com/dn-m/Math",
+        "state": {
+          "branch": "master",
+          "revision": "d1284e043377c0b924cba2ffa2ab0b9aa9dd246f",
+          "version": null
+        }
+      },
+      {
+        "package": "Music",
+        "repositoryURL": "https://github.com/dn-m/Music",
+        "state": {
+          "branch": "master",
+          "revision": "25590f06824bd405cc0c8a269274262bb3487e8c",
+          "version": null
+        }
+      },
+      {
+        "package": "Structure",
+        "repositoryURL": "https://github.com/dn-m/Structure",
+        "state": {
+          "branch": "master",
+          "revision": "7ff248ef8d5f622852b686a01a9473c1e46ff5e2",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
