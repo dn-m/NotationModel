@@ -6,6 +6,8 @@
 //
 //
 
+import SpelledPitch
+
 // MARK: - Typealiases
 
 /// Single `PitchSpelling` value.
