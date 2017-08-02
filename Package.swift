@@ -9,7 +9,8 @@ let package = Package(
         .library(name: "PlotModel", targets: ["PlotModel"]),
         .library(name: "SpelledPitch", targets: ["SpelledPitch"]),
         .library(name: "PitchSpeller", targets: ["PitchSpeller"]),
-        .library(name: "BeamedRhythm", targets: ["BeamedRhythm"])
+        .library(name: "BeamedRhythm", targets: ["BeamedRhythm"]),
+        .library(name: "StaffModel", targets: ["StaffModel"])
     ],
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", .branch("master")),
@@ -23,12 +24,14 @@ let package = Package(
         .target(name: "PitchSpeller", dependencies: ["SpelledPitch"]),
         .target(name: "BeamedRhythm", dependencies: ["Rhythm"]),
         .target(name: "RhythmBeamer", dependencies: ["BeamedRhythm"]),
+        .target(name: "StaffModel", dependencies: ["PlotModel", "SpelledPitch"]),
 
         // Tests
         .testTarget(name: "PlotModelTests"),
         .testTarget(name: "SpelledPitchTests", dependencies: ["SpelledPitch"]),
         .testTarget(name: "PitchSpellerTests", dependencies: ["PitchSpeller"]),
         .testTarget(name: "BeamedRhythmTests", dependencies: ["BeamedRhythm"]),
-        .testTarget(name: "RhythmBeamerTests", dependencies: ["RhythmBeamer"])
+        .testTarget(name: "RhythmBeamerTests", dependencies: ["RhythmBeamer"]),
+        .testTarget(name: "StaffModelTests", dependencies: ["StaffModel"])
     ]
 )

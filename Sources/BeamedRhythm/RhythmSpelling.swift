@@ -51,6 +51,7 @@ public struct RhythmSpelling {
     ///
     /// - TODO: Add ability to inject customized beaming algorithm.
     /// - Note: Currently, there is a default beaming algorithm which is not customizable.
+    // FIXME: Move to RhythmBeamer
     public init(_ rhythm: Rhythm<Int>) {
         let leaves = rhythm.metricalDurationTree.leaves
         let junctions = makeJunctions(leaves)
@@ -186,11 +187,15 @@ internal func makeGroups(_ tree: MetricalDurationTree) -> Grouping {
 }
 
 /// - returns: An array of `BeamJunction` values for the given `leaves`.
+//
+// Fixme: Move to RhythmBeamer
 internal func makeJunctions(_ leaves: [MetricalDuration]) -> [RhythmSpelling.BeamJunction] {
     return makeJunctions(leaves.map(beamCount))
 }
 
 /// - returns: Amount of beams needed to represent the given `duration`.
+//
+// FIXME: Move to RhythmBeamer
 internal func beamCount(_ duration: MetricalDuration) -> Int {
     
     let reduced = duration.reduced
@@ -211,6 +216,8 @@ internal func beamCount(_ duration: MetricalDuration) -> Int {
 }
 
 /// - returns: The `TieState` values necessary to render the given `MetricalContext` values.
+//
+// FIXME: Move to RhythmBeamer
 internal func makeTieStates <T> (_ metricalContexts: [MetricalContext<T>])
     -> [RhythmSpelling.TieState]
 {
