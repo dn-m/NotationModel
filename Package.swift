@@ -23,7 +23,6 @@ let package = Package(
         .target(name: "SpelledPitch", dependencies: ["Pitch"]),
         .target(name: "PitchSpeller", dependencies: ["SpelledPitch"]),
         .target(name: "BeamedRhythm", dependencies: ["Rhythm"]),
-        .target(name: "RhythmBeamer", dependencies: ["BeamedRhythm"]),
         .target(name: "StaffModel", dependencies: ["PlotModel", "SpelledPitch"]),
 
         // Tests
@@ -31,7 +30,6 @@ let package = Package(
         .testTarget(name: "SpelledPitchTests", dependencies: ["SpelledPitch"]),
         .testTarget(name: "PitchSpellerTests", dependencies: ["PitchSpeller"]),
         .testTarget(name: "BeamedRhythmTests", dependencies: ["BeamedRhythm"]),
-        .testTarget(name: "RhythmBeamerTests", dependencies: ["RhythmBeamer"]),
         .testTarget(name: "StaffModelTests", dependencies: ["StaffModel"])
     ]
 )
