@@ -19,8 +19,6 @@ public protocol NamedIntervalOrdinal: Hashable, InvertibleEnum {
 
     /// Create a `NamedIntervalOrdinal`-conforming type with a given amount of `steps` between
     /// the `letterName` properties of two `Spelled` types.
-    //
-    /// - Note: Perhaps this should be failable?
     init?(steps: Int)
 }
 
