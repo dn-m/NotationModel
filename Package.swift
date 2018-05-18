@@ -19,14 +19,14 @@ let package = Package(
     ],
     targets: [
         // Sources
-        .target(name: "PlotModel", dependencies: ["StructureWrapping", "DictionaryProtocol"]),
+        .target(name: "PlotModel", dependencies: ["StructureWrapping", "DataStructures"]),
         .target(name: "SpelledPitch", dependencies: ["Pitch"]),
         .target(name: "PitchSpeller", dependencies: ["SpelledPitch"]),
         .target(name: "BeamedRhythm", dependencies: ["Rhythm"]),
         .target(name: "StaffModel", dependencies: ["PlotModel", "SpelledPitch"]),
 
         // Tests
-        .testTarget(name: "PlotModelTests"),
+        .testTarget(name: "PlotModelTests", dependencies: ["PlotModel"]),
         .testTarget(name: "SpelledPitchTests", dependencies: ["SpelledPitch"]),
         .testTarget(name: "PitchSpellerTests", dependencies: ["PitchSpeller"]),
         .testTarget(name: "BeamedRhythmTests", dependencies: ["BeamedRhythm"]),

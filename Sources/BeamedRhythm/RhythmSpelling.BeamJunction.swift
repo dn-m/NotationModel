@@ -11,7 +11,7 @@ import Rhythm
 extension RhythmSpelling {
     
     /// Model of `State` values for each beam-level
-    public struct BeamJunction {
+    public struct BeamJunction: Equatable {
         
         /// Whether a beamlet is pointed forward or backward.
         public enum BeamletDirection: Double {
@@ -20,7 +20,7 @@ extension RhythmSpelling {
         }
         
         /// Whether to start, stop, or maintain a beam for a given beam-level
-        public enum State {
+        public enum State: Equatable {
             
             /// Start a beam on a given level.
             case start
@@ -213,34 +213,6 @@ extension RhythmSpelling.BeamJunction {
     }
 }
 
-extension RhythmSpelling.BeamJunction: Equatable {
-    
-    /// - returns: `true` if `BeamJunction` values are equivalent. Otherwise, `false`.
-    public static func == (lhs: RhythmSpelling.BeamJunction, rhs: RhythmSpelling.BeamJunction)
-        -> Bool
-    {
-        return lhs.states == rhs.states
-    }
-}
-
-extension RhythmSpelling.BeamJunction.State: Equatable {
-    
-    public static func == (
-        lhs: RhythmSpelling.BeamJunction.State,
-        rhs: RhythmSpelling.BeamJunction.State
-    ) -> Bool
-    {
-        switch (lhs,rhs) {
-        case (.start, start), (.stop, .stop), (.maintain, .maintain):
-            return true
-        case (.beamlet(let a), .beamlet(let b)):
-            return a == b
-        default:
-            return false
-        }
-    }
-}
-
 extension RhythmSpelling.BeamJunction: CustomStringConvertible {
     
     public var description: String {
@@ -248,19 +220,3 @@ extension RhythmSpelling.BeamJunction: CustomStringConvertible {
     }
 }
 
-extension RhythmSpelling.BeamJunction.State: CustomStringConvertible {
-    
-    /// Printed description.
-    public var description: String {
-        switch self {
-        case .start:
-            return "start"
-        case .stop:
-            return "stop"
-        case .maintain:
-            return "maintain"
-        case .beamlet(let direction):
-            return "beamlet (\(direction))"
-        }
-    }
-}

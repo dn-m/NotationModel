@@ -8,6 +8,7 @@
 
 import XCTest
 import Rhythm
+import MetricalDuration
 import BeamedRhythm
 
 class RhythmSpellingCollectionTests: XCTestCase {

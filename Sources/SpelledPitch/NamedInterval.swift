@@ -6,11 +6,16 @@
 //
 //
 
-import Structure
+import DataStructures
 import Pitch
 
+/// Move to `DataStructures` or `Algebra`?
+public protocol Invertible {
+    var inverse: Self { get }
+}
+
 /// Interface for types describing intervals between `SpelledPitch` values.
-public protocol NamedInterval: Invertible, Equatable {
+public protocol NamedInterval: Invertible {
 
     // MARK: - Associated Types
 
@@ -33,7 +38,6 @@ public protocol NamedInterval: Invertible, Equatable {
     /// Create a `NamedInterval` with a given `quality` and `ordinal`.
     init(_ quality: NamedIntervalQuality, _ ordinal: Ordinal)
 
-
     // Instead, use `PitchType` associatedtype
     /// Create a `NamedInterval` with two `SpelledPitch` values.
     init(_ a: SpelledPitchType, _ b: SpelledPitchType)
@@ -53,24 +57,15 @@ public protocol NamedInterval: Invertible, Equatable {
 public func areValid <O> (_ quality: NamedIntervalQuality, _ ordinal: O) -> Bool
     where O: NamedIntervalOrdinal
 {
-
-    if ordinal.isPerfect && quality.isPerfect || ordinal.isImperfect && quality.isImperfect {
-        return true
-    }
-
-    return false
-}
-
-extension NamedInterval {
-
-    // MARK: - `Equatable`
-
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        return (
-            lhs.ordinal == rhs.ordinal &&
-            lhs.quality == rhs.quality &&
-            lhs.quality.degree == rhs.quality.degree
-        )
+    switch (quality, ordinal) {
+    case (.perfect, let ordinal):
+        return ordinal.isPerfect
+    case (.imperfect, let ordinal):
+        return ordinal.isImperfect
+    case (.augmentedOrDiminished, let ordinal):
+        print("augmented or diminished")
+        print("ordinal: \(ordinal)")
+        return ordinal.isImperfect || ordinal.isPerfect
     }
 }
 
@@ -82,5 +77,3 @@ extension NamedInterval {
         return .init(quality.inverse, ordinal.inverse)
     }
 }
-
-

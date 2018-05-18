@@ -7,6 +7,7 @@
 //
 
 import DataStructures
+import MetricalDuration
 import Rhythm
 
 public typealias Grouping = Tree<Group.Context,Group.Context>

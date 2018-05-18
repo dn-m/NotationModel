@@ -8,6 +8,7 @@
 
 import XCTest
 import Rhythm
+import MetricalDuration
 import BeamedRhythm
 
 class SpelledRhythmTests: XCTestCase {
@@ -18,7 +19,7 @@ class SpelledRhythmTests: XCTestCase {
         let rhythm = Rhythm(durations, contexts)
         let spelling = RhythmSpelling(rhythm)
         let spelledRhythm = SpelledRhythm(rhythm: rhythm, spelling: spelling)
-        for (offset, leaf, item) in spelledRhythm {
+        for (offset, _, item) in spelledRhythm {
             print("offset: \(offset); item: \(item)")
         }
     }

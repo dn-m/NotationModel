@@ -31,14 +31,14 @@ class RelativeNamedIntervalTests: XCTestCase {
     }
 
     func testInverseMajorThirdMinorThird() {
-        let M3 = RelativeNamedInterval(.major, .third)
-        let m3 = RelativeNamedInterval(.minor, .third)
+        let M3 = RelativeNamedInterval(.imperfect(.major), .third)
+        let m3 = RelativeNamedInterval(.imperfect(.minor), .third)
         XCTAssertEqual(M3.inverse, m3)
     }
 
     func testInverseAugmentedFourthDiminishedSecond() {
-        let A4 = RelativeNamedInterval(.augmented, .fourth)
-        let d2 = RelativeNamedInterval(.diminished, .second)
+        let A4 = RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .augmented)), .fourth)
+        let d2 = RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .second)
         XCTAssertEqual(A4.inverse, d2)
         XCTAssertEqual(d2.inverse, A4)
     }
@@ -55,7 +55,7 @@ class RelativeNamedIntervalTests: XCTestCase {
         let a = SpelledPitchClass(0, Pitch.Spelling(.c))
         let b = SpelledPitchClass(10, Pitch.Spelling(.a, .sharp))
         let result = RelativeNamedInterval(a,b)
-        let expected = RelativeNamedInterval(.diminished, .third)
+        let expected = RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .third)
         XCTAssertEqual(result, expected)
     }
 
@@ -63,7 +63,7 @@ class RelativeNamedIntervalTests: XCTestCase {
         let a = SpelledPitchClass(2, Pitch.Spelling(.d))
         let b = SpelledPitchClass(6, Pitch.Spelling(.f, .sharp))
         let result = RelativeNamedInterval(a,b)
-        let expected = RelativeNamedInterval(.major, .third)
+        let expected = RelativeNamedInterval(.imperfect(.major), .third)
         XCTAssertEqual(result, expected)
     }
 
@@ -71,7 +71,7 @@ class RelativeNamedIntervalTests: XCTestCase {
         let a = SpelledPitchClass(10, Pitch.Spelling(.b, .flat))
         let b = SpelledPitchClass(3, Pitch.Spelling(.d, .sharp))
         let result = RelativeNamedInterval(a,b)
-        let expected = RelativeNamedInterval(.augmented, .third)
+        let expected = RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .augmented)), .third)
         XCTAssertEqual(result, expected)
     }
 }

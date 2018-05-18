@@ -56,25 +56,25 @@ class SpelledDyadTests: XCTestCase {
     }
 
     func testRelativeNamedIntervalMinorSecond() {
-        assertRelativeNamedInterval(for: SpelledDyad(c, dflat), equals: RelativeNamedInterval(.minor, .second))
+        assertRelativeNamedInterval(for: SpelledDyad(c, dflat), equals: RelativeNamedInterval(.imperfect(.minor), .second))
     }
 
     func testRelativeNamedIntervalAugmentedFourth() {
         assertRelativeNamedInterval(
             for: SpelledDyad(c, fsharp),
-            equals: RelativeNamedInterval(.augmented, .fourth)
+            equals: RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .augmented)), .fourth)
         )
     }
 
     func testRelativeNamedIntervalDiminishedFourth() {
         assertRelativeNamedInterval(
             for: SpelledDyad(fsharp, bflat),
-            equals: RelativeNamedInterval(.diminished, .fourth)
+            equals: RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .fourth)
         )
     }
 
     func testRelativeNamedIntervalDoubleDiminishedFourth() {
-        let quality = RelativeNamedInterval.Quality.diminished[.double]!
+        let quality = RelativeNamedInterval.Quality.augmentedOrDiminished(.init(.double, .diminished))
         assertRelativeNamedInterval(
             for: SpelledDyad(fsharp, bdoubleflat),
             equals: RelativeNamedInterval(quality, .fourth)
@@ -84,21 +84,21 @@ class SpelledDyadTests: XCTestCase {
     func testRelativeNamedIntervalDiminishedSecond() {
         assertRelativeNamedInterval(
             for: SpelledDyad(c, ddoubleflat),
-            equals: RelativeNamedInterval(.diminished, .second)
+            equals: RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .second)
         )
     }
 
     func testRelativeNamedIntervalAugmentedSecond() {
         assertRelativeNamedInterval(
             for: SpelledDyad(c, dsharp),
-            equals: RelativeNamedInterval(.augmented, .second)
+            equals: RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .augmented)), .second)
         )
     }
 
     func testDiminishedThird() {
         assertRelativeNamedInterval(
             for: SpelledDyad(dsharp, f),
-            equals: RelativeNamedInterval(.diminished, .third)
+            equals: RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .third)
         )
     }
 

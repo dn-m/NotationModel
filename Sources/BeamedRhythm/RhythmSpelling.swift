@@ -6,9 +6,10 @@
 //
 //
 
-import Structure // count trailing
+import func Math.countTrailingZeros
 import StructureWrapping
 import DataStructures
+import MetricalDuration
 import Rhythm
 
 public struct RhythmSpelling {
@@ -227,7 +228,12 @@ internal func makeTieStates <T> (_ metricalContexts: [MetricalContext<T>])
         let cur = metricalContexts[index]
 
         guard let next = metricalContexts[safe: index + 1] else {
-            return cur == .continuation ? .stop : .none
+            switch cur {
+            case .continuation:
+                return .stop
+            default:
+                return .none
+            }
         }
         
         switch (cur, next) {

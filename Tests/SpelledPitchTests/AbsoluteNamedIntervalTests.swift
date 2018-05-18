@@ -37,24 +37,30 @@ class AbsoluteNamedIntervalTests: XCTestCase {
     }
 
     func testInversionMajorSecondMinorSeventh() {
-        let M2 = AbsoluteNamedInterval(.major, .second)
-        let m7 = AbsoluteNamedInterval(.minor, .seventh)
+        let M2 = AbsoluteNamedInterval(.imperfect(.major), .second)
+        let m7 = AbsoluteNamedInterval(.imperfect(.minor), .seventh)
         XCTAssertEqual(M2.inverse, m7)
         XCTAssertEqual(m7.inverse, M2)
     }
 
     func testInversionMajorThirdMinorSixth() {
-        let M3 = AbsoluteNamedInterval(.major, .third)
-        let m6 = AbsoluteNamedInterval(.minor, .sixth)
+        let M3 = AbsoluteNamedInterval(.imperfect(.major), .third)
+        let m6 = AbsoluteNamedInterval(.imperfect(.minor), .sixth)
         XCTAssertEqual(M3.inverse, m6)
         XCTAssertEqual(m6.inverse, M3)
     }
 
+    func testAbsoluteNamedIntervalOrdinalInversion() {
+        let sixth = AbsoluteNamedInterval.Ordinal.sixth
+        let expected = AbsoluteNamedInterval.Ordinal.third
+        XCTAssertEqual(sixth.inverse, expected)
+    }
+
     func testDoubleAugmentedThirdDoubleDiminishedSixth() {
-        let AA3 = AbsoluteNamedInterval(.augmented, .third)
-        let dd6 = AbsoluteNamedInterval(.diminished, .sixth)
+        let AA3 = AbsoluteNamedInterval(.augmentedOrDiminished(.init(.double, .augmented)), .third)
+        let dd6 = AbsoluteNamedInterval(.augmentedOrDiminished(.init(.double, .diminished)), .sixth)
+        print("AA3.inverse: \(AA3.inverse)")
         XCTAssertEqual(AA3.inverse, dd6)
         XCTAssertEqual(dd6.inverse, AA3)
     }
 }
-

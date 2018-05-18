@@ -6,11 +6,9 @@
 //
 //
 
-import Structure
-
 /// Named intervals between two `SpelledPitch` values that honors order between `SpelledPitch`
 /// values.
-public struct AbsoluteNamedInterval: NamedInterval {
+public struct AbsoluteNamedInterval: NamedInterval, Equatable {
 
     // MARK: - Associated Types
 
@@ -20,58 +18,41 @@ public struct AbsoluteNamedInterval: NamedInterval {
     // MARK: - Nested Types
 
     /// Type descripting ordinality of an `AbsoluteNamedInterval`.
-    public struct Ordinal: NamedIntervalOrdinal {
-
-        // MARK: - Instance Properties
-
-        /// Raw value.
-        public let rawValue: Int
-
-        // MARK: - Cases
+    public enum Ordinal: Int, NamedIntervalOrdinal {
 
         // MARK: Ordinal classes
 
         // Set of `perfect` interval ordinals
-        public static let perfects: Ordinal = [unison, fourth, fifth]
+        public static let perfects: Set<Ordinal> = [.unison, .fourth, .fifth]
 
         // Set of `imperfect` interval ordinals
-        public static var imperfects: Ordinal = [second, third, sixth, seventh]
+        public static var imperfects: Set<Ordinal> = [.second, .third, .sixth, .seventh]
 
         // MARK: Ordinal instances
 
         /// Unison.
-        public static var unison = Ordinal(rawValue: 1 << 0)
+        case unison = 0
 
         /// Second.
-        public static var second = Ordinal(rawValue: 1 << 1)
+        case second = 1
 
         /// Third.
-        public static var third = Ordinal(rawValue: 1 << 2)
+        case third = 2
 
         /// Fourth.
-        public static var fourth = Ordinal(rawValue: 1 << 3)
+        case fourth = 3
 
         /// Fifth.
-        public static var fifth = Ordinal(rawValue: 1 << 4)
+        case fifth = 4
 
         /// Sixth.
-        public static var sixth = Ordinal(rawValue: 1 << 5)
+        case sixth = 5
 
         /// Seventh.
-        public static var seventh = Ordinal(rawValue: 1 << 6)
+        case seventh = 6
 
-        // MARK: - Instance Properties
-
-        /// Amount of options contained herein.
-        public var optionsCount: Int {
-            return 7
-        }
-
-        /// Inverse of `self`.
-        public var inverse: Ordinal {
-            let ordinal = countTrailingZeros(rawValue)
-            let inverseOrdinal = optionsCount - ordinal
-            return Ordinal(rawValue: 1 << inverseOrdinal)
+        public init?(steps: Int) {
+            self.init(rawValue: steps)
         }
 
         /// - returns: `true` if an `Ordinal` belongs to the `perfects` class. Otherwise,
@@ -85,14 +66,6 @@ public struct AbsoluteNamedInterval: NamedInterval {
         public var isImperfect: Bool {
             return Ordinal.imperfects.contains(self)
         }
-
-        // MARK: - Initializers
-
-        /// Create an `AbsoluteNamedInterval` with a given `rawValue`.
-        public init(rawValue: Int) {
-            self.rawValue = rawValue
-        }
-
     }
 
     // MARK: - Instance Properties
@@ -111,6 +84,8 @@ public struct AbsoluteNamedInterval: NamedInterval {
     public init(_ quality: Quality, _ ordinal: Ordinal) {
 
         guard areValid(quality, ordinal) else {
+            print(quality)
+            print(ordinal)
             fatalError("Cannot create an AbsoluteNamedInterval with \(quality) and \(ordinal)")
         }
 

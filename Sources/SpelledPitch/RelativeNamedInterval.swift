@@ -6,13 +6,14 @@
 //
 //
 
-import Structure // use Bitwise
+import Restructure
+import DataStructures
 import Math
 import Pitch
 
 /// Named intervals between two `SpelledPitch` values that does not honor order between
 /// `SpelledPitch` values.
-public struct RelativeNamedInterval: NamedInterval {
+public struct RelativeNamedInterval: NamedInterval, Equatable {
     
     // MARK: - Associated Types
     
@@ -25,67 +26,42 @@ public struct RelativeNamedInterval: NamedInterval {
     // MARK: - Nested Types
     
     /// Type describing ordinality of a `RelativeNamedInterval`.
-    public struct Ordinal: NamedIntervalOrdinal {
-        
-        // MARK: - Cases
+    public enum Ordinal: Int, NamedIntervalOrdinal {
         
         // MARK: Ordinal classes
         
         /// Set of `perfect` interval ordinals (`unison`, `fourth`)
-        public static let perfects: Ordinal = [unison, fourth]
+        public static let perfects: Set<Ordinal> = [.unison, .fourth]
         
         /// Set of `imperfect` interval ordinals (`second`, `third`)
-        public static var imperfects: Ordinal = [second, third]
+        public static var imperfects: Set<Ordinal> = [.second, .third]
         
         // MARK: Ordinal instances
         
         /// Unison.
-        public static var unison = Ordinal(rawValue: 1 << 0)
+        case unison = 0
         
         /// Second.
-        public static var second = Ordinal(rawValue: 1 << 1)
+        case second = 1
         
         /// Third.
-        public static var third = Ordinal(rawValue: 1 << 2)
+        case third = 2
         
         /// Fourth.
-        public static var fourth = Ordinal(rawValue: 1 << 3)
+        case fourth = 3
+
+        public init?(steps: Int) {
+            self.init(rawValue: steps)
+        }
         
         // MARK: - Instance Properties
-        
-        /// Amount of options contained herein.
-        public var optionsCount: Int {
-            return 4
-        }
-        
-        /// Inverse of `self`.
-        public var inverse: Ordinal {
-            let ordinal = countTrailingZeros(rawValue)
-            let inverseOrdinal = optionsCount - ordinal
-            return Ordinal(rawValue: 1 << inverseOrdinal)
-        }
-        
-        /// - returns: `true` if an `Ordinal` belongs to the `perfects` class. Otherwise,
-        /// `false`.
-        public var isPerfect: Bool {
-            return Ordinal.perfects.contains(self)
-        }
-        
-        /// - returns: `true` if an `Ordinal` belongs to the `imperfects` class. Otherwise, 
-        /// `false`.
-        public var isImperfect: Bool {
-            return Ordinal.imperfects.contains(self)
-        }
-        
-        // MARK: - Initializers
-        
-        /// Raw value.
-        public let rawValue: Int
-        
-        /// Create a `RelativeNamedInterval` with a given `rawValue`.
-        public init(rawValue: Int) {
-            self.rawValue = rawValue
-        }
+
+//        /// Inverse of `self`.
+//        public var inverse: Ordinal {
+//            let ordinal = countTrailingZeros(rawValue)
+//            let inverseOrdinal = optionsCount - ordinal
+//            return Ordinal(rawValue: 1 << inverseOrdinal)
+//        }
     }
     
     // MARK: - Instance Properties
@@ -132,7 +108,7 @@ public struct RelativeNamedInterval: NamedInterval {
         let sanitizedInterval = sanitizeIntervalClass(interval, steps: steps)
         
         // Create the necessary structures
-        let ordinal = Ordinal(steps: steps)
+        let ordinal = Ordinal(steps: steps)!
         let quality = Quality(sanitizedIntervalClass: sanitizedInterval, ordinal: ordinal)
         
         // Init
@@ -194,7 +170,7 @@ private func interval(_ a: SpelledPitchClass, _ b: SpelledPitchClass) -> Double 
     return (b.pitchClass - a.pitchClass).noteNumber.value
 }
 
-/// Wraps around 7
+/// Modulo 7
 private func steps(_ a: SpelledPitchClass, _ b: SpelledPitchClass) -> Int {
     return mod(b.spelling.letterName.steps - a.spelling.letterName.steps, 7)
 }
