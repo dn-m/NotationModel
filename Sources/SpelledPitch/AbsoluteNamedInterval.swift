@@ -84,8 +84,6 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     public init(_ quality: Quality, _ ordinal: Ordinal) {
 
         guard areValid(quality, ordinal) else {
-            print(quality)
-            print(ordinal)
             fatalError("Cannot create an AbsoluteNamedInterval with \(quality) and \(ordinal)")
         }
 
