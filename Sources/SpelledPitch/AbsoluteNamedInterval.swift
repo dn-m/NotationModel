@@ -17,9 +17,7 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
 
     // MARK: - Nested Types
 
-    // test, test, test
-    // Un_underscore_this
-    public enum _Ordinal {
+    public enum AbsoluteOrdinal {
 
         public enum PerfectOrdinal {
 
@@ -138,11 +136,6 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
 
     /// Create an `AbsoluteNamedInterval` with a given `quality` and `ordinal`.
     internal init(_ quality: Quality, _ ordinal: Ordinal) {
-
-        guard areValid(quality, ordinal) else {
-            fatalError("Cannot create an AbsoluteNamedInterval with \(quality) and \(ordinal)")
-        }
-
         self.quality = quality
         self.ordinal = ordinal
     }
@@ -152,22 +145,22 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
         fatalError()
     }
 
-    public init(_ quality: Quality.PerfectQuality, _ ordinal: _Ordinal.PerfectOrdinal) {
+    public init(_ quality: Quality.PerfectQuality, _ ordinal: AbsoluteOrdinal.PerfectOrdinal) {
         self.quality = .perfect(.perfect)
         self.ordinal = ordinal.ordinal
     }
 
-    public init(_ quality: Quality.ImperfectQuality, _ ordinal: _Ordinal.ImperfectOrdinal) {
+    public init(_ quality: Quality.ImperfectQuality, _ ordinal: AbsoluteOrdinal.ImperfectOrdinal) {
         self.quality = .imperfect(quality)
         self.ordinal = ordinal.ordinal
     }
 
-    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: _Ordinal.ImperfectOrdinal) {
+    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: AbsoluteOrdinal.ImperfectOrdinal) {
         self.quality = .augmentedOrDiminished(.init(.single, quality))
         self.ordinal = ordinal.ordinal
     }
 
-    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: _Ordinal.PerfectOrdinal) {
+    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: AbsoluteOrdinal.PerfectOrdinal) {
         self.quality = .augmentedOrDiminished(.init(.single, quality))
         self.ordinal = ordinal.ordinal
     }
@@ -175,7 +168,7 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     public init(
         _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
-        _ ordinal: _Ordinal.ImperfectOrdinal
+        _ ordinal: AbsoluteOrdinal.ImperfectOrdinal
     ) {
         self.quality = .augmentedOrDiminished(.init(degree, quality))
         self.ordinal = ordinal.ordinal
@@ -184,7 +177,7 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     public init(
         _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
-        _ ordinal: _Ordinal.PerfectOrdinal
+        _ ordinal: AbsoluteOrdinal.PerfectOrdinal
     ) {
         self.quality = .augmentedOrDiminished(.init(degree, quality))
         self.ordinal = ordinal.ordinal

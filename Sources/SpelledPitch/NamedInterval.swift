@@ -46,32 +46,32 @@ internal protocol NamedInterval: Invertible {
     init(_ a: SpelledPitchType, _ b: SpelledPitchType)
 }
 
-/// - returns: `true` if the given `quality` and `ordinal` can be paired to create a valid
-/// `NamedInterval`. Otherwise, `false`.
-///
-/// **Example:**
-/// ```
-/// areValid(.major, .third) // true
-/// areValid(.augmented, .second) // true
-/// areValid(.perfect, .fourth) // true
-/// areValid(.perfect, .second) // false
-/// areValid(.major, .second) // false
-/// ```
-///
-/// - Note: Hopefully this becomes unnecessary, as the compatibility of qualities and ordinals
-/// should be encoded into the type system.
-public func areValid <O> (_ quality: NamedIntervalQuality, _ ordinal: O) -> Bool
-    where O: NamedIntervalOrdinal
-{
-    switch (quality, ordinal) {
-    case (.perfect, let ordinal):
-        return ordinal.isPerfect
-    case (.imperfect, let ordinal):
-        return ordinal.isImperfect
-    case (.augmentedOrDiminished, let ordinal):
-        return ordinal.isImperfect || ordinal.isPerfect
-    }
-}
+///// - returns: `true` if the given `quality` and `ordinal` can be paired to create a valid
+///// `NamedInterval`. Otherwise, `false`.
+/////
+///// **Example:**
+///// ```
+///// areValid(.major, .third) // true
+///// areValid(.augmented, .second) // true
+///// areValid(.perfect, .fourth) // true
+///// areValid(.perfect, .second) // false
+///// areValid(.major, .second) // false
+///// ```
+/////
+///// - Note: Hopefully this becomes unnecessary, as the compatibility of qualities and ordinals
+///// should be encoded into the type system.
+//public func areValid <O> (_ quality: NamedIntervalQuality, _ ordinal: O) -> Bool
+//    where O: NamedIntervalOrdinal
+//{
+//    switch (quality, ordinal) {
+//    case (.perfect, let ordinal):
+//        return ordinal.isPerfect
+//    case (.imperfect, let ordinal):
+//        return ordinal.isImperfect
+//    case (.augmentedOrDiminished, let ordinal):
+//        return ordinal.isImperfect || ordinal.isPerfect
+//    }
+//}
 
 extension NamedInterval {
 
