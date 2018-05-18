@@ -13,9 +13,9 @@ let package = Package(
         .library(name: "StaffModel", targets: ["StaffModel"])
     ],
     dependencies: [
-        .package(url: "https://github.com/dn-m/Structure", .branch("master")),
-        .package(url: "https://github.com/dn-m/Math", .branch("master")),
-        .package(url: "https://github.com/dn-m/Music", .branch("master"))
+        .package(url: "https://github.com/dn-m/Structure", .branch("swift-4.2")),
+        .package(url: "https://github.com/dn-m/Math", .branch("swift-4.2")),
+        .package(url: "https://github.com/dn-m/Music", .branch("swift-4.2"))
     ],
     targets: [
         // Sources
