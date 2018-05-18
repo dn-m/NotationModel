@@ -42,6 +42,11 @@ class AbsoluteNamedIntervalTests: XCTestCase {
         let _: AbsoluteNamedInterval = .init(.double, .diminished, .fifth)
     }
 
+    func testAPIShouldNotCompile() {
+        //let _: AbsoluteNamedInterval = .init(.minor, .fifth)
+        //let _: AbsoluteNamedInterval = .init(.perfect, .second)
+    }
+
     func testInversionPerfectFifthPerfectFourth() {
         let P5 = AbsoluteNamedInterval(.perfect, .fifth)
         let P4 = AbsoluteNamedInterval(.perfect, .fourth)
