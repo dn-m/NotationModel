@@ -36,6 +36,7 @@ class AbsoluteNamedIntervalTests: XCTestCase {
         let _: AbsoluteNamedInterval = .init(.perfect, .fourth)
         let _: AbsoluteNamedInterval = .init(.augmented, .fifth)
         let _: AbsoluteNamedInterval = .init(.diminished, .fifth)
+        let _: AbsoluteNamedInterval = .init(.augmented, .third)
         let _: AbsoluteNamedInterval = .init(.minor, .seventh)
         let _: AbsoluteNamedInterval = .init(.triple, .augmented, .seventh)
         let _: AbsoluteNamedInterval = .init(.double, .diminished, .fifth)

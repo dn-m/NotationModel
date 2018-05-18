@@ -141,30 +141,39 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     }
 
     /// Create a `NamedInterval` with two `SpelledPitch` values.
-    public init(_ a: SpelledPitch, _ b: SpelledPitch) {
+    ///
+    /// - TODO: Implement!
+    internal init(_ a: SpelledPitch, _ b: SpelledPitch) {
         fatalError()
     }
 
+    /// Create a perfect `AbsoluteNamedInterval`.
+    ///
+    ///     let perfectFifth = AbsoluteNamedInterval(.perfect, .fifth)
+    ///
     public init(_ quality: Quality.PerfectQuality, _ ordinal: AbsoluteOrdinal.PerfectOrdinal) {
         self.quality = .perfect(.perfect)
         self.ordinal = ordinal.ordinal
     }
 
+    /// Create an imperfect `AbsoluteNamedInterval`.
+    ///
+    ///     let majorSecond = AbsoluteNamedInterval(.major, .second)
+    ///     let minorThird = AbsoluteNamedInterval(.minor, .third)
+    ///     let majorSixth = AbsoluteNamedInterval(.major, .sixth)
+    ///     let minorSeventh = AbsoluteNamedInterval(.minor, .seventh)
+    ///
     public init(_ quality: Quality.ImperfectQuality, _ ordinal: AbsoluteOrdinal.ImperfectOrdinal) {
         self.quality = .imperfect(quality)
         self.ordinal = ordinal.ordinal
     }
 
-    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: AbsoluteOrdinal.ImperfectOrdinal) {
-        self.quality = .augmentedOrDiminished(.init(.single, quality))
-        self.ordinal = ordinal.ordinal
-    }
-
-    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: AbsoluteOrdinal.PerfectOrdinal) {
-        self.quality = .augmentedOrDiminished(.init(.single, quality))
-        self.ordinal = ordinal.ordinal
-    }
-
+    /// Create an augmented or diminished `AbsoluteNamedInterval` with an imperfect ordinal. These
+    /// intervals can be up to quintuple augmented or diminished.
+    ///
+    ///     let doubleDiminishedSecond = AbsoluteNamedInterval(.double, .diminished, .second)
+    ///     let tripleAugmentedThird = AbsoluteNamedInterval(.triple, .augmented, .third)
+    ///
     public init(
         _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
@@ -174,12 +183,44 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
         self.ordinal = ordinal.ordinal
     }
 
+    /// Create an augmented or diminished `AbsoluteNamedInterval` with a perfect ordinal. These
+    /// intervals can be up to quintuple augmented or diminished.
+    ///
+    ///     let doubleAugmentedUnison = AbsoluteNamedInterval(.double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = AbsoluteNamedInterval(.triple, .diminished, .fourth)
+    ///
     public init(
         _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
         _ ordinal: AbsoluteOrdinal.PerfectOrdinal
     ) {
         self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.ordinal = ordinal.ordinal
+    }
+
+    /// Create an augmented or diminished `AbsoluteNamedInterval` with an imperfect ordinal.
+    ///
+    ///     let diminishedSecond = AbsoluteNamedInterval(.diminished, .second)
+    ///     let augmentedSixth = AbsoluteNamedInterval(.augmented, .sixth)
+    ///
+    public init(
+        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ ordinal: AbsoluteOrdinal.ImperfectOrdinal
+    ) {
+        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.ordinal = ordinal.ordinal
+    }
+
+    /// Create an augmented or diminished `AbsoluteNamedInterval` with a perfect ordinal.
+    ///
+    ///     let augmentedUnison = AbsoluteNamedInterval(.augmented, .unison)
+    ///     let tripleDiminishedFourth = AbsoluteNamedInterval(.triple, .diminished, .fourth)
+    ///
+    public init(
+        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ ordinal: AbsoluteOrdinal.PerfectOrdinal
+    ) {
+        self.quality = .augmentedOrDiminished(.init(.single, quality))
         self.ordinal = ordinal.ordinal
     }
 }
