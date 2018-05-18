@@ -24,7 +24,47 @@ public struct RelativeNamedInterval: NamedInterval, Equatable {
     public typealias Quality = NamedIntervalQuality
     
     // MARK: - Nested Types
-    
+
+    // test, test, test
+    // Un_underscore_this
+    public enum _Ordinal {
+
+        public enum PerfectOrdinal {
+
+            // convert to general ordinal
+            var ordinal: Ordinal {
+                switch self {
+                case .unison:
+                    return .unison
+                case .fourth:
+                    return .fourth
+                }
+            }
+
+            case unison
+            case fourth
+        }
+
+        public enum ImperfectOrdinal {
+
+            // convert to general ordinal
+            var ordinal: Ordinal {
+                switch self {
+                case .second:
+                    return .second
+                case .third:
+                    return .third
+                }
+            }
+
+            case second
+            case third
+        }
+
+        case perfect(PerfectOrdinal)
+        case imperfect(ImperfectOrdinal)
+    }
+
     /// Type describing ordinality of a `RelativeNamedInterval`.
     public enum Ordinal: Int, NamedIntervalOrdinal {
         
@@ -53,15 +93,13 @@ public struct RelativeNamedInterval: NamedInterval, Equatable {
         public init?(steps: Int) {
             self.init(rawValue: steps)
         }
-        
-        // MARK: - Instance Properties
+    }
 
-//        /// Inverse of `self`.
-//        public var inverse: Ordinal {
-//            let ordinal = countTrailingZeros(rawValue)
-//            let inverseOrdinal = optionsCount - ordinal
-//            return Ordinal(rawValue: 1 << inverseOrdinal)
-//        }
+    // MARK: - Type Properties
+
+    /// Unison interval.
+    public static var unison: RelativeNamedInterval {
+        return .init(.perfect(.perfect), .unison)
     }
     
     // MARK: - Instance Properties
@@ -74,7 +112,47 @@ public struct RelativeNamedInterval: NamedInterval, Equatable {
     public let quality: Quality
     
     // MARK: - Initializers
-    
+
+    public init(_ quality: Quality.PerfectQuality, _ ordinal: _Ordinal.PerfectOrdinal) {
+        self.quality = .perfect(.perfect)
+        self.ordinal = ordinal.ordinal
+    }
+
+    public init(_ quality: Quality.ImperfectQuality, _ ordinal: _Ordinal.ImperfectOrdinal) {
+        self.quality = .imperfect(quality)
+        self.ordinal = ordinal.ordinal
+    }
+
+    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: _Ordinal.ImperfectOrdinal) {
+        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.ordinal = ordinal.ordinal
+    }
+
+    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: _Ordinal.PerfectOrdinal) {
+        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.ordinal = ordinal.ordinal
+    }
+
+    public init(
+        _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
+        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ ordinal: _Ordinal.ImperfectOrdinal
+    )
+    {
+        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.ordinal = ordinal.ordinal
+    }
+
+    public init(
+        _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
+        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ ordinal: _Ordinal.PerfectOrdinal
+    )
+    {
+        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.ordinal = ordinal.ordinal
+    }
+
     /// Create a `RelativeNamedInterval` with a given `quality` and `ordinal`.
     ///
     /// **Example:**
@@ -82,7 +160,7 @@ public struct RelativeNamedInterval: NamedInterval, Equatable {
     /// let minorSecond = RelativeNamedInterval(.minor, .second)
     /// let augmentedSixth = RelativeNamedInterval(.relative, .sixth)
     /// ```
-    public init(_ quality: Quality, _ ordinal: Ordinal) {
+    internal init(_ quality: Quality, _ ordinal: Ordinal) {
         
         guard areValid(quality, ordinal) else {
             fatalError("Cannot create an RelativeNamedInterval with \(quality) and \(ordinal)")

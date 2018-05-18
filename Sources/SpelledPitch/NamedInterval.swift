@@ -15,7 +15,7 @@ public protocol Invertible {
 }
 
 /// Interface for types describing intervals between `SpelledPitch` values.
-public protocol NamedInterval: Invertible {
+internal protocol NamedInterval: Invertible {
 
     // MARK: - Associated Types
 
@@ -24,6 +24,9 @@ public protocol NamedInterval: Invertible {
 
     /// Type describing ordinality of an `AbsoluteNamedInterval`.
     associatedtype Ordinal: NamedIntervalOrdinal
+
+    /// Unison interval.
+    static var unison: Self { get }
 
     /// MARK: - Instance Properties
 
@@ -54,6 +57,9 @@ public protocol NamedInterval: Invertible {
 /// areValid(.perfect, .second) // false
 /// areValid(.major, .second) // false
 /// ```
+///
+/// - Note: Hopefully this becomes unnecessary, as the compatibility of qualities and ordinals
+/// should be encoded into the type system.
 public func areValid <O> (_ quality: NamedIntervalQuality, _ ordinal: O) -> Bool
     where O: NamedIntervalOrdinal
 {
@@ -63,8 +69,6 @@ public func areValid <O> (_ quality: NamedIntervalQuality, _ ordinal: O) -> Bool
     case (.imperfect, let ordinal):
         return ordinal.isImperfect
     case (.augmentedOrDiminished, let ordinal):
-        print("augmented or diminished")
-        print("ordinal: \(ordinal)")
         return ordinal.isImperfect || ordinal.isPerfect
     }
 }

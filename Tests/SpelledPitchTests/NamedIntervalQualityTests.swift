@@ -27,7 +27,7 @@ class NamedIntervalQualityTests: XCTestCase {
     }
 
     func testInversePerfect() {
-        let perfect = NamedIntervalQuality.perfect
+        let perfect = NamedIntervalQuality.perfect(.perfect)
         XCTAssertEqual(perfect.inverse, perfect)
     }
 }
