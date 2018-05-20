@@ -18,6 +18,11 @@ public struct NamedOrderedInterval {
 
     // MARK: - Nested Types
 
+    /// Direction of a `NamedOrderedInterval`.
+    public enum Direction {
+        case ascending, descending
+    }
+
     /// Ordinal for `NamedOrderedInterval`.
     public enum Ordinal: Invertible {
 
