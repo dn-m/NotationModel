@@ -11,7 +11,7 @@ import Pitch
 extension Pitch {
 
     /// Spelled representation of a `Pitch`.
-    public struct Spelling {
+    public struct Spelling: Equatable {
 
         // MARK: - Errors
 
@@ -171,6 +171,7 @@ extension Pitch.Spelling {
             }
         }
 
+        /// Default pitch class for a given `LetterName`.
         public var pitchClass: Double {
             switch self {
             case .c: return 0
@@ -351,22 +352,6 @@ extension Pitch.Spelling: Hashable {
     // FIXME: Use more efficient hashing strategy
     public var hashValue: Int {
         return "\(letterName),\(quarterStep),\(eighthStep)".hashValue
-    }
-}
-
-extension Pitch.Spelling: Equatable {
-
-    // MARK: - Equatable
-
-
-    /// - Returns: `true` if `letterName`, `quarterStep`, and `eighthStep` values for both
-    /// `PitchSpelling` values are equivalent. Otherwise, `false`.
-    public static func == (lhs: Pitch.Spelling, rhs: Pitch.Spelling) -> Bool {
-        return (
-            lhs.letterName == rhs.letterName &&
-            lhs.quarterStep == rhs.quarterStep &&
-            lhs.eighthStep == rhs.eighthStep
-        )
     }
 }
 
