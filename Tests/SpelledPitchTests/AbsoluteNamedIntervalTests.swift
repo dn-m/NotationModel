@@ -31,27 +31,27 @@ class AbsoluteNamedIntervalTests: XCTestCase {
     }
 
     func testAPIShouldNotCompile() {
-        //let _: AbsoluteNamedInterval = .init(.minor, .fifth)
-        //let _: AbsoluteNamedInterval = .init(.perfect, .second)
+        //let _: NamedOrderedInterval = .init(.minor, .fifth)
+        //let _: NamedOrderedInterval = .init(.perfect, .second)
     }
 
     func testInversionPerfectFifthPerfectFourth() {
         let P5 = NamedOrderedInterval(.perfect, .fifth)
-        let P4 = NamedOrderedInterval(.perfect, .fourth)
+        let P4 = NamedOrderedInterval(.descending, .perfect, .fourth)
         XCTAssertEqual(P5.inverse, P4)
         XCTAssertEqual(P4.inverse, P5)
     }
 
     func testInversionMajorSecondMinorSeventh() {
         let M2 = NamedOrderedInterval(.major, .second)
-        let m7 = NamedOrderedInterval(.minor, .seventh)
+        let m7 = NamedOrderedInterval(.descending, .minor, .seventh)
         XCTAssertEqual(M2.inverse, m7)
         XCTAssertEqual(m7.inverse, M2)
     }
 
     func testInversionMajorThirdMinorSixth() {
-        let M3 = NamedOrderedInterval(.major, .third)
-        let m6 = NamedOrderedInterval(.minor, .sixth)
+        let M3 = NamedOrderedInterval(.descending, .major, .third)
+        let m6 = NamedOrderedInterval(.ascending, .minor, .sixth)
         XCTAssertEqual(M3.inverse, m6)
         XCTAssertEqual(m6.inverse, M3)
     }
@@ -63,8 +63,8 @@ class AbsoluteNamedIntervalTests: XCTestCase {
     }
 
     func testDoubleAugmentedThirdDoubleDiminishedSixth() {
-        let AA3 = NamedOrderedInterval(.double, .augmented, .third)
-        let dd6 = NamedOrderedInterval(.double, .diminished, .sixth)
+        let AA3 = NamedOrderedInterval(.ascending, .double, .augmented, .third)
+        let dd6 = NamedOrderedInterval(.descending, .double, .diminished, .sixth)
         XCTAssertEqual(AA3.inverse, dd6)
         XCTAssertEqual(dd6.inverse, AA3)
     }

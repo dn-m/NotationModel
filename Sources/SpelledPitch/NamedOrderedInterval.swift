@@ -1,5 +1,5 @@
 //
-//  AbsoluteNamedInterval.swift
+//  NamedOrderedInterval.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 1/8/17.
@@ -8,8 +8,7 @@
 
 import DataStructures
 
-/// Named intervals between two `SpelledPitch` values that honors order between `SpelledPitch`
-/// values.
+/// Named intervals between two `SpelledPitch` values that honors order between them.
 public struct NamedOrderedInterval {
 
     // MARK: - Associated Types
@@ -19,7 +18,12 @@ public struct NamedOrderedInterval {
 
     // MARK: - Nested Types
 
-    /// Ordinal for `AbsoluteNamedInterval`.
+    /// Direction of a `NamedOrderedInterval`.
+    public enum Direction: InvertibleEnum {
+        case ascending, descending
+    }
+
+    /// Ordinal for `NamedOrderedInterval`.
     public enum Ordinal: Invertible {
 
         /// Perfect `Ordinal` cases.
@@ -72,18 +76,22 @@ public struct NamedOrderedInterval {
 
     // MARK: - Instance Properties
 
-    /// Ordinal value of a `AbsoluteNamedInterval`
+    /// The direction of a `NamedOrderedInterval`.
+    public let direction: Direction
+
+    /// Ordinal value of a `NamedOrderedInterval`
     /// (`unison`, `second`, `third`, `fourth`, `fifth`, `sixth`, `seventh`).
     public let ordinal: Ordinal
 
-    /// /// Quality value of a `RelativeNamedInterval`
+    /// /// Quality value of a `NamedUnorderedInterval`
     /// (`diminished`, `minor`, `perfect`, `major`, `augmented`).
     public let quality: Quality
 
     // MARK: - Initializers
 
-    /// Create an `AbsoluteNamedInterval` with a given `quality` and `ordinal`.
-    internal init(_ quality: Quality, _ ordinal: Ordinal) {
+    /// Create an `NamedOrderedInterval` with a given `quality` and `ordinal`.
+    internal init(_ direction: Direction = .ascending, _ quality: Quality, _ ordinal: Ordinal) {
+        self.direction = direction
         self.quality = quality
         self.ordinal = ordinal
     }
@@ -95,32 +103,62 @@ public struct NamedOrderedInterval {
         fatalError()
     }
 
-    /// Create a perfect `AbsoluteNamedInterval`.
+    /// Create a perfect `NamedOrderedInterval`.
     ///
-    ///     let perfectFifth = AbsoluteNamedInterval(.perfect, .fifth)
+    ///     let perfectFifth = NamedOrderedInterval(.perfect, .fifth)
     ///
     public init(_ quality: Quality.Perfect, _ ordinal: Ordinal.Perfect) {
+        self.direction = .ascending
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an imperfect `AbsoluteNamedInterval`.
+    /// Create a perfect `NamedOrderedInterval` with a given `direction`.
     ///
-    ///     let majorSecond = AbsoluteNamedInterval(.major, .second)
-    ///     let minorThird = AbsoluteNamedInterval(.minor, .third)
-    ///     let majorSixth = AbsoluteNamedInterval(.major, .sixth)
-    ///     let minorSeventh = AbsoluteNamedInterval(.minor, .seventh)
+    ///     let descendingPerfectFifth = NamedOrderedInterval(.descending, .perfect, .fifth)
+    ///
+    public init(_ direction: Direction, _ quality: Quality.Perfect, _ ordinal: Ordinal.Perfect) {
+        self.direction = direction
+        self.quality = .perfect(.perfect)
+        self.ordinal = .perfect(ordinal)
+    }
+
+    /// Create an imperfect `NamedOrderedInterval`.
+    ///
+    ///     let majorSecond = NamedOrderedInterval(.major, .second)
+    ///     let minorThird = NamedOrderedInterval(.minor, .third)
+    ///     let majorSixth = NamedOrderedInterval(.major, .sixth)
+    ///     let minorSeventh = NamedOrderedInterval(.minor, .seventh)
     ///
     public init(_ quality: Quality.Imperfect, _ ordinal: Ordinal.Imperfect) {
+        self.direction = .ascending
         self.quality = .imperfect(quality)
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `AbsoluteNamedInterval` with an imperfect ordinal. These
+    /// Create an imperfect `NamedOrderedInterval`.
+    ///
+    ///     let majorSecond = NamedOrderedInterval(.ascending, .major, .second)
+    ///     let minorThird = NamedOrderedInterval(.descending, .minor, .third)
+    ///     let majorSixth = NamedOrderedInterval(.ascending, .major, .sixth)
+    ///     let minorSeventh = NamedOrderedInterval(.descending, .minor, .seventh)
+    ///
+    public init(
+        _ direction: Direction,
+        _ quality: Quality.Imperfect,
+        _ ordinal: Ordinal.Imperfect
+    )
+    {
+        self.direction = direction
+        self.quality = .imperfect(quality)
+        self.ordinal = .imperfect(ordinal)
+    }
+
+    /// Create an augmented or diminished `NamedOrderedInterval` with an imperfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleDiminishedSecond = AbsoluteNamedInterval(.double, .diminished, .second)
-    ///     let tripleAugmentedThird = AbsoluteNamedInterval(.triple, .augmented, .third)
+    ///     let doubleDiminishedSecond = NamedOrderedInterval(.double, .diminished, .second)
+    ///     let tripleAugmentedThird = NamedOrderedInterval(.triple, .augmented, .third)
     ///
     public init(
         _ degree: Quality.Extended.Degree,
@@ -128,15 +166,34 @@ public struct NamedOrderedInterval {
         _ ordinal: Ordinal.Imperfect
     )
     {
+        self.direction = .ascending
         self.quality = .augmentedOrDiminished(.init(degree, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `AbsoluteNamedInterval` with a perfect ordinal. These
+    /// Create an augmented or diminished `NamedOrderedInterval` with a given `direction` and an
+    /// imperfect ordinal. These intervals can be up to quintuple augmented or diminished.
+    ///
+    ///     let doubleDiminishedSecond = NamedOrderedInterval(.descending, .double, .diminished, .second)
+    ///     let tripleAugmentedThird = NamedOrderedInterval(.ascending, .triple, .augmented, .third)
+    ///
+    public init(
+        _ direction: Direction,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
+        _ ordinal: Ordinal.Imperfect
+    )
+    {
+        self.direction = direction
+        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.ordinal = .imperfect(ordinal)
+    }
+
+    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleAugmentedUnison = AbsoluteNamedInterval(.double, .augmented, .unison)
-    ///     let tripleDiminishedFourth = AbsoluteNamedInterval(.triple, .diminished, .fourth)
+    ///     let doubleAugmentedUnison = NamedOrderedInterval(.double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = NamedOrderedInterval(.triple, .diminished, .fourth)
     ///
     public init(
         _ degree: Quality.Extended.Degree,
@@ -144,34 +201,89 @@ public struct NamedOrderedInterval {
         _ ordinal: Ordinal.Perfect
     )
     {
+        self.direction = .ascending
         self.quality = .augmentedOrDiminished(.init(degree, quality))
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `AbsoluteNamedInterval` with an imperfect ordinal.
+    /// Create an augmented or diminished `NamedOrderedInterval` with a given `direction` and a
+    /// perfect ordinal. These intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let diminishedSecond = AbsoluteNamedInterval(.diminished, .second)
-    ///     let augmentedSixth = AbsoluteNamedInterval(.augmented, .sixth)
+    ///     let doubleAugmentedUnison = NamedOrderedInterval(.descending, .double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = NamedOrderedInterval(.ascending, .triple, .diminished, .fourth)
+    ///
+    public init(
+        _ direction: Direction,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
+        _ ordinal: Ordinal.Perfect
+    )
+    {
+        self.direction = direction
+        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.ordinal = .perfect(ordinal)
+    }
+
+    /// Create an augmented or diminished `NamedOrderedInterval` with an imperfect ordinal.
+    ///
+    ///     let diminishedSecond = NamedOrderedInterval(.diminished, .second)
+    ///     let augmentedSixth = NamedOrderedInterval(.augmented, .sixth)
     ///
     public init(
         _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
     )
     {
+        self.direction = .ascending
         self.quality = .augmentedOrDiminished(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `AbsoluteNamedInterval` with a perfect ordinal.
+    /// Create an augmented or diminished `NamedOrderedInterval` with a given `direction` and an
+    /// imperfect ordinal.
     ///
-    ///     let augmentedUnison = AbsoluteNamedInterval(.augmented, .unison)
-    ///     let diminishedFourth = AbsoluteNamedInterval(.diminished, .fourth)
+    ///     let diminishedSecond = NamedOrderedInterval(.descending, .diminished, .second)
+    ///     let augmentedSixth = NamedOrderedInterval(.ascending, .augmented, .sixth)
+    ///
+    public init(
+        _ direction: Direction,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
+        _ ordinal: Ordinal.Imperfect
+    )
+    {
+        self.direction = direction
+        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.ordinal = .imperfect(ordinal)
+    }
+
+    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect ordinal.
+    ///
+    ///     let augmentedUnison = NamedOrderedInterval(.augmented, .unison)
+    ///     let diminishedFourth = NamedOrderedInterval(.diminished, .fourth)
     ///
     public init(
         _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
     )
     {
+        self.direction = .ascending
+        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.ordinal = .perfect(ordinal)
+    }
+
+    /// Create an augmented or diminished `NamedOrderedInterval` with a given `direction` and a
+    /// perfect ordinal.
+    ///
+    ///     let augmentedUnison = NamedOrderedInterval(.ascending, .augmented, .unison)
+    ///     let diminishedFourth = NamedOrderedInterval(.descending, .diminished, .fourth)
+    ///
+    public init(
+        _ direction: Direction,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
+        _ ordinal: Ordinal.Perfect
+    )
+    {
+        self.direction = direction
         self.quality = .augmentedOrDiminished(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
     }
@@ -184,6 +296,6 @@ extension NamedOrderedInterval: Invertible {
 
     /// - Returns: Inversion of `self`.
     public var inverse: NamedOrderedInterval {
-        return .init(quality.inverse, ordinal.inverse)
+        return .init(direction.inverse, quality.inverse, ordinal.inverse)
     }
 }
