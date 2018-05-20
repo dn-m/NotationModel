@@ -9,7 +9,7 @@
 import Pitch
 
 /// Spelled pitch class.
-public struct SpelledPitchClass: Spelled {
+public struct SpelledPitchClass: Spelled, Equatable {
     
     // MARK: - Instance Properties
     
