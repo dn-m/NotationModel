@@ -21,6 +21,7 @@ extension UnorderedInterval where Element == Pitch.Class {
     }
 }
 
+// FIXME: Move to `PitchSpeller` module.
 private let intervalClassOrderedBySpellingPriority: [UnorderedInterval<Pitch.Class>] = [
 
     // minor second, major seventh 1/8th tone neighborood

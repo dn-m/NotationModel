@@ -16,3 +16,4 @@ extension Set where Element == Pitch {
         return Swift.Set(map { $0.spelledWithDefaultSpelling })
     }
 }
+

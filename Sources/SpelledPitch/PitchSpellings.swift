@@ -8,10 +8,9 @@
 
 import Pitch
 
-// FIXME: Implement with `enum` to avoid initialization
+/// Collection of `Pitch.Spelling` values stored by `Pitch.Class`.
 public enum PitchSpellings {
     
-    /// - FIXME: Ensure this is exhaustive and correct!
     private static let spellingsByPitchClass: [Pitch.Class: [Pitch.Spelling]] = [
         
         00.00: [
