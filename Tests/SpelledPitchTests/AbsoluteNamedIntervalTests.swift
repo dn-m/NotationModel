@@ -13,20 +13,8 @@ class AbsoluteNamedIntervalTests: XCTestCase {
 
     typealias Ordinal = AbsoluteNamedInterval.Ordinal
 
-    func testUnisonPerfectNotImperfect() {
-        let unison = Ordinal.unison
-        XCTAssert(Ordinal.perfects.contains(unison))
-        XCTAssertFalse(Ordinal.imperfects.contains(unison))
-    }
-
-    func testSecondImperfectNotImperfect() {
-        let second = Ordinal.second
-        XCTAssert(Ordinal.imperfects.contains(second))
-        XCTAssertFalse(Ordinal.perfects.contains(second))
-    }
-
     func testSecondOrdinalInverseSeventh() {
-        XCTAssertEqual(Ordinal.second.inverse, Ordinal.seventh)
+        XCTAssertEqual(Ordinal.imperfect(.second).inverse, Ordinal.imperfect(.seventh))
     }
 
     func testAPI() {
@@ -69,8 +57,8 @@ class AbsoluteNamedIntervalTests: XCTestCase {
     }
 
     func testAbsoluteNamedIntervalOrdinalInversion() {
-        let sixth = AbsoluteNamedInterval.Ordinal.sixth
-        let expected = AbsoluteNamedInterval.Ordinal.third
+        let sixth = AbsoluteNamedInterval.Ordinal.imperfect(.sixth)
+        let expected = AbsoluteNamedInterval.Ordinal.imperfect(.third)
         XCTAssertEqual(sixth.inverse, expected)
     }
 
@@ -79,5 +67,18 @@ class AbsoluteNamedIntervalTests: XCTestCase {
         let dd6 = AbsoluteNamedInterval(.double, .diminished, .sixth)
         XCTAssertEqual(AA3.inverse, dd6)
         XCTAssertEqual(dd6.inverse, AA3)
+    }
+
+    func testPerfectOrdinalUnisonInverse() {
+        let unison = AbsoluteNamedInterval.Ordinal.perfect(.unison)
+        let expected = AbsoluteNamedInterval.Ordinal.perfect(.unison)
+        XCTAssertEqual(unison.inverse, expected)
+    }
+
+    func testPerfectOrdinalFourthFifthInverse() {
+        let fourth = AbsoluteNamedInterval.Ordinal.perfect(.fourth)
+        let fifth = AbsoluteNamedInterval.Ordinal.perfect(.fifth)
+        XCTAssertEqual(fourth.inverse, fifth)
+        XCTAssertEqual(fifth.inverse, fourth)
     }
 }
