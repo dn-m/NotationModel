@@ -8,16 +8,19 @@
 
 import DataStructures
 
+/// The quality of a `NamedInterval`.
 public enum NamedIntervalQuality: Invertible, Equatable {
 
     /// An augmented or diminished named interval quality
-    public struct AugmentedOrDiminishedQuality: Invertible, Equatable {
+    public struct Extended: Invertible, Equatable {
 
+        /// Either augmented or diminished
         public enum AugmentedOrDiminished {
             case augmented
             case diminished
         }
 
+        /// The degree to which an `Extended` quality is augmented or diminished.
         public enum Degree {
             case single
             case double
@@ -26,32 +29,42 @@ public enum NamedIntervalQuality: Invertible, Equatable {
             case quintuple
         }
 
+        // MARK: Instance Properties
+
         /// - Returns: Inversion of `self`.
-        public var inverse: AugmentedOrDiminishedQuality {
+        public var inverse: Extended {
             switch quality {
             case .augmented:
-                return AugmentedOrDiminishedQuality(degree, .diminished)
+                return Extended(degree, .diminished)
             case .diminished:
-                return AugmentedOrDiminishedQuality(degree, .augmented)
+                return Extended(degree, .augmented)
             }
         }
 
+        /// Whether this `Extended` quality is augmented or diminished
         let quality: AugmentedOrDiminished
+
+        /// The degree to which this quality is augmented or diminished (e.g., double augmented,
+        /// etc.)
         let degree: Degree
 
+        // MARK: Initializers
+
+        /// Creates an `Extended` `NamedIntervalQuality` with the given `degree` and `quality.`
         public init(_ degree: Degree = .single, _ quality: AugmentedOrDiminished) {
             self.degree = degree
             self.quality = quality
         }
     }
 
-    /// An imperect interval quality
-    public enum ImperfectQuality: InvertibleEnum {
+    /// An imperfect interval quality.
+    public enum Imperfect: InvertibleEnum {
         case major
         case minor
     }
 
-    public enum PerfectQuality {
+    /// A perfect interval quality.
+    public enum Perfect {
         case perfect
     }
 
@@ -67,10 +80,11 @@ public enum NamedIntervalQuality: Invertible, Equatable {
         }
     }
 
-    case perfect(PerfectQuality)
-    case imperfect(ImperfectQuality)
-    case augmentedOrDiminished(AugmentedOrDiminishedQuality)
+    case perfect(Perfect)
+    case imperfect(Imperfect)
+    case augmentedOrDiminished(Extended)
 
+    /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
     public init (sanitizedIntervalClass: Double, ordinal: RelativeNamedInterval.Ordinal) {
 
         func diminishedAndAugmentedThresholds(ordinal: RelativeNamedInterval.Ordinal)
@@ -120,4 +134,3 @@ public enum NamedIntervalQuality: Invertible, Equatable {
         }
     }
 }
-

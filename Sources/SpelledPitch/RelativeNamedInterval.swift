@@ -73,29 +73,29 @@ public struct RelativeNamedInterval: Equatable {
     
     // MARK: - Initializers
 
-    public init(_ quality: Quality.PerfectQuality, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: Quality.Perfect, _ ordinal: Ordinal.Perfect) {
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
     }
 
-    public init(_ quality: Quality.ImperfectQuality, _ ordinal: Ordinal.Imperfect) {
+    public init(_ quality: Quality.Imperfect, _ ordinal: Ordinal.Imperfect) {
         self.quality = .imperfect(quality)
         self.ordinal = .imperfect(ordinal)
     }
 
-    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
         self.quality = .augmentedOrDiminished(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
-    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
         self.quality = .augmentedOrDiminished(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
     }
 
     public init(
-        _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
-        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
     )
     {
@@ -104,8 +104,8 @@ public struct RelativeNamedInterval: Equatable {
     }
 
     public init(
-        _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
-        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
     )
     {

@@ -99,7 +99,7 @@ public struct AbsoluteNamedInterval: Equatable {
     ///
     ///     let perfectFifth = AbsoluteNamedInterval(.perfect, .fifth)
     ///
-    public init(_ quality: Quality.PerfectQuality, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: Quality.Perfect, _ ordinal: Ordinal.Perfect) {
         self.quality = .perfect(.perfect)
         self.ordinal = .perfect(ordinal)
     }
@@ -111,7 +111,7 @@ public struct AbsoluteNamedInterval: Equatable {
     ///     let majorSixth = AbsoluteNamedInterval(.major, .sixth)
     ///     let minorSeventh = AbsoluteNamedInterval(.minor, .seventh)
     ///
-    public init(_ quality: Quality.ImperfectQuality, _ ordinal: Ordinal.Imperfect) {
+    public init(_ quality: Quality.Imperfect, _ ordinal: Ordinal.Imperfect) {
         self.quality = .imperfect(quality)
         self.ordinal = .imperfect(ordinal)
     }
@@ -123,8 +123,8 @@ public struct AbsoluteNamedInterval: Equatable {
     ///     let tripleAugmentedThird = AbsoluteNamedInterval(.triple, .augmented, .third)
     ///
     public init(
-        _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
-        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
     )
     {
@@ -139,8 +139,8 @@ public struct AbsoluteNamedInterval: Equatable {
     ///     let tripleDiminishedFourth = AbsoluteNamedInterval(.triple, .diminished, .fourth)
     ///
     public init(
-        _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
-        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ degree: Quality.Extended.Degree,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
     )
     {
@@ -154,7 +154,7 @@ public struct AbsoluteNamedInterval: Equatable {
     ///     let augmentedSixth = AbsoluteNamedInterval(.augmented, .sixth)
     ///
     public init(
-        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Imperfect
     )
     {
@@ -168,7 +168,7 @@ public struct AbsoluteNamedInterval: Equatable {
     ///     let diminishedFourth = AbsoluteNamedInterval(.diminished, .fourth)
     ///
     public init(
-        _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
+        _ quality: Quality.Extended.AugmentedOrDiminished,
         _ ordinal: Ordinal.Perfect
     )
     {
