@@ -25,12 +25,15 @@ public struct NamedUnorderedInterval {
     
     // MARK: - Nested Types
 
+    /// The ordinal of a `NamedUnorderedInterval`.
     public enum Ordinal {
 
+        /// Perfect ordinals.
         public enum Perfect {
             case unison, fourth
         }
 
+        /// Imperfect ordinals.
         public enum Imperfect {
             case second, third
         }
@@ -115,11 +118,9 @@ public struct NamedUnorderedInterval {
 
     /// Create a `NamedUnorderedInterval` with a given `quality` and `ordinal`.
     ///
-    /// **Example:**
-    /// ```Swift
-    /// let minorSecond = NamedUnorderedInterval(.minor, .second)
-    /// let augmentedSixth = NamedUnorderedInterval(.relative, .sixth)
-    /// ```
+    ///     let minorSecond = NamedUnorderedInterval(.minor, .second)
+    ///     let augmentedSixth = NamedUnorderedInterval(.augmented, .sixth)
+    ///
     internal init(_ quality: Quality, _ ordinal: Ordinal) {
         self.quality = quality
         self.ordinal = ordinal
