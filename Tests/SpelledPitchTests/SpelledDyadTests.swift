@@ -21,7 +21,7 @@ class SpelledDyadTests: XCTestCase {
 
     func assertRelativeNamedInterval(
         for dyad: SpelledDyad,
-        equals interval: RelativeNamedInterval?
+        equals interval: NamedUnorderedInterval?
     )
     {
         XCTAssertEqual(dyad.relativeInterval, interval)
@@ -29,7 +29,7 @@ class SpelledDyadTests: XCTestCase {
 
     func assertAbsoluteInterval(
         for dyad: SpelledDyad,
-        equals interval: AbsoluteNamedInterval?
+        equals interval: NamedOrderedInterval?
     )
     {
         XCTAssertEqual(dyad.absoluteInterval, interval)
@@ -52,24 +52,24 @@ class SpelledDyadTests: XCTestCase {
 
     func testRelativeNamedIntervalPerfectUnison() {
         let spelledDyad = SpelledDyad(c,c)
-        assertRelativeNamedInterval(for: spelledDyad, equals: RelativeNamedInterval(.perfect, .unison))
+        assertRelativeNamedInterval(for: spelledDyad, equals: NamedUnorderedInterval(.perfect, .unison))
     }
 
     func testRelativeNamedIntervalMinorSecond() {
-        assertRelativeNamedInterval(for: SpelledDyad(c, dflat), equals: RelativeNamedInterval(.minor, .second))
+        assertRelativeNamedInterval(for: SpelledDyad(c, dflat), equals: NamedUnorderedInterval(.minor, .second))
     }
 
     func testRelativeNamedIntervalAugmentedFourth() {
         assertRelativeNamedInterval(
             for: SpelledDyad(c, fsharp),
-            equals: RelativeNamedInterval(.single, .augmented, .fourth)
+            equals: NamedUnorderedInterval(.single, .augmented, .fourth)
         )
     }
 
     func testRelativeNamedIntervalDiminishedFourth() {
         assertRelativeNamedInterval(
             for: SpelledDyad(fsharp, bflat),
-            equals: RelativeNamedInterval(.single, .diminished, .fourth)
+            equals: NamedUnorderedInterval(.single, .diminished, .fourth)
         )
     }
 

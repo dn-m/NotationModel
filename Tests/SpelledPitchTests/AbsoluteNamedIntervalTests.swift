@@ -11,23 +11,23 @@ import SpelledPitch
 
 class AbsoluteNamedIntervalTests: XCTestCase {
 
-    typealias Ordinal = AbsoluteNamedInterval.Ordinal
+    typealias Ordinal = NamedOrderedInterval.Ordinal
 
     func testSecondOrdinalInverseSeventh() {
         XCTAssertEqual(Ordinal.imperfect(.second).inverse, Ordinal.imperfect(.seventh))
     }
 
     func testAPI() {
-        let _: AbsoluteNamedInterval = .unison
-        let _: AbsoluteNamedInterval = .init(.minor, .second)
-        let _: AbsoluteNamedInterval = .init(.perfect, .fifth)
-        let _: AbsoluteNamedInterval = .init(.perfect, .fourth)
-        let _: AbsoluteNamedInterval = .init(.augmented, .fifth)
-        let _: AbsoluteNamedInterval = .init(.diminished, .fifth)
-        let _: AbsoluteNamedInterval = .init(.augmented, .third)
-        let _: AbsoluteNamedInterval = .init(.minor, .seventh)
-        let _: AbsoluteNamedInterval = .init(.triple, .augmented, .seventh)
-        let _: AbsoluteNamedInterval = .init(.double, .diminished, .fifth)
+        let _: NamedOrderedInterval = .unison
+        let _: NamedOrderedInterval = .init(.minor, .second)
+        let _: NamedOrderedInterval = .init(.perfect, .fifth)
+        let _: NamedOrderedInterval = .init(.perfect, .fourth)
+        let _: NamedOrderedInterval = .init(.augmented, .fifth)
+        let _: NamedOrderedInterval = .init(.diminished, .fifth)
+        let _: NamedOrderedInterval = .init(.augmented, .third)
+        let _: NamedOrderedInterval = .init(.minor, .seventh)
+        let _: NamedOrderedInterval = .init(.triple, .augmented, .seventh)
+        let _: NamedOrderedInterval = .init(.double, .diminished, .fifth)
     }
 
     func testAPIShouldNotCompile() {
@@ -36,48 +36,48 @@ class AbsoluteNamedIntervalTests: XCTestCase {
     }
 
     func testInversionPerfectFifthPerfectFourth() {
-        let P5 = AbsoluteNamedInterval(.perfect, .fifth)
-        let P4 = AbsoluteNamedInterval(.perfect, .fourth)
+        let P5 = NamedOrderedInterval(.perfect, .fifth)
+        let P4 = NamedOrderedInterval(.perfect, .fourth)
         XCTAssertEqual(P5.inverse, P4)
         XCTAssertEqual(P4.inverse, P5)
     }
 
     func testInversionMajorSecondMinorSeventh() {
-        let M2 = AbsoluteNamedInterval(.major, .second)
-        let m7 = AbsoluteNamedInterval(.minor, .seventh)
+        let M2 = NamedOrderedInterval(.major, .second)
+        let m7 = NamedOrderedInterval(.minor, .seventh)
         XCTAssertEqual(M2.inverse, m7)
         XCTAssertEqual(m7.inverse, M2)
     }
 
     func testInversionMajorThirdMinorSixth() {
-        let M3 = AbsoluteNamedInterval(.major, .third)
-        let m6 = AbsoluteNamedInterval(.minor, .sixth)
+        let M3 = NamedOrderedInterval(.major, .third)
+        let m6 = NamedOrderedInterval(.minor, .sixth)
         XCTAssertEqual(M3.inverse, m6)
         XCTAssertEqual(m6.inverse, M3)
     }
 
     func testAbsoluteNamedIntervalOrdinalInversion() {
-        let sixth = AbsoluteNamedInterval.Ordinal.imperfect(.sixth)
-        let expected = AbsoluteNamedInterval.Ordinal.imperfect(.third)
+        let sixth = NamedOrderedInterval.Ordinal.imperfect(.sixth)
+        let expected = NamedOrderedInterval.Ordinal.imperfect(.third)
         XCTAssertEqual(sixth.inverse, expected)
     }
 
     func testDoubleAugmentedThirdDoubleDiminishedSixth() {
-        let AA3 = AbsoluteNamedInterval(.double, .augmented, .third)
-        let dd6 = AbsoluteNamedInterval(.double, .diminished, .sixth)
+        let AA3 = NamedOrderedInterval(.double, .augmented, .third)
+        let dd6 = NamedOrderedInterval(.double, .diminished, .sixth)
         XCTAssertEqual(AA3.inverse, dd6)
         XCTAssertEqual(dd6.inverse, AA3)
     }
 
     func testPerfectOrdinalUnisonInverse() {
-        let unison = AbsoluteNamedInterval.Ordinal.perfect(.unison)
-        let expected = AbsoluteNamedInterval.Ordinal.perfect(.unison)
+        let unison = NamedOrderedInterval.Ordinal.perfect(.unison)
+        let expected = NamedOrderedInterval.Ordinal.perfect(.unison)
         XCTAssertEqual(unison.inverse, expected)
     }
 
     func testPerfectOrdinalFourthFifthInverse() {
-        let fourth = AbsoluteNamedInterval.Ordinal.perfect(.fourth)
-        let fifth = AbsoluteNamedInterval.Ordinal.perfect(.fifth)
+        let fourth = NamedOrderedInterval.Ordinal.perfect(.fourth)
+        let fifth = NamedOrderedInterval.Ordinal.perfect(.fifth)
         XCTAssertEqual(fourth.inverse, fifth)
         XCTAssertEqual(fifth.inverse, fourth)
     }
