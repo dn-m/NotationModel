@@ -76,7 +76,20 @@ public enum NamedIntervalQuality: Invertible, Equatable {
         func diminishedAndAugmentedThresholds(ordinal: RelativeNamedInterval.Ordinal)
             -> (Double, Double)
         {
-            let result: Double = ordinal == .unison ? 0.5 : ordinal.isPerfect ? 1 : 1.5
+            var result: Double {
+                switch ordinal {
+                case .perfect(let perfect):
+                    switch perfect {
+                    case .unison:
+                        return 0.5
+                    case .fourth:
+                        return 1
+                    }
+                case .imperfect:
+                    return 1.5
+                }
+            }
+
             return (-result, result)
         }
 

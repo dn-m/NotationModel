@@ -6,9 +6,11 @@
 //
 //
 
+import DataStructures
+
 /// Named intervals between two `SpelledPitch` values that honors order between `SpelledPitch`
 /// values.
-public struct AbsoluteNamedInterval: NamedInterval, Equatable {
+public struct AbsoluteNamedInterval: Equatable {
 
     // MARK: - Associated Types
 
@@ -17,101 +19,47 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
 
     // MARK: - Nested Types
 
-    public enum AbsoluteOrdinal {
+    /// Ordinal for `AbsoluteNamedInterval`.
+    public enum Ordinal: Equatable, Invertible {
 
-        public enum PerfectOrdinal {
+        /// Perfect `Ordinal` cases.
+        public enum Perfect: InvertibleEnum {
+            case unison, fourth, fifth
 
-            // convert to general ordinal
-            var ordinal: Ordinal {
-                switch self {
-                case .unison:
-                    return .unison
-                case .fourth:
-                    return .fourth
-                case .fifth:
-                    return .fifth
-                }
+            /// Customizes the `InvertibleEnum` `inverse` implementation to return `unison` as the
+            /// inverse of `unison`.
+            ///
+            /// - Returns: Inverse of `self`.
+            public var inverse: Perfect {
+                let index = Perfect.allCases.index(of: self)!
+                guard index > 0 else { return self }
+                let inverseIndex = Perfect.allCases.count - index
+                return Perfect.allCases[inverseIndex]
             }
-
-            case unison
-            case fourth
-            case fifth
         }
 
-        public enum ImperfectOrdinal {
+        /// Imperfect `Ordinal` cases
+        public enum Imperfect: InvertibleEnum {
+            case second, third, sixth, seventh
+        }
 
-            // convert to general ordinal
-            var ordinal: Ordinal {
-                switch self {
-                case .second:
-                    return .second
-                case .third:
-                    return .third
-                case .sixth:
-                    return .sixth
-                case .seventh:
-                    return .seventh
-                }
+        case perfect(Perfect)
+        case imperfect(Imperfect)
+
+        /// - Returns: Inversion of `self`.
+        ///
+        ///     let third: Ordinal = .imperfect(.third)
+        ///     third.inverse // => .imperfect(.sixth)
+        ///     let fifth: Ordinal = .perfect(.fifth)
+        ///     fifth.inverse // => .perfect(.fourth)
+        ///
+        public var inverse: AbsoluteNamedInterval.Ordinal {
+            switch self {
+            case .perfect(let ordinal):
+                return .perfect(ordinal.inverse)
+            case .imperfect(let ordinal):
+                return .imperfect(ordinal.inverse)
             }
-
-            case second
-            case third
-            case sixth
-            case seventh
-        }
-
-        case perfect(PerfectOrdinal)
-        case imperfect(ImperfectOrdinal)
-    }
-
-    /// Type descripting ordinality of an `AbsoluteNamedInterval`.
-    public enum Ordinal: Int, NamedIntervalOrdinal {
-
-        // MARK: Ordinal classes
-
-        // Set of `perfect` interval ordinals
-        public static let perfects: Set<Ordinal> = [.unison, .fourth, .fifth]
-
-        // Set of `imperfect` interval ordinals
-        public static var imperfects: Set<Ordinal> = [.second, .third, .sixth, .seventh]
-
-        // MARK: Ordinal instances
-
-        /// Unison.
-        case unison = 0
-
-        /// Second.
-        case second = 1
-
-        /// Third.
-        case third = 2
-
-        /// Fourth.
-        case fourth = 3
-
-        /// Fifth.
-        case fifth = 4
-
-        /// Sixth.
-        case sixth = 5
-
-        /// Seventh.
-        case seventh = 6
-
-        public init?(steps: Int) {
-            self.init(rawValue: steps)
-        }
-
-        /// - returns: `true` if an `Ordinal` belongs to the `perfects` class. Otherwise,
-        /// `false`.
-        public var isPerfect: Bool {
-            return Ordinal.perfects.contains(self)
-        }
-
-        /// - returns: `true` if an `Ordinal` belongs to the `imperfects` class. Otherwise,
-        /// `false`.
-        public var isImperfect: Bool {
-            return Ordinal.imperfects.contains(self)
         }
     }
 
@@ -119,7 +67,7 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
 
     /// Unison interval.
     public static var unison: AbsoluteNamedInterval {
-        return .init(.perfect(.perfect), .unison)
+        return .init(.perfect, .unison)
     }
 
     // MARK: - Instance Properties
@@ -151,9 +99,9 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     ///
     ///     let perfectFifth = AbsoluteNamedInterval(.perfect, .fifth)
     ///
-    public init(_ quality: Quality.PerfectQuality, _ ordinal: AbsoluteOrdinal.PerfectOrdinal) {
+    public init(_ quality: Quality.PerfectQuality, _ ordinal: Ordinal.Perfect) {
         self.quality = .perfect(.perfect)
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .perfect(ordinal)
     }
 
     /// Create an imperfect `AbsoluteNamedInterval`.
@@ -163,9 +111,9 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     ///     let majorSixth = AbsoluteNamedInterval(.major, .sixth)
     ///     let minorSeventh = AbsoluteNamedInterval(.minor, .seventh)
     ///
-    public init(_ quality: Quality.ImperfectQuality, _ ordinal: AbsoluteOrdinal.ImperfectOrdinal) {
+    public init(_ quality: Quality.ImperfectQuality, _ ordinal: Ordinal.Imperfect) {
         self.quality = .imperfect(quality)
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .imperfect(ordinal)
     }
 
     /// Create an augmented or diminished `AbsoluteNamedInterval` with an imperfect ordinal. These
@@ -177,10 +125,11 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     public init(
         _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
-        _ ordinal: AbsoluteOrdinal.ImperfectOrdinal
-    ) {
+        _ ordinal: Ordinal.Imperfect
+    )
+    {
         self.quality = .augmentedOrDiminished(.init(degree, quality))
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .imperfect(ordinal)
     }
 
     /// Create an augmented or diminished `AbsoluteNamedInterval` with a perfect ordinal. These
@@ -192,10 +141,11 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     public init(
         _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
-        _ ordinal: AbsoluteOrdinal.PerfectOrdinal
-    ) {
+        _ ordinal: Ordinal.Perfect
+    )
+    {
         self.quality = .augmentedOrDiminished(.init(degree, quality))
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .perfect(ordinal)
     }
 
     /// Create an augmented or diminished `AbsoluteNamedInterval` with an imperfect ordinal.
@@ -205,22 +155,32 @@ public struct AbsoluteNamedInterval: NamedInterval, Equatable {
     ///
     public init(
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
-        _ ordinal: AbsoluteOrdinal.ImperfectOrdinal
-    ) {
+        _ ordinal: Ordinal.Imperfect
+    )
+    {
         self.quality = .augmentedOrDiminished(.init(.single, quality))
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .imperfect(ordinal)
     }
 
     /// Create an augmented or diminished `AbsoluteNamedInterval` with a perfect ordinal.
     ///
     ///     let augmentedUnison = AbsoluteNamedInterval(.augmented, .unison)
-    ///     let tripleDiminishedFourth = AbsoluteNamedInterval(.triple, .diminished, .fourth)
+    ///     let diminishedFourth = AbsoluteNamedInterval(.diminished, .fourth)
     ///
     public init(
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
-        _ ordinal: AbsoluteOrdinal.PerfectOrdinal
-    ) {
+        _ ordinal: Ordinal.Perfect
+    )
+    {
         self.quality = .augmentedOrDiminished(.init(.single, quality))
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .perfect(ordinal)
+    }
+}
+
+extension AbsoluteNamedInterval: Invertible {
+
+    /// - Returns: Inversion of `self`.
+    public var inverse: AbsoluteNamedInterval {
+        return .init(quality.inverse, ordinal.inverse)
     }
 }

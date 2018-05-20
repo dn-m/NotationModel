@@ -13,8 +13,8 @@ import Pitch
 
 /// Named intervals between two `SpelledPitch` values that does not honor order between
 /// `SpelledPitch` values.
-public struct RelativeNamedInterval: NamedInterval, Equatable {
-    
+public struct RelativeNamedInterval: Equatable {
+
     // MARK: - Associated Types
     
     /// `PitchType` with level of ordering necessary to construct a `RelativeNamedInterval`.
@@ -25,71 +25,33 @@ public struct RelativeNamedInterval: NamedInterval, Equatable {
     
     // MARK: - Nested Types
 
-    public enum RelativeOrdinal {
+    public enum Ordinal: Equatable {
 
-        public enum PerfectOrdinal {
-
-            // convert to general ordinal
-            var ordinal: Ordinal {
-                switch self {
-                case .unison:
-                    return .unison
-                case .fourth:
-                    return .fourth
-                }
-            }
-
-            case unison
-            case fourth
+        public enum Perfect {
+            case unison, fourth
         }
 
-        public enum ImperfectOrdinal {
-
-            // convert to general ordinal
-            var ordinal: Ordinal {
-                switch self {
-                case .second:
-                    return .second
-                case .third:
-                    return .third
-                }
-            }
-
-            case second
-            case third
+        public enum Imperfect {
+            case second, third
         }
 
-        case perfect(PerfectOrdinal)
-        case imperfect(ImperfectOrdinal)
-    }
+        case perfect(Perfect)
+        case imperfect(Imperfect)
 
-    /// Type describing ordinality of a `RelativeNamedInterval`.
-    public enum Ordinal: Int, NamedIntervalOrdinal {
-        
-        // MARK: Ordinal classes
-        
-        /// Set of `perfect` interval ordinals (`unison`, `fourth`)
-        public static let perfects: Set<Ordinal> = [.unison, .fourth]
-        
-        /// Set of `imperfect` interval ordinals (`second`, `third`)
-        public static var imperfects: Set<Ordinal> = [.second, .third]
-        
-        // MARK: Ordinal instances
-        
-        /// Unison.
-        case unison = 0
-        
-        /// Second.
-        case second = 1
-        
-        /// Third.
-        case third = 2
-        
-        /// Fourth.
-        case fourth = 3
-
+        /// Creates a `RelativeNamedInterval` with the given amount of `steps`.
         public init?(steps: Int) {
-            self.init(rawValue: steps)
+            switch steps {
+            case 0:
+                self = .perfect(.unison)
+            case 1:
+                self = .imperfect(.second)
+            case 2:
+                self = .imperfect(.third)
+            case 3:
+                self = .perfect(.fourth)
+            default:
+                return nil
+            }
         }
     }
 
@@ -97,7 +59,7 @@ public struct RelativeNamedInterval: NamedInterval, Equatable {
 
     /// Unison interval.
     public static var unison: RelativeNamedInterval {
-        return .init(.perfect(.perfect), .unison)
+        return .init(.perfect, .unison)
     }
     
     // MARK: - Instance Properties
@@ -111,44 +73,44 @@ public struct RelativeNamedInterval: NamedInterval, Equatable {
     
     // MARK: - Initializers
 
-    public init(_ quality: Quality.PerfectQuality, _ ordinal: RelativeOrdinal.PerfectOrdinal) {
+    public init(_ quality: Quality.PerfectQuality, _ ordinal: Ordinal.Perfect) {
         self.quality = .perfect(.perfect)
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .perfect(ordinal)
     }
 
-    public init(_ quality: Quality.ImperfectQuality, _ ordinal: RelativeOrdinal.ImperfectOrdinal) {
+    public init(_ quality: Quality.ImperfectQuality, _ ordinal: Ordinal.Imperfect) {
         self.quality = .imperfect(quality)
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .imperfect(ordinal)
     }
 
-    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: RelativeOrdinal.ImperfectOrdinal) {
+    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
         self.quality = .augmentedOrDiminished(.init(.single, quality))
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .imperfect(ordinal)
     }
 
-    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: RelativeOrdinal.PerfectOrdinal) {
+    public init(_ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
         self.quality = .augmentedOrDiminished(.init(.single, quality))
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .perfect(ordinal)
     }
 
     public init(
         _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
-        _ ordinal: RelativeOrdinal.ImperfectOrdinal
+        _ ordinal: Ordinal.Imperfect
     )
     {
         self.quality = .augmentedOrDiminished(.init(degree, quality))
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .imperfect(ordinal)
     }
 
     public init(
         _ degree: Quality.AugmentedOrDiminishedQuality.Degree,
         _ quality: Quality.AugmentedOrDiminishedQuality.AugmentedOrDiminished,
-        _ ordinal: RelativeOrdinal.PerfectOrdinal
+        _ ordinal: Ordinal.Perfect
     )
     {
         self.quality = .augmentedOrDiminished(.init(degree, quality))
-        self.ordinal = ordinal.ordinal
+        self.ordinal = .perfect(ordinal)
     }
 
     /// Create a `RelativeNamedInterval` with a given `quality` and `ordinal`.
