@@ -210,4 +210,3 @@ private func interval(_ a: SpelledPitchClass, _ b: SpelledPitchClass) -> Double 
 private func steps(_ a: SpelledPitchClass, _ b: SpelledPitchClass) -> Int {
     return mod(b.spelling.letterName.steps - a.spelling.letterName.steps, 7)
 }
-

@@ -110,26 +110,37 @@ public enum NamedIntervalQuality: Invertible {
         /// The thresholds that need to be crossed in order to manage diminished and augmented
         /// intervals.
         let (diminished, augmented) = diminishedAndAugmentedThresholds(ordinal: ordinal)
+        print("diminished: \(diminished); augmented: \(augmented)")
 
         switch sanitizedIntervalClass {
+        case diminished - 4:
+            self = .augmentedOrDiminished(.init(.quintuple, .diminished))
+        case diminished - 3:
+            self = .augmentedOrDiminished(.init(.quadruple, .diminished))
+        case diminished - 2.5:
+            self = .augmentedOrDiminished(.init(.triple, .diminished))
+        case diminished - 1:
+            self = .augmentedOrDiminished(.init(.double, .diminished))
         case diminished:
             self = .augmentedOrDiminished(.init(.single, .diminished))
         case augmented:
             self = .augmentedOrDiminished(.init(.single, .augmented))
-        case _ where sanitizedIntervalClass < diminished:
-            print("Warning: only support up to double diminished!")
-            self = .augmentedOrDiminished(.init(.double, .diminished))
+        case augmented + 1:
+            self = .augmentedOrDiminished(.init(.double, .augmented))
+        case augmented + 2.5:
+            self = .augmentedOrDiminished(.init(.triple, .augmented))
+        case augmented + 3:
+            self = .augmentedOrDiminished(.init(.quadruple, .augmented))
+        case augmented + 4:
+            self = .augmentedOrDiminished(.init(.quintuple, .augmented))
         case -0.5:
             self = .imperfect(.minor)
         case +0.0:
             self = .perfect(.perfect)
         case +0.5:
             self = .imperfect(.major)
-        case _ where sanitizedIntervalClass > augmented:
-            print("Warning: only support up to double augmented!")
-            self = .augmentedOrDiminished(.init(.double, .augmented))
         default:
-            fatalError("Not possible to create a NamedIntervalQuality with \(sanitizedIntervalClass) and \(ordinal)")
+            fatalError("Not possible to create a NamedIntervalQuality with sanitized interval class \(sanitizedIntervalClass) and \(ordinal)")
         }
     }
 }
