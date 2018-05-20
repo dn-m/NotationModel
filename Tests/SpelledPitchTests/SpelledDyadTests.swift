@@ -74,31 +74,31 @@ class SpelledDyadTests: XCTestCase {
     }
 
 //    func testRelativeNamedIntervalDoubleDiminishedFourth() {
-//        let quality = RelativeNamedInterval.Quality.augmentedOrDiminished(.init(.double, .diminished))
+//        let quality = NamedUnorderedInterval.Quality.augmentedOrDiminished(.init(.double, .diminished))
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(fsharp, bdoubleflat),
-//            equals: RelativeNamedInterval(quality, .fourth)
+//            equals: NamedUnorderedInterval(quality, .fourth)
 //        )
 //    }
 //
 //    func testRelativeNamedIntervalDiminishedSecond() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(c, ddoubleflat),
-//            equals: RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .second)
+//            equals: NamedUnorderedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .second)
 //        )
 //    }
 //
 //    func testRelativeNamedIntervalAugmentedSecond() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(c, dsharp),
-//            equals: RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .augmented)), .second)
+//            equals: NamedUnorderedInterval(.augmentedOrDiminished(.init(.single, .augmented)), .second)
 //        )
 //    }
 //
 //    func testDiminishedThird() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(dsharp, f),
-//            equals: RelativeNamedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .third)
+//            equals: NamedUnorderedInterval(.augmentedOrDiminished(.init(.single, .diminished)), .third)
 //        )
 //    }
 //
@@ -106,33 +106,33 @@ class SpelledDyadTests: XCTestCase {
 //    func testRelativeNamedIntervalDoubleDiminishedSecond() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(csharp, ddoubleflat),
-//            equals: RelativeNamedInterval(.double, .diminished, .second)
+//            equals: NamedUnorderedInterval(.double, .diminished, .second)
 //        )
 //    }
 
 
 //    func testRelativeNamedIntervalPerfectFifth() {
-//        assertRelativeNamedInterval(for: SpelledDyad(c, g), equals: RelativeNamedInterval(.perfect, .fifth))
+//        assertRelativeNamedInterval(for: SpelledDyad(c, g), equals: NamedUnorderedInterval(.perfect, .fifth))
 //    }
 //
 //    func testRelativeNamedIntervalAugmentedFifth() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(c,gsharp),
-//            equals: RelativeNamedInterval(.augmented, .fifth)
+//            equals: NamedUnorderedInterval(.augmented, .fifth)
 //        )
 //    }
 
 //    func testDoubleAugmentedSixth() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(bflat, gdoublesharp),
-//            equals: RelativeNamedInterval(.double, .augmented, .sixth)
+//            equals: NamedUnorderedInterval(.double, .augmented, .sixth)
 //        )
 //    }
 //
 //    func testTripleDiminishedUnison() {
 //        assertRelativeNamedInterval(
 //            for: SpelledDyad(cdoublesharp, cflat),
-//            equals: RelativeNamedInterval(.triple, .augmented, .unison)
+//            equals: NamedUnorderedInterval(.triple, .augmented, .unison)
 //        )
 //    }
 

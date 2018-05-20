@@ -1,5 +1,5 @@
 //
-//  RelativeNamedInterval.swift
+//  NamedUnorderedInterval.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 1/8/17.
@@ -17,7 +17,7 @@ public struct NamedUnorderedInterval {
 
     // MARK: - Associated Types
     
-    /// `PitchType` with level of ordering necessary to construct a `RelativeNamedInterval`.
+    /// `PitchType` with level of ordering necessary to construct a `NamedUnorderedInterval`.
     public typealias PitchType = Pitch.Class
     
     /// Type describing the quality of a `NamedInterval`-conforming type.
@@ -38,7 +38,7 @@ public struct NamedUnorderedInterval {
         case perfect(Perfect)
         case imperfect(Imperfect)
 
-        /// Creates a `RelativeNamedInterval` with the given amount of `steps`.
+        /// Creates a `NamedUnorderedInterval` with the given amount of `steps`.
         public init?(steps: Int) {
             switch steps {
             case 0:
@@ -64,10 +64,10 @@ public struct NamedUnorderedInterval {
     
     // MARK: - Instance Properties
     
-    /// Ordinal value of a `RelativeNamedInterval` (`unison`, `second`, `third`, `fourth`).
+    /// Ordinal value of a `NamedUnorderedInterval` (`unison`, `second`, `third`, `fourth`).
     public let ordinal: Ordinal
     
-    /// Quality value of a `RelativeNamedInterval`
+    /// Quality value of a `NamedUnorderedInterval`
     /// (`diminished`, `minor`, `perfect`, `major`, `augmented`).
     public let quality: Quality
     
@@ -113,19 +113,19 @@ public struct NamedUnorderedInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create a `RelativeNamedInterval` with a given `quality` and `ordinal`.
+    /// Create a `NamedUnorderedInterval` with a given `quality` and `ordinal`.
     ///
     /// **Example:**
     /// ```Swift
-    /// let minorSecond = RelativeNamedInterval(.minor, .second)
-    /// let augmentedSixth = RelativeNamedInterval(.relative, .sixth)
+    /// let minorSecond = NamedUnorderedInterval(.minor, .second)
+    /// let augmentedSixth = NamedUnorderedInterval(.relative, .sixth)
     /// ```
     internal init(_ quality: Quality, _ ordinal: Ordinal) {
         self.quality = quality
         self.ordinal = ordinal
     }
     
-    /// Create a `RelativeNamedInterval` with two `SpelledPitch` values.
+    /// Create a `NamedUnorderedInterval` with two `SpelledPitch` values.
     public init(_ a: SpelledPitchClass, _ b: SpelledPitchClass) {
         
         // Ensure that the two `SpelledPitchClass` values are in the correct order to create
