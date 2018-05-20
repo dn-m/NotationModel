@@ -13,7 +13,7 @@ import Pitch
 
 /// Named intervals between two `SpelledPitch` values that does not honor order between
 /// `SpelledPitch` values.
-public struct RelativeNamedInterval {
+public struct NamedUnorderedInterval {
 
     // MARK: - Associated Types
     
@@ -58,7 +58,7 @@ public struct RelativeNamedInterval {
     // MARK: - Type Properties
 
     /// Unison interval.
-    public static var unison: RelativeNamedInterval {
+    public static var unison: NamedUnorderedInterval {
         return .init(.perfect, .unison)
     }
     
@@ -149,8 +149,8 @@ public struct RelativeNamedInterval {
     }
 }
 
-extension RelativeNamedInterval.Ordinal: Equatable, Hashable { }
-extension RelativeNamedInterval: Equatable, Hashable { }
+extension NamedUnorderedInterval.Ordinal: Equatable, Hashable { }
+extension NamedUnorderedInterval: Equatable, Hashable { }
 
 private func ordered (_ a: SpelledPitchClass, _ b: SpelledPitchClass)
     -> (SpelledPitchClass, SpelledPitchClass)

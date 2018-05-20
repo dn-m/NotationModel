@@ -85,9 +85,9 @@ public enum NamedIntervalQuality: Invertible {
     case augmentedOrDiminished(Extended)
 
     /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
-    public init (sanitizedIntervalClass: Double, ordinal: RelativeNamedInterval.Ordinal) {
+    public init (sanitizedIntervalClass: Double, ordinal: NamedUnorderedInterval.Ordinal) {
 
-        func diminishedAndAugmentedThresholds(ordinal: RelativeNamedInterval.Ordinal)
+        func diminishedAndAugmentedThresholds(ordinal: NamedUnorderedInterval.Ordinal)
             -> (Double, Double)
         {
             var result: Double {

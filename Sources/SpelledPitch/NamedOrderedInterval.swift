@@ -10,7 +10,7 @@ import DataStructures
 
 /// Named intervals between two `SpelledPitch` values that honors order between `SpelledPitch`
 /// values.
-public struct AbsoluteNamedInterval {
+public struct NamedOrderedInterval {
 
     // MARK: - Associated Types
 
@@ -53,7 +53,7 @@ public struct AbsoluteNamedInterval {
         ///     let fifth: Ordinal = .perfect(.fifth)
         ///     fifth.inverse // => .perfect(.fourth)
         ///
-        public var inverse: AbsoluteNamedInterval.Ordinal {
+        public var inverse: NamedOrderedInterval.Ordinal {
             switch self {
             case .perfect(let ordinal):
                 return .perfect(ordinal.inverse)
@@ -66,7 +66,7 @@ public struct AbsoluteNamedInterval {
     // MARK: - Type Properties
 
     /// Unison interval.
-    public static var unison: AbsoluteNamedInterval {
+    public static var unison: NamedOrderedInterval {
         return .init(.perfect, .unison)
     }
 
@@ -177,13 +177,13 @@ public struct AbsoluteNamedInterval {
     }
 }
 
-extension AbsoluteNamedInterval.Ordinal: Equatable, Hashable { }
-extension AbsoluteNamedInterval: Equatable, Hashable { }
+extension NamedOrderedInterval.Ordinal: Equatable, Hashable { }
+extension NamedOrderedInterval: Equatable, Hashable { }
 
-extension AbsoluteNamedInterval: Invertible {
+extension NamedOrderedInterval: Invertible {
 
     /// - Returns: Inversion of `self`.
-    public var inverse: AbsoluteNamedInterval {
+    public var inverse: NamedOrderedInterval {
         return .init(quality.inverse, ordinal.inverse)
     }
 }
