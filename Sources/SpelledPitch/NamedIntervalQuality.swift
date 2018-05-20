@@ -129,8 +129,7 @@ public enum NamedIntervalQuality: Invertible, Equatable {
             print("Warning: only support up to double augmented!")
             self = .augmentedOrDiminished(.init(.double, .augmented))
         default:
-            fatalError("Not possible to create a NamedIntervalQuality with \(sanitizedIntervalClass) and \(ordinal)"
-            )
+            fatalError("Not possible to create a NamedIntervalQuality with \(sanitizedIntervalClass) and \(ordinal)")
         }
     }
 }
