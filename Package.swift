@@ -20,7 +20,7 @@ let package = Package(
     targets: [
         // Sources
         .target(name: "PlotModel", dependencies: ["StructureWrapping", "DataStructures"]),
-        .target(name: "SpelledPitch", dependencies: ["Pitch"]),
+        .target(name: "SpelledPitch", dependencies: ["Pitch", "DataStructures"]),
         .target(name: "PitchSpeller", dependencies: ["SpelledPitch"]),
         .target(name: "BeamedRhythm", dependencies: ["Rhythm"]),
         .target(name: "StaffModel", dependencies: ["PlotModel", "SpelledPitch"]),

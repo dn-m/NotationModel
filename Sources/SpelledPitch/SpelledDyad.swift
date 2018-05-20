@@ -21,20 +21,20 @@ public struct SpelledDyad {
     
     /// - returns: Relative named interval, which does not ordering of `SpelledPitch` values
     /// contained herein.
-    public var relativeInterval: RelativeNamedInterval {
+    public var relativeInterval: NamedUnorderedInterval {
         
         // TODO: Make convenience init
         let lowerSPC = SpelledPitchClass(lower.pitch.class, lower.spelling)
         let higherSPC = SpelledPitchClass(higher.pitch.class, higher.spelling)
         
-        return RelativeNamedInterval(lowerSPC, higherSPC)
+        return NamedUnorderedInterval(lowerSPC, higherSPC)
     }
     
     /// - returns: Absolute named interval, which honors ordering of `SpelledPitch` values
     /// contained herein.
     //
     // FIXME: Implement
-    public var absoluteInterval: AbsoluteNamedInterval {
+    public var absoluteInterval: NamedOrderedInterval {
         fatalError()
     }
     
@@ -47,3 +47,5 @@ public struct SpelledDyad {
         self.higher = higher
     }
 }
+
+extension SpelledDyad: Equatable, Hashable { }
