@@ -8,5 +8,5 @@
 /// A `NamedOrderedInterval` that can be more than an octave displaced.
 public struct NamedCompoundInterval {
     public let interval: NamedOrderedInterval
-    public let octaveDisplacement: Int
+    public let octaveDisplacement: UInt
 }
