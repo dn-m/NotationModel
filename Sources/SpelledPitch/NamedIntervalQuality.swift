@@ -113,21 +113,21 @@ public enum NamedIntervalQuality: Invertible, Equatable {
 
         switch sanitizedIntervalClass {
         case diminished:
-            self = NamedIntervalQuality.augmentedOrDiminished(.init(.single, .diminished))
+            self = .augmentedOrDiminished(.init(.single, .diminished))
         case augmented:
-            self = NamedIntervalQuality.augmentedOrDiminished(.init(.single, .augmented))
+            self = .augmentedOrDiminished(.init(.single, .augmented))
         case _ where sanitizedIntervalClass < diminished:
             print("Warning: only support up to double diminished!")
-            self = NamedIntervalQuality.augmentedOrDiminished(.init(.double, .diminished))
+            self = .augmentedOrDiminished(.init(.double, .diminished))
         case -0.5:
-            self = NamedIntervalQuality.imperfect(.minor)
+            self = .imperfect(.minor)
         case +0.0:
-            self = NamedIntervalQuality.perfect(.perfect)
+            self = .perfect(.perfect)
         case +0.5:
-            self = NamedIntervalQuality.imperfect(.major)
+            self = .imperfect(.major)
         case _ where sanitizedIntervalClass > augmented:
             print("Warning: only support up to double augmented!")
-            self = NamedIntervalQuality.augmentedOrDiminished(.init(.double, .augmented))
+            self = .augmentedOrDiminished(.init(.double, .augmented))
         default:
             fatalError("Not possible to create a NamedIntervalQuality with \(sanitizedIntervalClass) and \(ordinal)"
             )
