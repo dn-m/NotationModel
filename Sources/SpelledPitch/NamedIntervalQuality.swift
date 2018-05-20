@@ -9,10 +9,10 @@
 import DataStructures
 
 /// The quality of a `NamedInterval`.
-public enum NamedIntervalQuality: Invertible, Equatable {
+public enum NamedIntervalQuality: Invertible {
 
     /// An augmented or diminished named interval quality
-    public struct Extended: Invertible, Equatable {
+    public struct Extended: Invertible {
 
         /// Either augmented or diminished
         public enum AugmentedOrDiminished {
@@ -133,3 +133,6 @@ public enum NamedIntervalQuality: Invertible, Equatable {
         }
     }
 }
+
+extension NamedIntervalQuality.Extended: Equatable, Hashable { }
+extension NamedIntervalQuality: Equatable, Hashable { }

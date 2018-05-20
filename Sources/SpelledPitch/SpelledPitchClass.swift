@@ -9,7 +9,7 @@
 import Pitch
 
 /// Spelled pitch class.
-public struct SpelledPitchClass: Spelled, Equatable {
+public struct SpelledPitchClass: Spelled {
     
     // MARK: - Instance Properties
     
@@ -40,6 +40,8 @@ public struct SpelledPitchClass: Spelled, Equatable {
     }
 }
 
+extension SpelledPitchClass: Equatable, Hashable { }
+
 extension SpelledPitchClass: CustomStringConvertible {
     
     // MARK: - CustromStringConvertible
@@ -50,25 +52,10 @@ extension SpelledPitchClass: CustomStringConvertible {
     }
 }
 
-extension SpelledPitchClass: Hashable {
-    
-    // MARK: - Hashable
-    
-    public var hashValue: Int {
-        return "\(pitchClass)\(spelling)".hashValue
+extension SpelledPitchClass: Comparable {
+
+
+    public static func < (lhs: SpelledPitchClass, rhs: SpelledPitchClass) -> Bool {
+        return lhs.pitchClass < rhs.pitchClass
     }
-}
-
-// MARK: - Equatable
-
-public func == (lhs: SpelledPitchClass, rhs: SpelledPitchClass) -> Bool {
-    return lhs.pitchClass == rhs.pitchClass && lhs.spelling == rhs.spelling
-}
-
-// MARK: - Comparable
-
-
-/// - TODO: Refine.
-public func < (lhs: SpelledPitchClass, rhs: SpelledPitchClass) -> Bool {
-    return lhs.pitchClass < rhs.pitchClass
 }

@@ -11,7 +11,7 @@ import Pitch
 extension Pitch {
 
     /// Spelled representation of a `Pitch`.
-    public struct Spelling: Equatable {
+    public struct Spelling {
 
         // MARK: - Errors
 
@@ -342,18 +342,7 @@ extension Pitch.Spelling {
     }
 }
 
-
-extension Pitch.Spelling: Hashable {
-
-    // MARK: - Hashable
-
-    /// Hash value of `PitchSpelling`.
-    //
-    // FIXME: Use more efficient hashing strategy
-    public var hashValue: Int {
-        return "\(letterName),\(quarterStep),\(eighthStep)".hashValue
-    }
-}
+extension Pitch.Spelling: Equatable, Hashable { }
 
 extension Pitch.Spelling: Comparable {
 

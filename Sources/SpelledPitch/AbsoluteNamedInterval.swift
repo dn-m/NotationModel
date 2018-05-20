@@ -10,7 +10,7 @@ import DataStructures
 
 /// Named intervals between two `SpelledPitch` values that honors order between `SpelledPitch`
 /// values.
-public struct AbsoluteNamedInterval: Equatable {
+public struct AbsoluteNamedInterval {
 
     // MARK: - Associated Types
 
@@ -20,7 +20,7 @@ public struct AbsoluteNamedInterval: Equatable {
     // MARK: - Nested Types
 
     /// Ordinal for `AbsoluteNamedInterval`.
-    public enum Ordinal: Equatable, Invertible {
+    public enum Ordinal: Invertible {
 
         /// Perfect `Ordinal` cases.
         public enum Perfect: InvertibleEnum {
@@ -176,6 +176,9 @@ public struct AbsoluteNamedInterval: Equatable {
         self.ordinal = .perfect(ordinal)
     }
 }
+
+extension AbsoluteNamedInterval.Ordinal: Equatable, Hashable { }
+extension AbsoluteNamedInterval: Equatable, Hashable { }
 
 extension AbsoluteNamedInterval: Invertible {
 

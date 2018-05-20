@@ -47,3 +47,5 @@ public struct SpelledDyad {
         self.higher = higher
     }
 }
+
+extension SpelledDyad: Equatable, Hashable { }
