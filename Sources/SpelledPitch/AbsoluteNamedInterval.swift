@@ -178,6 +178,8 @@ public struct AbsoluteNamedInterval: Equatable {
 }
 
 extension AbsoluteNamedInterval: Invertible {
+
+    /// - Returns: Inversion of `self`.
     public var inverse: AbsoluteNamedInterval {
         return .init(quality.inverse, ordinal.inverse)
     }
