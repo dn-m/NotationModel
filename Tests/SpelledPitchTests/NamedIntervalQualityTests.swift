@@ -13,8 +13,8 @@ import SpelledPitch
 class NamedIntervalQualityTests: XCTestCase {
 
     func testInverseDimAug() {
-        let dim = NamedIntervalQuality.augmentedOrDiminished(.init(.single, .diminished))
-        let aug = NamedIntervalQuality.augmentedOrDiminished(.init(.single, .augmented))
+        let dim = NamedIntervalQuality.extended(.init(.single, .diminished))
+        let aug = NamedIntervalQuality.extended(.init(.single, .augmented))
         XCTAssertEqual(dim.inverse, aug)
         XCTAssertEqual(aug.inverse, dim)
     }

@@ -167,7 +167,7 @@ public struct NamedOrderedInterval {
     )
     {
         self.direction = .ascending
-        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.quality = .extended(.init(degree, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
@@ -185,7 +185,7 @@ public struct NamedOrderedInterval {
     )
     {
         self.direction = direction
-        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.quality = .extended(.init(degree, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
@@ -202,7 +202,7 @@ public struct NamedOrderedInterval {
     )
     {
         self.direction = .ascending
-        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.quality = .extended(.init(degree, quality))
         self.ordinal = .perfect(ordinal)
     }
 
@@ -220,7 +220,7 @@ public struct NamedOrderedInterval {
     )
     {
         self.direction = direction
-        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.quality = .extended(.init(degree, quality))
         self.ordinal = .perfect(ordinal)
     }
 
@@ -235,7 +235,7 @@ public struct NamedOrderedInterval {
     )
     {
         self.direction = .ascending
-        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.quality = .extended(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
@@ -252,7 +252,7 @@ public struct NamedOrderedInterval {
     )
     {
         self.direction = direction
-        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.quality = .extended(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
@@ -267,7 +267,7 @@ public struct NamedOrderedInterval {
     )
     {
         self.direction = .ascending
-        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
     }
 
@@ -284,7 +284,7 @@ public struct NamedOrderedInterval {
     )
     {
         self.direction = direction
-        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
     }
 }

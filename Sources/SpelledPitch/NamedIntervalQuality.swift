@@ -70,14 +70,14 @@ public enum NamedIntervalQuality: Invertible {
             return .perfect(.perfect)
         case .imperfect(let quality):
             return .imperfect(quality.inverse)
-        case .augmentedOrDiminished(let quality):
-            return .augmentedOrDiminished(quality.inverse)
+        case .extended(let quality):
+            return .extended(quality.inverse)
         }
     }
 
     case perfect(Perfect)
     case imperfect(Imperfect)
-    case augmentedOrDiminished(Extended)
+    case extended(Extended)
 
     /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
     public init (sanitizedIntervalClass: Double, ordinal: NamedUnorderedInterval.Ordinal) {
@@ -109,25 +109,25 @@ public enum NamedIntervalQuality: Invertible {
 
         switch sanitizedIntervalClass {
         case diminished - 4:
-            self = .augmentedOrDiminished(.init(.quintuple, .diminished))
+            self = .extended(.init(.quintuple, .diminished))
         case diminished - 3:
-            self = .augmentedOrDiminished(.init(.quadruple, .diminished))
+            self = .extended(.init(.quadruple, .diminished))
         case diminished - 2.5:
-            self = .augmentedOrDiminished(.init(.triple, .diminished))
+            self = .extended(.init(.triple, .diminished))
         case diminished - 1:
-            self = .augmentedOrDiminished(.init(.double, .diminished))
+            self = .extended(.init(.double, .diminished))
         case diminished:
-            self = .augmentedOrDiminished(.init(.single, .diminished))
+            self = .extended(.init(.single, .diminished))
         case augmented:
-            self = .augmentedOrDiminished(.init(.single, .augmented))
+            self = .extended(.init(.single, .augmented))
         case augmented + 1:
-            self = .augmentedOrDiminished(.init(.double, .augmented))
+            self = .extended(.init(.double, .augmented))
         case augmented + 2.5:
-            self = .augmentedOrDiminished(.init(.triple, .augmented))
+            self = .extended(.init(.triple, .augmented))
         case augmented + 3:
-            self = .augmentedOrDiminished(.init(.quadruple, .augmented))
+            self = .extended(.init(.quadruple, .augmented))
         case augmented + 4:
-            self = .augmentedOrDiminished(.init(.quintuple, .augmented))
+            self = .extended(.init(.quintuple, .augmented))
         case -0.5:
             self = .imperfect(.minor)
         case +0.0:

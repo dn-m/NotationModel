@@ -101,7 +101,7 @@ public struct NamedUnorderedInterval {
     ///     let tripleAugmentedThird = NamedUnorderedInterval(.augmented, .third)
     ///
     public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
-        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.quality = .extended(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
@@ -111,7 +111,7 @@ public struct NamedUnorderedInterval {
     ///     let tripleDiminishedFourth = NamedUnorderedInterval(.diminished, .fourth)
     ///
     public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
-        self.quality = .augmentedOrDiminished(.init(.single, quality))
+        self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
     }
 
@@ -127,7 +127,7 @@ public struct NamedUnorderedInterval {
         _ ordinal: Ordinal.Imperfect
     )
     {
-        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.quality = .extended(.init(degree, quality))
         self.ordinal = .imperfect(ordinal)
     }
 
@@ -143,7 +143,7 @@ public struct NamedUnorderedInterval {
         _ ordinal: Ordinal.Perfect
     )
     {
-        self.quality = .augmentedOrDiminished(.init(degree, quality))
+        self.quality = .extended(.init(degree, quality))
         self.ordinal = .perfect(ordinal)
     }
 
