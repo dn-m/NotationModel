@@ -15,7 +15,7 @@ public enum NamedIntervalQuality: Invertible {
     public struct Extended: Invertible {
 
         /// Either augmented or diminished
-        public enum AugmentedOrDiminished {
+        public enum AugmentedOrDiminished: InvertibleEnum {
             case augmented
             case diminished
         }
@@ -33,12 +33,7 @@ public enum NamedIntervalQuality: Invertible {
 
         /// - Returns: Inversion of `self`.
         public var inverse: Extended {
-            switch quality {
-            case .augmented:
-                return Extended(degree, .diminished)
-            case .diminished:
-                return Extended(degree, .augmented)
-            }
+            return Extended(degree, quality.inverse)
         }
 
         /// Whether this `Extended` quality is augmented or diminished
