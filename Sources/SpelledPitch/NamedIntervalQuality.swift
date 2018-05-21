@@ -105,7 +105,6 @@ public enum NamedIntervalQuality: Invertible {
         /// The thresholds that need to be crossed in order to manage diminished and augmented
         /// intervals.
         let (diminished, augmented) = diminishedAndAugmentedThresholds(ordinal: ordinal)
-        print("diminished: \(diminished); augmented: \(augmented)")
 
         switch sanitizedIntervalClass {
         case diminished - 4:
