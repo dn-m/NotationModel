@@ -12,8 +12,8 @@ import SpelledPitch
 class SpelledDyadTests: XCTestCase {
 
     func testInitSorted() {
-        let higher = SpelledPitch(60, Pitch.Spelling(.c))
-        let lower = SpelledPitch(57, Pitch.Spelling(.a))
+        let higher = SpelledPitch(Pitch.Spelling(.c), 4)
+        let lower = SpelledPitch(Pitch.Spelling(.a), 3)
         let spelledDyad = SpelledDyad(higher, lower)
         XCTAssertEqual(higher, spelledDyad.higher)
         XCTAssertEqual(lower, spelledDyad.lower)
@@ -35,20 +35,20 @@ class SpelledDyadTests: XCTestCase {
         XCTAssertEqual(dyad.absoluteInterval, interval)
     }
 
-    let cflat = SpelledPitch(59, Pitch.Spelling(.c, .flat))
-    let c = SpelledPitch(60, Pitch.Spelling(.c))
-    let ddoubleflat = SpelledPitch(60, Pitch.Spelling(.d, .doubleFlat))
-    let dflat = SpelledPitch(61, Pitch.Spelling(.d, .flat))
-    let csharp = SpelledPitch(61, Pitch.Spelling(.c, .sharp))
-    let cdoublesharp = SpelledPitch(62, Pitch.Spelling(.c, .doubleSharp))
-    let dsharp = SpelledPitch(63, Pitch.Spelling(.d, .sharp))
-    let f = SpelledPitch(65, Pitch.Spelling(.f))
-    let fsharp = SpelledPitch(66, Pitch.Spelling(.f, .sharp))
-    let g = SpelledPitch(67, Pitch.Spelling(.g))
-    let gsharp = SpelledPitch(68, Pitch.Spelling(.g, .sharp))
-    let bdoubleflat = SpelledPitch(69, Pitch.Spelling(.b, .doubleFlat))
-    let bflat = SpelledPitch(70, Pitch.Spelling(.b, .flat))
-    let gdoublesharp = SpelledPitch(81, Pitch.Spelling(.g, .doubleSharp))
+    let cflat = SpelledPitch(Pitch.Spelling(.c, .flat), 4)
+    let c = SpelledPitch(Pitch.Spelling(.c), 4)
+    let ddoubleflat = SpelledPitch(Pitch.Spelling(.d, .doubleFlat), 4)
+    let dflat = SpelledPitch(Pitch.Spelling(.d, .flat), 4)
+    let csharp = SpelledPitch(Pitch.Spelling(.c, .sharp), 4)
+    let cdoublesharp = SpelledPitch(Pitch.Spelling(.c, .doubleSharp), 4)
+    let dsharp = SpelledPitch(Pitch.Spelling(.d, .sharp), 4)
+    let f = SpelledPitch(Pitch.Spelling(.f), 4)
+    let fsharp = SpelledPitch(Pitch.Spelling(.f, .sharp), 4)
+    let g = SpelledPitch(Pitch.Spelling(.g), 4)
+    let gsharp = SpelledPitch(Pitch.Spelling(.g, .sharp), 4)
+    let bdoubleflat = SpelledPitch(Pitch.Spelling(.b, .doubleFlat), 4)
+    let bflat = SpelledPitch(Pitch.Spelling(.b, .flat), 4)
+    let gdoublesharp = SpelledPitch(Pitch.Spelling(.g, .doubleSharp), 5)
 
     func testRelativeNamedIntervalPerfectUnison() {
         let spelledDyad = SpelledDyad(c,c)

@@ -6,6 +6,7 @@
 ////
 ////
 
+import Darwin
 import Pitch
 
 extension Pitch {
@@ -28,11 +29,26 @@ extension Pitch {
     ///
     public func spelled(with spelling: Pitch.Spelling) throws -> SpelledPitch {
 
-        guard spelling.isValid(for: self) else {
-            throw Pitch.Spelling.Error.invalidSpelling(self, spelling)
+        var octave: Int {
+
+            let unadjusted = Int(floor(noteNumber.value / 12.0)) - 1
+
+            var mustAdjustForC: Bool {
+                guard spelling.letterName == .c else { return false }
+                if spelling.quarterStep.direction == .down { return true }
+                return spelling.quarterStep == .natural && spelling.eighthStep == .down
+            }
+
+            var mustAdjustForB: Bool {
+                guard spelling.letterName == .b else { return false }
+                return spelling.quarterStep == .sharp && spelling.eighthStep.rawValue >= 0
+            }
+
+            return mustAdjustForC ? unadjusted + 1 : mustAdjustForB ? unadjusted - 1 : unadjusted
         }
 
-        return SpelledPitch(pitch: self, spelling: spelling)
+
+        return SpelledPitch(spelling, octave)
     }
 
     /// - returns: `SpelledPitch` with the default spelling for this `Pitch`.

@@ -17,7 +17,7 @@ class StaffPointModelTests: XCTestCase {
     let treble = Clef(.treble)
     let bass = Clef(.bass)
     
-    func staffPoint(_ pitchSet: Set<Pitch>) -> StaffPointModel {
+    func staffPoint(_ pitchSet: [Pitch]) -> StaffPointModel {
         let spelled = pitchSet.map { $0.spelledWithDefaultSpelling }
         let representable = spelled.map { StaffRepresentablePitch($0) }
         return StaffPointModel(representable)
@@ -32,49 +32,82 @@ class StaffPointModelTests: XCTestCase {
     
     func testLedgerLinesAboveAndBelowEmpty() {
         let staffPoint = StaffPointModel([])
-        XCTAssertEqual(staffPoint.ledgerLines(treble).0, 0)
+        XCTAssertEqual(staffPoint.ledgerLines(treble).above, 0)
     }
     
     func testLedgerLinesAboveMonadInStaff() {
         let point = staffPoint([71])
-        XCTAssertEqual(point.ledgerLines(treble).0, 0)
+        XCTAssertEqual(point.ledgerLines(treble).below, 0)
     }
     
     func testLedgerLinesBelowMonadInStaff() {
         let point = staffPoint([48])
-        XCTAssertEqual(point.ledgerLines(bass).1, 0)
+        XCTAssertEqual(point.ledgerLines(bass).below, 0)
     }
     
     func testLedgerLinesAboveMonadJustAboveNoLedgerLines() {
         let point = staffPoint([79])
-        XCTAssertEqual(point.ledgerLines(treble).1, 0)
+        XCTAssertEqual(point.ledgerLines(treble).above, 0)
     }
     
     func testLedgerLinesBelowMonadJustBelowNoLedgerLines() {
         let point = staffPoint([41])
-        XCTAssertEqual(point.ledgerLines(bass).1, 0)
+        XCTAssertEqual(point.ledgerLines(bass).below, 0)
     }
     
     func testLedgerLinesMonadOneAbove() {
         let point = staffPoint([60])
-        XCTAssertEqual(point.ledgerLines(bass).0, 1)
+        XCTAssertEqual(point.ledgerLines(bass).above, 1)
     }
     
     func testLedgerLinesMonadOneBelow() {
         let point = staffPoint([60])
-        XCTAssertEqual(point.ledgerLines(treble).1, 1)
+        XCTAssertEqual(point.ledgerLines(treble).below, 1)
     }
     
     func testLedgerLinesDyadSingleAboveAndBelow() {
         let point = staffPoint([60, 81])
-        XCTAssertEqual(point.ledgerLines(treble).1, 1)
-        XCTAssertEqual(point.ledgerLines(treble).0, 1)
+        XCTAssertEqual(point.ledgerLines(treble).below, 1)
+        XCTAssertEqual(point.ledgerLines(treble).above, 1)
+    }
+
+    func testDoublesExtrema() {
+        let values: [Double] = [64,66,67,69,86]
+        XCTAssertEqual(values.min(), 64)
+        XCTAssertEqual(values.max(), 86)
+    }
+
+    func testPitchesExtrema() {
+        let pitches: [Pitch] = [64,66,67,69,86]
+        XCTAssertEqual(pitches.min(), 64)
+        XCTAssertEqual(pitches.max(), 86)
+    }
+
+    func testSpelledPitchesExtrema() {
+        let originalPitches: [Pitch] = [64,66,67,69,86]
+        let spelledPitches = originalPitches.map { $0.spelledWithDefaultSpelling }
+        let mappedPitches = spelledPitches.map { $0.pitch }
+        XCTAssertEqual(originalPitches, mappedPitches)
+        XCTAssertEqual(mappedPitches.min(), 64)
+        XCTAssertEqual(mappedPitches.max(), 86)
+        XCTAssertEqual(spelledPitches.min()?.pitch, 64)
+        XCTAssertEqual(spelledPitches.max()?.pitch, 86)
+    }
+
+    func testHighest() {
+        let point = staffPoint([64,66,67,69,86])
+        XCTAssertEqual(point.highest?.spelledPitch.pitch, 86)
+    }
+
+    func testLowest() {
+        let point = staffPoint([64,66,67,69,86])
+        XCTAssertEqual(point.lowest?.spelledPitch.pitch, 64)
     }
     
     func testManyPitchesOnlySeveralLinesAboveDNatural() {
         let point = staffPoint([64,66,67,69,86])
-        XCTAssertEqual(point.ledgerLines(treble).1, 0)
-        XCTAssertEqual(point.ledgerLines(treble).0, 2)
+        XCTAssertEqual(point.ledgerLines(treble).below, 0)
+        XCTAssertEqual(point.ledgerLines(treble).above, 2)
     }
     
     func testStemConnectionPoint() {
