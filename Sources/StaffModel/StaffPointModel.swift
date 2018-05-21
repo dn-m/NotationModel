@@ -40,16 +40,12 @@ public struct StaffPointModel: PointModel {
     
     /// Create a `StaffPointModel` with any type of `Sequence` containing 
     /// `StaffRepresentablePitch` values.
-    public init <S: Sequence> (_ sequence: S)
-        where S.Iterator.Element == StaffRepresentablePitch
-    {
+    public init <S: Sequence> (_ sequence: S) where S.Element == StaffRepresentablePitch {
         self.elements = Set(sequence)
     }
     
     /// Symbolic connection point for stems.
-    public func stemConnectionPoint(from direction: VerticalDirection, axis: Clef)
-        -> StaffSlot?
-    {
+    public func stemConnectionPoint(from direction: VerticalDirection, axis: Clef) -> StaffSlot? {
         guard let representable = direction == .above ? lowest : highest else { return nil }
         return axis.coordinate(representable.spelledPitch)
     }

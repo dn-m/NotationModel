@@ -22,25 +22,7 @@ public struct StaffRepresentablePitch {
     }
 }
 
-extension StaffRepresentablePitch: Equatable {
-    
-    public static func == (lhs: StaffRepresentablePitch, rhs: StaffRepresentablePitch)
-        -> Bool
-    {
-        return (
-            lhs.spelledPitch == rhs.spelledPitch &&
-            lhs.notehead == rhs.notehead &&
-            lhs.accidental == rhs.accidental
-        )
-    }
-}
-
-extension StaffRepresentablePitch: Hashable {
-    
-    public var hashValue: Int {
-        return spelledPitch.hashValue ^ notehead.hashValue ^ accidental.hashValue
-    }
-}
+extension StaffRepresentablePitch: Equatable, Hashable { }
 
 extension StaffRepresentablePitch: Comparable {
     
