@@ -19,7 +19,7 @@ public struct SpelledPitch {
 
         let pitchClass = spelling.pitchClass
 
-        // FIXME: Break out function
+        // TODO: Break out function
         var octave: Int {
 
             let unadjusted = self.octave
