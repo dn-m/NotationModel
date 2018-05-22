@@ -69,8 +69,6 @@ extension Group {
     }
 }
 
-// TODO: Add conditional Equatable conformance in DataStructures.
-extension Tree: Equatable where Leaf == Group.Context, Branch == Group.Context { }
 extension Group.Context: Equatable { }
 extension Group: Equatable { }
 
