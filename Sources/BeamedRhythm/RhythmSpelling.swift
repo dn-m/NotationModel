@@ -12,13 +12,12 @@ import DataStructures
 import MetricalDuration
 import Rhythm
 
+// FIXME: Rename as extension of `Rhythm`.
 public struct RhythmSpelling {
     
     // MARK: - Nested Types
     
     /// Context for a single event in a `RhythmSpelling`.
-    ///
-    /// - TODO: Rename. Use `Context` for type that nests a value of the containing type.
     public struct Item {
         
         /// The actions necessary to render beams.
@@ -33,7 +32,7 @@ public struct RhythmSpelling {
     
     // MARK: - Instance Properties
     
-    /// `RhythmSpelling.Context` values for each leaf.
+    /// `RhythmSpelling.Item` values for each leaf.
     fileprivate let items: [Item]
     
     /// `Tree` structure which contains `Group` information, along with its span in terms of
@@ -42,7 +41,7 @@ public struct RhythmSpelling {
     
     // MARK: - Initializers
     
-    /// Creates a `RhythmSpelling` with the given `contexts`, and `groups`.
+    /// Creates a `RhythmSpelling` with the given `items`, and `groups`.
     public init(items: [Item], groups: Grouping) {
         self.items = items
         self.groups = groups
@@ -83,17 +82,8 @@ extension RhythmSpelling: CollectionWrapping {
     }
 }
 
-extension RhythmSpelling: Equatable {
-    
-    // MARK: - Equatable
-    
-    /// - returns: `true` if `RhythmSpelling` values are equivalent. Otherwise, `false`.
-    ///
-    /// - FIXME: `Groups` not yet equatable
-    public static func == (lhs: RhythmSpelling, rhs: RhythmSpelling) -> Bool {
-        return lhs.items == rhs.items /*&& lhs.groups == rhs.groups*/
-    }
-}
+extension RhythmSpelling.Item: Equatable { }
+extension RhythmSpelling: Equatable { }
 
 extension RhythmSpelling: CustomStringConvertible {
     
@@ -102,20 +92,6 @@ extension RhythmSpelling: CustomStringConvertible {
     /// Printed description.
     public var description: String {
         return items.description
-    }
-}
-
-extension RhythmSpelling.Item: Equatable {
-    
-    // MARK: - Equatable
-    
-    /// - returns: `true` if `Context` values are equivalent. Otherwise, `false`.
-    public static func == (lhs: RhythmSpelling.Item, rhs: RhythmSpelling.Item) -> Bool {
-        return (
-            lhs.beamJunction == rhs.beamJunction &&
-            lhs.tieState == rhs.tieState &&
-            lhs.dots == rhs.dots
-        )
     }
 }
 
@@ -189,7 +165,7 @@ internal func makeGroups(_ tree: MetricalDurationTree) -> Grouping {
 
 /// - returns: An array of `BeamJunction` values for the given `leaves`.
 //
-// Fixme: Move to RhythmBeamer
+// FIXME: Move to RhythmBeamer
 internal func makeJunctions(_ leaves: [MetricalDuration]) -> [RhythmSpelling.BeamJunction] {
     return makeJunctions(leaves.map(beamCount))
 }

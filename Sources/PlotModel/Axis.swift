@@ -18,4 +18,3 @@ public protocol Axis {
     /// Calculate a position for the given entity.
     var coordinate: (Element) -> Coordinate { get }
 }
-

@@ -69,23 +69,12 @@ extension Group {
     }
 }
 
-extension Group: Equatable {
-    
-    public static func == (lhs: Group, rhs: Group) -> Bool {
-        return lhs.duration == rhs.duration && lhs.contentsSum == rhs.contentsSum
-    }
-}
+extension Group.Context: Equatable { }
+extension Group: Equatable { }
 
 extension Group: CustomStringConvertible {
     
     public var description: String {
         return "\(contentsSum):\(duration)"
-    }
-}
-
-extension Group.Context {
-    
-    public static func == (lhs: Group.Context, rhs: Group.Context) -> Bool {
-        return lhs.group == rhs.group && lhs.leafRange == rhs.leafRange
     }
 }
