@@ -8,11 +8,11 @@
 import Pitch
 import SpelledPitch
 
-// Wetherfield Pitch Speller
+// Wetherfield Pitch Speller, Thesis pg. 38
 
-enum Category {
+internal enum Category {
 
-    struct PredicatePair: Equatable, Hashable {
+    private struct PredicatePair: Equatable, Hashable {
 
         let a: Int
         let b: Int
@@ -28,44 +28,44 @@ enum Category {
         }
     }
 
-    typealias Map = [PredicatePair: Pitch.Spelling.QuarterStepModifier]
+    private typealias Map = [PredicatePair: Pitch.Spelling.QuarterStepModifier]
 
-    static var zero: Map = [
+    private static var zero: Map = [
         .init(0,1): .natural,
         .init(1,1): .sharp,
         .init(0,0): .doubleFlat
     ]
 
-    static var one: Map = [
+    private static var one: Map = [
         .init(1,0): .sharp,
         .init(0,0): .flat,
         .init(1,1): .doubleSharp
     ]
 
-    static var two: Map = [
+    private static var two: Map = [
         .init(1,1): .doubleSharp,
         .init(0,0): .doubleFlat,
         .init(1,0): .natural
     ]
 
-    static var three: Map = [
+    private static var three: Map = [
         .init(0,0): .doubleFlat,
         .init(1,1): .sharp,
         .init(0,1): .flat
     ]
 
-    static var four: Map = [
+    private static var four: Map = [
         .init(0,0): .flat,
         .init(1,0): .natural,
         .init(1,1): .doubleSharp
     ]
 
-    static var five: Map = [
+    private static var five: Map = [
         .init(1,0): .sharp,
         .init(0,0): .flat
     ]
 
-    static func category(for pitchClass: Pitch.Class) -> Map? {
+    private static func category(for pitchClass: Pitch.Class) -> Map? {
         switch pitchClass {
         case 0,5:
             return zero
@@ -82,5 +82,15 @@ enum Category {
         default:
             return nil
         }
+    }
+
+    /// - Returns: `Pitch.Spelling.QuarterStepModifier` for the given `pitchClass` and `tendency`.
+    /// This mapping is defined by Wetherfield on pg. 38 of the thesis _A Graphical Theory of
+    /// Musical Pitch Spelling.
+    ///
+    internal static func modifier(pitchClass: Pitch.Class, tendency: (Int,Int))
+        -> Pitch.Spelling.QuarterStepModifier?
+    {
+        return category(for: pitchClass)?[.init(tendency)]
     }
 }
