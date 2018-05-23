@@ -54,7 +54,6 @@ extension SpelledPitchClass: CustomStringConvertible {
 
 extension SpelledPitchClass: Comparable {
 
-
     public static func < (lhs: SpelledPitchClass, rhs: SpelledPitchClass) -> Bool {
         return lhs.pitchClass < rhs.pitchClass
     }
