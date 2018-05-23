@@ -8,6 +8,13 @@
 
 import Pitch
 
+// FIXME: Add documentation.
+// FIXME: Add citations:
+// - Meredith
+// - Cambouropoulus
+// - Temperley
+// - Longuet-Higgins
+// - Wetherfield.
 public struct LineOfFifths {
     
     public typealias Position = Int
