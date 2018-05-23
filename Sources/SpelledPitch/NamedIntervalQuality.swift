@@ -79,16 +79,16 @@ public enum NamedIntervalQuality: Invertible {
     case imperfect(Imperfect)
     case extended(Extended)
 
-    /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
+    /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `name`.
     ///
     // FIXME: Make internal or private
-    public init (sanitizedIntervalClass: Double, ordinal: NamedUnorderedInterval.Ordinal) {
+    public init (sanitizedIntervalClass: Double, name: NamedUnorderedInterval.Size) {
 
-        func diminishedAndAugmentedThresholds(ordinal: NamedUnorderedInterval.Ordinal)
+        func diminishedAndAugmentedThresholds(name: NamedUnorderedInterval.Size)
             -> (Double, Double)
         {
             var result: Double {
-                switch ordinal {
+                switch name {
                 case .perfect(let perfect):
                     switch perfect {
                     case .unison:
@@ -106,7 +106,7 @@ public enum NamedIntervalQuality: Invertible {
 
         /// The thresholds that need to be crossed in order to manage diminished and augmented
         /// intervals.
-        let (diminished, augmented) = diminishedAndAugmentedThresholds(ordinal: ordinal)
+        let (diminished, augmented) = diminishedAndAugmentedThresholds(name: name)
 
         switch sanitizedIntervalClass {
         case diminished - 4:
@@ -136,7 +136,7 @@ public enum NamedIntervalQuality: Invertible {
         case +0.5:
             self = .imperfect(.major)
         default:
-            fatalError("Not possible to create a NamedIntervalQuality with sanitized interval class \(sanitizedIntervalClass) and \(ordinal)")
+            fatalError("Not possible to create a NamedIntervalQuality with sanitized interval class \(sanitizedIntervalClass) and \(name)")
         }
     }
 }
