@@ -157,6 +157,8 @@ public struct NamedUnorderedInterval {
     }
     
     /// Create a `NamedUnorderedInterval` with two `SpelledPitch` values.
+    ///
+    // FIXME: Modify to take in `SpelledDyad`.
     public init(_ a: SpelledPitchClass, _ b: SpelledPitchClass) {
         
         // Ensure that the two `SpelledPitchClass` values are in the correct order to create
