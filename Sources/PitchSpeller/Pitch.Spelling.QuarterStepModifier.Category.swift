@@ -12,111 +12,128 @@ import SpelledPitch
 
 extension Wetherfield {
 
-    struct Graph <T> {
-        struct Node <T> { }
-    }
+    struct PitchSpeller {
 
-    struct FlowNetwork <T> {
-        var graph: Graph<T>
-        var source: Graph<T>.Node<T>
-        var sink: Graph<T>.Node<T>
-    }
+        internal enum Category {
 
-    /// - Returns: The given `pitchClasses` spelled optimally, as defined in Wetherfield's thesis.
-    public func spell(_ pitchClasses: Set<Pitch.Class>) -> Set<SpelledPitch> {
-        fatalError()
-    }
+            internal struct TendencyPair: Equatable, Hashable {
 
-    internal enum Category {
+                internal enum Tendency: Int {
+                    case down = 0
+                    case up = 1
+                }
 
-        internal struct TendencyPair: Equatable, Hashable {
+                let up: Tendency
+                let down: Tendency
 
-            internal enum Tendency: Int {
-                case down = 0
-                case up = 1
+                init(_ up: Tendency, _ down: Tendency) {
+                    self.up = up
+                    self.down = down
+                }
+
+                init(_ tuple: (Tendency, Tendency)) {
+                    self.up = tuple.0
+                    self.down = tuple.1
+                }
             }
 
-            let up: Tendency
-            let down: Tendency
+            private typealias Map = [TendencyPair: Pitch.Spelling.QuarterStepModifier]
 
-            init(_ up: Tendency, _ down: Tendency) {
-                self.up = up
-                self.down = down
+            private static var zero: Map = [
+                .init(.up,.down): .natural,
+                .init(.up,.up): .sharp,
+                .init(.down,.down): .doubleFlat
+            ]
+
+            private static var one: Map = [
+                .init(.up,.down): .sharp,
+                .init(.down,.down): .flat,
+                .init(.up,.up): .doubleSharp
+            ]
+
+            private static var two: Map = [
+                .init(.up,.up): .doubleSharp,
+                .init(.down,.down): .doubleFlat,
+                .init(.up,.down): .natural
+            ]
+
+            private static var three: Map = [
+                .init(.down,.down): .doubleFlat,
+                .init(.up,.up): .sharp,
+                .init(.up,.down): .flat
+            ]
+
+            private static var four: Map = [
+                .init(.down,.down): .flat,
+                .init(.up,.down): .natural,
+                .init(.up,.up): .doubleSharp
+            ]
+
+            private static var five: Map = [
+                .init(.up,.down): .sharp,
+                .init(.down,.down): .flat
+            ]
+
+            private static func category(for pitchClass: Pitch.Class) -> Map? {
+                switch pitchClass {
+                case 0,5:
+                    return zero
+                case 1,6:
+                    return one
+                case 2,7,9:
+                    return two
+                case 3,10:
+                    return three
+                case 4,11:
+                    return four
+                case 8:
+                    return five
+                default:
+                    return nil
+                }
             }
 
-            init(_ tuple: (Tendency, Tendency)) {
-                self.up = tuple.0
-                self.down = tuple.1
+            /// - Returns: `Pitch.Spelling.QuarterStepModifier` for the given `pitchClass` and
+            /// `tendency`. This mapping is defined by Wetherfield on pg. 38 of the thesis _A Graphical
+            /// Theory of Musical Pitch Spelling_.
+            ///
+            internal static func modifier(
+                pitchClass: Pitch.Class,
+                tendency: (TendencyPair.Tendency,TendencyPair.Tendency)
+            ) -> Pitch.Spelling.QuarterStepModifier?
+            {
+                return category(for: pitchClass)?[.init(tendency)]
             }
         }
 
-        private typealias Map = [TendencyPair: Pitch.Spelling.QuarterStepModifier]
 
-        private static var zero: Map = [
-            .init(.up,.down): .natural,
-            .init(.up,.up): .sharp,
-            .init(.down,.down): .doubleFlat
-        ]
-
-        private static var one: Map = [
-            .init(.up,.down): .sharp,
-            .init(.down,.down): .flat,
-            .init(.up,.up): .doubleSharp
-        ]
-
-        private static var two: Map = [
-            .init(.up,.up): .doubleSharp,
-            .init(.down,.down): .doubleFlat,
-            .init(.up,.down): .natural
-        ]
-
-        private static var three: Map = [
-            .init(.down,.down): .doubleFlat,
-            .init(.up,.up): .sharp,
-            .init(.up,.down): .flat
-        ]
-
-        private static var four: Map = [
-            .init(.down,.down): .flat,
-            .init(.up,.down): .natural,
-            .init(.up,.up): .doubleSharp
-        ]
-
-        private static var five: Map = [
-            .init(.up,.down): .sharp,
-            .init(.down,.down): .flat
-        ]
-
-        private static func category(for pitchClass: Pitch.Class) -> Map? {
-            switch pitchClass {
-            case 0,5:
-                return zero
-            case 1,6:
-                return one
-            case 2,7,9:
-                return two
-            case 3,10:
-                return three
-            case 4,11:
-                return four
-            case 8:
-                return five
-            default:
-                return nil
-            }
+        enum State: Int {
+            case off = 0
+            case on = 1
         }
 
-        /// - Returns: `Pitch.Spelling.QuarterStepModifier` for the given `pitchClass` and
-        /// `tendency`. This mapping is defined by Wetherfield on pg. 38 of the thesis _A Graphical
-        /// Theory of Musical Pitch Spelling_.
-        ///
-        internal static func modifier(
-            pitchClass: Pitch.Class,
-            tendency: (TendencyPair.Tendency,TendencyPair.Tendency)
-        ) -> Pitch.Spelling.QuarterStepModifier?
-        {
-            return category(for: pitchClass)?[.init(tendency)]
+        /// Pair of nodes in the flow network which together, once assigned, represent the two
+        /// values which comprise a `TendencyPair`
+        struct Box {
+            var a: Graph<State>.Node<State>
+            var b: Graph<State>.Node<State>
+        }
+
+        /// - Returns: The given `pitchClasses` spelled optimally, as defined in Wetherfield's thesis.
+        public func spell(_ pitchClasses: Set<Pitch.Class>) -> Set<SpelledPitch> {
+            let flowNetwork = FlowNetwork<State>()
+            fatalError()
         }
     }
 
+    struct Graph <Element> {
+        struct Node <Element> { }
+    }
+
+    struct FlowNetwork <Element> {
+        var graph: Graph<Element> = Graph()
+        var source: Graph<Element>.Node<Element> = Graph.Node()
+        var sink: Graph<Element>.Node<Element> = Graph.Node()
+
+    }
 }
