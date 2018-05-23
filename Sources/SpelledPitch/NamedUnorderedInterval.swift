@@ -25,8 +25,8 @@ public struct NamedUnorderedInterval {
     
     // MARK: - Nested Types
 
-    /// The ordinal of a `NamedUnorderedInterval`.
-    public enum Ordinal {
+    /// The name of a `NamedUnorderedInterval`.
+    public enum Size {
 
         /// Perfect ordinals.
         public enum Perfect {
@@ -67,8 +67,8 @@ public struct NamedUnorderedInterval {
     
     // MARK: - Instance Properties
     
-    /// Ordinal value of a `NamedUnorderedInterval` (`unison`, `second`, `third`, `fourth`).
-    public let ordinal: Ordinal
+    /// Name value of a `NamedUnorderedInterval` (`unison`, `second`, `third`, `fourth`).
+    public let name: Size
     
     /// Quality value of a `NamedUnorderedInterval`
     /// (`diminished`, `minor`, `perfect`, `major`, `augmented`).
@@ -80,9 +80,9 @@ public struct NamedUnorderedInterval {
     ///
     ///     let perfectFifth = NamedUnorderedInterval(.perfect, .fourth)
     ///
-    public init(_ quality: Quality.Perfect, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: Quality.Perfect, _ name: Size.Perfect) {
         self.quality = .perfect(.perfect)
-        self.ordinal = .perfect(ordinal)
+        self.name = .perfect(name)
     }
 
     /// Create an imperfect `NamedUnorderedInterval`.
@@ -90,32 +90,32 @@ public struct NamedUnorderedInterval {
     ///     let majorSecond = NamedUnorderedInterval(.major, .second)
     ///     let minorThird = NamedUnorderedInterval(.minor, .third)
     ///
-    public init(_ quality: Quality.Imperfect, _ ordinal: Ordinal.Imperfect) {
+    public init(_ quality: Quality.Imperfect, _ name: Size.Imperfect) {
         self.quality = .imperfect(quality)
-        self.ordinal = .imperfect(ordinal)
+        self.name = .imperfect(name)
     }
 
-    /// Create an augmented or diminished `NamedUnorderedInterval` with an imperfect ordinal.
+    /// Create an augmented or diminished `NamedUnorderedInterval` with an imperfect name.
     ///
     ///     let doubleDiminishedSecond = NamedUnorderedInterval(.diminished, .second)
     ///     let tripleAugmentedThird = NamedUnorderedInterval(.augmented, .third)
     ///
-    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ name: Size.Imperfect) {
         self.quality = .extended(.init(.single, quality))
-        self.ordinal = .imperfect(ordinal)
+        self.name = .imperfect(name)
     }
 
-    /// Create an augmented or diminished `NamedUnorderedInterval` with a perfect ordinal.
+    /// Create an augmented or diminished `NamedUnorderedInterval` with a perfect name.
     ///
     ///     let doubleAugmentedUnison = NamedUnorderedInterval(.augmented, .unison)
     ///     let tripleDiminishedFourth = NamedUnorderedInterval(.diminished, .fourth)
     ///
-    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ name: Size.Perfect) {
         self.quality = .extended(.init(.single, quality))
-        self.ordinal = .perfect(ordinal)
+        self.name = .perfect(name)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a imperfect ordinal. These
+    /// Create an augmented or diminished `NamedOrderedInterval` with a imperfect name. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = NamedOrderedInterval(.double, .augmented, .second)
@@ -124,14 +124,14 @@ public struct NamedUnorderedInterval {
     public init(
         _ degree: Quality.Extended.Degree,
         _ quality: Quality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Imperfect
+        _ name: Size.Imperfect
     )
     {
         self.quality = .extended(.init(degree, quality))
-        self.ordinal = .imperfect(ordinal)
+        self.name = .imperfect(name)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect ordinal. These
+    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect name. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = NamedOrderedInterval(.double, .augmented, .unison)
@@ -140,21 +140,21 @@ public struct NamedUnorderedInterval {
     public init(
         _ degree: Quality.Extended.Degree,
         _ quality: Quality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Perfect
+        _ name: Size.Perfect
     )
     {
         self.quality = .extended(.init(degree, quality))
-        self.ordinal = .perfect(ordinal)
+        self.name = .perfect(name)
     }
 
-    /// Create a `NamedUnorderedInterval` with a given `quality` and `ordinal`.
+    /// Create a `NamedUnorderedInterval` with a given `quality` and `name`.
     ///
     ///     let minorSecond = NamedUnorderedInterval(.minor, .second)
     ///     let augmentedSixth = NamedUnorderedInterval(.augmented, .sixth)
     ///
-    internal init(_ quality: Quality, _ ordinal: Ordinal) {
+    internal init(_ quality: Quality, _ name: Size) {
         self.quality = quality
-        self.ordinal = ordinal
+        self.name = name
     }
     
     /// Create a `NamedUnorderedInterval` with two `SpelledPitch` values.
@@ -175,15 +175,15 @@ public struct NamedUnorderedInterval {
         let sanitizedInterval = sanitizeIntervalClass(interval, steps: steps)
         
         // Create the necessary structures
-        let ordinal = Ordinal(steps: steps)!
-        let quality = Quality(sanitizedIntervalClass: sanitizedInterval, ordinal: ordinal)
+        let name = Size(steps: steps)!
+        let quality = Quality(sanitizedIntervalClass: sanitizedInterval, name: name)
         
         // Init
-        self.init(quality, ordinal)
+        self.init(quality, name)
     }
 }
 
-extension NamedUnorderedInterval.Ordinal: Equatable, Hashable { }
+extension NamedUnorderedInterval.Size: Equatable, Hashable { }
 extension NamedUnorderedInterval: Equatable, Hashable { }
 
 private func ordered (_ a: SpelledPitchClass, _ b: SpelledPitchClass)

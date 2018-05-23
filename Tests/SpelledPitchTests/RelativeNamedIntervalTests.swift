@@ -12,7 +12,7 @@ import SpelledPitch
 
 class RelativeNamedIntervalTests: XCTestCase {
 
-    typealias Ordinal = NamedUnorderedInterval.Ordinal
+    typealias Name = NamedUnorderedInterval.Size
 
     func testInitUnisonSamePitchClass() {
         let a = SpelledPitchClass(0, Pitch.Spelling(.c))

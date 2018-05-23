@@ -11,10 +11,10 @@ import SpelledPitch
 
 class AbsoluteNamedIntervalTests: XCTestCase {
 
-    typealias Ordinal = NamedOrderedInterval.Ordinal
+    typealias Name = NamedOrderedInterval.Size
 
     func testSecondOrdinalInverseSeventh() {
-        XCTAssertEqual(Ordinal.imperfect(.second).inverse, Ordinal.imperfect(.seventh))
+        XCTAssertEqual(Name.imperfect(.second).inverse, Name.imperfect(.seventh))
     }
 
     func testAPI() {
@@ -57,8 +57,8 @@ class AbsoluteNamedIntervalTests: XCTestCase {
     }
 
     func testAbsoluteNamedIntervalOrdinalInversion() {
-        let sixth = NamedOrderedInterval.Ordinal.imperfect(.sixth)
-        let expected = NamedOrderedInterval.Ordinal.imperfect(.third)
+        let sixth = NamedOrderedInterval.Size.imperfect(.sixth)
+        let expected = NamedOrderedInterval.Size.imperfect(.third)
         XCTAssertEqual(sixth.inverse, expected)
     }
 
@@ -70,14 +70,14 @@ class AbsoluteNamedIntervalTests: XCTestCase {
     }
 
     func testPerfectOrdinalUnisonInverse() {
-        let unison = NamedOrderedInterval.Ordinal.perfect(.unison)
-        let expected = NamedOrderedInterval.Ordinal.perfect(.unison)
+        let unison = NamedOrderedInterval.Size.perfect(.unison)
+        let expected = NamedOrderedInterval.Size.perfect(.unison)
         XCTAssertEqual(unison.inverse, expected)
     }
 
     func testPerfectOrdinalFourthFifthInverse() {
-        let fourth = NamedOrderedInterval.Ordinal.perfect(.fourth)
-        let fifth = NamedOrderedInterval.Ordinal.perfect(.fifth)
+        let fourth = NamedOrderedInterval.Size.perfect(.fourth)
+        let fifth = NamedOrderedInterval.Size.perfect(.fifth)
         XCTAssertEqual(fourth.inverse, fifth)
         XCTAssertEqual(fifth.inverse, fourth)
     }
