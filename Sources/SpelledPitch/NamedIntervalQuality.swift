@@ -80,6 +80,8 @@ public enum NamedIntervalQuality: Invertible {
     case extended(Extended)
 
     /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
+    ///
+    // FIXME: Make internal or private
     public init (sanitizedIntervalClass: Double, ordinal: NamedUnorderedInterval.Ordinal) {
 
         func diminishedAndAugmentedThresholds(ordinal: NamedUnorderedInterval.Ordinal)
