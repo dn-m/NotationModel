@@ -98,7 +98,7 @@ extension Wetherfield {
         internal static func modifier(
             pitchClass: Pitch.Class,
             tendency: (TendencyPair.Tendency,TendencyPair.Tendency)
-            ) -> Pitch.Spelling.QuarterStepModifier?
+        ) -> Pitch.Spelling.QuarterStepModifier?
         {
             return category(for: pitchClass)?[.init(tendency)]
         }
