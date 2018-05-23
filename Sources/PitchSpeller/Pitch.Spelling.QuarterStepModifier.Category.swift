@@ -91,9 +91,9 @@ extension Wetherfield {
             }
         }
 
-        /// - Returns: `Pitch.Spelling.QuarterStepModifier` for the given `pitchClass` and `tendency`.
-        /// This mapping is defined by Wetherfield on pg. 38 of the thesis _A Graphical Theory of
-        /// Musical Pitch Spelling_.
+        /// - Returns: `Pitch.Spelling.QuarterStepModifier` for the given `pitchClass` and
+        /// `tendency`. This mapping is defined by Wetherfield on pg. 38 of the thesis _A Graphical
+        /// Theory of Musical Pitch Spelling_.
         ///
         internal static func modifier(
             pitchClass: Pitch.Class,
