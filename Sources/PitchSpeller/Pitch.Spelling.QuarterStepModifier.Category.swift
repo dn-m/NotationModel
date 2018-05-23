@@ -22,7 +22,7 @@ extension Wetherfield {
         var sink: Graph<T>.Node<T>
     }
 
-    /// - Returns: The given `pitchClasses` spelled optimally, as defined in Wetherfields thesis.
+    /// - Returns: The given `pitchClasses` spelled optimally, as defined in Wetherfield's thesis.
     public func spell(_ pitchClasses: Set<Pitch.Class>) -> Set<SpelledPitch> {
         fatalError()
     }
