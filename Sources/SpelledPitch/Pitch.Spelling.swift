@@ -197,15 +197,15 @@ extension Pitch.Spelling {
      Coarse resolution component of a `Pitch.Spelling`.
      Analogous to the body of an accidental.
      */
-    public enum QuarterStepModifier: Double, Comparable {
+    public enum QuarterStepModifier: Double {
 
-        public enum Direction: Double, Comparable {
+        public enum Direction: Double {
             case none = 0
             case up = 1
             case down = -1
         }
 
-        public enum Resolution: Double, Comparable {
+        public enum Resolution: Double {
             case halfStep = 0
             case quarterStep = 0.5
         }
