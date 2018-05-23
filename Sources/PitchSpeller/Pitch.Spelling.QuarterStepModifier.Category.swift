@@ -12,6 +12,16 @@ import SpelledPitch
 
 extension Wetherfield {
 
+    struct Graph <T> {
+        struct Node <T> { }
+    }
+
+    struct FlowNetwork <T> {
+        var graph: Graph<T>
+        var source: Graph<T>.Node<T>
+        var sink: Graph<T>.Node<T>
+    }
+
     /// - Returns: The given `pitchClasses` spelled optimally, as defined in Wetherfields thesis.
     public func spell(_ pitchClasses: Set<Pitch.Class>) -> Set<SpelledPitch> {
         fatalError()
