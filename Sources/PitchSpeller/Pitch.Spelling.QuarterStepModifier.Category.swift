@@ -12,6 +12,11 @@ import SpelledPitch
 
 extension Wetherfield {
 
+    /// - Returns: The given `pitchClasses` spelled optimally, as defined in Wetherfields thesis.
+    public func spell(_ pitchClasses: Set<Pitch.Class>) -> Set<SpelledPitch> {
+        fatalError()
+    }
+
     internal enum Category {
 
         internal struct TendencyPair: Equatable, Hashable {
