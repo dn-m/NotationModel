@@ -25,7 +25,7 @@ public struct NamedUnorderedInterval {
     
     // MARK: - Nested Types
 
-    /// The name of a `NamedUnorderedInterval`.
+    /// The size of a `NamedUnorderedInterval`.
     public enum Size {
 
         /// Perfect ordinals.
@@ -68,7 +68,7 @@ public struct NamedUnorderedInterval {
     // MARK: - Instance Properties
     
     /// Name value of a `NamedUnorderedInterval` (`unison`, `second`, `third`, `fourth`).
-    public let name: Size
+    public let size: Size
     
     /// Quality value of a `NamedUnorderedInterval`
     /// (`diminished`, `minor`, `perfect`, `major`, `augmented`).
@@ -80,9 +80,9 @@ public struct NamedUnorderedInterval {
     ///
     ///     let perfectFifth = NamedUnorderedInterval(.perfect, .fourth)
     ///
-    public init(_ quality: Quality.Perfect, _ name: Size.Perfect) {
+    public init(_ quality: Quality.Perfect, _ size: Size.Perfect) {
         self.quality = .perfect(.perfect)
-        self.name = .perfect(name)
+        self.size = .perfect(size)
     }
 
     /// Create an imperfect `NamedUnorderedInterval`.
@@ -90,32 +90,32 @@ public struct NamedUnorderedInterval {
     ///     let majorSecond = NamedUnorderedInterval(.major, .second)
     ///     let minorThird = NamedUnorderedInterval(.minor, .third)
     ///
-    public init(_ quality: Quality.Imperfect, _ name: Size.Imperfect) {
+    public init(_ quality: Quality.Imperfect, _ size: Size.Imperfect) {
         self.quality = .imperfect(quality)
-        self.name = .imperfect(name)
+        self.size = .imperfect(size)
     }
 
-    /// Create an augmented or diminished `NamedUnorderedInterval` with an imperfect name.
+    /// Create an augmented or diminished `NamedUnorderedInterval` with an imperfect size.
     ///
     ///     let doubleDiminishedSecond = NamedUnorderedInterval(.diminished, .second)
     ///     let tripleAugmentedThird = NamedUnorderedInterval(.augmented, .third)
     ///
-    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ name: Size.Imperfect) {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ size: Size.Imperfect) {
         self.quality = .extended(.init(.single, quality))
-        self.name = .imperfect(name)
+        self.size = .imperfect(size)
     }
 
-    /// Create an augmented or diminished `NamedUnorderedInterval` with a perfect name.
+    /// Create an augmented or diminished `NamedUnorderedInterval` with a perfect size.
     ///
     ///     let doubleAugmentedUnison = NamedUnorderedInterval(.augmented, .unison)
     ///     let tripleDiminishedFourth = NamedUnorderedInterval(.diminished, .fourth)
     ///
-    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ name: Size.Perfect) {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ size: Size.Perfect) {
         self.quality = .extended(.init(.single, quality))
-        self.name = .perfect(name)
+        self.size = .perfect(size)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a imperfect name. These
+    /// Create an augmented or diminished `NamedOrderedInterval` with a imperfect size. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = NamedOrderedInterval(.double, .augmented, .second)
@@ -124,14 +124,14 @@ public struct NamedUnorderedInterval {
     public init(
         _ degree: Quality.Extended.Degree,
         _ quality: Quality.Extended.AugmentedOrDiminished,
-        _ name: Size.Imperfect
+        _ size: Size.Imperfect
     )
     {
         self.quality = .extended(.init(degree, quality))
-        self.name = .imperfect(name)
+        self.size = .imperfect(size)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect name. These
+    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect size. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = NamedOrderedInterval(.double, .augmented, .unison)
@@ -140,21 +140,21 @@ public struct NamedUnorderedInterval {
     public init(
         _ degree: Quality.Extended.Degree,
         _ quality: Quality.Extended.AugmentedOrDiminished,
-        _ name: Size.Perfect
+        _ size: Size.Perfect
     )
     {
         self.quality = .extended(.init(degree, quality))
-        self.name = .perfect(name)
+        self.size = .perfect(size)
     }
 
-    /// Create a `NamedUnorderedInterval` with a given `quality` and `name`.
+    /// Create a `NamedUnorderedInterval` with a given `quality` and `size`.
     ///
     ///     let minorSecond = NamedUnorderedInterval(.minor, .second)
     ///     let augmentedSixth = NamedUnorderedInterval(.augmented, .sixth)
     ///
-    internal init(_ quality: Quality, _ name: Size) {
+    internal init(_ quality: Quality, _ size: Size) {
         self.quality = quality
-        self.name = name
+        self.size = size
     }
     
     /// Create a `NamedUnorderedInterval` with two `SpelledPitch` values.
@@ -175,11 +175,11 @@ public struct NamedUnorderedInterval {
         let sanitizedInterval = sanitizeIntervalClass(interval, steps: steps)
         
         // Create the necessary structures
-        let name = Size(steps: steps)!
-        let quality = Quality(sanitizedIntervalClass: sanitizedInterval, name: name)
+        let size = Size(steps: steps)!
+        let quality = Quality(sanitizedIntervalClass: sanitizedInterval, size: size)
         
         // Init
-        self.init(quality, name)
+        self.init(quality, size)
     }
 }
 
