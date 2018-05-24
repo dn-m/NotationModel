@@ -15,87 +15,67 @@ import StructureWrapping
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
 public struct Graph <Value: Hashable> {
 
-    public struct AdjacencyList {
-
-        public var edges: [Edge] {
-            return values.flatMap { _, values in values }
-        }
-
-        public var nodes: [Node] {
-            return values.map { node, _ in node }
-        }
-
-        private var values: [Node: [Edge]] = [:]
-
-        mutating func createNode(_ value: Value) -> Node {
-            let node = Node(value: value)
-            if values[node] == nil {
-                values[node] = []
-            }
-            return node
-        }
-
-        mutating func addEdge(from source: Node, to destination: Node, value: Double) {
-            let edge = Edge(from: source, to: destination, value: value)
-            values[source]?.append(edge)
-        }
-
-        func edgeValue(from source: Node, to destination: Node) -> Double? {
-            guard let edges = values[source] else { return nil }
-            for edge in edges {
-                if edge.destination == destination {
-                    return edge.value
-                }
-            }
-            return nil
-        }
-
-        func edges(from source: Node) -> [Edge] {
-            return values[source] ?? []
-        }
-    }
+    // TODO: Consider making own type which wraps `[Node]`
+    public typealias Path = [Node]
 
     public struct Node: Hashable {
         var value: Value
     }
 
     public struct Edge: Hashable {
-        var source: Node
-        var destination: Node
-        var value: Double
-        init(from source: Node, to destination: Node, value: Double) {
+        public var source: Node
+        public var destination: Node
+        public var value: Double
+        public init(from source: Node, to destination: Node, value: Double) {
             self.source = source
             self.destination = destination
             self.value = value
         }
     }
 
-    public var nodes: [Node] {
-        return adjacencyList.nodes
-    }
+    // MARK: - Instance Properties
 
     public var edges: [Edge] {
-        return adjacencyList.edges
+        return adjacencyList.flatMap { _, values in values }
     }
 
-    private var adjacencyList = AdjacencyList()
+    public var nodes: [Node] {
+        return adjacencyList.map { node, _ in node }
+    }
+
+    private var adjacencyList: [Node: [Edge]] = [:]
+
+    // MARK: - Initializers
 
     public init() { }
 
+    // MARK: - Insance Methods
+
     public mutating func createNode(_ value: Value) -> Node {
-        return adjacencyList.createNode(value)
+        let node = Node(value: value)
+        if adjacencyList[node] == nil {
+            adjacencyList[node] = []
+        }
+        return node
     }
 
     public mutating func addEdge(from source: Node, to destination: Node, value: Double) {
-        adjacencyList.addEdge(from: source, to: destination, value: value)
+        let edge = Edge(from: source, to: destination, value: value)
+        adjacencyList[source]?.append(edge)
     }
 
     public func edgeValue(from source: Node, to destination: Node) -> Double? {
-        return adjacencyList.edgeValue(from: source, to: destination)
+        guard let edges = adjacencyList[source] else { return nil }
+        for edge in edges {
+            if edge.destination == destination {
+                return edge.value
+            }
+        }
+        return nil
     }
 
     public func edges(from source: Node) -> [Edge] {
-        return adjacencyList.edges(from: source)
+        return adjacencyList[source] ?? []
     }
 }
 
@@ -105,12 +85,12 @@ extension Wetherfield {
 
         internal enum Category {
 
-            internal struct TendencyPair: Equatable, Hashable {
+            internal enum Tendency: Int {
+                case down = 0
+                case up = 1
+            }
 
-                internal enum Tendency: Int {
-                    case down = 0
-                    case up = 1
-                }
+            internal struct TendencyPair: Equatable, Hashable {
 
                 let up: Tendency
                 let down: Tendency
@@ -188,7 +168,7 @@ extension Wetherfield {
             ///
             internal static func modifier(
                 pitchClass: Pitch.Class,
-                tendency: (TendencyPair.Tendency,TendencyPair.Tendency)
+                tendency: (Tendency,Tendency)
             ) -> Pitch.Spelling.QuarterStepModifier?
             {
                 return category(for: pitchClass)?[.init(tendency)]
@@ -196,62 +176,91 @@ extension Wetherfield {
         }
     }
 
-    struct FlowNetwork <Value> {
+    struct FlowNetwork {
 
-        struct NodeInfo: Hashable {
+        struct UnassignedNodeInfo: Hashable {
 
             /// The `pitchClass` which is being represented by a given `Node`.
             let pitchClass: Pitch.Class
 
             /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
-            /// `1`.
+            /// `1`. This value will ultimately represent the index within a `TendencyPair`.
             let index: Int
         }
 
-        var graph = Graph<NodeInfo>()
+        struct AssignedNodeInfo: Hashable {
 
-        mutating func makeGraph() {
-            let c: Pitch.Class = 60
-            let d: Pitch.Class = 62
-            let gsharp: Pitch.Class = 68
-            let info: [NodeInfo] = [c,d,gsharp].flatMap { pitchClass in
-                return [0,1].map { index in
-                    return NodeInfo(pitchClass: pitchClass, index: index)
+            /// The `pitchClass` which is being represented by a given `Node`.
+            let pitchClass: Pitch.Class
+
+            /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
+            /// `1`. This value will ultimately represent the index within a `TendencyPair`.
+            let index: Int
+
+            /// The "tendency" value assigned subsequent to finding the minium cut.
+            let tendency: PitchSpeller.Category.Tendency
+
+            // MARK: - Initializers
+
+            init(_ nodeInfo: UnassignedNodeInfo, tendency: PitchSpeller.Category.Tendency) {
+                self.pitchClass = nodeInfo.pitchClass
+                self.index = nodeInfo.index
+                self.tendency = tendency
+            }
+        }
+
+        private var graph: Graph<UnassignedNodeInfo>
+        private var source: Graph<UnassignedNodeInfo>.Node
+        private var sink: Graph<UnassignedNodeInfo>.Node
+        private var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
+
+        init(_ pitchClasses: Set<Pitch.Class>, parsimonyPivot: Pitch.Class = 2) {
+
+            // Create an empty `Graph`.
+            self.graph = Graph()
+
+            // Create the `source` node of the pair representing the `parsimony pivot`.
+            self.source = self.graph.createNode(
+                UnassignedNodeInfo(pitchClass: parsimonyPivot, index: 0)
+            )
+
+            // Create the `sink` nodeof the pair representing the `parsimony pivot`.
+            self.sink = self.graph.createNode(
+                UnassignedNodeInfo(pitchClass: parsimonyPivot, index: 1)
+            )
+
+            // Create nodes for each pitch class in the given `pitchClasses`.
+            for pitchClass in pitchClasses {
+
+                // Create two nodes, one which will represent the `up` tendency (index 0), and the
+                // other which will represent the `down` tendency (index 1)
+                for index in [0,1] {
+                    internalNodes.append(
+                        self.graph.createNode(
+                            UnassignedNodeInfo(pitchClass: pitchClass, index: index)
+                        )
+                    )
                 }
             }
-            for nodeInfo in info {
-                _ = graph.createNode(nodeInfo)
-            }
         }
     }
 }
 
-extension Graph.AdjacencyList: CollectionWrapping {
-    public var base: [Graph.Node: [Graph.Edge]] {
-        return values
-    }
-}
 
 extension Graph: CollectionWrapping {
-    public var base: AdjacencyList {
+    public var base: [Node: [Edge]] {
         return adjacencyList
-    }
-}
-
-extension Graph.AdjacencyList: CustomStringConvertible {
-    public var description: String {
-        var result = ""
-        for (source, edges) in values {
-            let destinations = edges.map { "\($0.destination.value)" }
-            result += "\(source.value) -> [\(destinations.joined(separator: ","))]"
-            result += "\n"
-        }
-        return result
     }
 }
 
 extension Graph: CustomStringConvertible {
     public var description: String {
-        return adjacencyList.description
+        var result = ""
+        for (source, edges) in adjacencyList {
+            let destinations = edges.map { "\($0.destination.value)" }
+            result += "\(source.value) -> [\(destinations.joined(separator: ","))]"
+            result += "\n"
+        }
+        return result
     }
 }
