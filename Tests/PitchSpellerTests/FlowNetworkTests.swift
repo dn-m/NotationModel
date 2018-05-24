@@ -1,0 +1,40 @@
+//
+//  FlowNetworkTests.swift
+//  PitchSpellerTests
+//
+//  Created by James Bean on 5/24/18.
+//
+
+import XCTest
+@testable import PitchSpeller
+
+class FlowNetworkTests: XCTestCase {
+    
+    func testInitMonadNodeCount() {
+        let flowNetwork = Wetherfield.FlowNetwork([0], parsimonyPivot: 2)
+        XCTAssertEqual(flowNetwork.internalNodes.count, 2)
+    }
+
+    func testInitDyadNodeCount() {
+        let flowNetwork = Wetherfield.FlowNetwork([0,1], parsimonyPivot: 2)
+        XCTAssertEqual(flowNetwork.internalNodes.count, 4)
+    }
+
+    func testInitTriadEdges() {
+        let flowNetwork = Wetherfield.FlowNetwork([0,1,6], parsimonyPivot: 2)
+        for internalNode in flowNetwork.internalNodes {
+
+            // Source is connected to all internal nodes
+            XCTAssertNotNil(flowNetwork.graph.edgeValue(from: flowNetwork.source, to: internalNode))
+
+            // All internal nodes are connected to sink
+            XCTAssertNotNil(flowNetwork.graph.edgeValue(from: internalNode, to: flowNetwork.sink))
+
+            // All internal nodes are connected to each other
+            for otherNode in flowNetwork.internalNodes.lazy.filter({ $0 != internalNode}) {
+                XCTAssertNotNil(flowNetwork.graph.edgeValue(from: internalNode, to: otherNode))
+                XCTAssertNotNil(flowNetwork.graph.edgeValue(from: otherNode, to: internalNode))
+            }
+        }
+    }
+}
