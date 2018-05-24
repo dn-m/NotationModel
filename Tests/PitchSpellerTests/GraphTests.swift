@@ -38,4 +38,26 @@ class GraphTests: XCTestCase {
         let graph = simpleGraph
         XCTAssertEqual(graph.edges.count, 5)
     }
+
+    func testEdgeValue() {
+        var graph = Graph<Int>()
+        let source = graph.createNode(0)
+        let destination = graph.createNode(1)
+        graph.addEdge(from: source, to: destination, value: 0.5)
+        XCTAssertEqual(graph.edgeValue(from: source, to: destination), 0.5)
+    }
+
+    func testEdgesFromNode() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.addEdge(from: a, to: b, value: 1)
+        graph.addEdge(from: a, to: c, value: 0.5)
+        let edges = graph.edges(from: a)
+        let ab = edges[0]
+        let ac = edges[1]
+        XCTAssertEqual(ab.value, 1)
+        XCTAssertEqual(ac.value, 0.5)
+    }
 }
