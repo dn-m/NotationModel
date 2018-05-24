@@ -7,8 +7,97 @@
 
 import Pitch
 import SpelledPitch
+import DataStructures
+import StructureWrapping
 
 // Wetherfield Pitch Speller, Thesis pg. 38
+
+/// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
+public struct Graph <Value: Hashable> {
+
+    public struct AdjacencyList {
+
+        public var edges: [Edge] {
+            return values.flatMap { _, values in values }
+        }
+
+        public var nodes: [Node] {
+            return values.map { node, _ in node }
+        }
+
+        private var values: [Node: [Edge]] = [:]
+
+        mutating func createNode(_ value: Value) -> Node {
+            let node = Node(value: value)
+            if values[node] == nil {
+                values[node] = []
+            }
+            return node
+        }
+
+        mutating func addEdge(from source: Node, to destination: Node, value: Double) {
+            let edge = Edge(from: source, to: destination, value: value)
+            values[source]?.append(edge)
+        }
+
+        func edgeValue(from source: Node, to destination: Node) -> Double? {
+            guard let edges = values[source] else { return nil }
+            for edge in edges {
+                if edge.destination == destination {
+                    return edge.value
+                }
+            }
+            return nil
+        }
+
+        func edges(from source: Node) -> [Edge] {
+            return values[source] ?? []
+        }
+    }
+
+    public struct Node: Hashable {
+        var value: Value
+    }
+
+    public struct Edge: Hashable {
+        var source: Node
+        var destination: Node
+        var value: Double
+        init(from source: Node, to destination: Node, value: Double) {
+            self.source = source
+            self.destination = destination
+            self.value = value
+        }
+    }
+
+    public var nodes: [Node] {
+        return adjacencyList.nodes
+    }
+
+    public var edges: [Edge] {
+        return adjacencyList.edges
+    }
+
+    private var adjacencyList = AdjacencyList()
+
+    public init() { }
+
+    public mutating func createNode(_ value: Value) -> Node {
+        return adjacencyList.createNode(value)
+    }
+
+    public mutating func addEdge(from source: Node, to destination: Node, value: Double) {
+        adjacencyList.addEdge(from: source, to: destination, value: value)
+    }
+
+    public func edgeValue(from source: Node, to destination: Node) -> Double? {
+        return adjacencyList.edgeValue(from: source, to: destination)
+    }
+
+    public func edges(from source: Node) -> [Edge] {
+        return adjacencyList.edges(from: source)
+    }
+}
 
 extension Wetherfield {
 
@@ -105,35 +194,64 @@ extension Wetherfield {
                 return category(for: pitchClass)?[.init(tendency)]
             }
         }
-
-
-        enum State: Int {
-            case off = 0
-            case on = 1
-        }
-
-        /// Pair of nodes in the flow network which together, once assigned, represent the two
-        /// values which comprise a `TendencyPair`
-        struct Box {
-            var a: Graph<State>.Node<State>
-            var b: Graph<State>.Node<State>
-        }
-
-        /// - Returns: The given `pitchClasses` spelled optimally, as defined in Wetherfield's thesis.
-        public func spell(_ pitchClasses: Set<Pitch.Class>) -> Set<SpelledPitch> {
-            let flowNetwork = FlowNetwork<State>()
-            fatalError()
-        }
     }
 
-    struct Graph <Element> {
-        struct Node <Element> { }
+    struct FlowNetwork <Value> {
+
+        struct NodeInfo: Hashable {
+
+            /// The `pitchClass` which is being represented by a given `Node`.
+            let pitchClass: Pitch.Class
+
+            /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
+            /// `1`.
+            let index: Int
+        }
+
+        var graph = Graph<NodeInfo>()
+
+        mutating func makeGraph() {
+            let c: Pitch.Class = 60
+            let d: Pitch.Class = 62
+            let gsharp: Pitch.Class = 68
+            let info: [NodeInfo] = [c,d,gsharp].flatMap { pitchClass in
+                return [0,1].map { index in
+                    return NodeInfo(pitchClass: pitchClass, index: index)
+                }
+            }
+            for nodeInfo in info {
+                _ = graph.createNode(nodeInfo)
+            }
+        }
     }
+}
 
-    struct FlowNetwork <Element> {
-        var graph: Graph<Element> = Graph()
-        var source: Graph<Element>.Node<Element> = Graph.Node()
-        var sink: Graph<Element>.Node<Element> = Graph.Node()
+extension Graph.AdjacencyList: CollectionWrapping {
+    public var base: [Graph.Node: [Graph.Edge]] {
+        return values
+    }
+}
 
+extension Graph: CollectionWrapping {
+    public var base: AdjacencyList {
+        return adjacencyList
+    }
+}
+
+extension Graph.AdjacencyList: CustomStringConvertible {
+    public var description: String {
+        var result = ""
+        for (source, edges) in values {
+            let destinations = edges.map { "\($0.destination.value)" }
+            result += "\(source.value) -> [\(destinations.joined(separator: ","))]"
+            result += "\n"
+        }
+        return result
+    }
+}
+
+extension Graph: CustomStringConvertible {
+    public var description: String {
+        return adjacencyList.description
     }
 }
