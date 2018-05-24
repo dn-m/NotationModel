@@ -11,18 +11,26 @@ import XCTest
 class FlowNetworkTests: XCTestCase {
     
     func testInitMonadNodeCount() {
-        let flowNetwork = Wetherfield.FlowNetwork([0], parsimonyPivot: 2)
+        let flowNetwork = Wetherfield.FlowNetwork(pitchClasses: [0], parsimonyPivot: 2)
         XCTAssertEqual(flowNetwork.internalNodes.count, 2)
     }
 
     func testInitDyadNodeCount() {
-        let flowNetwork = Wetherfield.FlowNetwork([0,1], parsimonyPivot: 2)
+        let flowNetwork = Wetherfield.FlowNetwork(pitchClasses: [0,1], parsimonyPivot: 2)
         XCTAssertEqual(flowNetwork.internalNodes.count, 4)
     }
 
     func testInitTriadEdges() {
-        let flowNetwork = Wetherfield.FlowNetwork([0,1,6], parsimonyPivot: 2)
+
+        let flowNetwork = Wetherfield.FlowNetwork(pitchClasses: [0,1,6], parsimonyPivot: 2)
+
         for internalNode in flowNetwork.internalNodes {
+
+            // Sink is not connected to anything
+            XCTAssertNil(flowNetwork.graph.edgeValue(from: flowNetwork.sink, to: internalNode))
+
+            // Nothing is not connected to the source
+            XCTAssertNil(flowNetwork.graph.edgeValue(from: internalNode, to: flowNetwork.source))
 
             // Source is connected to all internal nodes
             XCTAssertNotNil(flowNetwork.graph.edgeValue(from: flowNetwork.source, to: internalNode))
@@ -36,5 +44,6 @@ class FlowNetworkTests: XCTestCase {
                 XCTAssertNotNil(flowNetwork.graph.edgeValue(from: otherNode, to: internalNode))
             }
         }
+        print(flowNetwork)
     }
 }
