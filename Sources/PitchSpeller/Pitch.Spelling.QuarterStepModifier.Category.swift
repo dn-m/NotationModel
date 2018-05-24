@@ -176,7 +176,7 @@ extension Wetherfield {
         }
     }
 
-    struct FlowNetwork {
+    public struct FlowNetwork {
 
         struct UnassignedNodeInfo: Hashable {
 
@@ -209,12 +209,12 @@ extension Wetherfield {
             }
         }
 
-        private var graph: Graph<UnassignedNodeInfo>
-        private var source: Graph<UnassignedNodeInfo>.Node
-        private var sink: Graph<UnassignedNodeInfo>.Node
-        private var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
+        internal var graph: Graph<UnassignedNodeInfo>
+        internal var source: Graph<UnassignedNodeInfo>.Node
+        internal var sink: Graph<UnassignedNodeInfo>.Node
+        internal var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
 
-        init(_ pitchClasses: Set<Pitch.Class>, parsimonyPivot: Pitch.Class = 2) {
+        public init(_ pitchClasses: Set<Pitch.Class>, parsimonyPivot: Pitch.Class = 2) {
 
             // Create an empty `Graph`.
             self.graph = Graph()
@@ -242,10 +242,24 @@ extension Wetherfield {
                     )
                 }
             }
+
+            // Connect nodes
+            for node in internalNodes {
+
+                // Add edges from source to all internal nodes, with an initial value of 1.
+                self.graph.addEdge(from: source, to: node, value: 1)
+
+                // Add edges from all internal nodes to sink, with an initial value of 1.
+                self.graph.addEdge(from: node, to: sink, value: 1)
+
+                // Add edges from all internal nodes to all other internal nodes.
+                for other in internalNodes.lazy.filter({ $0 != node }) {
+                    self.graph.addEdge(from: node, to: other, value: 1)
+                }
+            }
         }
     }
 }
-
 
 extension Graph: CollectionWrapping {
     public var base: [Node: [Edge]] {
