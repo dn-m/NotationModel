@@ -13,10 +13,14 @@ public struct Graph <Value: Hashable> {
     // TODO: Consider making own type which wraps `[Node]`
     public typealias Path = [Node]
 
+    /// Node in a `Graph`. Note that this is a value type. It is stored by its `hashValue`, thereby
+    /// making its `Value` type `Hashable`. It is thus up to the user to make the wrapped value
+    /// unique if the nature of the data is not necessarily unique.
     public struct Node: Hashable {
         var value: Value
     }
 
+    /// Directed edge between two `Node` values.
     public struct Edge: Hashable {
         public var source: Node
         public var destination: Node
