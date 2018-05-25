@@ -90,6 +90,7 @@ extension Wetherfield {
                 self.graph.addEdge(from: node, to: sink, value: 1)
 
                 // Add edges from all internal nodes to all other internal nodes.
+                // TODO: Ensure `filter` does not making this accidentally expensive.
                 for other in internalNodes.lazy.filter({ $0 != node }) {
                     self.graph.addEdge(from: node, to: other, value: 1)
                 }
