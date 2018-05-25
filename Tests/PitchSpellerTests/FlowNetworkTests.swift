@@ -44,6 +44,29 @@ class FlowNetworkTests: XCTestCase {
                 XCTAssertNotNil(flowNetwork.graph.edgeValue(from: otherNode, to: internalNode))
             }
         }
-        print(flowNetwork)
+    }
+
+    func testPaths() {
+        let flowNetwork = Wetherfield.FlowNetwork(pitchClasses: [0], parsimonyPivot: 2)
+
+        //     (0,0)
+        //    / || \
+        //   s  ||  t
+        //    \ || /
+        //     (0,1)
+
+        // Edges:
+        // - Source -> 0,0
+        // - Source -> 0,1
+        // - 0,0 -> 0,1
+        // - 0,1 -> 0,0
+        // - 0,0 -> Sink
+        // - 0,1 -> Sink
+
+        // Paths:
+        // - Source -> (0,0) -> t
+        // - Source -> (0,1) -> t
+        // - Source -> (0,0) -> (0,1) -> t
+        // - Source -> (0,1) -> (0,0) -> t
     }
 }

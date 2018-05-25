@@ -11,7 +11,10 @@ extension Wetherfield {
 
     public struct FlowNetwork {
 
-        struct UnassignedNodeInfo: Hashable {
+        typealias Path = Graph<UnassignedNodeInfo>.Path
+        typealias Node = Graph<UnassignedNodeInfo>.Node
+
+        internal struct UnassignedNodeInfo: Hashable {
 
             /// The `pitchClass` which is being represented by a given `Node`.
             let pitchClass: Pitch.Class
@@ -21,7 +24,7 @@ extension Wetherfield {
             let index: Int
         }
 
-        struct AssignedNodeInfo: Hashable {
+        internal struct AssignedNodeInfo: Hashable {
 
             /// The `pitchClass` which is being represented by a given `Node`.
             let pitchClass: Pitch.Class
@@ -44,9 +47,9 @@ extension Wetherfield {
 
         // TODO: Consider more (space-)efficient storage of Nodes.
         internal var graph: Graph<UnassignedNodeInfo>
-        internal var source: Graph<UnassignedNodeInfo>.Node
-        internal var sink: Graph<UnassignedNodeInfo>.Node
-        internal var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
+        internal var source: Node
+        internal var sink: Node
+        internal var internalNodes: [Node] = []
 
         public init(pitchClasses: Set<Pitch.Class>, parsimonyPivot: Pitch.Class = 2) {
 
@@ -91,6 +94,12 @@ extension Wetherfield {
                     self.graph.addEdge(from: node, to: other, value: 1)
                 }
             }
+        }
+
+        /// - Returns: All paths
+        internal var paths: [Path] {
+            var result: [Path] = []
+            fatalError()
         }
     }
 }
