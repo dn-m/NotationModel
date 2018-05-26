@@ -60,4 +60,51 @@ class GraphTests: XCTestCase {
         XCTAssertEqual(ab.value, 1)
         XCTAssertEqual(ac.value, 0.5)
     }
+
+    func testNodesAdjacentToNode() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.addEdge(from: a, to: b, value: 1)
+        graph.addEdge(from: a, to: c, value: 0.5)
+        XCTAssertEqual(graph.nodesAdjacent(to: a), [b,c])
+        XCTAssertEqual(graph.nodesAdjacent(to: b), [])
+        XCTAssertEqual(graph.nodesAdjacent(to: c), [])
+    }
+
+    func testBreadthFirstSearchSingleNode() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        XCTAssertEqual(graph.breadthFirstSearch(from: a), [a])
+    }
+
+    func testBreadthFirstSearchTwoUnconnectedNodes() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        XCTAssertEqual(graph.breadthFirstSearch(from: a), nil)
+        XCTAssertEqual(graph.breadthFirstSearch(from: b), nil)
+    }
+
+    func testBreadthFirstSearchTwoDirectionallyConnectedNodes() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        graph.addEdge(from: a, to: b, value: 1)
+        XCTAssertEqual(graph.breadthFirstSearch(from: a), [a,b])
+        XCTAssertEqual(graph.breadthFirstSearch(from: b), nil)
+    }
+
+    func testBreadthFirstSearchThreeNodes() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.addEdge(from: a, to: b, value: 1)
+        graph.addEdge(from: b, to: c, value: 0.66)
+        graph.addEdge(from: a, to: c, value: 0.33)
+        XCTAssertEqual(graph.breadthFirstSearch(from: a), [a,b,c])
+        XCTAssertEqual(graph.breadthFirstSearch(from: b), nil)
+    }
 }
