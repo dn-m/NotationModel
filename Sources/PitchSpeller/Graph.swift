@@ -66,7 +66,7 @@ public struct Graph <Value: Hashable> {
     /// `value` (i.e., weight, or capacity).
     public mutating func addEdge(from source: Node, to destination: Node, value: Double) {
         let edge = Edge(from: source, to: destination, value: value)
-        adjacencyList[source]?.append(edge)
+        adjacencyList.safelyAppend(edge, toArrayWith: source)
     }
 
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given `source`,
