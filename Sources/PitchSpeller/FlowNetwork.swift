@@ -128,10 +128,9 @@ extension Wetherfield {
             }
         }
 
-        /// - Returns: All paths
-        internal var paths: [Path] {
-            // graph.breadthFirstSearch(...)
-            fatalError()
+        /// - Returns: All of the paths from the `source` to the `sink`.
+        internal var paths: Set<Path> {
+            return graph.paths(from: source, to: sink)
         }
     }
 }
