@@ -91,6 +91,10 @@ public struct Graph <Value: Hashable> {
         return edges(from: node).map { $0.destination }
     }
 
+    public func paths(from node: Node) -> [Path] {
+        fatalError()
+    }
+
     /// - Returns: All nodes in the graph starting from the given `first` node, if all nodes are
     /// reachable by the `first` node. Otherwise, `nil`.
     public func breadthFirstSearch(from first: Node) -> [Node]? {
