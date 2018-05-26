@@ -80,7 +80,7 @@ extension Wetherfield {
         internal var sink: Node
         internal var internalNodes: [Node] = []
 
-        // TODO: Expaned this out so that each "notehead" (pitch-event) has a `box` of two nodes as
+        // TODO: Expand this out so that each "notehead" (pitch-event) has a `box` of two nodes as
         // opposed to only a single `Pitch.Class` having a `box`.
         public init(pitchClasses: Set<Pitch.Class>, parsimonyPivot: Pitch.Class = 2) {
 
