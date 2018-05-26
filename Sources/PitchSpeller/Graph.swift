@@ -91,8 +91,49 @@ public struct Graph <Value: Hashable> {
         return edges(from: node).map { $0.destination }
     }
 
-    public func paths(from node: Node) -> [Path] {
-        fatalError()
+    /// - Returns: All of the paths from the given `source` to the given `destination`.
+    public func paths(from source: Node, to destination: Node) -> Set<Path> {
+
+        func paths(
+            from source: Node,
+            to destination: Node,
+            visited: Set<Node>,
+            currentPath: [Node],
+            accum: Set<[Node]>
+        ) -> Set<[Node]>
+        {
+            var visited = visited.inserting(source)
+            var currentPath = currentPath
+            var accum = accum
+
+            // We have found a path!
+            if source == destination {
+                return accum.inserting(currentPath)
+            }
+
+            // Continue on from each node connected from this one.
+            for adjacent in nodesAdjacent(to: source) {
+                if !visited.contains(adjacent) {
+                    currentPath.append(adjacent)
+                    accum.formUnion(
+                        paths(
+                            from: adjacent,
+                            to: destination,
+                            visited: visited,
+                            currentPath: currentPath,
+                            accum: accum
+                        )
+                    )
+                    currentPath.removeLast()
+                }
+            }
+            visited.remove(source)
+            return accum
+        }
+
+        let nodes = paths(from: source, to: destination, visited: [], currentPath: [source], accum: [])
+        let edges = nodes.map(makePath)
+        return Set(edges)
     }
 
     /// - Returns: All nodes in the graph starting from the given `first` node, if all nodes are
@@ -115,7 +156,8 @@ public struct Graph <Value: Hashable> {
         return visited
     }
 
-    private func path(from nodes: [Node]) -> Path {
+    /// Create a `Path` from a given array of `nodes`.
+    private func makePath(from nodes: [Node]) -> Path {
         return (nodes.startIndex ..< nodes.endIndex - 1).compactMap { index in
             let source = nodes[index]
             let destination = nodes[index + 1]
