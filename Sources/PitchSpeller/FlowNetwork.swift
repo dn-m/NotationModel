@@ -7,7 +7,7 @@
 
 import Pitch
 
-/// Implements a queue - helper class that uses an array internally.
+/// Queue.
 public struct Queue <Element: Equatable> {
 
     private var storage: [Element] = []
