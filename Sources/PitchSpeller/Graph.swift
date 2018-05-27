@@ -144,6 +144,8 @@ public struct Graph <Value: Hashable> {
     /// given `destination`, if it is reachable. Otherwise, `nil`.
     public func shortestPath(from source: Node, to destination: Node) -> Path? {
 
+        /// In the process of breadth-first searching, each node points to its predecessor. Follow
+        /// this line back to the beginning in order to reconstitute the path travelled.
         func backtrace(from history: [Node: Node]) -> Path {
             var result: [Node] = []
             var current: Node = destination
