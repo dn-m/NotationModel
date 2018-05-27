@@ -8,6 +8,8 @@
 import Pitch
 
 /// Queue.
+///
+/// - TODO: Move to dn-m/Structure/DataStructures
 public struct Queue <Element: Equatable> {
 
     private var storage: [Element] = []
