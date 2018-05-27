@@ -57,6 +57,8 @@ extension Wetherfield {
         internal struct UnassignedNodeInfo: Hashable {
 
             /// The `pitchClass` which is being represented by a given `Node`.
+            ///
+            /// - TODO: Make reference to `box` for `notehead` (pitch event) instead of `Pitch.Class`.
             let pitchClass: Pitch.Class
 
             /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
