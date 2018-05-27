@@ -22,20 +22,26 @@ Dive inside.
 cd NotationModel
 ```
 
-Ask [Swift Package Manager](https://swift.org/package-manager/) to update dependencies (all are `dn-m`)
+Ask [Swift Package Manager](https://swift.org/package-manager/) to update dependencies (all are `dn-m`).
 
 ```Bash
 swift package update
 ```
 
-Compiles code and runs tests
+Compiles code and runs tests in terminal.
 
 ```Bash
 swift test
 ```
 
-Ask Swift Package Manager to generate a nice Xcode project
+Ask Swift Package Manager to generate a nice Xcode project.
 
 ```Bash
 swift package generate-xcodeproj
+```
+
+Open it up.
+
+```Bash
+open NotationModel.xcodeproj/
 ```
