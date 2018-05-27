@@ -48,6 +48,7 @@ extension Queue: ExpressibleByArrayLiteral {
 
 extension Wetherfield {
 
+    /// - TODO: Make generic
     public struct FlowNetwork {
 
         typealias Path = Graph<UnassignedNodeInfo>.Path
