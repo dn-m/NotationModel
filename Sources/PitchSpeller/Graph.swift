@@ -54,6 +54,8 @@ public struct Graph <Value: Hashable> {
     // MARK: - Insance Methods
 
     /// Create a `Node` with the given `value`. This node is placed in the `Graph`.
+    ///
+    /// - Note: Consider making `throw` if value already exists in the graph?
     public mutating func createNode(_ value: Value) -> Node {
         let node = Node(value: value)
         if adjacencyList[node] == nil {
