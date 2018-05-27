@@ -138,11 +138,11 @@ public struct Graph <Value: Hashable> {
 
     /// - Returns: All nodes in the graph starting from the given `first` node, if all nodes are
     /// reachable by the `first` node. Otherwise, `nil`.
-    public func breadthFirstSearch(from first: Node) -> [Node]? {
+    public func breadthFirstSearch(from source: Node) -> [Node]? {
         var visited: [Node] = []
         var queue = Queue<Node>()
-        queue.push(first)
-        visited.append(first)
+        queue.push(source)
+        visited.append(source)
         while !queue.isEmpty {
             let node = queue.pop()
             for adjacent in nodesAdjacent(to: node) {
