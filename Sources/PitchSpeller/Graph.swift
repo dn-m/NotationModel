@@ -23,8 +23,8 @@ public struct Graph <Value: Hashable> {
 
     /// Directed edge between two `Node` values.
     public struct Edge: Hashable {
-        public var source: Node
-        public var destination: Node
+        public let source: Node
+        public let destination: Node
         public var value: Double
         public init(from source: Node, to destination: Node, value: Double) {
             self.source = source
@@ -136,43 +136,41 @@ public struct Graph <Value: Hashable> {
         return Set(edges)
     }
 
-    /// - Returns: The shortest path from the given `source` to a node which does not connect on to
-    /// another.
-    public func shortestPath(from source: Node) -> [Node] {
-        var visited: [Node] = []
-        var queue = Queue<Node>()
-        queue.push(source)
-        visited.append(source)
-        while !queue.isEmpty {
-            let node = queue.pop()
-            for adjacent in nodesAdjacent(to: node) {
-                if !visited.contains(adjacent) {
-                    queue.push(adjacent)
-                    visited.append(adjacent)
-                }
-            }
-        }
-        return visited
-    }
+    /// - Returns: The path with the minimum number of edges between the given `source` and the
+    /// given `destination` if it is reachable. Otherwise, `nil`.
+    public func shortestPath(from source: Node, to destination: Node) -> [Node]? {
 
-    /// - Returns: All nodes in the graph starting from the given `first` node, if all nodes are
-    /// reachable by the `first` node. Otherwise, `nil`.
-    public func breadthFirstSearch(from source: Node) -> [Node]? {
-        var visited: [Node] = []
-        var queue = Queue<Node>()
+        func backtrace(from history: [Node: Node]) -> [Node] {
+            var result: [Node] = []
+            var current: Node = destination
+            while current != source {
+                result.append(current)
+                current = history[current]!
+            }
+            result.append(source)
+            return Array(result.reversed())
+        }
+
+        // Maps each visited node to its predecessor, which is then backtraced to reconstitute
+        // the path travelled.
+        var history: [Node: Node] = [:]
+        var queue: Queue<Node> = []
+
         queue.push(source)
-        visited.append(source)
+
         while !queue.isEmpty {
             let node = queue.pop()
-            for adjacent in nodesAdjacent(to: node) {
-                if !visited.contains(adjacent) {
-                    queue.push(adjacent)
-                    visited.append(adjacent)
-                }
+            if node == destination {
+                return backtrace(from: history)
+            }
+            for adjacent in nodesAdjacent(to: node) where !history.keys.contains(adjacent) {
+                queue.push(adjacent)
+                history[adjacent] = node
             }
         }
-        guard visited.count == count else { return nil }
-        return visited
+
+        // `destination` is not reachable by `source`.
+        return nil
     }
 
     /// Create a `Path` from a given array of `nodes`.
