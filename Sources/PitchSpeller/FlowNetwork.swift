@@ -36,6 +36,14 @@ public struct Queue <Element: Equatable> {
     }
 }
 
+extension Queue: ExpressibleByArrayLiteral {
+
+    /// Create a `Queue` with an `ArrayLiteral`.
+    public init(arrayLiteral elements: Element...) {
+        self.storage = elements
+    }
+}
+
 extension Wetherfield {
 
     public struct FlowNetwork {
