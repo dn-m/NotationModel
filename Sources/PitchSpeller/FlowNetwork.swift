@@ -7,6 +7,43 @@
 
 import Pitch
 
+/// Queue.
+public struct Queue <Element: Equatable> {
+
+    private var storage: [Element] = []
+
+    public var isEmpty: Bool {
+        return storage.isEmpty
+    }
+
+    public var count: Int {
+        return storage.count
+    }
+
+    public mutating func push(_ value: Element) {
+        storage.append(value)
+    }
+
+    public mutating func pop() -> Element {
+        return storage.remove(at: 0)
+    }
+
+    public func contains(_ value: Element) -> Bool {
+        if storage.index(of: value) != nil {
+            return true
+        }
+        return false
+    }
+}
+
+extension Queue: ExpressibleByArrayLiteral {
+
+    /// Create a `Queue` with an `ArrayLiteral`.
+    public init(arrayLiteral elements: Element...) {
+        self.storage = elements
+    }
+}
+
 extension Wetherfield {
 
     public struct FlowNetwork {
@@ -51,6 +88,8 @@ extension Wetherfield {
         internal var sink: Node
         internal var internalNodes: [Node] = []
 
+        // TODO: Expand this out so that each "notehead" (pitch-event) has a `box` of two nodes as
+        // opposed to only a single `Pitch.Class` having a `box`.
         public init(pitchClasses: Set<Pitch.Class>, parsimonyPivot: Pitch.Class = 2) {
 
             // Create an empty `Graph`.
@@ -61,7 +100,7 @@ extension Wetherfield {
                 UnassignedNodeInfo(pitchClass: parsimonyPivot, index: 0)
             )
 
-            // Create the `sink` nodeof the pair representing the `parsimony pivot`.
+            // Create the `sink` node of the pair representing the `parsimony pivot`.
             self.sink = self.graph.createNode(
                 UnassignedNodeInfo(pitchClass: parsimonyPivot, index: 1)
             )
@@ -97,10 +136,9 @@ extension Wetherfield {
             }
         }
 
-        /// - Returns: All paths
-        internal var paths: [Path] {
-            var result: [Path] = []
-            fatalError()
+        /// - Returns: All of the paths from the `source` to the `sink`.
+        internal var paths: Set<Path> {
+            return graph.paths(from: source, to: sink)
         }
     }
 }

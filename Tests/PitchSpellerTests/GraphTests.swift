@@ -60,4 +60,69 @@ class GraphTests: XCTestCase {
         XCTAssertEqual(ab.value, 1)
         XCTAssertEqual(ac.value, 0.5)
     }
+
+    func testNodesAdjacentToNode() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.addEdge(from: a, to: b, value: 1)
+        graph.addEdge(from: a, to: c, value: 0.5)
+        XCTAssertEqual(graph.nodesAdjacent(to: a), [b,c])
+        XCTAssertEqual(graph.nodesAdjacent(to: b), [])
+        XCTAssertEqual(graph.nodesAdjacent(to: c), [])
+    }
+
+    func testShortestPathSingleNode() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        XCTAssertEqual(graph.shortestPath(from: a, to: a), [a])
+    }
+
+    func testShortestPathTwoUnconnectedNodes() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        XCTAssertEqual(graph.shortestPath(from: a, to: b), nil)
+        XCTAssertEqual(graph.shortestPath(from: b, to: b), [b])
+    }
+
+    func testShortestPathTwoDirectionallyConnectedNodes() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        graph.addEdge(from: a, to: b, value: 1)
+        XCTAssertEqual(graph.shortestPath(from: a, to: b), [a,b])
+        XCTAssertEqual(graph.shortestPath(from: b, to: b), [b])
+    }
+
+    func testShortestPathThreeNodes() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.addEdge(from: a, to: b, value: 1)
+        graph.addEdge(from: b, to: c, value: 0.66)
+        graph.addEdge(from: a, to: c, value: 0.33)
+        XCTAssertEqual(graph.shortestPath(from: a, to: c), [a,c])
+        XCTAssertEqual(graph.shortestPath(from: b, to: c), [b,c])
+    }
+
+    func testPaths() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.addEdge(from: a, to: b, value: 1)
+        graph.addEdge(from: b, to: c, value: 0.2)
+        graph.addEdge(from: a, to: c, value: 0.8)
+
+        XCTAssertEqual(
+            graph.paths(from: a, to: c),
+            [
+                [Graph.Edge(from: a, to: b, value: 1), Graph.Edge(from: b, to: c, value: 0.2)],
+                [Graph.Edge(from: a, to: c, value: 0.8)]
+            ]
+        )
+    }
 }
