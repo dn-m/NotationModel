@@ -148,10 +148,18 @@ extension Wetherfield {
 
         /// - TODO: Implement
         private func edmondsKarp() {
+
+            // Create Residual Network
+            var residual = graph
+
+            // Iterate over Augmenting Paths
+
             // Get shortest path:
-            let shortestPath = graph.shortestPath(from: source, to: sink)
+            let shortestPath = graph.shortestPath(from: source, to: sink)!
             // Get maximum flow of shortest path:
-            
+            let maximumFlow = shortestPath.map { $0.value }.min()!
+
+            // ...
         }
     }
 }
