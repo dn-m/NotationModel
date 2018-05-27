@@ -145,5 +145,13 @@ extension Wetherfield {
         internal var paths: Set<Path> {
             return graph.paths(from: source, to: sink)
         }
+
+        /// - TODO: Implement
+        private func edmondsKarp() {
+            // Get shortest path:
+            let shortestPath = graph.shortestPath(from: source, to: sink)
+            // Get maximum flow of shortest path:
+            
+        }
     }
 }

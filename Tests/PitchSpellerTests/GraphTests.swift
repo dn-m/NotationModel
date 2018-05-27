@@ -76,7 +76,7 @@ class GraphTests: XCTestCase {
     func testShortestPathSingleNode() {
         var graph = Graph<String>()
         let a = graph.createNode("a")
-        XCTAssertEqual(graph.shortestPath(from: a, to: a), [a])
+        XCTAssertEqual(graph.shortestPath(from: a, to: a), [])
     }
 
     func testShortestPathTwoUnconnectedNodes() {
@@ -84,7 +84,7 @@ class GraphTests: XCTestCase {
         let a = graph.createNode("a")
         let b = graph.createNode("b")
         XCTAssertEqual(graph.shortestPath(from: a, to: b), nil)
-        XCTAssertEqual(graph.shortestPath(from: b, to: b), [b])
+        XCTAssertEqual(graph.shortestPath(from: b, to: b), [])
     }
 
     func testShortestPathTwoDirectionallyConnectedNodes() {
@@ -92,8 +92,8 @@ class GraphTests: XCTestCase {
         let a = graph.createNode("a")
         let b = graph.createNode("b")
         graph.addEdge(from: a, to: b, value: 1)
-        XCTAssertEqual(graph.shortestPath(from: a, to: b), [a,b])
-        XCTAssertEqual(graph.shortestPath(from: b, to: b), [b])
+        XCTAssertEqual(graph.shortestPath(from: a, to: b), [Graph.Edge(from: a, to: b, value: 1)])
+        XCTAssertEqual(graph.shortestPath(from: b, to: b), [])
     }
 
     func testShortestPathThreeNodes() {
@@ -104,8 +104,8 @@ class GraphTests: XCTestCase {
         graph.addEdge(from: a, to: b, value: 1)
         graph.addEdge(from: b, to: c, value: 0.66)
         graph.addEdge(from: a, to: c, value: 0.33)
-        XCTAssertEqual(graph.shortestPath(from: a, to: c), [a,c])
-        XCTAssertEqual(graph.shortestPath(from: b, to: c), [b,c])
+        XCTAssertEqual(graph.shortestPath(from: a, to: c), [Graph.Edge(from: a, to: c, value: 0.33)])
+        XCTAssertEqual(graph.shortestPath(from: b, to: c), [Graph.Edge(from: b, to: c, value: 0.66)])
     }
 
     func testPaths() {

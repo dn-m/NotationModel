@@ -132,15 +132,17 @@ public struct Graph <Value: Hashable> {
         }
 
         let nodes = paths(from: source, to: destination, visited: [], currentPath: [source], accum: [])
+
+        // FIXME: Refactor
         let edges = nodes.map(makePath)
         return Set(edges)
     }
 
     /// - Returns: The path with the minimum number of edges between the given `source` and the
     /// given `destination`, if it is reachable. Otherwise, `nil`.
-    public func shortestPath(from source: Node, to destination: Node) -> [Node]? {
+    public func shortestPath(from source: Node, to destination: Node) -> Path? {
 
-        func backtrace(from history: [Node: Node]) -> [Node] {
+        func backtrace(from history: [Node: Node]) -> Path {
             var result: [Node] = []
             var current: Node = destination
             while current != source {
@@ -148,7 +150,7 @@ public struct Graph <Value: Hashable> {
                 current = history[current]!
             }
             result.append(source)
-            return Array(result.reversed())
+            return makePath(from: Array(result.reversed()))
         }
 
         // Maps each visited node to its predecessor, which is then backtraced to reconstitute
