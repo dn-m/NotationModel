@@ -137,7 +137,7 @@ public struct Graph <Value: Hashable> {
     }
 
     /// - Returns: The path with the minimum number of edges between the given `source` and the
-    /// given `destination` if it is reachable. Otherwise, `nil`.
+    /// given `destination`, if it is reachable. Otherwise, `nil`.
     public func shortestPath(from source: Node, to destination: Node) -> [Node]? {
 
         func backtrace(from history: [Node: Node]) -> [Node] {
