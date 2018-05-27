@@ -11,7 +11,7 @@ import DataStructures
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
 public struct Graph <Value: Hashable> {
 
-    // TODO: Consider making own type which wraps `[Node]`
+    // TODO: Consider making own type which wraps `[Edge]`, or perhaps just use `Graph`.
     public typealias Path = [Edge]
 
     /// Node in a `Graph`. Note that this is a value type. It is stored by its `hashValue`, thereby
