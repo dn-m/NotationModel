@@ -13,4 +13,5 @@ git clone https://github.com/dn-m/NotationModel
 cd NotationModel
 swift package update
 swift test
+swift package generate-xcodeproj
 ```
