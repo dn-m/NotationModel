@@ -4,9 +4,11 @@
 
 Model of musical notation.
 
+## Development
+
 Work on this branch requires High Sierra, Xcode 9.4-beta, and the Swift 4.2 [toolchain](https://swift.org/download/#snapshots).
 
-Try these:
+### Build instructions
 
 Clone the repo.
 
