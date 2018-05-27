@@ -73,30 +73,30 @@ class GraphTests: XCTestCase {
         XCTAssertEqual(graph.nodesAdjacent(to: c), [])
     }
 
-    func testBreadthFirstSearchSingleNode() {
+    func testShortestPathSingleNode() {
         var graph = Graph<String>()
         let a = graph.createNode("a")
-        XCTAssertEqual(graph.breadthFirstSearch(from: a), [a])
+        XCTAssertEqual(graph.shortestPath(from: a, to: a), [a])
     }
 
-    func testBreadthFirstSearchTwoUnconnectedNodes() {
+    func testShortestPathTwoUnconnectedNodes() {
         var graph = Graph<String>()
         let a = graph.createNode("a")
         let b = graph.createNode("b")
-        XCTAssertEqual(graph.breadthFirstSearch(from: a), nil)
-        XCTAssertEqual(graph.breadthFirstSearch(from: b), nil)
+        XCTAssertEqual(graph.shortestPath(from: a, to: b), nil)
+        XCTAssertEqual(graph.shortestPath(from: b, to: b), [b])
     }
 
-    func testBreadthFirstSearchTwoDirectionallyConnectedNodes() {
+    func testShortestPathTwoDirectionallyConnectedNodes() {
         var graph = Graph<String>()
         let a = graph.createNode("a")
         let b = graph.createNode("b")
         graph.addEdge(from: a, to: b, value: 1)
-        XCTAssertEqual(graph.breadthFirstSearch(from: a), [a,b])
-        XCTAssertEqual(graph.breadthFirstSearch(from: b), nil)
+        XCTAssertEqual(graph.shortestPath(from: a, to: b), [a,b])
+        XCTAssertEqual(graph.shortestPath(from: b, to: b), [b])
     }
 
-    func testBreadthFirstSearchThreeNodes() {
+    func testShortestPathThreeNodes() {
         var graph = Graph<String>()
         let a = graph.createNode("a")
         let b = graph.createNode("b")
@@ -104,8 +104,8 @@ class GraphTests: XCTestCase {
         graph.addEdge(from: a, to: b, value: 1)
         graph.addEdge(from: b, to: c, value: 0.66)
         graph.addEdge(from: a, to: c, value: 0.33)
-        XCTAssertEqual(graph.breadthFirstSearch(from: a), [a,b,c])
-        XCTAssertEqual(graph.breadthFirstSearch(from: b), nil)
+        XCTAssertEqual(graph.shortestPath(from: a, to: c), [a,c])
+        XCTAssertEqual(graph.shortestPath(from: b, to: c), [b,c])
     }
 
     func testPaths() {
