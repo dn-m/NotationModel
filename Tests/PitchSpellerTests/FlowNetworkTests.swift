@@ -25,6 +25,7 @@ class FlowNetworkTests: XCTestCase {
 
     func testEdmondsKarp() {
         let flowNetwork = simpleFlowNetwork
-        //flowNetwork.edmondsKarp()
+        let residualNetwork = flowNetwork.edmondsKarp()
+        print(residualNetwork)
     }
  }

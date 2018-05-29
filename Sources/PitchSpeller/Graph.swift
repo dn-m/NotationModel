@@ -244,7 +244,7 @@ public struct Graph <Value: Hashable>: Hashable {
     }
 
     /// Create a `Path` from a given array of `nodes`.
-    private func makePath(from nodes: [Node]) -> Path {
+    public func makePath(from nodes: [Node]) -> Path {
         return Path(edges(nodes))
     }
 }
@@ -264,6 +264,18 @@ extension Graph: CustomStringConvertible {
             result += "\n"
         }
         return result
+    }
+}
+
+extension Graph.Node: CustomStringConvertible {
+    public var description: String {
+        return "<\(value)>"
+    }
+}
+
+extension Graph.Edge: CustomStringConvertible {
+    public var description: String {
+        return "\(source) - \(value) -> \(destination)"
     }
 }
 
