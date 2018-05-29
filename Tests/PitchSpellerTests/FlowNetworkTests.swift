@@ -28,4 +28,18 @@ class FlowNetworkTests: XCTestCase {
         let residualNetwork = flowNetwork.edmondsKarp()
         print(residualNetwork)
     }
+
+    func testMaximumPathFlow() {
+        var graph = Graph<String>()
+        let source = graph.createNode("source")
+        let sink = graph.createNode("sink")
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        graph.insertEdge(from: source, to: a, value: 1)
+        graph.insertEdge(from: a, to: b, value: 2)
+        graph.insertEdge(from: b, to: sink, value: 3)
+        let flowNetwork = FlowNetwork(graph, source: source, sink: sink)
+        let path = graph.shortestPath(from: source, to: sink)!
+        XCTAssertEqual(flowNetwork.maximumFlow(of: path), 1)
+    }
  }
