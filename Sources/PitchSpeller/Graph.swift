@@ -11,8 +11,21 @@ import DataStructures
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
 public struct Graph <Value: Hashable>: Hashable {
 
-    // TODO: Consider making own type which wraps `[Edge]`, or perhaps just use `Graph`.
-    public typealias Path = [Edge]
+    /// Path between nodes in a graph.
+    public struct Path: Hashable {
+
+        // MARK: - Instance Properties
+
+        /// The `Graph.Edge` values contained herein.
+        let edges: [Edge]
+
+        // MARK: - Initializers
+
+        /// Create a `Graph.Path` with the given array of `Edge` values.
+        public init(_ edges: [Edge]) {
+            self.edges = edges
+        }
+    }
 
     /// Node in a `Graph`. Note that this is a value type. It is stored by its `hashValue`, thereby
     /// making its `Value` type `Hashable`. It is thus up to the user to make the wrapped value
@@ -185,8 +198,7 @@ public struct Graph <Value: Hashable>: Hashable {
         return nil
     }
 
-    /// Create a `Path` from a given array of `nodes`.
-    private func makePath(from nodes: [Node]) -> Path {
+    private func edges(_ nodes: [Node]) -> [Edge] {
         return (nodes.startIndex ..< nodes.endIndex - 1).compactMap { index in
             let source = nodes[index]
             let destination = nodes[index + 1]
@@ -194,6 +206,11 @@ public struct Graph <Value: Hashable>: Hashable {
                 Edge(from: source, to: destination, value: value)
             }
         }
+    }
+
+    /// Create a `Path` from a given array of `nodes`.
+    private func makePath(from nodes: [Node]) -> Path {
+        return Path(edges(nodes))
     }
 }
 
@@ -212,5 +229,13 @@ extension Graph: CustomStringConvertible {
             result += "\n"
         }
         return result
+    }
+}
+
+extension Graph.Path: ExpressibleByArrayLiteral {
+
+    /// Create a `Graph.Path` with an array literal of `Graph.Edge` values.
+    public init(arrayLiteral elements: Graph.Edge...) {
+        self.edges = elements
     }
 }
