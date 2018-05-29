@@ -97,17 +97,20 @@ public struct Graph <Value: Hashable>: Hashable {
     }
 
     /// Add an edge from the given `source` to the given `destination` nodes, with the given
-    /// `value` (i.e., weight, or capacity).
+    /// `value` (i.e., weight, or capacity). If the `value` of the edge is 0, the edge is removed.
     public mutating func insertEdge(from source: Node, to destination: Node, value: Double) {
         let edge = Edge(from: source, to: destination, value: value)
         insertEdge(edge)
     }
 
-    /// Add an `Edge` if it does not currently exist. Otherwise, replaces the edge with the
-    /// equivalent `source` and `destination` nodes.
+    /// Add the given `edge` if it does not currently exist. Otherwise, replaces the edge with the
+    /// equivalent `source` and `destination` nodes. If the `value` of the edge is 0, the edge is
+    /// removed.
     public mutating func insertEdge(_ edge: Edge) {
         removeEdge(from: edge.source, to: edge.destination)
-        adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
+        if edge.value != 0 {
+            adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
+        }
     }
 
     /// Removes the `Edge` which connects the given `source` and `destination` nodes, if present.
