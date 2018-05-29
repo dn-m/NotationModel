@@ -47,6 +47,17 @@ class GraphTests: XCTestCase {
         XCTAssertEqual(graph.edgeValue(from: source, to: destination), 0.5)
     }
 
+    func testRemoveEdge() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.addEdge(from: a, to: b, value: 1)
+        graph.addEdge(from: b, to: c, value: 1)
+        graph.removeEdge(from: a, to: b)
+        XCTAssertNil(graph.edgeValue(from: a, to: b))
+    }
+
     func testEdgesFromNode() {
         var graph = Graph<String>()
         let a = graph.createNode("a")
