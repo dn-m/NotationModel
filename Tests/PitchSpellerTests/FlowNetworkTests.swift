@@ -16,10 +16,10 @@ class FlowNetworkTests: XCTestCase {
         let sink = graph.createNode("sink")
         let a = graph.createNode("a")
         let b = graph.createNode("b")
-        graph.addEdge(from: source, to: a, value: 1)
-        graph.addEdge(from: source, to: b, value: 2)
-        graph.addEdge(from: a, to: sink, value: 3)
-        graph.addEdge(from: b, to: sink, value: 4)
+        graph.insertEdge(from: source, to: a, value: 1)
+        graph.insertEdge(from: source, to: b, value: 2)
+        graph.insertEdge(from: a, to: sink, value: 3)
+        graph.insertEdge(from: b, to: sink, value: 4)
         return FlowNetwork(graph, source: source, sink: sink)
     }
 
