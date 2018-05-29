@@ -9,7 +9,7 @@ import StructureWrapping
 import DataStructures
 
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
-public struct Graph <Value: Hashable> {
+public struct Graph <Value: Hashable>: Hashable {
 
     // TODO: Consider making own type which wraps `[Edge]`, or perhaps just use `Graph`.
     public typealias Path = [Edge]
@@ -69,6 +69,11 @@ public struct Graph <Value: Hashable> {
     public mutating func addEdge(from source: Node, to destination: Node, value: Double) {
         let edge = Edge(from: source, to: destination, value: value)
         adjacencyList.safelyAppend(edge, toArrayWith: source)
+    }
+
+    /// - TODO: Consider making `throw`
+    public mutating func removeEdge(from source: Node, to destination: Node) {
+        adjacencyList[source] = adjacencyList[source]?.filter { $0.destination != destination }
     }
 
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given `source`,
@@ -144,8 +149,9 @@ public struct Graph <Value: Hashable> {
     /// given `destination`, if it is reachable. Otherwise, `nil`.
     public func shortestPath(from source: Node, to destination: Node) -> Path? {
 
-        /// In the process of breadth-first searching, each node points to its predecessor. Follow
-        /// this line back to the beginning in order to reconstitute the path travelled.
+        /// In the process of breadth-first searching, each node is stored as a key in a dictionary
+        /// with its predecessor as its associated value. Follow this line back to the beginning in
+        /// order to reconstitute the path travelled.
         func backtrace(from history: [Node: Node]) -> Path {
             var result: [Node] = []
             var current: Node = destination
