@@ -15,7 +15,20 @@ public struct Graph <Value: Hashable>: Hashable {
     /// making its `Value` type `Hashable`. It is thus up to the user to make the wrapped value
     /// unique if the nature of the data is not necessarily unique.
     public struct Node: Hashable {
+
         var value: Value
+
+        // MARK: - Initializers
+
+        /// Create a `Node` containing the given `value`.
+        public init(_ value: Value) {
+            self.value = value
+        }
+
+        /// - Returns: A `Node` with the value updated by the given `transform`.
+        public func map <U> (_ transform: (Value) -> U) -> Graph<U>.Node {
+            return .init(transform(value))
+        }
     }
 
     /// Directed edge between two `Node` values.
@@ -36,6 +49,14 @@ public struct Graph <Value: Hashable>: Hashable {
             self.source = source
             self.destination = destination
             self.value = value
+        }
+
+        public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U>.Edge {
+            return Graph<U>.Edge(
+                from: source.map(transform),
+                to: destination.map(transform),
+                value: value
+            )
         }
 
         /// - Returns: An `Edge` with the value updated with by the given `transform`.
@@ -81,7 +102,9 @@ public struct Graph <Value: Hashable>: Hashable {
 
     // MARK: - Initializers
 
-    public init() { }
+    public init(_ adjacencyList: [Node: [Edge]] = [:]) {
+        self.adjacencyList = adjacencyList
+    }
 
     // MARK: - Insance Methods
 
@@ -89,7 +112,7 @@ public struct Graph <Value: Hashable>: Hashable {
     ///
     /// - Note: Consider making `throw` if value already exists in the graph?
     public mutating func createNode(_ value: Value) -> Node {
-        let node = Node(value: value)
+        let node = Node(value)
         if adjacencyList[node] == nil {
             adjacencyList[node] = []
         }
@@ -97,20 +120,17 @@ public struct Graph <Value: Hashable>: Hashable {
     }
 
     /// Add an edge from the given `source` to the given `destination` nodes, with the given
-    /// `value` (i.e., weight, or capacity). If the `value` of the edge is 0, the edge is removed.
+    /// `value` (i.e., weight, or capacity).
     public mutating func insertEdge(from source: Node, to destination: Node, value: Double) {
         let edge = Edge(from: source, to: destination, value: value)
         insertEdge(edge)
     }
 
     /// Add the given `edge` if it does not currently exist. Otherwise, replaces the edge with the
-    /// equivalent `source` and `destination` nodes. If the `value` of the edge is 0, the edge is
-    /// removed.
+    /// equivalent `source` and `destination` nodes.
     public mutating func insertEdge(_ edge: Edge) {
         removeEdge(from: edge.source, to: edge.destination)
-        if edge.value != 0 {
-            adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
-        }
+        adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
     }
 
     /// Removes the `Edge` which connects the given `source` and `destination` nodes, if present.
@@ -122,6 +142,16 @@ public struct Graph <Value: Hashable>: Hashable {
     /// Inserts the given `path`. Replaces nodes and edges if necessary.
     public mutating func insertPath(_ path: Path) {
         path.forEach { insertEdge($0) }
+    }
+
+    /// - Returns: A `Graph` with each of the nodes updated by the given `transform`.
+    public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U> {
+        var new: [Graph<U>.Node: [Graph<U>.Edge]] = [:]
+        adjacencyList.forEach { (node, edges) in
+            new[(node.map(transform))] = edges.map { $0.mapNodes(transform) }
+        }
+        return .init(new)
+
     }
 
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given `source`,
