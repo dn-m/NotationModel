@@ -40,19 +40,21 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     }
 
     /// - TODO: Implement
-    private func edmondsKarp() {
+    internal func edmondsKarp() {
 
         // Create Residual Network
         var residual = graph
 
         // Iterate over all Augmenting Paths
 
+        // The maximum flow for the entire network
+        var flow: Double = 0
+
         while let path = residual.shortestPath(from: source, to: sink) {
             // Get maximum flow of shortest path:
-            let maximumFlow = path.map { $0.value }.min()!
+            let capacities = min(maximumFlow(of: path), .greatestFiniteMagnitude)
 
         }
-
 
         // ...
 
@@ -60,4 +62,9 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
 
         // ...
     }
+
+    internal func maximumFlow(of path: Path) -> Double {
+        return path.edges.map { $0.value }.min()!
+    }
 }
+
