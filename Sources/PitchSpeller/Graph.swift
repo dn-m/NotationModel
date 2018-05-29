@@ -11,6 +11,31 @@ import DataStructures
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
 public struct Graph <Value: Hashable>: Hashable {
 
+    /// Node in a `Graph`. Note that this is a value type. It is stored by its `hashValue`, thereby
+    /// making its `Value` type `Hashable`. It is thus up to the user to make the wrapped value
+    /// unique if the nature of the data is not necessarily unique.
+    public struct Node: Hashable {
+        var value: Value
+    }
+
+    /// Directed edge between two `Node` values.
+    public struct Edge: Hashable {
+
+        // MARK: - Instance Properties
+
+        public let source: Node
+        public let destination: Node
+        public var value: Double
+
+        // MARK: - Initializers
+
+        public init(from source: Node, to destination: Node, value: Double) {
+            self.source = source
+            self.destination = destination
+            self.value = value
+        }
+    }
+
     /// Path between nodes in a graph.
     public struct Path: Hashable {
 
@@ -24,25 +49,6 @@ public struct Graph <Value: Hashable>: Hashable {
         /// Create a `Graph.Path` with the given array of `Edge` values.
         public init(_ edges: [Edge]) {
             self.edges = edges
-        }
-    }
-
-    /// Node in a `Graph`. Note that this is a value type. It is stored by its `hashValue`, thereby
-    /// making its `Value` type `Hashable`. It is thus up to the user to make the wrapped value
-    /// unique if the nature of the data is not necessarily unique.
-    public struct Node: Hashable {
-        var value: Value
-    }
-
-    /// Directed edge between two `Node` values.
-    public struct Edge: Hashable {
-        public let source: Node
-        public let destination: Node
-        public var value: Double
-        public init(from source: Node, to destination: Node, value: Double) {
-            self.source = source
-            self.destination = destination
-            self.value = value
         }
     }
 
