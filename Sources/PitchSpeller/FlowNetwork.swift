@@ -67,4 +67,3 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
         return path.edges.map { $0.value }.min()!
     }
 }
-
