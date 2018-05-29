@@ -11,7 +11,7 @@ extension Wetherfield {
 
     // TODO: Expand this out so that each "notehead" (pitch-event) has a `box` of two nodes as
     // opposed to only a single `Pitch.Class` having a `box`.
-    func flowNetwork(
+    internal static func flowNetwork(
         pitchClasses: Set<Pitch.Class>,
         parsimonyPivot: Pitch.Class = 2
     ) -> FlowNetwork<UnassignedNodeInfo>
@@ -112,6 +112,7 @@ extension Wetherfield {
             self.graph = graph
             self.source = source
             self.sink = sink
+            self.internalNodes = graph.nodes.filter { $0 != source && $0 != sink }
         }
 
         /// - Returns: All of the paths from the `source` to the `sink`.
@@ -125,15 +126,13 @@ extension Wetherfield {
             // Create Residual Network
             var residual = graph
 
-            // Iterate over Augmenting Paths
+            // Iterate over all Augmenting Paths
 
             while let path = residual.shortestPath(from: source, to: sink) {
                 // Get maximum flow of shortest path:
                 let maximumFlow = path.map { $0.value }.min()!
-            }
 
-            // Get shortest path:
-            let shortestPath = graph.shortestPath(from: source, to: sink)!
+            }
 
 
             // ...
