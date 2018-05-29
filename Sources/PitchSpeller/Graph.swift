@@ -9,10 +9,7 @@ import StructureWrapping
 import DataStructures
 
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
-public struct Graph <Value: Hashable> {
-
-    // TODO: Consider making own type which wraps `[Edge]`, or perhaps just use `Graph`.
-    public typealias Path = [Edge]
+public struct Graph <Value: Hashable>: Hashable {
 
     /// Node in a `Graph`. Note that this is a value type. It is stored by its `hashValue`, thereby
     /// making its `Value` type `Hashable`. It is thus up to the user to make the wrapped value
@@ -22,14 +19,49 @@ public struct Graph <Value: Hashable> {
     }
 
     /// Directed edge between two `Node` values.
+    ///
+    /// - TODO: Consider making `value` generic, rather than `Double`. This would make it possible
+    /// for a `Value` to be of any type (e.g., `Capacity`, `Weight`, etc.)
     public struct Edge: Hashable {
+
+        // MARK: - Instance Properties
+
         public let source: Node
         public let destination: Node
         public var value: Double
+
+        // MARK: - Initializers
+
         public init(from source: Node, to destination: Node, value: Double) {
             self.source = source
             self.destination = destination
             self.value = value
+        }
+
+        /// - Returns: An `Edge` with the value updated with by the given `transform`.
+        public func map(_ transform: (Double) -> Double) -> Edge {
+            return Edge(from: source, to: destination, value: transform(value))
+        }
+    }
+
+    /// Path between nodes in a graph.
+    public struct Path: Hashable {
+
+        // MARK: - Instance Properties
+
+        /// The `Graph.Edge` values contained herein.
+        let edges: [Edge]
+
+        // MARK: - Initializers
+
+        /// Create a `Graph.Path` with the given array of `Edge` values.
+        public init(_ edges: [Edge]) {
+            self.edges = edges
+        }
+
+        /// - Returns: A `Path` with the values of each `Edge` updated with by the given `transform`.
+        public func map(_ transform: (Double) -> Double) -> Path {
+            return Path(edges.map { $0.map(transform) })
         }
     }
 
@@ -65,10 +97,31 @@ public struct Graph <Value: Hashable> {
     }
 
     /// Add an edge from the given `source` to the given `destination` nodes, with the given
-    /// `value` (i.e., weight, or capacity).
-    public mutating func addEdge(from source: Node, to destination: Node, value: Double) {
+    /// `value` (i.e., weight, or capacity). If the `value` of the edge is 0, the edge is removed.
+    public mutating func insertEdge(from source: Node, to destination: Node, value: Double) {
         let edge = Edge(from: source, to: destination, value: value)
-        adjacencyList.safelyAppend(edge, toArrayWith: source)
+        insertEdge(edge)
+    }
+
+    /// Add the given `edge` if it does not currently exist. Otherwise, replaces the edge with the
+    /// equivalent `source` and `destination` nodes. If the `value` of the edge is 0, the edge is
+    /// removed.
+    public mutating func insertEdge(_ edge: Edge) {
+        removeEdge(from: edge.source, to: edge.destination)
+        if edge.value != 0 {
+            adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
+        }
+    }
+
+    /// Removes the `Edge` which connects the given `source` and `destination` nodes, if present.
+    public mutating func removeEdge(from source: Node, to destination: Node) {
+        // FIXME: Consider more efficient and cleaner approach.
+        adjacencyList[source] = adjacencyList[source]?.filter { $0.destination != destination }
+    }
+
+    /// Inserts the given `path`. Replaces nodes and edges if necessary.
+    public mutating func insertPath(_ path: Path) {
+        path.forEach { insertEdge($0) }
     }
 
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given `source`,
@@ -144,8 +197,9 @@ public struct Graph <Value: Hashable> {
     /// given `destination`, if it is reachable. Otherwise, `nil`.
     public func shortestPath(from source: Node, to destination: Node) -> Path? {
 
-        /// In the process of breadth-first searching, each node points to its predecessor. Follow
-        /// this line back to the beginning in order to reconstitute the path travelled.
+        /// In the process of breadth-first searching, each node is stored as a key in a dictionary
+        /// with its predecessor as its associated value. Follow this line back to the beginning in
+        /// order to reconstitute the path travelled.
         func backtrace(from history: [Node: Node]) -> Path {
             var result: [Node] = []
             var current: Node = destination
@@ -179,8 +233,7 @@ public struct Graph <Value: Hashable> {
         return nil
     }
 
-    /// Create a `Path` from a given array of `nodes`.
-    private func makePath(from nodes: [Node]) -> Path {
+    private func edges(_ nodes: [Node]) -> [Edge] {
         return (nodes.startIndex ..< nodes.endIndex - 1).compactMap { index in
             let source = nodes[index]
             let destination = nodes[index + 1]
@@ -188,6 +241,11 @@ public struct Graph <Value: Hashable> {
                 Edge(from: source, to: destination, value: value)
             }
         }
+    }
+
+    /// Create a `Path` from a given array of `nodes`.
+    public func makePath(from nodes: [Node]) -> Path {
+        return Path(edges(nodes))
     }
 }
 
@@ -206,5 +264,31 @@ extension Graph: CustomStringConvertible {
             result += "\n"
         }
         return result
+    }
+}
+
+extension Graph.Node: CustomStringConvertible {
+    public var description: String {
+        return "<\(value)>"
+    }
+}
+
+extension Graph.Edge: CustomStringConvertible {
+    public var description: String {
+        return "\(source) - \(value) -> \(destination)"
+    }
+}
+
+extension Graph.Path: ExpressibleByArrayLiteral {
+
+    /// Create a `Graph.Path` with an array literal of `Graph.Edge` values.
+    public init(arrayLiteral elements: Graph.Edge...) {
+        self.edges = elements
+    }
+}
+
+extension Graph.Path: CollectionWrapping {
+    public var base: [Graph.Edge] {
+        return edges
     }
 }
