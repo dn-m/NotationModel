@@ -19,6 +19,9 @@ public struct Graph <Value: Hashable>: Hashable {
     }
 
     /// Directed edge between two `Node` values.
+    ///
+    /// - TODO: Consider making `value` generic, rather than `Double`. This would make it possible
+    /// for a `Value` to be of any type (e.g., `Capacity`, `Weight`, etc.)
     public struct Edge: Hashable {
 
         // MARK: - Instance Properties
@@ -33,6 +36,11 @@ public struct Graph <Value: Hashable>: Hashable {
             self.source = source
             self.destination = destination
             self.value = value
+        }
+
+        /// - Returns: An `Edge` with the value updated with by the given `transform`.
+        public func map(_ transform: (Double) -> Double) -> Edge {
+            return Edge(from: source, to: destination, value: transform(value))
         }
     }
 
@@ -49,6 +57,11 @@ public struct Graph <Value: Hashable>: Hashable {
         /// Create a `Graph.Path` with the given array of `Edge` values.
         public init(_ edges: [Edge]) {
             self.edges = edges
+        }
+
+        /// - Returns: A `Path` with the values of each `Edge` updated with by the given `transform`.
+        public func map(_ transform: (Double) -> Double) -> Path {
+            return Path(edges.map { $0.map(transform) })
         }
     }
 
@@ -85,14 +98,27 @@ public struct Graph <Value: Hashable>: Hashable {
 
     /// Add an edge from the given `source` to the given `destination` nodes, with the given
     /// `value` (i.e., weight, or capacity).
-    public mutating func addEdge(from source: Node, to destination: Node, value: Double) {
+    public mutating func insertEdge(from source: Node, to destination: Node, value: Double) {
         let edge = Edge(from: source, to: destination, value: value)
-        adjacencyList.safelyAppend(edge, toArrayWith: source)
+        insertEdge(edge)
     }
 
-    /// - TODO: Consider making `throw`
+    /// Add an `Edge` if it does not currently exist. Otherwise, replaces the edge with the
+    /// equivalent `source` and `destination` nodes.
+    public mutating func insertEdge(_ edge: Edge) {
+        removeEdge(from: edge.source, to: edge.destination)
+        adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
+    }
+
+    /// Removes the `Edge` which connects the given `source` and `destination` nodes, if present.
     public mutating func removeEdge(from source: Node, to destination: Node) {
+        // FIXME: Consider more efficient and cleaner approach.
         adjacencyList[source] = adjacencyList[source]?.filter { $0.destination != destination }
+    }
+
+    /// Inserts the given `path`. Replaces nodes and edges if necessary.
+    public mutating func insertPath(_ path: Path) {
+        path.forEach { insertEdge($0) }
     }
 
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given `source`,
@@ -243,5 +269,11 @@ extension Graph.Path: ExpressibleByArrayLiteral {
     /// Create a `Graph.Path` with an array literal of `Graph.Edge` values.
     public init(arrayLiteral elements: Graph.Edge...) {
         self.edges = elements
+    }
+}
+
+extension Graph.Path: CollectionWrapping {
+    public var base: [Graph.Edge] {
+        return edges
     }
 }

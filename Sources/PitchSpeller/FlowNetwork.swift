@@ -48,19 +48,28 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
         // Iterate over all Augmenting Paths
 
         // The maximum flow for the entire network
-        var flow: Double = 0
+        var maximumNetworkFlow: Double = 0
 
         while let path = residual.shortestPath(from: source, to: sink) {
-            // Get maximum flow of shortest path:
-            let capacities = min(maximumFlow(of: path), .greatestFiniteMagnitude)
 
+            // 1. Get maximum flow of shortest path:
+            let maximumPathFlow = min(maximumFlow(of: path), .greatestFiniteMagnitude)
+
+            // 2. Subtract flow from edges
+
+
+            // 3. Create / update reverse edge
+
+            // 4. Add to maximum flow
+            maximumNetworkFlow += maximumPathFlow
         }
+    }
 
-        // ...
+    internal func updateFlow(of path: Path, in graph: Graph<Value>, by amount: Double) {
+        // for edge in path
+        // update edge in graph
+        let edges = path.map { $0.map { $0 + amount }}
 
-        // just keep puuuuushin' it through
-
-        // ...
     }
 
     internal func maximumFlow(of path: Path) -> Double {

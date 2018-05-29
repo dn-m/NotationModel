@@ -49,15 +49,15 @@ public enum Wetherfield {
         for node in internalNodes {
 
             // Add edges from source to all internal nodes, with an initial value of 1.
-            graph.addEdge(from: source, to: node, value: 1)
+            graph.insertEdge(from: source, to: node, value: 1)
 
             // Add edges from all internal nodes to sink, with an initial value of 1.
-            graph.addEdge(from: node, to: sink, value: 1)
+            graph.insertEdge(from: node, to: sink, value: 1)
 
             // Add edges from all internal nodes to all other internal nodes.
             // TODO: Ensure `filter` does not making this accidentally expensive.
             for other in internalNodes.lazy.filter({ $0 != node }) {
-                graph.addEdge(from: node, to: other, value: 1)
+                graph.insertEdge(from: node, to: other, value: 1)
             }
         }
 
