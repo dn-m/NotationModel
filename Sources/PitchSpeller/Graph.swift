@@ -51,17 +51,20 @@ public struct Graph <Value: Hashable>: Hashable {
             self.value = value
         }
 
+        /// - Returns: Graph with nodes updated by the given `transform`.
         public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U>.Edge {
-            return Graph<U>.Edge(
-                from: source.map(transform),
-                to: destination.map(transform),
-                value: value
-            )
+            return .init(from: source.map(transform), to: destination.map(transform), value: value)
         }
 
         /// - Returns: An `Edge` with the value updated with by the given `transform`.
         public func map(_ transform: (Double) -> Double) -> Edge {
             return Edge(from: source, to: destination, value: transform(value))
+        }
+
+        /// - Returns: `true` if the source and destination nodes of this `Edge` are equivalent to
+        /// those of the given `other`. Otherwise, `false`.
+        public func nodesAreEqual(to other: Edge) -> Bool {
+            return source == other.source && destination == other.destination
         }
     }
 
@@ -263,6 +266,16 @@ public struct Graph <Value: Hashable>: Hashable {
         }
 
         // `destination` is not reachable by `source`.
+        return nil
+    }
+
+    /// - Returns: The edge from the given `source` to the given `destination`, if it exists.
+    /// Otherwise, `nil`.
+    internal func edge(from source: Node, to destination: Node) -> Edge? {
+        guard let edges = adjacencyList[source] else { return nil }
+        for edge in edges where edge.destination == destination {
+            return edge
+        }
         return nil
     }
 
