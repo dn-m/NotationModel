@@ -60,6 +60,7 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     /// - Returns: The residual network of this one after pushing maximum flow through.
     //
     // TODO: Create / update reverse edges!
+    // TODO: Create two subgraphs (from sink, and to source)
     internal func edmondsKarp() -> FlowNetwork {
         let minimumCut = saturatedEdges(in: graph, comparingAgainst: residualNetwork)
         return FlowNetwork(residualNetwork, source: source, sink: sink)
