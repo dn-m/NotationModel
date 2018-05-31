@@ -106,6 +106,12 @@ public struct Graph <Value: Hashable>: Hashable {
         return adjacencyList.map { node, _ in node }
     }
 
+    /// - Returns: All of the disconnected subgraphs. In the case that the graph is connected, this
+    /// graph will be wrapped up in a single-element set.
+    public var subgraphs: Set<Graph> {
+        fatalError()
+    }
+
     private var adjacencyList: [Node: [Edge]] = [:]
 
     // MARK: - Initializers
@@ -165,8 +171,9 @@ public struct Graph <Value: Hashable>: Hashable {
 
     }
 
-    /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given `source`,
-    /// to the given `destination`, if the two given nodes are connected. Otherwise, `nil`.
+    /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given
+    /// `source`, to the given `destination`, if the two given nodes are connected. Otherwise,
+    /// `nil`.
     public func edgeValue(from source: Node, to destination: Node) -> Double? {
         guard let edges = adjacencyList[source] else { return nil }
         for edge in edges {

@@ -119,24 +119,6 @@ class GraphTests: XCTestCase {
         XCTAssertEqual(graph.shortestPath(from: b, to: c), [Graph.Edge(from: b, to: c, value: 0.66)])
     }
 
-    func testPaths() {
-        var graph = Graph<String>()
-        let a = graph.createNode("a")
-        let b = graph.createNode("b")
-        let c = graph.createNode("c")
-        graph.insertEdge(from: a, to: b, value: 1)
-        graph.insertEdge(from: b, to: c, value: 0.2)
-        graph.insertEdge(from: a, to: c, value: 0.8)
-
-        XCTAssertEqual(
-            graph.paths(from: a, to: c),
-            [
-                [Graph.Edge(from: a, to: b, value: 1), Graph.Edge(from: b, to: c, value: 0.2)],
-                [Graph.Edge(from: a, to: c, value: 0.8)]
-            ]
-        )
-    }
-
     func testInsertEdgeReplacesEdges() {
         var graph = Graph<String>()
         let a = graph.createNode("a")
