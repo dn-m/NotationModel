@@ -35,6 +35,8 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     /// - Returns: The residual network produced after subtracting the maximum flow from each of the
     /// edges. The saturated edges will be absent from the `residualNetwork`, as their values
     /// reached zero in the flow-propagation process.
+    ///
+    /// - TODO: Add backflow to reversed edges.
     private var residualNetwork: Graph<Value> {
         var residualNetwork = graph
         while let path = residualNetwork.shortestPath(from: source, to: sink) {
