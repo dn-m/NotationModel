@@ -88,7 +88,7 @@ public struct Graph <Value: Hashable>: Hashable {
             self.edges = edges
         }
 
-        /// - Returns: A `Path` with the values of each `Edge` updated with by the given `transform`.
+        /// - Returns: A `Path` with the values of each `Edge` updated by the given `transform`.
         public func map(_ transform: (Double) -> Double) -> Path {
             return Path(edges.map { $0.map(transform) })
         }
