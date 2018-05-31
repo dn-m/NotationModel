@@ -39,6 +39,11 @@ public struct Graph <Value: Hashable>: Hashable {
 
         // MARK: - Instance Properties
 
+        /// - Returns: An `Edge` whose direction is reversed.
+        public var reversed: Edge {
+            return Edge(from: destination, to: source, value: value)
+        }
+
         public let source: Node
         public let destination: Node
         public var value: Double

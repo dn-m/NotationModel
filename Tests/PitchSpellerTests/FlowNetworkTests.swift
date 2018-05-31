@@ -60,7 +60,7 @@ class FlowNetworkTests: XCTestCase {
         let f = graph.createNode("f")
         let g = graph.createNode("g")
 
-        // hook em up
+        // hook 'em up
         graph.insertEdge(from: a, to: b, value: 3)
         graph.insertEdge(from: a, to: d, value: 3)
         graph.insertEdge(from: b, to: c, value: 4)
