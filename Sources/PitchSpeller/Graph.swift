@@ -187,6 +187,11 @@ public struct Graph <Value: Hashable>: Hashable {
         return edges(from: node).map { $0.destination }
     }
 
+    /// - Returns: `true` if ths graph contains the given `node`. Otherwise, `false`.
+    public func contains(_ node: Node) -> Bool {
+        return nodes.contains(node)
+    }
+
     /// - Returns: The path with the minimum number of edges between the given `source` and the
     /// given `destination`, if it is reachable. Otherwise, `nil`.
     public func shortestPath(from source: Node, to destination: Node) -> Path? {
