@@ -5,6 +5,7 @@
 //  Created by James Bean on 5/24/18.
 //
 
+import Restructure
 import StructureWrapping
 import DataStructures
 
@@ -214,7 +215,7 @@ public struct Graph <Value: Hashable>: Hashable {
                 current = history[current]!
             }
             result.append(source)
-            return makePath(from: Array(result.reversed()))
+            return makePath(from: result.reversed())
         }
 
         // Maps each visited node to its predecessor, which is then backtraced to reconstitute
@@ -249,18 +250,17 @@ public struct Graph <Value: Hashable>: Hashable {
         return nil
     }
 
-    private func edges(_ nodes: [Node]) -> [Edge] {
-        return (nodes.startIndex ..< nodes.endIndex - 1).compactMap { index in
-            let source = nodes[index]
-            let destination = nodes[index + 1]
+    /// - Returns: An array of `Edge` values for the given sequence of `Node` values.
+    private func edges <S> (_ nodes: S) -> [Edge] where S: Sequence, S.Element == Node {
+        return nodes.pairs.compactMap { source, destination in
             return edgeValue(from: source, to: destination).map { value in
                 Edge(from: source, to: destination, value: value)
             }
         }
     }
 
-    /// Create a `Path` from a given array of `nodes`.
-    public func makePath(from nodes: [Node]) -> Path {
+    /// - Returns: A `Path` from a given sequence of `nodes`.
+    public func makePath <S> (from nodes: S) -> Path where S: Sequence, S.Element == Node {
         return Path(edges(nodes))
     }
 }
