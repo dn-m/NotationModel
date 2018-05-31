@@ -21,11 +21,6 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
         return graph.nodes.filter { $0 != source && $0 != sink }
     }
 
-    /// - Returns: All of the paths from the `source` to the `sink`.
-    internal var paths: Set<Path> {
-        return graph.paths(from: source, to: sink)
-    }
-
     /// - Returns: The edges whose values are equivalent to the maximum flow along the path from
     /// the `source` to the `sink` within which the edge resides.
     internal var saturatedEdges: Set<Edge> {
