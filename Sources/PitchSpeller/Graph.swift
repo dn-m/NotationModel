@@ -187,53 +187,6 @@ public struct Graph <Value: Hashable>: Hashable {
         return edges(from: node).map { $0.destination }
     }
 
-    /// - Returns: All of the paths from the given `source` to the given `destination`.
-    public func paths(from source: Node, to destination: Node) -> Set<Path> {
-
-        func paths(
-            from source: Node,
-            to destination: Node,
-            visited: Set<Node>,
-            currentPath: [Node],
-            accum: Set<[Node]>
-        ) -> Set<[Node]>
-        {
-            var visited = visited.inserting(source)
-            var currentPath = currentPath
-            var accum = accum
-
-            // We have found a path!
-            if source == destination {
-                return accum.inserting(currentPath)
-            }
-
-            // Continue on from each node connected from this one.
-            for adjacent in nodesAdjacent(to: source) {
-                if !visited.contains(adjacent) {
-                    currentPath.append(adjacent)
-                    accum.formUnion(
-                        paths(
-                            from: adjacent,
-                            to: destination,
-                            visited: visited,
-                            currentPath: currentPath,
-                            accum: accum
-                        )
-                    )
-                    currentPath.removeLast()
-                }
-            }
-            visited.remove(source)
-            return accum
-        }
-
-        let nodes = paths(from: source, to: destination, visited: [], currentPath: [source], accum: [])
-
-        // FIXME: Refactor
-        let edges = nodes.map(makePath)
-        return Set(edges)
-    }
-
     /// - Returns: The path with the minimum number of edges between the given `source` and the
     /// given `destination`, if it is reachable. Otherwise, `nil`.
     public func shortestPath(from source: Node, to destination: Node) -> Path? {
