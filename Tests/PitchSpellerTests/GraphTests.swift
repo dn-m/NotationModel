@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import PitchSpeller
+@testable import PitchSpeller
 
 class GraphTests: XCTestCase {
 
@@ -79,9 +79,9 @@ class GraphTests: XCTestCase {
         let c = graph.createNode("c")
         graph.insertEdge(from: a, to: b, value: 1)
         graph.insertEdge(from: a, to: c, value: 0.5)
-        XCTAssertEqual(graph.nodesAdjacent(to: a), [b,c])
-        XCTAssertEqual(graph.nodesAdjacent(to: b), [])
-        XCTAssertEqual(graph.nodesAdjacent(to: c), [])
+        XCTAssertEqual(graph.neighbors(of: a), [b,c])
+        XCTAssertEqual(graph.neighbors(of: b), [])
+        XCTAssertEqual(graph.neighbors(of: c), [])
     }
 
     func testShortestPathSingleNode() {
@@ -152,5 +152,15 @@ class GraphTests: XCTestCase {
         graph.insertPath(graph.shortestPath(from: a, to: c)!.map { _ in 0 })
         XCTAssertNil(graph.edgeValue(from: a, to: b))
         XCTAssertNil(graph.edgeValue(from: b, to: c))
+    }
+
+    func testBreadthFirstSearch() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.insertEdge(from: a, to: b, value: 1)
+        graph.insertEdge(from: b, to: c, value: 1)
+        XCTAssertEqual(graph.breadthFirstSearch(from: a), [a,b,c])
     }
 }
