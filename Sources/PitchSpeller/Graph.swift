@@ -117,6 +117,7 @@ public struct Graph <Value: Hashable>: Hashable {
         return copy
     }
 
+    /// - Returns: A directed graph with each edge reversed.
     var reversed: Graph {
         let edges = self.edges.map { $0.reversed }
         return Graph(edges)
