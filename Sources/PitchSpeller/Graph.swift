@@ -127,10 +127,12 @@ public struct Graph <Value: Hashable>: Hashable {
 
     // MARK: - Initializers
 
+    /// Create a `Graph` with the given `adjacencyList`.
     public init(_ adjacencyList: [Node: [Edge]] = [:]) {
         self.adjacencyList = adjacencyList
     }
 
+    /// Create a `Graph` with the given `edges`.
     public init <S> (_ edges: S) where S: Sequence, S.Element == Edge {
         for edge in edges {
             adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
