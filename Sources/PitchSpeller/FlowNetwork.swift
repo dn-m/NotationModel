@@ -40,6 +40,16 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
         return residualNetwork
     }
 
+    /// - Returns: The two partitions on either side of the s-t cut.
+    internal var partitions: (source: Graph<Value>, sink: Graph<Value>) {
+        let residualNetwork = self.residualNetwork
+        let sourceNodes = residualNetwork.breadthFirstSearch(from: source)
+        let sinkNodes = residualNetwork.reversed.breadthFirstSearch(from: sink)
+        let sourcePartition = Graph(graph.edges(sourceNodes))
+        let sinkPartition = Graph(graph.edges(sinkNodes.reversed()))
+        return (sourcePartition, sinkPartition)
+    }
+
     // TODO: Consider more (space-)efficient storage of Nodes.
     internal var graph: Graph<Value>
     internal var source: Node

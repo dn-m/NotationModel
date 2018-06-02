@@ -107,10 +107,19 @@ public struct Graph <Value: Hashable>: Hashable {
         return adjacencyList.map { node, _ in node }
     }
 
-    /// - Returns: All of the disconnected subgraphs. In the case that the graph is connected, this
-    /// graph will be wrapped up in a single-element set.
-    public var subgraphs: Set<Graph> {
-        fatalError()
+    /// - Returns: An undirected graph from this directed graph by inserting reversed copies of each
+    /// edge.
+    var undirected: Graph {
+        var copy = self
+        for edge in edges {
+            copy.insertEdge(edge.reversed)
+        }
+        return copy
+    }
+
+    var reversed: Graph {
+        let edges = self.edges.map { $0.reversed }
+        return Graph(edges)
     }
 
     private var adjacencyList: [Node: [Edge]] = [:]
@@ -119,6 +128,12 @@ public struct Graph <Value: Hashable>: Hashable {
 
     public init(_ adjacencyList: [Node: [Edge]] = [:]) {
         self.adjacencyList = adjacencyList
+    }
+
+    public init <S> (_ edges: S) where S: Sequence, S.Element == Edge {
+        for edge in edges {
+            adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
+        }
     }
 
     // MARK: - Insance Methods
@@ -191,7 +206,7 @@ public struct Graph <Value: Hashable>: Hashable {
     }
 
     /// - Returns: All of the `Node` values adjacent to the given `node`.
-    public func nodesAdjacent(to node: Node) -> [Node] {
+    public func neighbors(of node: Node) -> [Node] {
         return edges(from: node).map { $0.destination }
     }
 
@@ -230,14 +245,30 @@ public struct Graph <Value: Hashable>: Hashable {
             if node == destination {
                 return backtrace(from: history)
             }
-            for adjacent in nodesAdjacent(to: node) where !history.keys.contains(adjacent) {
-                queue.push(adjacent)
-                history[adjacent] = node
+            for neighbor in neighbors(of: node) where !history.keys.contains(neighbor) {
+                queue.push(neighbor)
+                history[neighbor] = node
             }
         }
 
         // `destination` is not reachable by `source`.
         return nil
+    }
+
+    /// - Returns: Nodes in breadth-first order.
+    internal func breadthFirstSearch(from source: Node) -> [Node] {
+        var visited: [Node] = []
+        var queue: Queue<Node> = []
+        queue.push(source)
+        visited.append(source)
+        while !queue.isEmpty {
+            let node = queue.pop()
+            for neighbor in neighbors(of: node) where !visited.contains(neighbor) {
+                queue.push(neighbor)
+                visited.append(neighbor)
+            }
+        }
+        return visited
     }
 
     /// - Returns: The edge from the given `source` to the given `destination`, if it exists.
@@ -251,7 +282,7 @@ public struct Graph <Value: Hashable>: Hashable {
     }
 
     /// - Returns: An array of `Edge` values for the given sequence of `Node` values.
-    private func edges <S> (_ nodes: S) -> [Edge] where S: Sequence, S.Element == Node {
+    internal func edges <S> (_ nodes: S) -> [Edge] where S: Sequence, S.Element == Node {
         return nodes.pairs.compactMap { source, destination in
             return edgeValue(from: source, to: destination).map { value in
                 Edge(from: source, to: destination, value: value)
@@ -308,3 +339,4 @@ extension Graph.Path: CollectionWrapping {
         return edges
     }
 }
+
