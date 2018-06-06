@@ -23,7 +23,7 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
 
     /// - Returns: The edges whose values are equivalent to the maximum flow along the path from
     /// the `source` to the `sink` within which the edge resides.
-    internal var saturatedEdges: Set<Edge> {
+    public var saturatedEdges: Set<Edge> {
         return saturatedEdges(in: graph, comparingAgainst: residualNetwork)
     }
 
@@ -32,7 +32,7 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     /// reached zero in the flow-propagation process.
     ///
     /// - TODO: Add backflow to reversed edges.
-    private var residualNetwork: Graph<Value> {
+    public var residualNetwork: Graph<Value> {
         var residualNetwork = graph
         while let path = residualNetwork.shortestPath(from: source, to: sink) {
             residualNetwork.insertPath(path.map { $0 - maximumFlow(of: path) })
@@ -41,7 +41,7 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     }
 
     /// - Returns: The two partitions on either side of the s-t cut.
-    internal var partitions: (source: Graph<Value>, sink: Graph<Value>) {
+    public var partitions: (source: Graph<Value>, sink: Graph<Value>) {
         return (graph(sourceReachableNodes), graph(sinkReachableNodes.reversed()))
     }
 
