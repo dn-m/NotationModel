@@ -317,51 +317,51 @@ class RhythmSpellingTests: XCTestCase {
         XCTAssertEqual(makeTieStates(contexts), expected)
     }
     
-    // FIXME: Groups not yet equatable
-    func testInitWithRhythmTree() {
-        
-        let metricalDurationTree = 4/>8 * [1,1,1,1]
-        
-        let metricalContexts: [MetricalContext<Int>] = [
-            .instance(.event(1)),
-            .continuation,
-            .continuation,
-            .instance(.absence)
-        ]
-        
-        let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
-        let spelling = RhythmSpelling(rhythmTree)
+//    // FIXME: Groups not yet equatable
+//    func testInitWithRhythmTree() {
+//
+//        let metricalDurationTree = 4/>8 * [1,1,1,1]
+//
+//        let metricalContexts: [MetricalContext<Int>] = [
+//            .instance(.event(1)),
+//            .continuation,
+//            .continuation,
+//            .instance(.absence)
+//        ]
+//        
+//        let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
+//        let spelling = RhythmSpelling(rhythmTree)
+//
+//        let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
+//            [1: .start],
+//            [1: .maintain],
+//            [1: .maintain],
+//            [1: .stop]
+//        ].map(RhythmSpelling.BeamJunction.init)
+//
+//        let expectedTieStates: [RhythmSpelling.TieState] = [
+//            .start,
+//            .maintain,
+//            .stop,
+//            .none
+//        ]
+//
+//        let expectedDots = [0,0,0,0]
+//
+//        let items = zip(
+//            expectedBeamJunctions,
+//            expectedTieStates,
+//            expectedDots
+//        ).map(RhythmSpelling.Item.init)
+//
+//        // Groups not yet equatable
+//        let context = Group(duration: 4/>8, contentsSum: 4).context(range: 0...8)
+//        let groups = Grouping.leaf(context)
+//        let expected = RhythmSpelling(items: items, groups: groups)
+//
+//        XCTAssertEqual(spelling, expected)
+//    }
 
-        let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
-            [1: .start],
-            [1: .maintain],
-            [1: .maintain],
-            [1: .stop]
-        ].map(RhythmSpelling.BeamJunction.init)
-        
-        let expectedTieStates: [RhythmSpelling.TieState] = [
-            .start,
-            .maintain,
-            .stop,
-            .none
-        ]
-        
-        let expectedDots = [0,0,0,0]
-        
-        let items = zip(
-            expectedBeamJunctions,
-            expectedTieStates,
-            expectedDots
-        ).map(RhythmSpelling.Item.init)
-        
-        // Groups not yet equatable
-        let context = Group(duration: 4/>8, contentsSum: 4).context(range: 0...8)
-        let groups = Grouping.leaf(context)
-        let expected = RhythmSpelling(items: items, groups: groups)
-        
-        XCTAssertEqual(spelling, expected)
-    }
-    
     // FIXME: Not fully implemented
     func testInitWithRhythmTreeDottedValues() {
         

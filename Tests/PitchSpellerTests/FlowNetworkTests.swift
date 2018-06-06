@@ -9,64 +9,105 @@ import XCTest
 @testable import PitchSpeller
 
 class FlowNetworkTests: XCTestCase {
-    
-    func testInitMonadNodeCount() {
-        let flowNetwork = Wetherfield.FlowNetwork(pitchClasses: [0], parsimonyPivot: 2)
-        XCTAssertEqual(flowNetwork.internalNodes.count, 2)
+
+    var simpleFlowNetwork: FlowNetwork<String> {
+        var graph = Graph<String>()
+        let source = graph.createNode("source")
+        let sink = graph.createNode("sink")
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        graph.insertEdge(from: source, to: a, value: 1)
+        graph.insertEdge(from: source, to: b, value: 2)
+        graph.insertEdge(from: a, to: sink, value: 3)
+        graph.insertEdge(from: b, to: sink, value: 4)
+        return FlowNetwork(graph, source: source, sink: sink)
     }
 
-    func testInitDyadNodeCount() {
-        let flowNetwork = Wetherfield.FlowNetwork(pitchClasses: [0,1], parsimonyPivot: 2)
-        XCTAssertEqual(flowNetwork.internalNodes.count, 4)
+    func testMaximumPathFlow() {
+        var graph = Graph<String>()
+        let source = graph.createNode("source")
+        let sink = graph.createNode("sink")
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        graph.insertEdge(from: source, to: a, value: 1)
+        graph.insertEdge(from: a, to: b, value: 2)
+        graph.insertEdge(from: b, to: sink, value: 3)
+        let flowNetwork = FlowNetwork(graph, source: source, sink: sink)
+        let path = graph.shortestPath(from: source, to: sink)!
+        XCTAssertEqual(flowNetwork.maximumFlow(of: path), 1)
     }
 
-    func testInitTriadEdges() {
+    func testSaturatedEdges() {
 
-        let flowNetwork = Wetherfield.FlowNetwork(pitchClasses: [0,1,6], parsimonyPivot: 2)
+        // Example taken from: https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm
+        var graph = Graph<String>()
 
-        for internalNode in flowNetwork.internalNodes {
+        // source
+        let a = graph.createNode("a")
 
-            // Sink is not connected to anything
-            XCTAssertNil(flowNetwork.graph.edgeValue(from: flowNetwork.sink, to: internalNode))
+         // sink
+        let b = graph.createNode("b")
 
-            // Nothing is not connected to the source
-            XCTAssertNil(flowNetwork.graph.edgeValue(from: internalNode, to: flowNetwork.source))
+        // internal nodes
+        let c = graph.createNode("c")
+        let d = graph.createNode("d")
+        let e = graph.createNode("e")
+        let f = graph.createNode("f")
+        let g = graph.createNode("g")
 
-            // Source is connected to all internal nodes
-            XCTAssertNotNil(flowNetwork.graph.edgeValue(from: flowNetwork.source, to: internalNode))
+        // hook 'em up
+        graph.insertEdge(from: a, to: b, value: 3)
+        graph.insertEdge(from: a, to: d, value: 3)
+        graph.insertEdge(from: b, to: c, value: 4)
+        graph.insertEdge(from: c, to: a, value: 3)
+        graph.insertEdge(from: c, to: e, value: 2)
+        graph.insertEdge(from: e, to: b, value: 1)
+        graph.insertEdge(from: c, to: d, value: 1)
+        graph.insertEdge(from: d, to: f, value: 6)
+        graph.insertEdge(from: d, to: e, value: 2)
+        graph.insertEdge(from: e, to: g, value: 1)
+        graph.insertEdge(from: f, to: g, value: 9)
+        let flowNetwork = FlowNetwork(graph, source: a, sink: g)
 
-            // All internal nodes are connected to sink
-            XCTAssertNotNil(flowNetwork.graph.edgeValue(from: internalNode, to: flowNetwork.sink))
-
-            // All internal nodes are connected to each other
-            for otherNode in flowNetwork.internalNodes.lazy.filter({ $0 != internalNode}) {
-                XCTAssertNotNil(flowNetwork.graph.edgeValue(from: internalNode, to: otherNode))
-                XCTAssertNotNil(flowNetwork.graph.edgeValue(from: otherNode, to: internalNode))
-            }
-        }
+        let ad = graph.edge(from: a, to: d)!
+        let cd = graph.edge(from: c, to: d)!
+        let eg = graph.edge(from: e, to: g)!
+        XCTAssertEqual(flowNetwork.saturatedEdges, [ad, cd, eg])
     }
 
-    func testPaths() {
-        let flowNetwork = Wetherfield.FlowNetwork(pitchClasses: [0], parsimonyPivot: 2)
+    func testPartitions() {
 
-        //     (0,0)
-        //    / || \
-        //   s  ||  t
-        //    \ || /
-        //     (0,1)
+        // Example taken from: https://www.geeksforgeeks.org/minimum-cut-in-a-directed-graph/
+        var graph = Graph<String>()
 
-        // Edges:
-        // - Source -> 0,0
-        // - Source -> 0,1
-        // - 0,0 -> 0,1
-        // - 0,1 -> 0,0
-        // - 0,0 -> Sink
-        // - 0,1 -> Sink
+        // source
+        let a = graph.createNode("a")
 
-        // Paths:
-        // - Source -> (0,0) -> t
-        // - Source -> (0,1) -> t
-        // - Source -> (0,0) -> (0,1) -> t
-        // - Source -> (0,1) -> (0,0) -> t
+        // sink
+        let b = graph.createNode("b")
+
+        // internal nodes
+        let c = graph.createNode("c")
+        let d = graph.createNode("d")
+        let e = graph.createNode("e")
+        let f = graph.createNode("f")
+
+        graph.insertEdge(from: a, to: b, value: 16)
+        graph.insertEdge(from: a, to: c, value: 13)
+        graph.insertEdge(from: b, to: c, value: 10)
+        graph.insertEdge(from: c, to: b, value: 4)
+        graph.insertEdge(from: b, to: d, value: 12)
+        graph.insertEdge(from: d, to: c, value: 9)
+        graph.insertEdge(from: c, to: e, value: 14)
+        graph.insertEdge(from: e, to: d, value: 7)
+        graph.insertEdge(from: d, to: f, value: 20)
+        graph.insertEdge(from: e, to: f, value: 4)
+        let flowNetwork = FlowNetwork(graph, source: a, sink: f)
+
+        // Expected partitions
+        let sourcePartition = Graph(graph.edges([a,b,c,e]))
+        let sinkPartition = Graph(graph.edges([d,f]))
+        XCTAssertEqual(flowNetwork.partitions.source, sourcePartition)
+        XCTAssertEqual(flowNetwork.partitions.sink, sinkPartition)
     }
-}
+ }
