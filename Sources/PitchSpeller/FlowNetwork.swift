@@ -42,12 +42,22 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
 
     /// - Returns: The two partitions on either side of the s-t cut.
     internal var partitions: (source: Graph<Value>, sink: Graph<Value>) {
-        let residualNetwork = self.residualNetwork
-        let sourceNodes = residualNetwork.breadthFirstSearch(from: source)
-        let sinkNodes = residualNetwork.reversed.breadthFirstSearch(from: sink)
-        let sourcePartition = Graph(graph.edges(sourceNodes))
-        let sinkPartition = Graph(graph.edges(sinkNodes.reversed()))
-        return (sourcePartition, sinkPartition)
+        return (graph(sourceReachableNodes), graph(sinkReachableNodes.reversed()))
+    }
+
+    /// - Returns: Nodes in residual network reachable forwards from the `source`.
+    private var sourceReachableNodes: [Node] {
+        return residualNetwork.breadthFirstSearch(from: source)
+    }
+
+    /// - Returns: Nodes in residual network reachable backwards from the `sink`.
+    private var sinkReachableNodes: [Node] {
+        return residualNetwork.reversed.breadthFirstSearch(from: sink)
+    }
+
+    /// - Returns: A `Graph` composed of the given `nodes`, and corresponding edges in this graph.
+    private func graph(_ nodes: [Node]) -> Graph<Value> {
+        return Graph(graph.edges(nodes))
     }
 
     // TODO: Consider more (space-)efficient storage of Nodes.
