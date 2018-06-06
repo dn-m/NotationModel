@@ -196,6 +196,12 @@ public struct Graph <Value: Hashable>: Hashable {
         )
     }
 
+    /// - Returns: A `Graph` with each of the edges contained herein updated by the given
+    /// `transform`.
+    public func mapEdges (_ transform: (Double) -> Double) -> Graph<Value> {
+        return Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
+    }
+
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given
     /// `source`, to the given `destination`, if the two given nodes are connected. Otherwise,
     /// `nil`.
