@@ -23,12 +23,6 @@ class FlowNetworkTests: XCTestCase {
         return FlowNetwork(graph, source: source, sink: sink)
     }
 
-    func testEdmondsKarp() {
-        let flowNetwork = simpleFlowNetwork
-        let residualNetwork = flowNetwork.edmondsKarp()
-        print(residualNetwork)
-    }
-
     func testMaximumPathFlow() {
         var graph = Graph<String>()
         let source = graph.createNode("source")
