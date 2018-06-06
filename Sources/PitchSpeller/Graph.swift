@@ -342,4 +342,3 @@ extension Graph.Path: CollectionWrapping {
         return edges
     }
 }
-
