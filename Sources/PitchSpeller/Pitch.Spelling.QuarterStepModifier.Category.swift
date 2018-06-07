@@ -115,20 +115,13 @@ extension Wetherfield.PitchSpeller {
     }
 }
 
-extension SpelledPitch {
-    init(pitchClass: Pitch.Class, quarterStepModifier: Pitch.Spelling.QuarterStepModifier) {
-        fatalError()
-    }
-}
-
 extension Pitch.Spelling {
-    init(pitchClass: Pitch.Class, quarterStepModifier: Pitch.Spelling.QuarterStepModifier) {
-        fatalError()
-    }
-}
-
-extension Pitch.Spelling.LetterName {
-    init(pitchClass: Pitch.Class, quarterStepModifier: Pitch.Spelling.QuarterStepModifier) {
-        fatalError()
+    init?(pitchClass: Pitch.Class, quarterStepModifier: Pitch.Spelling.QuarterStepModifier) {
+        guard
+            let letter = LetterName(pitchClass: pitchClass, quarterStepModifier: quarterStepModifier)
+        else {
+            return nil
+        }
+        self.init(letter, quarterStepModifier)
     }
 }
