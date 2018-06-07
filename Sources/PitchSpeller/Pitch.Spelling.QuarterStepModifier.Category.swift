@@ -33,7 +33,7 @@ extension Wetherfield.PitchSpeller {
     /// - Returns: A `SpelledPitch` value applied to the given `pitch` with the given `tendencies`
     /// which are resultant from the `FlowNetwork` decoding.
     func spelledPitch(pitch: Pitch, tendencies: TendencyPair) -> SpelledPitch {
-        let modifier = Category.modifier(pitchClass: pitch.class, tendencies: tendencies)!
+        let (modifier, _) = Category.modifierAndIndex(for: pitch.class, with: tendencies)!
         let pitchSpelling = Pitch.Spelling(pitchClass: pitch.class, quarterStepModifier: modifier)!
         return try! pitch.spelled(with: pitchSpelling)
     }
@@ -62,6 +62,8 @@ extension Wetherfield.PitchSpeller {
     internal struct Category {
 
         private typealias Map = OrderedDictionary<TendencyPair,Pitch.Spelling.QuarterStepModifier>
+
+        // Each of these `Map` values are ordered from flat to sharp.
 
         private static var zero: Map = [
             .init(.down,.down): .doubleFlat,
@@ -121,10 +123,58 @@ extension Wetherfield.PitchSpeller {
         /// `tendency`. This mapping is defined by Wetherfield on pg. 38 of the thesis _A Graphical
         /// Theory of Musical Pitch Spelling_.
         ///
-        internal static func modifier(pitchClass: Pitch.Class, tendencies: TendencyPair)
-            -> Pitch.Spelling.QuarterStepModifier?
+        internal static func modifierAndIndex(for pitchClass: Pitch.Class, with tendencies: TendencyPair)
+            -> (modifier: Pitch.Spelling.QuarterStepModifier, index: Int)?
         {
-            return category(for: pitchClass)?[tendencies]
+            guard let category = self.category(for: pitchClass) else { return nil }
+            let index = category.keys.index(of: tendencies)!
+            guard let modifier = category[tendencies] else { return nil }
+            return (modifier: modifier, index: index)
+        }
+
+        internal static func pitchSpelling(pitchClass: Pitch.Class, tendencies: TendencyPair)
+            -> Pitch.Spelling?
+        {
+
+            guard let (modifier, index) = modifierAndIndex(for: pitchClass, with: tendencies) else {
+                return nil
+            }
+
+            var letterName: Pitch.Spelling.LetterName? {
+
+                var initial: Pitch.Spelling.LetterName {
+                    switch pitchClass {
+                    case 0,2,4,5,7,9,11:
+                        return Pitch.Spelling.LetterName.default(for: pitchClass)
+                    case 1,6:
+                        return Pitch.Spelling.LetterName.default(for: pitchClass - 1)
+                    case 3,10:
+                        return Pitch.Spelling.LetterName.default(for: pitchClass + 1)
+                    default:
+                        fatalError()
+                    }
+                }
+
+                switch pitchClass {
+                case 0,1,2,3,4,5,6,7,9,10,11:
+                    switch index {
+                    case 0: return initial.successor
+                    case 1: return initial
+                    case 2: return initial.predecessor
+                    default: fatalError()
+                    }
+                case 8:
+                    switch modifier {
+                    case .flat: return .a
+                    case .sharp: return .g
+                    default: return nil
+                    }
+                default:
+                    return nil
+                }
+            }
+
+            return letterName.map { Pitch.Spelling($0, modifier) }
         }
     }
 }
