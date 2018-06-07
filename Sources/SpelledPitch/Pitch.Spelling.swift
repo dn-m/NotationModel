@@ -6,6 +6,7 @@
 //  Copyright © 2016 James Bean. All rights reserved.
 //
 
+import Math
 import Pitch
 
 extension Pitch {
@@ -114,7 +115,21 @@ extension Pitch.Spelling {
     /**
      Letter name component of a `Pitch.Spelling`
      */
-    public enum LetterName: String {
+    public enum LetterName: String, CaseIterable {
+
+        internal static func `default`(for unmodifiedPitchClass: Pitch.Class) -> LetterName {
+            switch unmodifiedPitchClass {
+            case 0: return .c
+            case 2: return .d
+            case 4: return .e
+            case 5: return .f
+            case 7: return .g
+            case 9: return .a
+            case 11: return .b
+            default:
+                fatalError("Impossible")
+            }
+        }
 
         // MARK: - Cases
 
@@ -158,6 +173,99 @@ extension Pitch.Spelling {
             }
         }
 
+        // FIXME: Refactor
+        /// Create a `Pitch.Spelling.LetterName with the given `pitchClass` and the given
+        /// `modifier`.
+        public init?(pitchClass: Pitch.Class, modifier: QuarterStepModifier) {
+
+            switch pitchClass {
+
+            // Category "zero"
+            case 0,5:
+                let initial = LetterName.default(for: pitchClass)
+                switch modifier {
+                case .natural:
+                    self = initial
+                case .doubleFlat:
+                    self = initial.successor
+                case .sharp:
+                    self = initial.predecessor
+                default:
+                    return nil // impossible
+                }
+
+            // Category "one"
+            case 1,6:
+                let initial = LetterName.default(for: pitchClass - 1)
+                switch modifier {
+                case .flat:
+                    self = initial.successor
+                case .sharp:
+                    self = initial
+                case .doubleSharp:
+                    self = initial.predecessor
+                default:
+                    return nil // impossible
+                }
+
+            // Category "two"
+            case 2,7,9:
+                let initial = LetterName.default(for: pitchClass)
+                switch modifier {
+                case .doubleFlat:
+                    self = initial.successor
+                case .natural:
+                    self = initial
+                case .doubleSharp:
+                    self = initial.predecessor
+                default:
+                    return nil // impossible
+                }
+
+            // Category "three"
+            case 3,10:
+                let initial = LetterName.default(for: pitchClass + 1)
+                switch modifier {
+                case .doubleFlat:
+                    self = initial.successor
+                case .flat:
+                    self = initial
+                case .sharp:
+                    self = initial.predecessor
+                default:
+                    return nil // impossible
+                }
+
+            // Category "four"
+            case 4,11:
+                let initial = LetterName.default(for: pitchClass)
+                switch modifier {
+                case .flat:
+                    self = initial.successor
+                case .natural:
+                    self = initial
+                case .doubleSharp:
+                    self = initial.predecessor
+                default:
+                    return nil // impossible
+                }
+
+
+            // Category "Five"
+            case 8:
+                switch modifier {
+                case .flat:
+                    self = .a
+                case .sharp:
+                    self = .g
+                default:
+                    return nil
+                }
+            default:
+                return nil // impossible
+            }
+        }
+
         /// Amount of steps from c
         public var steps: Int {
             switch self {
@@ -182,6 +290,18 @@ extension Pitch.Spelling {
             case .a: return 9
             case .b: return 11
             }
+        }
+
+        /// - TODO: Refactor out into `CircularEnum`
+        public var predecessor: LetterName {
+            let ownIndex = LetterName.allCases.index(of: self)!
+            return LetterName.allCases[mod(ownIndex - 1, LetterName.allCases.count)]
+        }
+
+        /// - TODO: Refactor out into `CircularEnum`
+        public var successor: LetterName {
+            let ownIndex = LetterName.allCases.index(of: self)!
+            return LetterName.allCases[mod(ownIndex + 1, LetterName.allCases.count)]
         }
     }
 }
