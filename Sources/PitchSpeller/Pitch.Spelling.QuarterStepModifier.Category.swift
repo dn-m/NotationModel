@@ -59,6 +59,7 @@ extension Wetherfield.PitchSpeller {
         }
     }
 
+    /// - TODO: Architect things around concrete Category instances, with calling instance methods.
     internal struct Category {
 
         private typealias Map = OrderedDictionary<TendencyPair,Pitch.Spelling.QuarterStepModifier>
@@ -123,8 +124,10 @@ extension Wetherfield.PitchSpeller {
         /// `tendency`. This mapping is defined by Wetherfield on pg. 38 of the thesis _A Graphical
         /// Theory of Musical Pitch Spelling_.
         ///
-        internal static func modifierAndIndex(for pitchClass: Pitch.Class, with tendencies: TendencyPair)
-            -> (modifier: Pitch.Spelling.QuarterStepModifier, index: Int)?
+        internal static func modifierAndIndex(
+            for pitchClass: Pitch.Class,
+            with tendencies: TendencyPair
+        ) -> (modifier: Pitch.Spelling.QuarterStepModifier, index: Int)?
         {
             guard let category = self.category(for: pitchClass) else { return nil }
             let index = category.keys.index(of: tendencies)!
@@ -144,10 +147,13 @@ extension Wetherfield.PitchSpeller {
 
                 var initial: Pitch.Spelling.LetterName {
                     switch pitchClass {
+                    // "White keys" pitch classes need no adjustment
                     case 0,2,4,5,7,9,11:
                         return Pitch.Spelling.LetterName.default(for: pitchClass)
+                    // Category "One" pitch classes need to be shifted down
                     case 1,6:
                         return Pitch.Spelling.LetterName.default(for: pitchClass - 1)
+                    // Category "Three" pitch classes need to be shifted up
                     case 3,10:
                         return Pitch.Spelling.LetterName.default(for: pitchClass + 1)
                     default:
@@ -157,18 +163,9 @@ extension Wetherfield.PitchSpeller {
 
                 switch pitchClass {
                 case 0,1,2,3,4,5,6,7,9,10,11:
-                    switch index {
-                    case 0: return initial.successor
-                    case 1: return initial
-                    case 2: return initial.predecessor
-                    default: fatalError()
-                    }
+                    return index == 1 ? initial : index == 0 ? initial.successor : initial.predecessor
                 case 8:
-                    switch modifier {
-                    case .flat: return .a
-                    case .sharp: return .g
-                    default: return nil
-                    }
+                    return modifier == .flat ? .a : .g
                 default:
                     return nil
                 }
