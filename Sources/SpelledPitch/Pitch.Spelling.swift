@@ -117,19 +117,7 @@ extension Pitch.Spelling {
      */
     public enum LetterName: String, CaseIterable {
 
-        internal static func `default`(for unmodifiedPitchClass: Pitch.Class) -> LetterName {
-            switch unmodifiedPitchClass {
-            case 0: return .c
-            case 2: return .d
-            case 4: return .e
-            case 5: return .f
-            case 7: return .g
-            case 9: return .a
-            case 11: return .b
-            default:
-                fatalError("Impossible")
-            }
-        }
+
 
         // MARK: - Cases
 
@@ -170,99 +158,6 @@ extension Pitch.Spelling {
             case "f", "F": self = .f
             case "g", "G": self = .g
             default: return nil
-            }
-        }
-
-        // FIXME: Refactor
-        /// Create a `Pitch.Spelling.LetterName with the given `pitchClass` and the given
-        /// `modifier`.
-        public init?(pitchClass: Pitch.Class, quarterStepModifier: QuarterStepModifier) {
-
-            switch pitchClass {
-
-            // Category "zero"
-            case 0,5:
-                let initial = LetterName.default(for: pitchClass)
-                switch quarterStepModifier {
-                case .natural:
-                    self = initial
-                case .doubleFlat:
-                    self = initial.successor
-                case .sharp:
-                    self = initial.predecessor
-                default:
-                    return nil // impossible
-                }
-
-            // Category "one"
-            case 1,6:
-                let initial = LetterName.default(for: pitchClass - 1)
-                switch quarterStepModifier {
-                case .flat:
-                    self = initial.successor
-                case .sharp:
-                    self = initial
-                case .doubleSharp:
-                    self = initial.predecessor
-                default:
-                    return nil // impossible
-                }
-
-            // Category "two"
-            case 2,7,9:
-                let initial = LetterName.default(for: pitchClass)
-                switch quarterStepModifier {
-                case .doubleFlat:
-                    self = initial.successor
-                case .natural:
-                    self = initial
-                case .doubleSharp:
-                    self = initial.predecessor
-                default:
-                    return nil // impossible
-                }
-
-            // Category "three"
-            case 3,10:
-                let initial = LetterName.default(for: pitchClass + 1)
-                switch quarterStepModifier {
-                case .doubleFlat:
-                    self = initial.successor
-                case .flat:
-                    self = initial
-                case .sharp:
-                    self = initial.predecessor
-                default:
-                    return nil // impossible
-                }
-
-            // Category "four"
-            case 4,11:
-                let initial = LetterName.default(for: pitchClass)
-                switch quarterStepModifier {
-                case .flat:
-                    self = initial.successor
-                case .natural:
-                    self = initial
-                case .doubleSharp:
-                    self = initial.predecessor
-                default:
-                    return nil // impossible
-                }
-
-
-            // Category "Five"
-            case 8:
-                switch quarterStepModifier {
-                case .flat:
-                    self = .a
-                case .sharp:
-                    self = .g
-                default:
-                    return nil
-                }
-            default:
-                return nil // impossible
             }
         }
 

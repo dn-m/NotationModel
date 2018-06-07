@@ -1,13 +1,13 @@
 //
 //  Pitch.Spelling.LetterName.Tests.swift
-//  SpelledPitchTests
+//  PitchSpellerTests
 //
 //  Created by James Bean on 6/6/18.
 //
 
 import XCTest
 import Pitch
-import SpelledPitch
+import PitchSpeller
 
 class Pitch_Spelling_LetterNameTests: XCTestCase {
 
