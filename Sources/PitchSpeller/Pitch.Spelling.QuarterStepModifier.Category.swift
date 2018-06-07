@@ -18,6 +18,16 @@ extension Wetherfield {
     }
 }
 
+// TripleOutputCategory
+// DoubleOutputCategory
+// SingleOutputCategory
+
+// TripleInputCategory
+// DoubleInputCategory
+// SingleInputCategory
+
+
+
 extension Wetherfield.PitchSpeller {
 
     /// - Returns: A `SpelledPitch` value applied to the given `pitch` with the given `tendencies`
@@ -49,7 +59,7 @@ extension Wetherfield.PitchSpeller {
         }
     }
 
-    internal enum Category {
+    internal struct Category {
 
         private typealias Map = OrderedDictionary<TendencyPair,Pitch.Spelling.QuarterStepModifier>
 
@@ -153,11 +163,31 @@ extension Pitch.Spelling.LetterName {
     /// `modifier`.
     public init?(pitchClass: Pitch.Class, quarterStepModifier: Pitch.Spelling.QuarterStepModifier) {
 
+        // Get initial lettername
+        // Get lettername given position of quarterStepModifier in options
+
+        func initialLetterName(for pitchClass: Pitch.Class) -> Pitch.Spelling.LetterName {
+            switch pitchClass {
+            case 0,2,4,5,7,9,11:
+                return Pitch.Spelling.LetterName.default(for: pitchClass)
+            case 1,6:
+                return Pitch.Spelling.LetterName.default(for: pitchClass - 1)
+            case 3,10:
+                return Pitch.Spelling.LetterName.default(for: pitchClass + 1)
+            case 8:
+                return .a // temporary
+            default:
+                fatalError()
+            }
+        }
+
+        let initial = initialLetterName(for: pitchClass)
+
         switch pitchClass {
 
         // Category "zero"
         case 0,5:
-            let initial = Pitch.Spelling.LetterName.default(for: pitchClass)
+
             switch quarterStepModifier {
             case .natural:
                 self = initial
@@ -171,7 +201,6 @@ extension Pitch.Spelling.LetterName {
 
         // Category "one"
         case 1,6:
-            let initial = Pitch.Spelling.LetterName.default(for: pitchClass - 1)
             switch quarterStepModifier {
             case .flat:
                 self = initial.successor
@@ -185,7 +214,6 @@ extension Pitch.Spelling.LetterName {
 
         // Category "two"
         case 2,7,9:
-            let initial = Pitch.Spelling.LetterName.default(for: pitchClass)
             switch quarterStepModifier {
             case .doubleFlat:
                 self = initial.successor
@@ -199,7 +227,6 @@ extension Pitch.Spelling.LetterName {
 
         // Category "three"
         case 3,10:
-            let initial = Pitch.Spelling.LetterName.default(for: pitchClass + 1)
             switch quarterStepModifier {
             case .doubleFlat:
                 self = initial.successor
@@ -213,7 +240,6 @@ extension Pitch.Spelling.LetterName {
 
         // Category "four"
         case 4,11:
-            let initial = Pitch.Spelling.LetterName.default(for: pitchClass)
             switch quarterStepModifier {
             case .flat:
                 self = initial.successor
