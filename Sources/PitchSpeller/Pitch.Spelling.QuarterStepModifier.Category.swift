@@ -163,7 +163,6 @@ extension Pitch.Spelling.LetterName {
     /// `modifier`.
     public init?(pitchClass: Pitch.Class, quarterStepModifier: Pitch.Spelling.QuarterStepModifier) {
 
-        // Get initial lettername
         // Get lettername given position of quarterStepModifier in options
 
         func initialLetterName(for pitchClass: Pitch.Class) -> Pitch.Spelling.LetterName {
