@@ -176,14 +176,14 @@ extension Pitch.Spelling {
         // FIXME: Refactor
         /// Create a `Pitch.Spelling.LetterName with the given `pitchClass` and the given
         /// `modifier`.
-        public init?(pitchClass: Pitch.Class, modifier: QuarterStepModifier) {
+        public init?(pitchClass: Pitch.Class, quarterStepModifier: QuarterStepModifier) {
 
             switch pitchClass {
 
             // Category "zero"
             case 0,5:
                 let initial = LetterName.default(for: pitchClass)
-                switch modifier {
+                switch quarterStepModifier {
                 case .natural:
                     self = initial
                 case .doubleFlat:
@@ -197,7 +197,7 @@ extension Pitch.Spelling {
             // Category "one"
             case 1,6:
                 let initial = LetterName.default(for: pitchClass - 1)
-                switch modifier {
+                switch quarterStepModifier {
                 case .flat:
                     self = initial.successor
                 case .sharp:
@@ -211,7 +211,7 @@ extension Pitch.Spelling {
             // Category "two"
             case 2,7,9:
                 let initial = LetterName.default(for: pitchClass)
-                switch modifier {
+                switch quarterStepModifier {
                 case .doubleFlat:
                     self = initial.successor
                 case .natural:
@@ -225,7 +225,7 @@ extension Pitch.Spelling {
             // Category "three"
             case 3,10:
                 let initial = LetterName.default(for: pitchClass + 1)
-                switch modifier {
+                switch quarterStepModifier {
                 case .doubleFlat:
                     self = initial.successor
                 case .flat:
@@ -239,7 +239,7 @@ extension Pitch.Spelling {
             // Category "four"
             case 4,11:
                 let initial = LetterName.default(for: pitchClass)
-                switch modifier {
+                switch quarterStepModifier {
                 case .flat:
                     self = initial.successor
                 case .natural:
@@ -253,7 +253,7 @@ extension Pitch.Spelling {
 
             // Category "Five"
             case 8:
-                switch modifier {
+                switch quarterStepModifier {
                 case .flat:
                     self = .a
                 case .sharp:
