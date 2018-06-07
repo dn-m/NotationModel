@@ -85,11 +85,11 @@ public enum Wetherfield {
         let index: Int
 
         /// The "tendency" value assigned subsequent to finding the minium cut.
-        let tendency: PitchSpeller.Category.Tendency
+        let tendency: PitchSpeller.Tendency
 
         // MARK: - Initializers
 
-        init(_ nodeInfo: UnassignedNodeInfo, tendency: PitchSpeller.Category.Tendency) {
+        init(_ nodeInfo: UnassignedNodeInfo, tendency: PitchSpeller.Tendency) {
             self.item = nodeInfo.item
             self.index = nodeInfo.index
             self.tendency = tendency

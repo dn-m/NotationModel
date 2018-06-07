@@ -15,35 +15,41 @@ extension Wetherfield {
 
     struct PitchSpeller {
         let unspelledPitchSequence: UnspelledPitchSequence
-
-        // Create a `FlowNetwork`.
     }
 }
 
 extension Wetherfield.PitchSpeller {
 
+    /// - Returns: A `SpelledPitch` value applied to the given `pitch` with the given `tendencies`
+    /// which are resultant from the `FlowNetwork` decoding.
+    func spelledPitch(pitch: Pitch, tendencies: TendencyPair) -> SpelledPitch {
+        let modifier = Category.modifier(pitchClass: pitch.class, tendencies: tendencies)!
+        let pitchSpelling = Pitch.Spelling(pitchClass: pitch.class, quarterStepModifier: modifier)!
+        return try! pitch.spelled(with: pitchSpelling)
+    }
+
+    internal enum Tendency: Int {
+        case down = 0
+        case up = 1
+    }
+
+    internal struct TendencyPair: Equatable, Hashable {
+
+        let up: Tendency
+        let down: Tendency
+
+        init(_ up: Tendency, _ down: Tendency) {
+            self.up = up
+            self.down = down
+        }
+
+        init(_ tuple: (Tendency, Tendency)) {
+            self.up = tuple.0
+            self.down = tuple.1
+        }
+    }
+
     internal enum Category {
-
-        internal enum Tendency: Int {
-            case down = 0
-            case up = 1
-        }
-
-        internal struct TendencyPair: Equatable, Hashable {
-
-            let up: Tendency
-            let down: Tendency
-
-            init(_ up: Tendency, _ down: Tendency) {
-                self.up = up
-                self.down = down
-            }
-
-            init(_ tuple: (Tendency, Tendency)) {
-                self.up = tuple.0
-                self.down = tuple.1
-            }
-        }
 
         private typealias Map = OrderedDictionary<TendencyPair,Pitch.Spelling.QuarterStepModifier>
 
@@ -105,12 +111,10 @@ extension Wetherfield.PitchSpeller {
         /// `tendency`. This mapping is defined by Wetherfield on pg. 38 of the thesis _A Graphical
         /// Theory of Musical Pitch Spelling_.
         ///
-        internal static func modifier(
-            pitchClass: Pitch.Class,
-            tendency: (Tendency,Tendency)
-        ) -> Pitch.Spelling.QuarterStepModifier?
+        internal static func modifier(pitchClass: Pitch.Class, tendencies: TendencyPair)
+            -> Pitch.Spelling.QuarterStepModifier?
         {
-            return category(for: pitchClass)?[.init(tendency)]
+            return category(for: pitchClass)?[tendencies]
         }
     }
 }
