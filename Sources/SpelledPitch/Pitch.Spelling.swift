@@ -6,7 +6,6 @@
 //  Copyright © 2016 James Bean. All rights reserved.
 //
 
-import Math
 import Pitch
 
 extension Pitch {
@@ -186,22 +185,8 @@ extension Pitch.Spelling {
             case .b: return 11
             }
         }
-
-        /// - TODO: Refactor out into `CircularEnum`
-        public var predecessor: LetterName {
-            let ownIndex = LetterName.allCases.index(of: self)!
-            return LetterName.allCases[mod(ownIndex - 1, LetterName.allCases.count)]
-        }
-
-        /// - TODO: Refactor out into `CircularEnum`
-        public var successor: LetterName {
-            let ownIndex = LetterName.allCases.index(of: self)!
-            return LetterName.allCases[mod(ownIndex + 1, LetterName.allCases.count)]
-        }
     }
 }
-
-
 
 // FIXME: Move to own file
 extension Pitch.Spelling {
