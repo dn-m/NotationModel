@@ -1,5 +1,5 @@
 //
-//  NamedIntervalQuality.Category.swift
+//  Tendency.swift
 //  PitchSpeller
 //
 //  Created by James Bean on 5/22/18.
@@ -7,23 +7,17 @@
 
 import Pitch
 import SpelledPitch
-import DataStructures
 
-// Wetherfield Pitch Speller, Thesis pg. 38
-
-extension Wetherfield {
-
-    struct PitchSpeller {
-        let unspelledPitchSequence: UnspelledPitchSequence
-    }
-}
-
+/// One of two values encoded in a Wetherfield `FlowNetwork`. Each provides a tendency `up`, or
+/// `down` for the purposes of spelling an unspelled pitch in a given musical context.
 internal enum Tendency: Int {
     case down = 0
     case up = 1
 }
 
-internal struct TendencyPair: Equatable, Hashable {
+/// A pair of `Tendency` values. Wrapped up here for the purposes of `Equatable` and `Hashable`
+/// synthesizing.
+struct TendencyPair: Hashable {
 
     let up: Tendency
     let down: Tendency
@@ -42,7 +36,8 @@ internal struct TendencyPair: Equatable, Hashable {
 extension Pitch.Spelling {
 
     /// Creates a `Pitch.Spelling` values with the given `pitchClass` and the given `tendencies`,
-    /// if it is possible. Otherwise, fails as `nil`.
+    /// which are resultant from the Wetherfield-encoded and -decoded `FlowNetwork`, if it is
+    /// possible. Otherwise, fails as `nil`.
     init?(pitchClass: Pitch.Class, tendencies: TendencyPair) {
         guard
             let category = Pitch.Spelling.Category.category(for: pitchClass),
