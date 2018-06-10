@@ -40,32 +40,17 @@ internal struct TendencyPair: Equatable, Hashable {
 }
 
 extension Pitch.Spelling {
+
+    /// Creates a `Pitch.Spelling` values with the given `pitchClass` and the given `tendencies`,
+    /// if it is possible. Otherwise, fails as `nil`.
     init?(pitchClass: Pitch.Class, tendencies: TendencyPair) {
         guard
             let category = Pitch.Spelling.Category.category(for: pitchClass),
-            let tendencyConverter = category as? TendencyConvertible.Type,
+            let tendencyConverter = category as? TendencyConverting.Type,
             let modifierDirection = tendencyConverter.modifierDirection(for: tendencies)
         else {
             return nil
         }
         self.init(pitchClass: pitchClass, modifierDirection: modifierDirection)
     }
-}
-
-extension Wetherfield.PitchSpeller {
-
-    static func pitchSpelling(for pitchClass: Pitch.Class, with tendencies: TendencyPair)
-        -> Pitch.Spelling?
-    {
-        guard
-            let category = Pitch.Spelling.Category.category(for: pitchClass),
-            let tendencyConverter = category as? TendencyConvertible.Type,
-            let modifierDirection = tendencyConverter.modifierDirection(for: tendencies)
-        else {
-            return nil
-        }
-        return Pitch.Spelling(pitchClass: pitchClass, modifierDirection: modifierDirection)
-    }
-
-
 }

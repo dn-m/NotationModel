@@ -1,5 +1,5 @@
 //
-//  TendencyConvertible.swift
+//  TendencyConverting.swift
 //  PitchSpeller
 //
 //  Created by James Bean on 6/10/18.
@@ -7,19 +7,16 @@
 
 import Pitch
 
-typealias TendencyMap = [TendencyPair: ModifierDirection]
-
-/// Interface for `PitchSpellingCategory` types which can transform a `TendencyPair` into a
+/// Interface for `PitchSpellingCategoryProtocol` types which can convert a `TendencyPair` into a
 /// `ModifierDirection`.
-protocol TendencyConvertible {
+protocol TendencyConverting {
+    typealias TendencyMap = [TendencyPair: ModifierDirection]
     static var modifierDirectionByTendencies: TendencyMap { get }
 }
 
-extension PitchSpellingCategory where Self: TendencyConvertible {
-    //static func category
-}
-
-extension TendencyConvertible {
+extension TendencyConverting {
+    /// - Returns: The `ModifierDirection` for the given `tendencies`, if such a direction exists.
+    /// Otherwise, `nil`.
     static func modifierDirection(for tendencies: TendencyPair)
         -> ModifierDirection?
     {
@@ -27,7 +24,7 @@ extension TendencyConvertible {
     }
 }
 
-extension Pitch.Spelling.Category.Zero: TendencyConvertible {
+extension Pitch.Spelling.Category.Zero: TendencyConverting {
     static var modifierDirectionByTendencies: TendencyMap {
         return [
             .init(.down,.down): .down,
@@ -37,7 +34,7 @@ extension Pitch.Spelling.Category.Zero: TendencyConvertible {
     }
 }
 
-extension Pitch.Spelling.Category.One: TendencyConvertible {
+extension Pitch.Spelling.Category.One: TendencyConverting {
     static var modifierDirectionByTendencies: TendencyMap {
         return [
             .init(.down,.down): .down,
@@ -47,7 +44,7 @@ extension Pitch.Spelling.Category.One: TendencyConvertible {
     }
 }
 
-extension Pitch.Spelling.Category.Two: TendencyConvertible {
+extension Pitch.Spelling.Category.Two: TendencyConverting {
     static var modifierDirectionByTendencies: TendencyMap {
         return [
             .init(.down,.down): .down,
@@ -57,7 +54,7 @@ extension Pitch.Spelling.Category.Two: TendencyConvertible {
     }
 }
 
-extension Pitch.Spelling.Category.Three: TendencyConvertible {
+extension Pitch.Spelling.Category.Three: TendencyConverting {
     static var modifierDirectionByTendencies: TendencyMap {
         return [
             .init(.down,.down): .down,
@@ -67,7 +64,7 @@ extension Pitch.Spelling.Category.Three: TendencyConvertible {
     }
 }
 
-extension Pitch.Spelling.Category.Four: TendencyConvertible {
+extension Pitch.Spelling.Category.Four: TendencyConverting {
     static var modifierDirectionByTendencies: TendencyMap {
         return [
             .init(.down,.down): .down,
@@ -77,7 +74,7 @@ extension Pitch.Spelling.Category.Four: TendencyConvertible {
     }
 }
 
-extension Pitch.Spelling.Category.Five: TendencyConvertible {
+extension Pitch.Spelling.Category.Five: TendencyConverting {
     static var modifierDirectionByTendencies: TendencyMap {
         return [
             .init(.down,.down): .down,
