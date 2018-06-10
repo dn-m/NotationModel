@@ -83,24 +83,25 @@ extension Pitch.Spelling {
             default: return nil
             }
         }
+    }
+}
 
-        /// - Returns: The `Pitch.Spelling` value for the given `pitchClass` with the given
-        /// `modifierDirection`, if the `pitchClass` is an integral value, and if the
-        /// `modifierDirection` can be converted into a `QuarterStepModifier` within the
-        /// `PitchSpellingCategory` in which the given `pitchClass` resides. Otherwise, `nil`.
-        static func pitchSpelling(for pitchClass: Pitch.Class, modifierDirection: ModifierDirection)
-            -> Pitch.Spelling?
-        {
-            guard
-                let category = category(for: pitchClass),
-                let modifier = category.modifiers[modifierDirection],
-                let neutral = Pitch.Spelling.LetterName.neutral(for: pitchClass),
-                let letterName = neutral.adjusted(for: pitchClass, with: modifierDirection)
-            else {
-                return nil
-            }
-            return Pitch.Spelling(letterName, modifier)
+extension Pitch.Spelling {
+
+    /// - Returns: The `Pitch.Spelling` value for the given `pitchClass` with the given
+    /// `modifierDirection`, if the `pitchClass` is an integral value, and if the
+    /// `modifierDirection` can be converted into a `QuarterStepModifier` within the
+    /// `PitchSpellingCategory` in which the given `pitchClass` resides. Otherwise, `nil`.
+    init?(pitchClass: Pitch.Class, modifierDirection: ModifierDirection) {
+        guard
+            let category = Pitch.Spelling.Category.category(for: pitchClass),
+            let modifier = category.modifiers[modifierDirection],
+            let neutral = Pitch.Spelling.LetterName.neutral(for: pitchClass),
+            let letterName = neutral.adjusted(for: pitchClass, with: modifierDirection)
+        else {
+            return nil
         }
+        self.init(letterName, modifier)
     }
 }
 
