@@ -7,7 +7,7 @@
 
 import Pitch
 
-typealias TendencyMap = [Wetherfield.PitchSpeller.TendencyPair: ModifierDirection]
+typealias TendencyMap = [TendencyPair: ModifierDirection]
 
 /// Interface for `PitchSpellingCategory` types which can transform a `TendencyPair` into a
 /// `ModifierDirection`.
@@ -15,8 +15,12 @@ protocol TendencyConvertible {
     static var modifierDirectionByTendencies: TendencyMap { get }
 }
 
+extension PitchSpellingCategory where Self: TendencyConvertible {
+    //static func category
+}
+
 extension TendencyConvertible {
-    static func modifierDirection(for tendencies: Wetherfield.PitchSpeller.TendencyPair)
+    static func modifierDirection(for tendencies: TendencyPair)
         -> ModifierDirection?
     {
         return modifierDirectionByTendencies[tendencies]
