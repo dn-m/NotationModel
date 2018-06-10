@@ -86,18 +86,36 @@ extension Pitch.Spelling {
     /// `PitchSpellingCategoryProtocol` in which the given `pitchClass` resides. Otherwise, `nil`.
     init?(pitchClass: Pitch.Class, modifierDirection: ModifierDirection) {
         guard
-            let category = Pitch.Spelling.Category.category(for: pitchClass),
+            let category = Category.category(for: pitchClass),
             let modifier = category.modifiers[modifierDirection],
-            let neutral = Pitch.Spelling.LetterName.neutral(for: pitchClass),
-            let letterName = neutral.adjusted(for: pitchClass, with: modifierDirection)
-            else {
-                return nil
+            let letterName = LetterName(pitchClass: pitchClass, modifierDirection: modifierDirection)
+        else {
+            return nil
         }
         self.init(letterName, modifier)
     }
 }
 
 extension Pitch.Spelling.LetterName {
+
+    /// Create a `LetterName` with the given `pitchClass` and `modifierDirection`.
+    init?(pitchClass: Pitch.Class, modifierDirection: ModifierDirection) {
+        if pitchClass == 8 {
+            switch modifierDirection {
+            case .down: self = .a
+            case .up: self = .g
+            default: return nil
+            }
+            return
+        }
+        guard
+            let neutral = Pitch.Spelling.LetterName.neutral(for: pitchClass),
+            let adjusted = neutral.adjusted(for: pitchClass, with: modifierDirection)
+        else {
+            return nil
+        }
+        self = adjusted
+    }
 
     /// - Returns: The `LetterName` which corresponds to the `.neutral` `ModifierDirection` for the
     /// the given `pitchClass`, if such a `LetterName` exists. Otherwise, `nil`.
@@ -146,6 +164,7 @@ extension Pitch.Spelling.LetterName {
 
 extension Pitch.Spelling.LetterName {
 
+    /// - Returns: The next-lower `LetterName` value.
     /// - TODO: Refactor out into `CircularEnum`
     public var predecessor: Pitch.Spelling.LetterName {
         let ownIndex = Pitch.Spelling.LetterName.allCases.index(of: self)!
@@ -153,6 +172,7 @@ extension Pitch.Spelling.LetterName {
         return Pitch.Spelling.LetterName.allCases[previousIndex]
     }
 
+    /// - Returns: The next-higher `LetterName` value.
     /// - TODO: Refactor out into `CircularEnum`
     public var successor: Pitch.Spelling.LetterName {
         let ownIndex = Pitch.Spelling.LetterName.allCases.index(of: self)!
