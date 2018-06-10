@@ -1,5 +1,5 @@
 //
-//  PitchSpellingCategory.swift
+//  PitchSpellingCategoryProtocol.swift
 //  PitchSpeller
 //
 //  Created by James Bean on 6/9/18.
@@ -9,7 +9,7 @@ import Math
 import Pitch
 
 /// The possible directions of `QuarterStepModifier` values within the context of
-/// a `PitchSpellingCategory`.
+/// a `PitchSpellingCategoryProtocol`.
 enum ModifierDirection: Hashable {
     case down
     case neutral
@@ -17,62 +17,61 @@ enum ModifierDirection: Hashable {
 }
 
 /// Interface for the six pitch spelling categories.
-protocol PitchSpellingCategory {
-
+protocol PitchSpellingCategoryProtocol {
     /// The available `QuarterStepModifier` value by the given `ModifierDirection`.
     static var modifiers: [ModifierDirection: Pitch.Spelling.QuarterStepModifier] { get }
 }
 
 extension Pitch.Spelling {
 
-    /// Namespace for `PitchSpellingCategory` types.
+    /// Namespace for `PitchSpellingCategoryProtocol` types.
     enum Category {
 
         /// Category for pitch classes `0` and `5`.
-        struct Zero: PitchSpellingCategory {
+        struct Zero: PitchSpellingCategoryProtocol {
             static var modifiers: [ModifierDirection: Pitch.Spelling.QuarterStepModifier] {
                 return [.down: .doubleFlat, .neutral: .natural, .up: .sharp]
             }
         }
 
         /// Category for pitch classes `1` and `6`.
-        struct One: PitchSpellingCategory {
+        struct One: PitchSpellingCategoryProtocol {
             static var modifiers: [ModifierDirection: Pitch.Spelling.QuarterStepModifier] {
                 return [.down: .flat, .neutral: .sharp, .up: .doubleSharp]
             }
         }
 
         /// Category for pitch classes `2`, `7`, and `9`.
-        struct Two: PitchSpellingCategory {
+        struct Two: PitchSpellingCategoryProtocol {
             static var modifiers: [ModifierDirection: Pitch.Spelling.QuarterStepModifier] {
                 return [.down: .doubleFlat, .neutral: .natural, .up: .doubleSharp]
             }
         }
 
         /// Category for pitch classes `3`, and `10`.
-        struct Three: PitchSpellingCategory {
+        struct Three: PitchSpellingCategoryProtocol {
             static var modifiers: [ModifierDirection: Pitch.Spelling.QuarterStepModifier] {
                 return [.down: .doubleFlat, .neutral: .flat, .up: .sharp]
             }
         }
 
         /// Category for pitch classes `4`, and `11`.
-        struct Four: PitchSpellingCategory {
+        struct Four: PitchSpellingCategoryProtocol {
             static var modifiers: [ModifierDirection: Pitch.Spelling.QuarterStepModifier] {
                 return [.down: .flat, .neutral: .natural, .up: .doubleSharp]
             }
         }
 
         /// Category for pitch class `8`.
-        struct Five: PitchSpellingCategory {
+        struct Five: PitchSpellingCategoryProtocol {
             static var modifiers: [ModifierDirection: Pitch.Spelling.QuarterStepModifier] {
                 return [.down: .flat, .up: .sharp]
             }
         }
 
-        /// - Returns: The type of `PitchSpellingCategory` which the given `pitchClass` resides, if
+        /// - Returns: The type of `PitchSpellingCategoryProtocol` which the given `pitchClass` resides, if
         /// the `pitchClass` is an integral value. Otherwise, `nil`.
-        static func category(for pitchClass: Pitch.Class) -> PitchSpellingCategory.Type? {
+        static func category(for pitchClass: Pitch.Class) -> PitchSpellingCategoryProtocol.Type? {
             switch pitchClass {
             case 0,5: return Zero.self
             case 1,6: return One.self
@@ -91,7 +90,7 @@ extension Pitch.Spelling {
     /// - Returns: The `Pitch.Spelling` value for the given `pitchClass` with the given
     /// `modifierDirection`, if the `pitchClass` is an integral value, and if the
     /// `modifierDirection` can be converted into a `QuarterStepModifier` within the
-    /// `PitchSpellingCategory` in which the given `pitchClass` resides. Otherwise, `nil`.
+    /// `PitchSpellingCategoryProtocol` in which the given `pitchClass` resides. Otherwise, `nil`.
     init?(pitchClass: Pitch.Class, modifierDirection: ModifierDirection) {
         guard
             let category = Pitch.Spelling.Category.category(for: pitchClass),
