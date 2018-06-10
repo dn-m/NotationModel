@@ -169,9 +169,7 @@ extension Pitch.Spelling.LetterName {
 
     /// - Returns: The `LetterName` for the given `pitchClass`, if the given `pitchClass` is
     /// spellable with a `.natural` `QuarterStepModifier`.
-    internal static func `default`(for pitchClass: Pitch.Class)
-        -> Pitch.Spelling.LetterName?
-    {
+    internal static func `default`(for pitchClass: Pitch.Class) -> Pitch.Spelling.LetterName? {
         switch pitchClass {
         case 0: return .c
         case 2: return .d
