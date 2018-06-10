@@ -1,20 +1,13 @@
 //
-//  PitchSpellingCategoryProtocol.swift
+//  Pitch.Spelling.Category.swift
 //  PitchSpeller
 //
-//  Created by James Bean on 6/9/18.
+//  Created by James Bean on 6/10/18.
 //
 
 import Math
 import Pitch
-
-/// The possible directions of `QuarterStepModifier` values within the context of
-/// a `PitchSpellingCategoryProtocol`.
-enum ModifierDirection: Hashable {
-    case down
-    case neutral
-    case up
-}
+import SpelledPitch
 
 /// Interface for the six pitch spelling categories.
 protocol PitchSpellingCategoryProtocol {
@@ -97,8 +90,8 @@ extension Pitch.Spelling {
             let modifier = category.modifiers[modifierDirection],
             let neutral = Pitch.Spelling.LetterName.neutral(for: pitchClass),
             let letterName = neutral.adjusted(for: pitchClass, with: modifierDirection)
-        else {
-            return nil
+            else {
+                return nil
         }
         self.init(letterName, modifier)
     }
@@ -180,5 +173,67 @@ extension Pitch.Spelling.LetterName {
         case 11: return .b
         default: return nil
         }
+    }
+}
+
+// FIXME: Move below to own file when SR-631 build order bug is resolved.
+// MARK: `Pitch.Spelling.Category` -> `TendencyConverting`
+
+extension Pitch.Spelling.Category.Zero: TendencyConverting {
+    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+        return [
+            .init(.down,.down): .down,
+            .init(.up,.down): .neutral,
+            .init(.up,.up): .up
+        ]
+    }
+}
+
+extension Pitch.Spelling.Category.One: TendencyConverting {
+    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+        return [
+            .init(.down,.down): .down,
+            .init(.up,.down): .neutral,
+            .init(.up,.up): .up
+        ]
+    }
+}
+
+extension Pitch.Spelling.Category.Two: TendencyConverting {
+    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+        return [
+            .init(.down,.down): .down,
+            .init(.up,.down): .neutral,
+            .init(.up,.up): .up
+        ]
+    }
+}
+
+extension Pitch.Spelling.Category.Three: TendencyConverting {
+    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+        return [
+            .init(.down,.down): .down,
+            .init(.up,.down): .neutral,
+            .init(.up,.up): .up
+        ]
+    }
+}
+
+extension Pitch.Spelling.Category.Four: TendencyConverting {
+    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+        return [
+            .init(.down,.down): .down,
+            .init(.up,.down): .neutral,
+            .init(.up,.up): .up
+        ]
+    }
+}
+
+extension Pitch.Spelling.Category.Five: TendencyConverting {
+    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+        return [
+            .init(.down,.down): .down,
+            .init(.up,.down): .up
+        ]
     }
 }
