@@ -62,8 +62,8 @@ extension Pitch.Spelling {
             }
         }
 
-        /// - Returns: The type of `PitchSpellingCategoryProtocol` which the given `pitchClass` resides, if
-        /// the `pitchClass` is an integral value. Otherwise, `nil`.
+        /// - Returns: The type of `PitchSpellingCategoryProtocol` in which the given `pitchClass`
+        /// resides, if the `pitchClass` is an integral value. Otherwise, `nil`.
         static func category(for pitchClass: Pitch.Class) -> PitchSpellingCategoryProtocol.Type? {
             switch pitchClass {
             case 0,5: return Zero.self
