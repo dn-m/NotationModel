@@ -114,7 +114,9 @@ extension Pitch.Spelling {
     /**
      Letter name component of a `Pitch.Spelling`
      */
-    public enum LetterName: String {
+    public enum LetterName: String, CaseIterable {
+
+
 
         // MARK: - Cases
 
@@ -185,8 +187,6 @@ extension Pitch.Spelling {
         }
     }
 }
-
-
 
 // FIXME: Move to own file
 extension Pitch.Spelling {

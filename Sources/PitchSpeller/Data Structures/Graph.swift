@@ -67,6 +67,11 @@ public struct Graph <Value: Hashable>: Hashable {
             return Edge(from: source, to: destination, value: transform(value))
         }
 
+        /// Mutates the value of this `Edge`.
+        public mutating func update(value: Double) {
+            self.value = value
+        }
+
         /// - Returns: `true` if the source and destination nodes of this `Edge` are equivalent to
         /// those of the given `other`. Otherwise, `false`.
         public func nodesAreEqual(to other: Edge) -> Bool {
@@ -182,12 +187,19 @@ public struct Graph <Value: Hashable>: Hashable {
 
     /// - Returns: A `Graph` with each of the nodes updated by the given `transform`.
     public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U> {
-        var new: [Graph<U>.Node: [Graph<U>.Edge]] = [:]
-        adjacencyList.forEach { (node, edges) in
-            new[(node.map(transform))] = edges.map { $0.mapNodes(transform) }
-        }
-        return .init(new)
+        return Graph<U>(
+            Dictionary(
+                adjacencyList.map { (node,edges) in
+                    (node.map(transform), edges.map { $0.mapNodes(transform)})
+                }
+            )
+        )
+    }
 
+    /// - Returns: A `Graph` with each of the edges contained herein updated by the given
+    /// `transform`.
+    public func mapEdges (_ transform: (Double) -> Double) -> Graph<Value> {
+        return Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
     }
 
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given
