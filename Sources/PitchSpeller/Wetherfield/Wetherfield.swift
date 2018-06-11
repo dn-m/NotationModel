@@ -79,6 +79,13 @@ public enum Wetherfield {
 
         // MARK: - Instance Methods
 
+        func assign() -> [AssignedNodeInfo] {
+            let (sourcePartition, sinkPartition) = flowNetwork.partitions
+            let sourceNodes = sourcePartition.nodes.map { $0.value.assigning(tendency: .down) }
+            let sinkNodes = sinkPartition.nodes.map { $0.value.assigning(tendency: .up) }
+            return sourceNodes + sinkNodes
+        }
+
         /// - Returns: The `source` node in the `FlowNetwork`. This node is given an `identifier` of
         /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
         private func makeSource(in graph: inout Graph<UnassignedNodeInfo>)
