@@ -35,9 +35,9 @@ struct TendencyPair: Hashable {
 
 extension Pitch.Spelling {
 
-    /// Creates a `Pitch.Spelling` values with the given `pitchClass` and the given `tendencies`,
+    /// Creates a `Pitch.Spelling` value with the given `pitchClass` and the given `tendencies`,
     /// which are resultant from the Wetherfield-encoded and -decoded `FlowNetwork`, if it is
-    /// possible. Otherwise, fails as `nil`.
+    /// possible. Otherwise, returns `nil`.
     init?(pitchClass: Pitch.Class, tendencies: TendencyPair) {
         guard
             let category = Pitch.Spelling.Category.category(for: pitchClass),
