@@ -49,7 +49,7 @@ public enum Wetherfield {
         }
 
         /// - Returns: `FlowNetwork` of `UnassignedNodeInfo`-wrapping nodes.
-        private lazy var flowNetwork: FlowNetwork<UnassignedNodeInfo> = {
+        internal lazy var flowNetwork: FlowNetwork<UnassignedNodeInfo> = {
             var graph = Graph<UnassignedNodeInfo>()
             let source = makeSource(in: &graph)
             let sink = makeSink(in: &graph)

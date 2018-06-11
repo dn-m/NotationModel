@@ -6,48 +6,52 @@
 //
 
 import XCTest
+import Foundation
+import Pitch
 @testable import PitchSpeller
 
 class WetherfieldTests: XCTestCase {
     
-//    func testInitMonadNodeCount() {
-//        let flowNetwork = Wetherfield.flowNetwork(pitchClasses: [0], parsimonyPivot: 2)
-//        XCTAssertEqual(flowNetwork.internalNodes.count, 2)
-//    }
-//
-//    func testInitDyadNodeCount() {
-//        let flowNetwork = Wetherfield.flowNetwork(pitchClasses: [0,1], parsimonyPivot: 2)
-//        XCTAssertEqual(flowNetwork.internalNodes.count, 4)
-//    }
-//
-//    func testInitTriadEdges() {
-//
-//        let flowNetwork = Wetherfield.flowNetwork(pitchClasses: [0,1,6], parsimonyPivot: 2)
-//
-//        for internalNode in flowNetwork.internalNodes {
-//
-//            // Sink is not connected to anything
-//            XCTAssertNil(flowNetwork.graph.edgeValue(from: flowNetwork.sink, to: internalNode))
-//
-//            // Nothing is not connected to the source
-//            XCTAssertNil(flowNetwork.graph.edgeValue(from: internalNode, to: flowNetwork.source))
-//
-//            // Source is connected to all internal nodes
-//            XCTAssertNotNil(flowNetwork.graph.edgeValue(from: flowNetwork.source, to: internalNode))
-//
-//            // All internal nodes are connected to sink
-//            XCTAssertNotNil(flowNetwork.graph.edgeValue(from: internalNode, to: flowNetwork.sink))
-//
-//            // All internal nodes are connected to each other
-//            for otherNode in flowNetwork.internalNodes.lazy.filter({ $0 != internalNode}) {
-//                XCTAssertNotNil(flowNetwork.graph.edgeValue(from: internalNode, to: otherNode))
-//                XCTAssertNotNil(flowNetwork.graph.edgeValue(from: otherNode, to: internalNode))
-//            }
-//        }
-//    }
-//
+    func testInitMonadNodeCount() {
+        let speller = Wetherfield.PitchSpeller(pitches: [60], parsimonyPivot: 2)
+        XCTAssertEqual(speller.flowNetwork.internalNodes.count, 2)
+    }
+
+    func testInitDyadNodeCount() {
+        let speller = Wetherfield.PitchSpeller(pitches: [60,61], parsimonyPivot: 2)
+        XCTAssertEqual(speller.flowNetwork.internalNodes.count, 4)
+    }
+
+    func testInitTriadEdges() {
+
+        let speller = Wetherfield.PitchSpeller(pitches: [60,61,66], parsimonyPivot: 2)
+        let flowNetwork = speller.flowNetwork
+
+        for internalNode in speller.flowNetwork.internalNodes {
+
+            // Sink is not connected to anything
+            XCTAssertNil(flowNetwork.graph.edgeValue(from: flowNetwork.sink, to: internalNode))
+
+            // Nothing is not connected to the source
+            XCTAssertNil(flowNetwork.graph.edgeValue(from: internalNode, to: flowNetwork.source))
+
+            // Source is connected to all internal nodes
+            XCTAssertNotNil(flowNetwork.graph.edgeValue(from: flowNetwork.source, to: internalNode))
+
+            // All internal nodes are connected to sink
+            XCTAssertNotNil(flowNetwork.graph.edgeValue(from: internalNode, to: flowNetwork.sink))
+
+            // All internal nodes are connected to each other
+            for otherNode in flowNetwork.internalNodes.lazy.filter({ $0 != internalNode}) {
+                XCTAssertNotNil(flowNetwork.graph.edgeValue(from: internalNode, to: otherNode))
+                XCTAssertNotNil(flowNetwork.graph.edgeValue(from: otherNode, to: internalNode))
+            }
+        }
+    }
+
+
 //    func testPaths() {
-//        let flowNetwork = Wetherfield.flowNetwork(pitchClasses: [0], parsimonyPivot: 2)
+//        let flowNetwork = Wetherfield.PitchSpeller(pitch: [60], parsimonyPivot: 2)
 //
 //        //     (0,0)
 //        //    / || \
