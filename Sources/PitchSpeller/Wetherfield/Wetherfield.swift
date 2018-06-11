@@ -27,7 +27,7 @@ public enum Wetherfield {
 
             /// - Returns: An `AssignedNodeInfo` with the given `tendency` applied to `self`.
             func assigning(tendency: Tendency) -> AssignedNodeInfo {
-                return AssignedNodeInfo.init(self, tendency: tendency)
+                return AssignedNodeInfo(self, tendency: tendency)
             }
         }
 
