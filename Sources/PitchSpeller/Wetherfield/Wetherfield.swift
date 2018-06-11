@@ -24,6 +24,11 @@ public enum Wetherfield {
             /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
             /// `1`. This value will ultimately represent the index within a `TendencyPair`.
             let index: Int
+
+            /// - Returns: An `AssignedNodeInfo` with the given `tendency` applied to `self`.
+            func assigning(tendency: Tendency) -> AssignedNodeInfo {
+                return AssignedNodeInfo.init(self, tendency: tendency)
+            }
         }
 
         /// The payload for a Flownetwork which has been assigned.
