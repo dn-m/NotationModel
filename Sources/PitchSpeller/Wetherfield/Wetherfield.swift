@@ -48,6 +48,16 @@ public enum Wetherfield {
             }
         }
 
+        /// - Returns: `FlowNetwork` of `UnassignedNodeInfo`-wrapping nodes.
+        private lazy var flowNetwork: FlowNetwork<UnassignedNodeInfo> = {
+            var graph = Graph<UnassignedNodeInfo>()
+            let source = makeSource(in: &graph)
+            let sink = makeSink(in: &graph)
+            let internalNodes = makeInternalNodes(in: &graph)
+            hookUpNodes(source: source, sink: sink, internalNodes: internalNodes, in: &graph)
+            return FlowNetwork(graph, source: source, sink: sink)
+        }()
+
         /// The `Pitch` values to be spelled.
         let pitches: [Pitch]
 
@@ -64,17 +74,7 @@ public enum Wetherfield {
 
         // MARK: - Instance Methods
 
-        /// - Returns: `FlowNetwork` of `UnassignedNodeInfo`-wrapping nodes.
-        func flowNetwork() -> FlowNetwork<UnassignedNodeInfo> {
-            var graph = Graph<UnassignedNodeInfo>()
-            let source = makeSource(in: &graph)
-            let sink = makeSink(in: &graph)
-            let internalNodes = makeInternalNodes(in: &graph)
-            hookUpNodes(source: source, sink: sink, internalNodes: internalNodes, in: &graph)
-            return FlowNetwork(graph, source: source, sink: sink)
-        }
-
-        func makeSource(in graph: inout Graph<UnassignedNodeInfo>)
+        private func makeSource(in graph: inout Graph<UnassignedNodeInfo>)
             -> Graph<UnassignedNodeInfo>.Node
         {
             let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
@@ -82,13 +82,15 @@ public enum Wetherfield {
             return graph.createNode(payload)
         }
 
-        func makeSink(in graph: inout Graph<UnassignedNodeInfo>) -> Graph<UnassignedNodeInfo>.Node {
+        private func makeSink(in graph: inout Graph<UnassignedNodeInfo>)
+            -> Graph<UnassignedNodeInfo>.Node
+        {
             let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
             let payload = UnassignedNodeInfo(item: item, index: 1)
             return graph.createNode(payload)
         }
 
-        func makeInternalNodes(in graph: inout Graph<UnassignedNodeInfo>)
+        private func makeInternalNodes(in graph: inout Graph<UnassignedNodeInfo>)
             -> [Graph<UnassignedNodeInfo>.Node]
         {
             var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
@@ -103,7 +105,7 @@ public enum Wetherfield {
             return internalNodes
         }
 
-        func hookUpNodes(
+        private func hookUpNodes(
             source: Graph<UnassignedNodeInfo>.Node,
             sink: Graph<UnassignedNodeInfo>.Node,
             internalNodes: [Graph<UnassignedNodeInfo>.Node],
