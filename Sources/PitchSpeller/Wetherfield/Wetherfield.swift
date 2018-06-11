@@ -74,6 +74,8 @@ public enum Wetherfield {
 
         // MARK: - Instance Methods
 
+        /// - Returns: The `source` node in the `FlowNetwork`. This node is given an `identifier` of
+        /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
         private func makeSource(in graph: inout Graph<UnassignedNodeInfo>)
             -> Graph<UnassignedNodeInfo>.Node
         {
@@ -82,6 +84,8 @@ public enum Wetherfield {
             return graph.createNode(payload)
         }
 
+        /// - Returns: The `sink` node in the `FlowNetwork`. This node is given an `identifier` of
+        /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
         private func makeSink(in graph: inout Graph<UnassignedNodeInfo>)
             -> Graph<UnassignedNodeInfo>.Node
         {
@@ -90,6 +94,8 @@ public enum Wetherfield {
             return graph.createNode(payload)
         }
 
+        /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
+        /// `identifier` equivalent to its index in the `pitches` array.
         private func makeInternalNodes(in graph: inout Graph<UnassignedNodeInfo>)
             -> [Graph<UnassignedNodeInfo>.Node]
         {
@@ -105,6 +111,7 @@ public enum Wetherfield {
             return internalNodes
         }
 
+        /// Attaches all of the nodes in the graph with default values of `1`.
         private func hookUpNodes(
             source: Graph<UnassignedNodeInfo>.Node,
             sink: Graph<UnassignedNodeInfo>.Node,
