@@ -10,89 +10,73 @@ import Pitch
 /// "Namespace" for Wetherfield Pitch Speller.
 public enum Wetherfield {
 
-//    // TODO: Expand this out so that each "notehead" (pitch-event) has a `box` of two nodes as
-//    // opposed to only a single `Pitch.Class` having a `box`.
-//    internal static func flowNetwork(
-//        pitchClasses: Set<Pitch.Class>,
-//        parsimonyPivot: Pitch.Class = 2
-//    ) -> FlowNetwork<UnassignedNodeInfo>
-//    {
-//
-//        // Create an empty `Graph`.
-//        var graph = Graph<UnassignedNodeInfo>()
-//
-//        // Create the `source` node of the pair representing the `parsimony pivot`.
-//        let source = graph.createNode(
-//            UnassignedNodeInfo(pitchClass: parsimonyPivot, index: 0)
-//        )
-//
-//        // Create the `sink` node of the pair representing the `parsimony pivot`.
-//        let sink = graph.createNode(
-//            UnassignedNodeInfo(pitchClass: parsimonyPivot, index: 1)
-//        )
-//
-//        var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
-//
-//        // Create nodes for each pitch class in the given `pitchClasses`.
-//        for pitchClass in pitchClasses {
-//
-//            // Create two nodes, one which will represent the `up` tendency (index 0), and the
-//            // other which will represent the `down` tendency (index 1)
-//            for index in [0,1] {
-//                internalNodes.append(
-//                    graph.createNode(UnassignedNodeInfo(pitchClass: pitchClass, index: index))
-//                )
-//            }
-//        }
-//
-//        // Connect nodes
-//        for node in internalNodes {
-//
-//            // Add edges from source to all internal nodes, with an initial value of 1.
-//            graph.insertEdge(from: source, to: node, value: 1)
-//
-//            // Add edges from all internal nodes to sink, with an initial value of 1.
-//            graph.insertEdge(from: node, to: sink, value: 1)
-//
-//            // Add edges from all internal nodes to all other internal nodes.
-//            // TODO: Ensure `filter` does not making this accidentally expensive.
-//            for other in internalNodes.lazy.filter({ $0 != node }) {
-//                graph.insertEdge(from: node, to: other, value: 1)
-//            }
-//        }
-//
-//        return FlowNetwork(graph, source: source, sink: sink)
-//    }
+    /// Pitch spelling mechanism which implements the formalization proposed in Wetherfield's thesis
+    /// _A Graphical Theory of Musical Pitch Spelling_.
+    final class PitchSpeller {
 
-    internal struct UnassignedNodeInfo: Hashable {
+        /// The payload for a FlowNetwork which has not yet been assigned.
+        struct UnassignedNodeInfo: Hashable {
 
-        /// The unspelled pitch class and associated identifier which will ultimately be
-        /// represented.
-        let item: UnspelledPitchItem
+            /// The unspelled pitch class and associated identifier which will ultimately be
+            /// represented.
+            let item: UnspelledPitchItem
 
-        /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
-        /// `1`. This value will ultimately represent the index within a `TendencyPair`.
-        let index: Int
-    }
+            /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
+            /// `1`. This value will ultimately represent the index within a `TendencyPair`.
+            let index: Int
+        }
 
-    internal struct AssignedNodeInfo: Hashable {
+        /// The payload for a Flownetwork which has been assigned.
+        struct AssignedNodeInfo: Hashable {
 
-        /// The unspelled pitch class and associated identifier which is now representable.
-        let item: UnspelledPitchItem
+            /// The unspelled pitch class and associated identifier which is now representable.
+            let item: UnspelledPitchItem
 
-        /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
-        /// `1`. This value will ultimately represent the index within a `TendencyPair`.
-        let index: Int
+            /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
+            /// `1`. This value will ultimately represent the index within a `TendencyPair`.
+            let index: Int
 
-        /// The "tendency" value assigned subsequent to finding the minium cut.
-        let tendency: Tendency
+            /// The "tendency" value assigned subsequent to finding the minium cut.
+            let tendency: Tendency
+
+            // MARK: - Initializers
+
+            init(_ nodeInfo: UnassignedNodeInfo, tendency: Tendency) {
+                self.item = nodeInfo.item
+                self.index = nodeInfo.index
+                self.tendency = tendency
+            }
+        }
+
+        /// The `Pitch` values to be spelled.
+        let pitches: [Pitch]
+
+        /// The omnipresent tie-breaking pitch class
+        let parsimonyPivot: Pitch.Class
 
         // MARK: - Initializers
 
-        init(_ nodeInfo: UnassignedNodeInfo, tendency: Tendency) {
-            self.item = nodeInfo.item
-            self.index = nodeInfo.index
-            self.tendency = tendency
+        /// Create a `PitchSpeller` to spell the given `pitches`.
+        init(pitches: [Pitch], parsimonyPivot: Pitch.Class) {
+            self.pitches = pitches
+            self.parsimonyPivot = parsimonyPivot
+        }
+
+        // MARK: - Instance Methods
+
+        // TODO: Implement
+        func flowNetwork() -> FlowNetwork<UnassignedNodeInfo> {
+
+            // 1. Create Graph
+            // 2. Create Source
+            // 3. Create Sink
+            // 4. Create nodes for all pitches
+            // 5. Connect Source to all internal nodes
+            // 6. Connect all internal nodes to all other internal nodes
+            // 7. Connect all internal nodes to sink
+            // 8. Create `FlowNetwork` with graph, source, and sink
+
+            fatalError()
         }
     }
 }

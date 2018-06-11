@@ -10,5 +10,5 @@ import Pitch
 /// A `Pitch.Class` wrapped up with an identifier.
 struct UnspelledPitchItem: Hashable {
     let identifier: Int
-    let pitch: Pitch
+    let pitchClass: Pitch.Class
 }
