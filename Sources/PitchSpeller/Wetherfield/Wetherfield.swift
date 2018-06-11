@@ -97,9 +97,9 @@ public enum Wetherfield {
             for (identifier, pitch) in pitches.enumerated() {
                 let item = UnspelledPitchItem(identifier: identifier, pitchClass: pitch.class)
                 for index in [0,1] {
-                    internalNodes.append(
-                        graph.createNode(UnassignedNodeInfo(item: item, index: index))
-                    )
+                    let nodeInfo = UnassignedNodeInfo(item: item, index: index)
+                    let node = graph.createNode(nodeInfo)
+                    internalNodes.append(node)
                 }
             }
             return internalNodes
