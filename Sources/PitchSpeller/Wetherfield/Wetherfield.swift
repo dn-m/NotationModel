@@ -64,19 +64,59 @@ public enum Wetherfield {
 
         // MARK: - Instance Methods
 
-        // TODO: Implement
+        /// - Returns: `FlowNetwork` of `UnassignedNodeInfo`-wrapping nodes.
         func flowNetwork() -> FlowNetwork<UnassignedNodeInfo> {
+            var graph = Graph<UnassignedNodeInfo>()
+            let source = makeSource(in: &graph)
+            let sink = makeSink(in: &graph)
+            let internalNodes = makeInternalNodes(in: &graph)
+            hookUpNodes(source: source, sink: sink, internalNodes: internalNodes, in: &graph)
+            return FlowNetwork(graph, source: source, sink: sink)
+        }
 
-            // 1. Create Graph
-            // 2. Create Source
-            // 3. Create Sink
-            // 4. Create nodes for all pitches
-            // 5. Connect Source to all internal nodes
-            // 6. Connect all internal nodes to all other internal nodes
-            // 7. Connect all internal nodes to sink
-            // 8. Create `FlowNetwork` with graph, source, and sink
+        func makeSource(in graph: inout Graph<UnassignedNodeInfo>)
+            -> Graph<UnassignedNodeInfo>.Node
+        {
+            let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
+            let payload = UnassignedNodeInfo(item: item, index: 0)
+            return graph.createNode(payload)
+        }
 
-            fatalError()
+        func makeSink(in graph: inout Graph<UnassignedNodeInfo>) -> Graph<UnassignedNodeInfo>.Node {
+            let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
+            let payload = UnassignedNodeInfo(item: item, index: 1)
+            return graph.createNode(payload)
+        }
+
+        func makeInternalNodes(in graph: inout Graph<UnassignedNodeInfo>)
+            -> [Graph<UnassignedNodeInfo>.Node]
+        {
+            var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
+            for (identifier, pitch) in pitches.enumerated() {
+                let item = UnspelledPitchItem(identifier: identifier, pitchClass: pitch.class)
+                for index in [0,1] {
+                    internalNodes.append(
+                        graph.createNode(UnassignedNodeInfo(item: item, index: index))
+                    )
+                }
+            }
+            return internalNodes
+        }
+
+        func hookUpNodes(
+            source: Graph<UnassignedNodeInfo>.Node,
+            sink: Graph<UnassignedNodeInfo>.Node,
+            internalNodes: [Graph<UnassignedNodeInfo>.Node],
+            in graph: inout Graph<UnassignedNodeInfo>
+        )
+        {
+            for node in internalNodes {
+                graph.insertEdge(from: source, to: node, value: 1)
+                graph.insertEdge(from: node, to: sink, value: 1)
+                for other in internalNodes.lazy.filter({ $0 != node }) {
+                    graph.insertEdge(from: node, to: other, value: 1)
+                }
+            }
         }
     }
 }
