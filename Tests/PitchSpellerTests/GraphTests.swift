@@ -142,7 +142,7 @@ class GraphTests: XCTestCase {
         XCTAssertEqual(graph.edgeValue(from: b, to: c), 1)
     }
 
-    func testGraphInsertEdgeWithValueZeroRemoveEdge() {
+    func testInsertEdgeWithValueZeroRemoveEdge() {
         var graph = Graph<String>()
         let a = graph.createNode("a")
         let b = graph.createNode("b")
@@ -152,6 +152,21 @@ class GraphTests: XCTestCase {
         graph.insertPath(graph.shortestPath(from: a, to: c)!.map { _ in 0 })
         XCTAssertNil(graph.edgeValue(from: a, to: b))
         XCTAssertNil(graph.edgeValue(from: b, to: c))
+    }
+
+    func testUpdateEdge() {
+        var graph = Graph<String>()
+        let a = graph.createNode("a")
+        let b = graph.createNode("b")
+        let c = graph.createNode("c")
+        graph.insertEdge(from: a, to: b, value: 1)
+        graph.insertEdge(from: b, to: c, value: 1)
+        graph.updateEdge(from: a, to: b) { $0 * 2 }
+        graph.updateEdge(from: b, to: c) { _ in 10 }
+        graph.updateEdge(from: a, to: c) { $0 * 100 }
+        XCTAssertEqual(graph.edgeValue(from: a, to: b), 2)
+        XCTAssertEqual(graph.edgeValue(from: b, to: c), 10)
+        XCTAssertNil(graph.edgeValue(from: a, to: c))
     }
 
     func testBreadthFirstSearch() {
