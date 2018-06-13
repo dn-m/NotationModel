@@ -6,6 +6,7 @@
 //
 
 import Pitch
+import SpelledPitch
 
 /// "Namespace" for Wetherfield Pitch Speller.
 public enum Wetherfield {
@@ -78,6 +79,12 @@ public enum Wetherfield {
         }
 
         // MARK: - Instance Methods
+
+        /// - Returns: An array of `SpelledPitch` values in the order in which the original
+        /// unspelled `Pitch` values are given.
+        func spell() -> [SpelledPitch] {
+            fatalError()
+        }
 
         func assigned() -> [AssignedNodeInfo] {
             let (sourcePartition, sinkPartition) = flowNetwork.partitions
