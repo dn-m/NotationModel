@@ -79,7 +79,7 @@ public enum Wetherfield {
 
         // MARK: - Instance Methods
 
-        func assign() -> [AssignedNodeInfo] {
+        func assigned() -> [AssignedNodeInfo] {
             let (sourcePartition, sinkPartition) = flowNetwork.partitions
             let sourceNodes = sourcePartition.nodes.map { $0.value.assigning(tendency: .down) }
             let sinkNodes = sinkPartition.nodes.map { $0.value.assigning(tendency: .up) }
