@@ -180,6 +180,19 @@ public struct Graph <Value: Hashable>: Hashable {
         adjacencyList[source] = adjacencyList[source]?.filter { $0.destination != destination }
     }
 
+    /// Updates the value of the edge from the given `source` to the given `destination` by the
+    /// given `transform`. If no edge currently exists between the given nodes, does nothing.
+    /// - TODO: Consider making `throw`.
+    public mutating func updateEdge(
+        from source: Node,
+        to destination: Node,
+        by transform: (Double) -> Double
+    )
+    {
+        guard let edge = self.edge(from: source, to: destination) else { return }
+        insertEdge(edge.map(transform))
+    }
+
     /// Inserts the given `path`. Replaces nodes and edges if necessary.
     public mutating func insertPath(_ path: Path) {
         path.forEach { insertEdge($0) }

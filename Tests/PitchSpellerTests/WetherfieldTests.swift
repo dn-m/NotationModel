@@ -49,6 +49,13 @@ class WetherfieldTests: XCTestCase {
         }
     }
 
+    func testTriadAssigned() {
+        let speller = Wetherfield.PitchSpeller(pitches: [60,63,68], parsimonyPivot: 2)
+        let flowNetwork = speller.flowNetwork
+        
+        dump(flowNetwork)
+    }
+
 
 //    func testPaths() {
 //        let flowNetwork = Wetherfield.PitchSpeller(pitch: [60], parsimonyPivot: 2)
