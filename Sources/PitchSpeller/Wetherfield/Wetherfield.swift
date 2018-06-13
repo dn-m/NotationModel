@@ -83,6 +83,12 @@ public enum Wetherfield {
         /// - Returns: An array of `SpelledPitch` values in the order in which the original
         /// unspelled `Pitch` values are given.
         func spell() -> [SpelledPitch] {
+
+            // 1. Assign Nodes
+            // 2. Reconstitute "Box" pairs of assigned nodes
+            // 3. Map these pairs into `SpelledPitch` values
+            // 4. `return`
+
             fatalError()
         }
 
