@@ -48,7 +48,6 @@ class FlowNetworkTests: XCTestCase {
         // internal nodes
         graph.insertNode("b")
 
-
         graph.insertNode("c")
         graph.insertNode("d")
         graph.insertNode("e")
