@@ -8,23 +8,18 @@
 import Pitch
 import SpelledPitch
 
-typealias Node = Graph<UnassignedNodeInfo>.Node
-typealias Edge = Graph<UnassignedNodeInfo>.Edge
-
 struct PitchSpeller {
 
     let pitches: [Pitch]
-    let pitchNodes: [Node]
-    let flowNetwork: FlowNetwork<UnassignedNodeInfo>
+
+    // 2 * Box offset + Box index
+    let pitchNodes: [Int]
+    let flowNetwork: FlowNetwork<Int>
 
     init(pitches: [Pitch], parsimonyPivot: Pitch.Class) {
         self.pitches = pitches
         self.pitchNodes = internalNodes(pitches: pitches)
-        self.flowNetwork = makeFlowNetwork(
-            source: source(parsimonyPivot: parsimonyPivot),
-            sink: sink(parsimonyPivot: parsimonyPivot),
-            internalNodes: pitchNodes
-        )
+        self.flowNetwork = makeFlowNetwork(source: -2, sink: -1, internalNodes: pitchNodes)
     }
 
     /// - Returns: An array of `SpelledPitch` values in the order in which the original
@@ -39,11 +34,9 @@ struct PitchSpeller {
         fatalError()
     }
 
-    private func assignedNodes() -> [AssignedNodeInfo] {
+    private func assignedNodes() -> [Tendency] {
         let (sourcePartition, sinkPartition) = flowNetwork.partitions
-        let sourceNodes = sourcePartition.nodes.map { $0.assigning(tendency: .down) }
-        let sinkNodes = sinkPartition.nodes.map { $0.assigning(tendency: .up) }
-        return sourceNodes + sinkNodes
+        return sourcePartition.nodes.map { _ in .down } + sinkPartition.nodes.map { _ in .up }
     }
 
     /// - Returns: The `Pitch` value for the given `offset` and the given `index`.
@@ -61,9 +54,7 @@ struct PitchSpeller {
 
 /// - Returns: A `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
 /// process.
-func makeFlowNetwork(source: Node, sink: Node, internalNodes: [Node])
-    -> FlowNetwork<UnassignedNodeInfo>
-{
+func makeFlowNetwork(source: Int, sink: Int, internalNodes: [Int]) -> FlowNetwork<Int> {
     return FlowNetwork(
         makeGraph(source: source, sink: sink, internalNodes: internalNodes),
         source: source,
@@ -72,7 +63,7 @@ func makeFlowNetwork(source: Node, sink: Node, internalNodes: [Node])
 }
 
 /// - Returns: A `Graph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
-func makeGraph(source: Node, sink: Node, internalNodes: [Node]) -> Graph<UnassignedNodeInfo> {
+func makeGraph(source: Int, sink: Int, internalNodes: [Int]) -> Graph<Int> {
     var graph = Graph([source, sink] + internalNodes)
     for node in internalNodes {
         graph.insertEdge(from: source, to: node, value: 1)
@@ -86,14 +77,13 @@ func makeGraph(source: Node, sink: Node, internalNodes: [Node]) -> Graph<Unassig
 
 /// - Returns: The `source` node for a `FlowNetwork`. This node is given an `identifier` of
 /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-func source(parsimonyPivot: Pitch.Class) -> Graph<UnassignedNodeInfo>.Node {
+func source() -> Graph<Int>.Node {
     return node(offset: -1, index: 0)
 }
 
 /// - Returns: The `sink` node for a `FlowNetwork`. This node is given an `identifier` of
 /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-func sink(parsimonyPivot: Pitch.Class) -> Graph<UnassignedNodeInfo>.Node {
-    //let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
+func sink() -> Graph<Int>.Node {
     return node(offset: -1, index: 1)
 }
 
@@ -102,14 +92,13 @@ func sink(parsimonyPivot: Pitch.Class) -> Graph<UnassignedNodeInfo>.Node {
 //
 // FIXME: the `-> [Graph<UnassignedNodeInfo>.Node]` disambiguation should not be necessary. Further,
 // the `flatMap` _should_ become `compactMap`, as `compactMap` seems only to work for optionals?
-func internalNodes(pitches: [Pitch]) -> [Graph<UnassignedNodeInfo>.Node] {
-    return pitches.enumerated().flatMap { offset, pitch -> [Graph<UnassignedNodeInfo>.Node] in
+func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
+    return pitches.enumerated().flatMap { offset, pitch -> [Graph<Int>.Node] in
         return [0,1].map { index in node(offset: offset, index: index) }
     }
 }
 
 /// - Returns: A `Node` which wraps an `UnassignedNodeInfo` with the given `item` and `index`.
-func node(offset: Int, index: Int) -> Graph<UnassignedNodeInfo>.Node {
-    //return Graph.Node(UnassignedNodeInfo.init(offset: offset, index: index))
-    return offset + index
+func node(offset: Int, index: Int) -> Graph<Int>.Node {
+    return 2 * offset + index
 }
