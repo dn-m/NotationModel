@@ -77,8 +77,8 @@ public enum Wetherfield {
             self.parsimonyPivot = parsimonyPivot
 
             var graph = Graph<UnassignedNodeInfo>()
-            let source = makeSource(in: &graph, parsimonyPivot: parsimonyPivot)
-            let sink = makeSink(in: &graph, parsimonyPivot: parsimonyPivot)
+            let source = makeSource(for: parsimonyPivot, in: &graph)
+            let sink = makeSink(for: parsimonyPivot, in: &graph)
             let internalNodes = makeInternalNodes(for: pitches, in: &graph)
             hookUpNodes(source: source, sink: sink, internalNodes: internalNodes, in: &graph)
             self.flowNetwork = FlowNetwork(graph, source: source, sink: sink)
@@ -117,10 +117,8 @@ public enum Wetherfield {
 
 /// - Returns: The `source` node in the `FlowNetwork`. This node is given an `identifier` of
 /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-private func makeSource(
-    in graph: inout Graph<UnassignedNodeInfo>,
-    parsimonyPivot: Pitch.Class
-) -> Graph<UnassignedNodeInfo>.Node
+func makeSource(for parsimonyPivot: Pitch.Class, in graph: inout Graph<UnassignedNodeInfo>)
+    -> Graph<UnassignedNodeInfo>.Node
 {
     let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
     let payload = UnassignedNodeInfo(item: item, index: 0)
@@ -129,10 +127,8 @@ private func makeSource(
 
 /// - Returns: The `sink` node in the `FlowNetwork`. This node is given an `identifier` of
 /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-private func makeSink(
-    in graph: inout Graph<UnassignedNodeInfo>,
-    parsimonyPivot: Pitch.Class
-    ) -> Graph<UnassignedNodeInfo>.Node
+func makeSink(for parsimonyPivot: Pitch.Class, in graph: inout Graph<UnassignedNodeInfo>)
+    -> Graph<UnassignedNodeInfo>.Node
 {
     let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
     let payload = UnassignedNodeInfo(item: item, index: 1)
@@ -141,7 +137,7 @@ private func makeSink(
 
 /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
 /// `identifier` equivalent to its index in the `pitches` array.
-private func makeInternalNodes(for pitches: [Pitch], in graph: inout Graph<UnassignedNodeInfo>)
+func makeInternalNodes(for pitches: [Pitch], in graph: inout Graph<UnassignedNodeInfo>)
     -> [Graph<UnassignedNodeInfo>.Node]
 {
     var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
@@ -157,7 +153,7 @@ private func makeInternalNodes(for pitches: [Pitch], in graph: inout Graph<Unass
 }
 
 /// Attaches all of the nodes in the graph with default values of `1`.
-private func hookUpNodes(
+func hookUpNodes(
     source: Graph<UnassignedNodeInfo>.Node,
     sink: Graph<UnassignedNodeInfo>.Node,
     internalNodes: [Graph<UnassignedNodeInfo>.Node],
