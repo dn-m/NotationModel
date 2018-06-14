@@ -8,6 +8,46 @@
 import Pitch
 import SpelledPitch
 
+/// The payload for a FlowNetwork which has not yet been assigned.
+struct UnassignedNodeInfo: Hashable {
+
+    /// The unspelled pitch class and associated identifier which will ultimately be
+    /// represented.
+    let item: UnspelledPitchItem
+
+    /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
+    /// `1`. This value will ultimately represent the index within a `TendencyPair`.
+    let index: Int
+
+    /// - Returns: An `AssignedNodeInfo` with the given `tendency` applied to `self`.
+    func assigning(tendency: Tendency) -> AssignedNodeInfo {
+        return AssignedNodeInfo(self, tendency: tendency)
+    }
+}
+
+/// The payload for a Flownetwork which has been assigned.
+struct AssignedNodeInfo: Hashable {
+
+    /// The unspelled pitch class and associated identifier which is now representable.
+    let item: UnspelledPitchItem
+
+    /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
+    /// `1`. This value will ultimately represent the index within a `TendencyPair`.
+    let index: Int
+
+    /// The "tendency" value assigned subsequent to finding the minium cut.
+    let tendency: Tendency
+
+    // MARK: - Initializers
+
+    init(_ nodeInfo: UnassignedNodeInfo, tendency: Tendency) {
+        self.item = nodeInfo.item
+        self.index = nodeInfo.index
+        self.tendency = tendency
+    }
+}
+
+
 /// "Namespace" for Wetherfield Pitch Speller.
 public enum Wetherfield {
 
@@ -17,45 +57,6 @@ public enum Wetherfield {
 
         typealias Node = FlowNetwork<UnassignedNodeInfo>.Node
         typealias Edge = FlowNetwork<UnassignedNodeInfo>.Edge
-
-        /// The payload for a FlowNetwork which has not yet been assigned.
-        struct UnassignedNodeInfo: Hashable {
-
-            /// The unspelled pitch class and associated identifier which will ultimately be
-            /// represented.
-            let item: UnspelledPitchItem
-
-            /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
-            /// `1`. This value will ultimately represent the index within a `TendencyPair`.
-            let index: Int
-
-            /// - Returns: An `AssignedNodeInfo` with the given `tendency` applied to `self`.
-            func assigning(tendency: Tendency) -> AssignedNodeInfo {
-                return AssignedNodeInfo(self, tendency: tendency)
-            }
-        }
-
-        /// The payload for a Flownetwork which has been assigned.
-        struct AssignedNodeInfo: Hashable {
-
-            /// The unspelled pitch class and associated identifier which is now representable.
-            let item: UnspelledPitchItem
-
-            /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
-            /// `1`. This value will ultimately represent the index within a `TendencyPair`.
-            let index: Int
-
-            /// The "tendency" value assigned subsequent to finding the minium cut.
-            let tendency: Tendency
-
-            // MARK: - Initializers
-
-            init(_ nodeInfo: UnassignedNodeInfo, tendency: Tendency) {
-                self.item = nodeInfo.item
-                self.index = nodeInfo.index
-                self.tendency = tendency
-            }
-        }
 
         /// The `Pitch` values to be spelled.
         let pitches: [Pitch]
