@@ -144,6 +144,13 @@ public struct Graph <Value: Hashable>: Hashable {
         }
     }
 
+    /// Create a `Graph` with the given `nodes`.
+    public init <S> (_ nodes: S) where S: Sequence, S.Element == Node {
+        for node in nodes {
+            adjacencyList[node] = []
+        }
+    }
+
     // MARK: - Insance Methods
 
     /// Create a `Node` with the given `value`. This node is placed in the `Graph`.
@@ -151,10 +158,15 @@ public struct Graph <Value: Hashable>: Hashable {
     /// - Note: Consider making `throw` if value already exists in the graph?
     public mutating func createNode(_ value: Value) -> Node {
         let node = Node(value)
+        insertNode(node)
+        return node
+    }
+
+    /// Insert the given `node` into the graph.
+    public mutating func insertNode(_ node: Node) {
         if adjacencyList[node] == nil {
             adjacencyList[node] = []
         }
-        return node
     }
 
     /// Add an edge from the given `source` to the given `destination` nodes, with the given
