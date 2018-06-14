@@ -77,10 +77,10 @@ public enum Wetherfield {
             self.parsimonyPivot = parsimonyPivot
 
             var graph = Graph<UnassignedNodeInfo>()
-            let source = PitchSpeller.makeSource(in: &graph, parsimonyPivot: parsimonyPivot)
-            let sink = PitchSpeller.makeSink(in: &graph, parsimonyPivot: parsimonyPivot)
-            let internalNodes = PitchSpeller.makeInternalNodes(for: pitches, in: &graph)
-            PitchSpeller.hookUpNodes(source: source, sink: sink, internalNodes: internalNodes, in: &graph)
+            let source = makeSource(in: &graph, parsimonyPivot: parsimonyPivot)
+            let sink = makeSink(in: &graph, parsimonyPivot: parsimonyPivot)
+            let internalNodes = makeInternalNodes(for: pitches, in: &graph)
+            hookUpNodes(source: source, sink: sink, internalNodes: internalNodes, in: &graph)
             self.flowNetwork = FlowNetwork(graph, source: source, sink: sink)
         }
 
@@ -112,63 +112,63 @@ public enum Wetherfield {
         func node(identifier: Int, index: Int) -> Node? {
             return nil
         }
+    }
+}
 
-        /// - Returns: The `source` node in the `FlowNetwork`. This node is given an `identifier` of
-        /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-        private static func makeSource(
-            in graph: inout Graph<UnassignedNodeInfo>,
-            parsimonyPivot: Pitch.Class
-        ) -> Graph<UnassignedNodeInfo>.Node
-        {
-            let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
-            let payload = UnassignedNodeInfo(item: item, index: 0)
-            return graph.createNode(payload)
+/// - Returns: The `source` node in the `FlowNetwork`. This node is given an `identifier` of
+/// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
+private func makeSource(
+    in graph: inout Graph<UnassignedNodeInfo>,
+    parsimonyPivot: Pitch.Class
+) -> Graph<UnassignedNodeInfo>.Node
+{
+    let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
+    let payload = UnassignedNodeInfo(item: item, index: 0)
+    return graph.createNode(payload)
+}
+
+/// - Returns: The `sink` node in the `FlowNetwork`. This node is given an `identifier` of
+/// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
+private func makeSink(
+    in graph: inout Graph<UnassignedNodeInfo>,
+    parsimonyPivot: Pitch.Class
+    ) -> Graph<UnassignedNodeInfo>.Node
+{
+    let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
+    let payload = UnassignedNodeInfo(item: item, index: 1)
+    return graph.createNode(payload)
+}
+
+/// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
+/// `identifier` equivalent to its index in the `pitches` array.
+private func makeInternalNodes(for pitches: [Pitch], in graph: inout Graph<UnassignedNodeInfo>)
+    -> [Graph<UnassignedNodeInfo>.Node]
+{
+    var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
+    for (identifier, pitch) in pitches.enumerated() {
+        let item = UnspelledPitchItem(identifier: identifier, pitchClass: pitch.class)
+        for index in [0,1] {
+            let nodeInfo = UnassignedNodeInfo(item: item, index: index)
+            let node = graph.createNode(nodeInfo)
+            internalNodes.append(node)
         }
+    }
+    return internalNodes
+}
 
-        /// - Returns: The `sink` node in the `FlowNetwork`. This node is given an `identifier` of
-        /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-        private static func makeSink(
-            in graph: inout Graph<UnassignedNodeInfo>,
-            parsimonyPivot: Pitch.Class
-        ) -> Graph<UnassignedNodeInfo>.Node
-        {
-            let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
-            let payload = UnassignedNodeInfo(item: item, index: 1)
-            return graph.createNode(payload)
-        }
-
-        /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
-        /// `identifier` equivalent to its index in the `pitches` array.
-        private static func makeInternalNodes(for pitches: [Pitch], in graph: inout Graph<UnassignedNodeInfo>)
-            -> [Graph<UnassignedNodeInfo>.Node]
-        {
-            var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
-            for (identifier, pitch) in pitches.enumerated() {
-                let item = UnspelledPitchItem(identifier: identifier, pitchClass: pitch.class)
-                for index in [0,1] {
-                    let nodeInfo = UnassignedNodeInfo(item: item, index: index)
-                    let node = graph.createNode(nodeInfo)
-                    internalNodes.append(node)
-                }
-            }
-            return internalNodes
-        }
-
-        /// Attaches all of the nodes in the graph with default values of `1`.
-        private static func hookUpNodes(
-            source: Graph<UnassignedNodeInfo>.Node,
-            sink: Graph<UnassignedNodeInfo>.Node,
-            internalNodes: [Graph<UnassignedNodeInfo>.Node],
-            in graph: inout Graph<UnassignedNodeInfo>
-        )
-        {
-            for node in internalNodes {
-                graph.insertEdge(from: source, to: node, value: 1)
-                graph.insertEdge(from: node, to: sink, value: 1)
-                for other in internalNodes.lazy.filter({ $0 != node }) {
-                    graph.insertEdge(from: node, to: other, value: 1)
-                }
-            }
+/// Attaches all of the nodes in the graph with default values of `1`.
+private func hookUpNodes(
+    source: Graph<UnassignedNodeInfo>.Node,
+    sink: Graph<UnassignedNodeInfo>.Node,
+    internalNodes: [Graph<UnassignedNodeInfo>.Node],
+    in graph: inout Graph<UnassignedNodeInfo>
+)
+{
+    for node in internalNodes {
+        graph.insertEdge(from: source, to: node, value: 1)
+        graph.insertEdge(from: node, to: sink, value: 1)
+        for other in internalNodes.lazy.filter({ $0 != node }) {
+            graph.insertEdge(from: node, to: other, value: 1)
         }
     }
 }
