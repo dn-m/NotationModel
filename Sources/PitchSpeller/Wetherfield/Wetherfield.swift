@@ -76,17 +76,17 @@ struct PitchSpeller {
         }
 
         return assignedNodes
-            // Restructure them to original order
             .sorted { $0.index < $1.index }
-            // Remove the `parsimonyPivot` nodes
             .dropFirst(2)
             .pairs
-            .map { (up, down) in
-                let pitch = self.pitch(node: up.index)
-                let tendencies = TendencyPair((up.tendency, down.tendency))
-                let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
-                return try! pitch.spelled(with: spelling)
-            }
+            .map(spellingPitch)
+    }
+
+    private func spellingPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch {
+        let pitch = self.pitch(node: up.index)
+        let tendencies = TendencyPair((up.tendency, down.tendency))
+        let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
+        return try! pitch.spelled(with: spelling)
     }
 
     /// - Returns: The `Pitch` value for the given `node` value.
