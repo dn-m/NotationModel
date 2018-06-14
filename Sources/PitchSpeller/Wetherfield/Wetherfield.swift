@@ -5,14 +5,30 @@
 //  Created by James Bean on 5/23/18.
 //
 
+import Restructure
 import Pitch
 import SpelledPitch
 
+struct AssignedNode {
+    let index: Int
+    let tendency: Tendency
+    init(_ index: Int, _ tendency: Tendency) {
+        self.index = index
+        self.tendency = tendency
+    }
+}
+
 struct PitchSpeller {
 
-    /// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches), and
-    /// an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent the
-    /// given `Pitch`.)
+    /// - Returns: The nodes for the `Pitch` at the given `index`.
+    private static func nodes(pitchAtIndex index: Int) -> (Int, Int) {
+        let offset = 2 * index
+        return (offset, offset + 1)
+    }
+
+    /// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
+    /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
+    /// the given `Pitch`.)
     private static func node(offset: Int, index: Int) -> Int {
         return 2 * offset + index
     }
@@ -25,17 +41,25 @@ struct PitchSpeller {
         }
     }
 
+    // MARK: - Instance Properties
+
     /// The omnipresent, tie-breaking `Pitch.Class` value.
     let parsimonyPivot: Pitch.Class
 
     /// The unspelled `Pitch` values to be spelled.
     let pitches: [Pitch]
 
-    // 2 * Box offset + Box index
+    /// The nodes within the `FlowNetwork`. The values are the encodings of the indices of `Pitch`
+    /// values in `pitches.
     let pitchNodes: [Int]
+
+    /// The `FlowNetwork` which will be manipulated in order to spell the unspelled `pitches`.
     let flowNetwork: FlowNetwork<Int>
 
-    init(pitches: [Pitch], parsimonyPivot: Pitch.Class) {
+    // MARK: - Initializers
+
+    /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
+    init(pitches: [Pitch], parsimonyPivot: Pitch.Class = 2) {
         self.pitches = pitches
         self.parsimonyPivot = parsimonyPivot
         self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
@@ -46,22 +70,30 @@ struct PitchSpeller {
     /// unspelled `Pitch` values are given.
     func spell() -> [SpelledPitch] {
 
-        // 1. Assign Nodes
-        // 2. Reconstitute "Box" pairs of assigned nodes
-        // 3. Map these pairs into `SpelledPitch` values
-        // 4. `return`
+        var assignedNodes: [AssignedNode] {
+            let (sourcePartition, sinkPartition) = flowNetwork.partitions
+            let sourceNodes = sourcePartition.nodes.map { index in AssignedNode(index, .down) }
+            let sinkNodes = sinkPartition.nodes.map { index in AssignedNode(index, .up) }
+            return sourceNodes + sinkNodes
+        }
 
-        fatalError()
+        return assignedNodes
+            // Restructure them to original order
+            .sorted { $0.index < $1.index }
+            // Remove the `parsimonyPivot` nodes
+            .dropFirst(2)
+            .pairs
+            .map { (up, down) in
+                let pitch = self.pitch(node: up.index)
+                let tendencies = TendencyPair((up.tendency, down.tendency))
+                let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
+                return try! pitch.spelled(with: spelling)
+            }
     }
 
-    private func assignedNodes() -> [Tendency] {
-        let (sourcePartition, sinkPartition) = flowNetwork.partitions
-        return sourcePartition.nodes.map { _ in .down } + sinkPartition.nodes.map { _ in .up }
-    }
-
-    func pitch(node: Int) -> Pitch? {
-        guard node >= pitches.startIndex && node < pitches.endIndex else { return nil }
-        return pitches[node]
+    /// - Returns: The `Pitch` value for the given `node` value.
+    private func pitch(node: Int) -> Pitch {
+        return pitches[node / 2]
     }
 }
 
