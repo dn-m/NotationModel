@@ -79,10 +79,10 @@ struct PitchSpeller {
             .sorted { $0.index < $1.index }
             .dropFirst(2)
             .pairs
-            .map(spellingPitch)
+            .map(spellPitch)
     }
 
-    private func spellingPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch {
+    private func spellPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch {
         let pitch = self.pitch(node: up.index)
         let tendencies = TendencyPair((up.tendency, down.tendency))
         let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
