@@ -42,7 +42,7 @@ struct PitchSpeller {
     // MARK: - Instance Properties
 
     /// The omnipresent, tie-breaking `Pitch.Class` value.
-    let parsimonyPivot: Pitch.Class
+    let parsimonyPivot: Pitch.Spelling
 
     /// The unspelled `Pitch` values to be spelled.
     let pitches: [Pitch]
@@ -57,7 +57,7 @@ struct PitchSpeller {
     // MARK: - Initializers
 
     /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
-    init(pitches: [Pitch], parsimonyPivot: Pitch.Class = 2) {
+    init(pitches: [Pitch], parsimonyPivot: Pitch.Spelling = .init(.d)) {
         self.pitches = pitches
         self.parsimonyPivot = parsimonyPivot
         self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
