@@ -53,6 +53,7 @@ class WetherfieldTests: XCTestCase {
         let speller = Wetherfield.PitchSpeller(pitches: [60,61,66], parsimonyPivot: 2)
         let flowNetwork = speller.flowNetwork
         flowNetwork.internalNodes.forEach { print($0) }
+        
     }
 
 //    func testPaths() {
