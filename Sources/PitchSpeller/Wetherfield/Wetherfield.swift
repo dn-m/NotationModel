@@ -10,6 +10,7 @@ import SpelledPitch
 
 struct PitchSpeller {
 
+    let parsimonyPivot: Pitch.Class
     let pitches: [Pitch]
 
     // 2 * Box offset + Box index
@@ -18,8 +19,9 @@ struct PitchSpeller {
 
     init(pitches: [Pitch], parsimonyPivot: Pitch.Class) {
         self.pitches = pitches
+        self.parsimonyPivot = parsimonyPivot
         self.pitchNodes = internalNodes(pitches: pitches)
-        self.flowNetwork = makeFlowNetwork(source: -2, sink: -1, internalNodes: pitchNodes)
+        self.flowNetwork = FlowNetwork(source: -2, sink: -1, internalNodes: pitchNodes)
     }
 
     /// - Returns: An array of `SpelledPitch` values in the order in which the original
@@ -44,35 +46,33 @@ struct PitchSpeller {
         return pitches[2 * offset + index]
     }
 
-//    /// - Returns: The index in `pitches` / `pitchNodes` of the given `unassignedNodeInfo`.
-//    private func index(of unassignedNodeInfo: UnassignedNodeInfo) -> Int? {
-//        //let index = unassignedNodeInfo.item.identifier + unassignedNodeInfo.index.rawValue
-//        guard index >= pitches.startIndex && index < pitches.endIndex else { return nil }
-//        return index
-//    }
+    func pitch(node: Int) -> Pitch? {
+        guard node >= pitches.startIndex && node < pitches.endIndex else { return nil }
+        return pitches[node]
+    }
 }
 
-/// - Returns: A `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
-/// process.
-func makeFlowNetwork(source: Int, sink: Int, internalNodes: [Int]) -> FlowNetwork<Int> {
-    return FlowNetwork(
-        makeGraph(source: source, sink: sink, internalNodes: internalNodes),
-        source: source,
-        sink: sink
-    )
+extension FlowNetwork where Value == Int {
+    /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
+    /// process.
+    init(source: Int, sink: Int, internalNodes: [Int]) {
+        let graph = Graph(source: source, sink: sink, internalNodes: internalNodes)
+        self.init(graph, source: -2, sink: -1)
+    }
 }
 
-/// - Returns: A `Graph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
-func makeGraph(source: Int, sink: Int, internalNodes: [Int]) -> Graph<Int> {
-    var graph = Graph([source, sink] + internalNodes)
-    for node in internalNodes {
-        graph.insertEdge(from: source, to: node, value: 1)
-        graph.insertEdge(from: node, to: sink, value: 1)
-        for other in internalNodes.lazy.filter({ $0 != node }) {
-            graph.insertEdge(from: node, to: other, value: 1)
+extension Graph where Value == Int {
+    /// Create a `Graph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
+    init(source: Int, sink: Int, internalNodes: [Int]) {
+        self.init([source, sink] + internalNodes)
+        for node in internalNodes {
+            insertEdge(from: source, to: node, value: 1)
+            insertEdge(from: node, to: sink, value: 1)
+            for other in internalNodes.lazy.filter({ $0 != node }) {
+                insertEdge(from: node, to: other, value: 1)
+            }
         }
     }
-    return graph
 }
 
 /// - Returns: The `source` node for a `FlowNetwork`. This node is given an `identifier` of
