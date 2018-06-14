@@ -75,18 +75,6 @@ extension Graph where Value == Int {
     }
 }
 
-/// - Returns: The `source` node for a `FlowNetwork`. This node is given an `identifier` of
-/// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-func source() -> Graph<Int>.Node {
-    return node(offset: -1, index: 0)
-}
-
-/// - Returns: The `sink` node for a `FlowNetwork`. This node is given an `identifier` of
-/// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-func sink() -> Graph<Int>.Node {
-    return node(offset: -1, index: 1)
-}
-
 /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
 /// `identifier` equivalent to its index in the `pitches` array.
 //
