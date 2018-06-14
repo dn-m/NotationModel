@@ -12,28 +12,28 @@ class FlowNetworkTests: XCTestCase {
 
     var simpleFlowNetwork: FlowNetwork<String> {
         var graph = Graph<String>()
-        let source = graph.createNode("source")
-        let sink = graph.createNode("sink")
-        let a = graph.createNode("a")
-        let b = graph.createNode("b")
-        graph.insertEdge(from: source, to: a, value: 1)
-        graph.insertEdge(from: source, to: b, value: 2)
-        graph.insertEdge(from: a, to: sink, value: 3)
-        graph.insertEdge(from: b, to: sink, value: 4)
-        return FlowNetwork(graph, source: source, sink: sink)
+        graph.insertNode("source")
+        graph.insertNode("sink")
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertEdge(from: "source", to: "a", value: 1)
+        graph.insertEdge(from: "source", to: "b", value: 2)
+        graph.insertEdge(from: "a", to: "sink", value: 3)
+        graph.insertEdge(from: "b", to: "sink", value: 4)
+        return FlowNetwork(graph, source: "source", sink: "sink")
     }
 
     func testMaximumPathFlow() {
         var graph = Graph<String>()
-        let source = graph.createNode("source")
-        let sink = graph.createNode("sink")
-        let a = graph.createNode("a")
-        let b = graph.createNode("b")
-        graph.insertEdge(from: source, to: a, value: 1)
-        graph.insertEdge(from: a, to: b, value: 2)
-        graph.insertEdge(from: b, to: sink, value: 3)
-        let flowNetwork = FlowNetwork(graph, source: source, sink: sink)
-        let path = graph.shortestPath(from: source, to: sink)!
+        graph.insertNode("source")
+        graph.insertNode("sink")
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertEdge(from: "source", to: "a", value: 1)
+        graph.insertEdge(from: "a", to: "b", value: 2)
+        graph.insertEdge(from: "b", to: "sink", value: 3)
+        let flowNetwork = FlowNetwork(graph, source: "source", sink: "sink")
+        let path = graph.shortestPath(from: "source", to: "sink")!
         XCTAssertEqual(flowNetwork.maximumFlow(of: path), 1)
     }
 
@@ -43,35 +43,37 @@ class FlowNetworkTests: XCTestCase {
         var graph = Graph<String>()
 
         // source
-        let a = graph.createNode("a")
-
-         // sink
-        let b = graph.createNode("b")
+        graph.insertNode("a")
 
         // internal nodes
-        let c = graph.createNode("c")
-        let d = graph.createNode("d")
-        let e = graph.createNode("e")
-        let f = graph.createNode("f")
-        let g = graph.createNode("g")
+        graph.insertNode("b")
+
+
+        graph.insertNode("c")
+        graph.insertNode("d")
+        graph.insertNode("e")
+        graph.insertNode("f")
+        graph.insertNode("g")
 
         // hook 'em up
-        graph.insertEdge(from: a, to: b, value: 3)
-        graph.insertEdge(from: a, to: d, value: 3)
-        graph.insertEdge(from: b, to: c, value: 4)
-        graph.insertEdge(from: c, to: a, value: 3)
-        graph.insertEdge(from: c, to: e, value: 2)
-        graph.insertEdge(from: e, to: b, value: 1)
-        graph.insertEdge(from: c, to: d, value: 1)
-        graph.insertEdge(from: d, to: f, value: 6)
-        graph.insertEdge(from: d, to: e, value: 2)
-        graph.insertEdge(from: e, to: g, value: 1)
-        graph.insertEdge(from: f, to: g, value: 9)
-        let flowNetwork = FlowNetwork(graph, source: a, sink: g)
+        graph.insertEdge(from: "a", to: "b", value: 3)
+        graph.insertEdge(from: "a", to: "d", value: 3)
+        graph.insertEdge(from: "b", to: "c", value: 4)
+        graph.insertEdge(from: "c", to: "a", value: 3)
+        graph.insertEdge(from: "c", to: "e", value: 2)
+        graph.insertEdge(from: "e", to: "b", value: 1)
+        graph.insertEdge(from: "c", to: "d", value: 1)
+        graph.insertEdge(from: "d", to: "f", value: 6)
+        graph.insertEdge(from: "d", to: "e", value: 2)
+        graph.insertEdge(from: "e", to: "g", value: 1)
+        graph.insertEdge(from: "f", to: "g", value: 9)
 
-        let ad = graph.edge(from: a, to: d)!
-        let cd = graph.edge(from: c, to: d)!
-        let eg = graph.edge(from: e, to: g)!
+        let flowNetwork = FlowNetwork(graph, source: "a", sink: "g")
+
+        let ad = graph.edge(from: "a", to: "d")!
+        let cd = graph.edge(from: "c", to: "d")!
+        let eg = graph.edge(from: "e", to: "g")!
+
         XCTAssertEqual(flowNetwork.saturatedEdges, [ad, cd, eg])
     }
 
@@ -81,32 +83,34 @@ class FlowNetworkTests: XCTestCase {
         var graph = Graph<String>()
 
         // source
-        let a = graph.createNode("a")
-
-        // sink
-        let b = graph.createNode("b")
+        graph.insertNode("a")
 
         // internal nodes
-        let c = graph.createNode("c")
-        let d = graph.createNode("d")
-        let e = graph.createNode("e")
-        let f = graph.createNode("f")
+        graph.insertNode("b")
+        graph.insertNode("c")
+        graph.insertNode("d")
+        graph.insertNode("e")
 
-        graph.insertEdge(from: a, to: b, value: 16)
-        graph.insertEdge(from: a, to: c, value: 13)
-        graph.insertEdge(from: b, to: c, value: 10)
-        graph.insertEdge(from: c, to: b, value: 4)
-        graph.insertEdge(from: b, to: d, value: 12)
-        graph.insertEdge(from: d, to: c, value: 9)
-        graph.insertEdge(from: c, to: e, value: 14)
-        graph.insertEdge(from: e, to: d, value: 7)
-        graph.insertEdge(from: d, to: f, value: 20)
-        graph.insertEdge(from: e, to: f, value: 4)
-        let flowNetwork = FlowNetwork(graph, source: a, sink: f)
+        // sink
+        graph.insertNode("f")
+
+        graph.insertEdge(from: "a", to: "b", value: 16)
+        graph.insertEdge(from: "a", to: "c", value: 13)
+        graph.insertEdge(from: "b", to: "c", value: 10)
+        graph.insertEdge(from: "c", to: "b", value: 4)
+        graph.insertEdge(from: "b", to: "d", value: 12)
+        graph.insertEdge(from: "d", to: "c", value: 9)
+        graph.insertEdge(from: "c", to: "e", value: 14)
+        graph.insertEdge(from: "e", to: "d", value: 7)
+        graph.insertEdge(from: "d", to: "f", value: 20)
+        graph.insertEdge(from: "e", to: "f", value: 4)
+        let flowNetwork = FlowNetwork(graph, source: "a", sink: "f")
 
         // Expected partitions
-        let sourcePartition = Graph(graph.edges([a,b,c,e]))
-        let sinkPartition = Graph(graph.edges([d,f]))
+        let sourceEdges = graph.edges(["a","b","c","e"])
+        let sourcePartition = Graph<String>(sourceEdges)
+        let sinkEdges = graph.edges(["d","f"])
+        let sinkPartition = Graph<String>(sinkEdges)
         XCTAssertEqual(flowNetwork.partitions.source, sourcePartition)
         XCTAssertEqual(flowNetwork.partitions.sink, sinkPartition)
     }

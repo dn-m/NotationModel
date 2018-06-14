@@ -13,18 +13,18 @@ import Pitch
 class WetherfieldTests: XCTestCase {
     
     func testInitMonadNodeCount() {
-        let speller = Wetherfield.PitchSpeller(pitches: [60], parsimonyPivot: 2)
+        let speller = PitchSpeller(pitches: [60], parsimonyPivot: 2)
         XCTAssertEqual(speller.flowNetwork.internalNodes.count, 2)
     }
 
     func testInitDyadNodeCount() {
-        let speller = Wetherfield.PitchSpeller(pitches: [60,61], parsimonyPivot: 2)
+        let speller = PitchSpeller(pitches: [60,61], parsimonyPivot: 2)
         XCTAssertEqual(speller.flowNetwork.internalNodes.count, 4)
     }
 
     func testInitTriadEdges() {
 
-        let speller = Wetherfield.PitchSpeller(pitches: [60,61,66], parsimonyPivot: 2)
+        let speller = PitchSpeller(pitches: [60,61,66], parsimonyPivot: 2)
         let flowNetwork = speller.flowNetwork
 
         for internalNode in speller.flowNetwork.internalNodes {
@@ -50,10 +50,10 @@ class WetherfieldTests: XCTestCase {
     }
 
     func testEdgeUpdating() {
-        let speller = Wetherfield.PitchSpeller(pitches: [60,61,66], parsimonyPivot: 2)
+        let speller = PitchSpeller(pitches: [60,61,66], parsimonyPivot: 2)
         let flowNetwork = speller.flowNetwork
         flowNetwork.internalNodes.forEach { print($0) }
-        
+
     }
 
 //    func testPaths() {
