@@ -10,13 +10,25 @@ import SpelledPitch
 
 struct PitchSpeller {
 
-    /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
-    /// `identifier` equivalent to its index in the `pitches` array.
-    private static func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
-        return pitches.indices.flatMap { offset in [0,1].map { index in 2 * offset + index } }
+    /// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches), and
+    /// an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent the
+    /// given `Pitch`.)
+    private static func node(offset: Int, index: Int) -> Int {
+        return 2 * offset + index
     }
 
+    /// - Returns: An array of nodes, each representing the index of the unassigned node in
+    /// `pitchNodes`.
+    private static func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
+        return pitches.indices.flatMap { offset in
+            [0,1].map { index in node(offset: offset, index: index) }
+        }
+    }
+
+    /// The omnipresent, tie-breaking `Pitch.Class` value.
     let parsimonyPivot: Pitch.Class
+
+    /// The unspelled `Pitch` values to be spelled.
     let pitches: [Pitch]
 
     // 2 * Box offset + Box index
