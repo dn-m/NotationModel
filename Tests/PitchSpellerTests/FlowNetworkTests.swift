@@ -12,28 +12,28 @@ class FlowNetworkTests: XCTestCase {
 
     var simpleFlowNetwork: FlowNetwork<String> {
         var graph = Graph<String>()
-        graph.insertNode("source")
-        graph.insertNode("sink")
+        graph.insertNode("s")
+        graph.insertNode("t")
         graph.insertNode("a")
         graph.insertNode("b")
-        graph.insertEdge(from: "source", to: "a", value: 1)
-        graph.insertEdge(from: "source", to: "b", value: 2)
-        graph.insertEdge(from: "a", to: "sink", value: 3)
-        graph.insertEdge(from: "b", to: "sink", value: 4)
-        return FlowNetwork(graph, source: "source", sink: "sink")
+        graph.insertEdge(from: "s", to: "a", value: 1)
+        graph.insertEdge(from: "s", to: "b", value: 2)
+        graph.insertEdge(from: "a", to: "t", value: 3)
+        graph.insertEdge(from: "b", to: "t", value: 4)
+        return FlowNetwork(graph, source: "s", sink: "t")
     }
 
     func testMaximumPathFlow() {
         var graph = Graph<String>()
-        graph.insertNode("source")
-        graph.insertNode("sink")
+        graph.insertNode("s")
+        graph.insertNode("t")
         graph.insertNode("a")
         graph.insertNode("b")
-        graph.insertEdge(from: "source", to: "a", value: 1)
+        graph.insertEdge(from: "s", to: "a", value: 1)
         graph.insertEdge(from: "a", to: "b", value: 2)
-        graph.insertEdge(from: "b", to: "sink", value: 3)
-        let flowNetwork = FlowNetwork(graph, source: "source", sink: "sink")
-        let path = graph.shortestPath(from: "source", to: "sink")!
+        graph.insertEdge(from: "b", to: "t", value: 3)
+        let flowNetwork = FlowNetwork(graph, source: "s", sink: "t")
+        let path = graph.shortestPath(from: "s", to: "t")!
         XCTAssertEqual(flowNetwork.maximumFlow(of: path), 1)
     }
 
