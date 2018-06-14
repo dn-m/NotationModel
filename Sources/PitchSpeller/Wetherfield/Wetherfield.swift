@@ -41,11 +41,6 @@ struct PitchSpeller {
         return sourcePartition.nodes.map { _ in .down } + sinkPartition.nodes.map { _ in .up }
     }
 
-    /// - Returns: The `Pitch` value for the given `offset` and the given `index`.
-    func index(offset: Int, index: Int) -> Pitch {
-        return pitches[2 * offset + index]
-    }
-
     func pitch(node: Int) -> Pitch? {
         guard node >= pitches.startIndex && node < pitches.endIndex else { return nil }
         return pitches[node]
@@ -77,16 +72,6 @@ extension Graph where Value == Int {
 
 /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
 /// `identifier` equivalent to its index in the `pitches` array.
-//
-// FIXME: the `-> [Graph<UnassignedNodeInfo>.Node]` disambiguation should not be necessary. Further,
-// the `flatMap` _should_ become `compactMap`, as `compactMap` seems only to work for optionals?
 func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
-    return pitches.enumerated().flatMap { offset, pitch -> [Graph<Int>.Node] in
-        return [0,1].map { index in node(offset: offset, index: index) }
-    }
-}
-
-/// - Returns: A `Node` which wraps an `UnassignedNodeInfo` with the given `item` and `index`.
-func node(offset: Int, index: Int) -> Graph<Int>.Node {
-    return 2 * offset + index
+    return pitches.indices.flatMap { offset in [0,1].map { index in 2 * offset + index } }
 }
