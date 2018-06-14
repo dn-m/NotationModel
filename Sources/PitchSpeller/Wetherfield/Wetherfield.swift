@@ -15,6 +15,9 @@ public enum Wetherfield {
     /// _A Graphical Theory of Musical Pitch Spelling_.
     final class PitchSpeller {
 
+        typealias Node = FlowNetwork<UnassignedNodeInfo>.Node
+        typealias Edge = FlowNetwork<UnassignedNodeInfo>.Edge
+
         /// The payload for a FlowNetwork which has not yet been assigned.
         struct UnassignedNodeInfo: Hashable {
 
@@ -54,21 +57,16 @@ public enum Wetherfield {
             }
         }
 
-        /// - Returns: `FlowNetwork` of `UnassignedNodeInfo`-wrapping nodes.
-        internal lazy var flowNetwork: FlowNetwork<UnassignedNodeInfo> = {
-            var graph = Graph<UnassignedNodeInfo>()
-            let source = makeSource(in: &graph)
-            let sink = makeSink(in: &graph)
-            let internalNodes = makeInternalNodes(in: &graph)
-            hookUpNodes(source: source, sink: sink, internalNodes: internalNodes, in: &graph)
-            return FlowNetwork(graph, source: source, sink: sink)
-        }()
-
         /// The `Pitch` values to be spelled.
         let pitches: [Pitch]
 
+        /// Non-source/-sink nodes, in order of corresponding value in `pitches`.
+        var nodes: [Node] = []
+
         /// The omnipresent tie-breaking pitch class
         let parsimonyPivot: Pitch.Class
+
+        let flowNetwork: FlowNetwork<UnassignedNodeInfo>
 
         // MARK: - Initializers
 
@@ -76,6 +74,13 @@ public enum Wetherfield {
         init(pitches: [Pitch], parsimonyPivot: Pitch.Class) {
             self.pitches = pitches
             self.parsimonyPivot = parsimonyPivot
+
+            var graph = Graph<UnassignedNodeInfo>()
+            let source = PitchSpeller.makeSource(in: &graph, parsimonyPivot: parsimonyPivot)
+            let sink = PitchSpeller.makeSink(in: &graph, parsimonyPivot: parsimonyPivot)
+            let internalNodes = PitchSpeller.makeInternalNodes(for: pitches, in: &graph)
+            PitchSpeller.hookUpNodes(source: source, sink: sink, internalNodes: internalNodes, in: &graph)
+            self.flowNetwork = FlowNetwork(graph, source: source, sink: sink)
         }
 
         // MARK: - Instance Methods
@@ -99,10 +104,20 @@ public enum Wetherfield {
             return sourceNodes + sinkNodes
         }
 
+        func nodes(identifier: Int) -> (Node, Node)? {
+            return nil
+        }
+
+        func node(identifier: Int, index: Int) -> Node? {
+            return nil
+        }
+
         /// - Returns: The `source` node in the `FlowNetwork`. This node is given an `identifier` of
         /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-        private func makeSource(in graph: inout Graph<UnassignedNodeInfo>)
-            -> Graph<UnassignedNodeInfo>.Node
+        private static func makeSource(
+            in graph: inout Graph<UnassignedNodeInfo>,
+            parsimonyPivot: Pitch.Class
+        ) -> Graph<UnassignedNodeInfo>.Node
         {
             let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
             let payload = UnassignedNodeInfo(item: item, index: 0)
@@ -111,8 +126,10 @@ public enum Wetherfield {
 
         /// - Returns: The `sink` node in the `FlowNetwork`. This node is given an `identifier` of
         /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
-        private func makeSink(in graph: inout Graph<UnassignedNodeInfo>)
-            -> Graph<UnassignedNodeInfo>.Node
+        private static func makeSink(
+            in graph: inout Graph<UnassignedNodeInfo>,
+            parsimonyPivot: Pitch.Class
+        ) -> Graph<UnassignedNodeInfo>.Node
         {
             let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
             let payload = UnassignedNodeInfo(item: item, index: 1)
@@ -121,7 +138,7 @@ public enum Wetherfield {
 
         /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
         /// `identifier` equivalent to its index in the `pitches` array.
-        private func makeInternalNodes(in graph: inout Graph<UnassignedNodeInfo>)
+        private static func makeInternalNodes(for pitches: [Pitch], in graph: inout Graph<UnassignedNodeInfo>)
             -> [Graph<UnassignedNodeInfo>.Node]
         {
             var internalNodes: [Graph<UnassignedNodeInfo>.Node] = []
@@ -137,7 +154,7 @@ public enum Wetherfield {
         }
 
         /// Attaches all of the nodes in the graph with default values of `1`.
-        private func hookUpNodes(
+        private static func hookUpNodes(
             source: Graph<UnassignedNodeInfo>.Node,
             sink: Graph<UnassignedNodeInfo>.Node,
             internalNodes: [Graph<UnassignedNodeInfo>.Node],
