@@ -29,16 +29,14 @@ struct PitchSpeller {
     /// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
     /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
     /// the given `Pitch`.)
-    private static func node(offset: Int, index: Int) -> Int {
+    private static func node(_ offset: Int, _ index: Int) -> Int {
         return 2 * offset + index
     }
 
     /// - Returns: An array of nodes, each representing the index of the unassigned node in
     /// `pitchNodes`.
     private static func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
-        return pitches.indices.flatMap { offset in
-            [0,1].map { index in node(offset: offset, index: index) }
-        }
+        return pitches.indices.flatMap { offset in [0,1].map { index in node(offset, index) } }
     }
 
     // MARK: - Instance Properties
