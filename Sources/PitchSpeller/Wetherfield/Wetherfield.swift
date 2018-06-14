@@ -10,6 +10,12 @@ import SpelledPitch
 
 struct PitchSpeller {
 
+    /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
+    /// `identifier` equivalent to its index in the `pitches` array.
+    private static func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
+        return pitches.indices.flatMap { offset in [0,1].map { index in 2 * offset + index } }
+    }
+
     let parsimonyPivot: Pitch.Class
     let pitches: [Pitch]
 
@@ -20,7 +26,7 @@ struct PitchSpeller {
     init(pitches: [Pitch], parsimonyPivot: Pitch.Class) {
         self.pitches = pitches
         self.parsimonyPivot = parsimonyPivot
-        self.pitchNodes = internalNodes(pitches: pitches)
+        self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
         self.flowNetwork = FlowNetwork(source: -2, sink: -1, internalNodes: pitchNodes)
     }
 
@@ -68,10 +74,4 @@ extension Graph where Value == Int {
             }
         }
     }
-}
-
-/// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
-/// `identifier` equivalent to its index in the `pitches` array.
-func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
-    return pitches.indices.flatMap { offset in [0,1].map { index in 2 * offset + index } }
 }
