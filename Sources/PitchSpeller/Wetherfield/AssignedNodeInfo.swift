@@ -8,12 +8,12 @@
 /// The payload for a Flownetwork which has been assigned.
 struct AssignedNodeInfo: Hashable {
 
-    /// The unspelled pitch class and associated identifier which is now representable.
-    let item: UnspelledPitchItem
+    /// The offset of the `Pitch` that is being spelled in the original input array.
+    let offset: Int
 
     /// Index of the node in the `Box` for the given `pitchClass`. Will be either `0`, or
     /// `1`. This value will ultimately represent the index within a `TendencyPair`.
-    let index: Index
+    let index: Int
 
     /// The "tendency" value assigned subsequent to finding the minium cut.
     let tendency: Tendency
@@ -21,7 +21,7 @@ struct AssignedNodeInfo: Hashable {
     // MARK: - Initializers
 
     init(_ nodeInfo: UnassignedNodeInfo, tendency: Tendency) {
-        self.item = nodeInfo.item
+        self.offset = nodeInfo.offset
         self.index = nodeInfo.index
         self.tendency = tendency
     }

@@ -12,25 +12,7 @@ import DataStructures
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
 public struct Graph <Value: Hashable>: Hashable {
 
-    /// Node in a `Graph`. Note that this is a value type. It is stored by its `hashValue`, thereby
-    /// making its `Value` type `Hashable`. It is thus up to the user to make the wrapped value
-    /// unique if the nature of the data is not necessarily unique.
-    public struct Node: Hashable {
-
-        var value: Value
-
-        // MARK: - Initializers
-
-        /// Create a `Node` containing the given `value`.
-        public init(_ value: Value) {
-            self.value = value
-        }
-
-        /// - Returns: A `Node` with the value updated by the given `transform`.
-        public func map <U> (_ transform: (Value) -> U) -> Graph<U>.Node {
-            return .init(transform(value))
-        }
-    }
+    public typealias Node = Value
 
     /// Directed edge between two `Node` values.
     ///
@@ -59,7 +41,7 @@ public struct Graph <Value: Hashable>: Hashable {
 
         /// - Returns: Graph with nodes updated by the given `transform`.
         public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U>.Edge {
-            return .init(from: source.map(transform), to: destination.map(transform), value: value)
+            return .init(from: transform(source), to: transform(destination), value: value)
         }
 
         /// - Returns: An `Edge` with the value updated with by the given `transform`.
@@ -153,15 +135,6 @@ public struct Graph <Value: Hashable>: Hashable {
 
     // MARK: - Insance Methods
 
-    /// Create a `Node` with the given `value`. This node is placed in the `Graph`.
-    ///
-    /// - Note: Consider making `throw` if value already exists in the graph?
-    public mutating func createNode(_ value: Value) -> Node {
-        let node = Node(value)
-        insertNode(node)
-        return node
-    }
-
     /// Insert the given `node` into the graph.
     public mutating func insertNode(_ node: Node) {
         if adjacencyList[node] == nil {
@@ -215,7 +188,7 @@ public struct Graph <Value: Hashable>: Hashable {
         return Graph<U>(
             Dictionary(
                 adjacencyList.map { (node,edges) in
-                    (node.map(transform), edges.map { $0.mapNodes(transform)})
+                    (transform(node), edges.map { $0.mapNodes(transform)})
                 }
             )
         )
@@ -346,17 +319,11 @@ extension Graph: CustomStringConvertible {
     public var description: String {
         var result = ""
         for (source, edges) in adjacencyList {
-            let destinations = edges.map { "\($0.destination.value)" }
-            result += "\(source.value) -> [\(destinations.joined(separator: ","))]"
+            let destinations = edges.map { "\($0.destination)" }
+            result += "\(source) -> [\(destinations.joined(separator: ","))]"
             result += "\n"
         }
         return result
-    }
-}
-
-extension Graph.Node: CustomStringConvertible {
-    public var description: String {
-        return "<\(value)>"
     }
 }
 

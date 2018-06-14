@@ -11,13 +11,6 @@ import SpelledPitch
 typealias Node = Graph<UnassignedNodeInfo>.Node
 typealias Edge = Graph<UnassignedNodeInfo>.Edge
 
-/// The index of an `UnassignedNodeInfo` within a pair of nodes which represent a single
-/// `PitchItem`.
-enum Index: Int {
-    case zero = 0
-    case one = 1
-}
-
 struct PitchSpeller {
 
     let pitches: [Pitch]
@@ -48,17 +41,22 @@ struct PitchSpeller {
 
     private func assignedNodes() -> [AssignedNodeInfo] {
         let (sourcePartition, sinkPartition) = flowNetwork.partitions
-        let sourceNodes = sourcePartition.nodes.map { $0.value.assigning(tendency: .down) }
-        let sinkNodes = sinkPartition.nodes.map { $0.value.assigning(tendency: .up) }
+        let sourceNodes = sourcePartition.nodes.map { $0.assigning(tendency: .down) }
+        let sinkNodes = sinkPartition.nodes.map { $0.assigning(tendency: .up) }
         return sourceNodes + sinkNodes
     }
 
-    /// - Returns: The index in `pitches` / `pitchNodes` of the given `unassignedNodeInfo`.
-    private func index(of unassignedNodeInfo: UnassignedNodeInfo) -> Int? {
-        let index = unassignedNodeInfo.item.identifier + unassignedNodeInfo.index.rawValue
-        guard index >= pitches.startIndex && index < pitches.endIndex else { return nil }
-        return index
+    /// - Returns: The `Pitch` value for the given `offset` and the given `index`.
+    func index(offset: Int, index: Int) -> Pitch {
+        return pitches[2 * offset + index]
     }
+
+//    /// - Returns: The index in `pitches` / `pitchNodes` of the given `unassignedNodeInfo`.
+//    private func index(of unassignedNodeInfo: UnassignedNodeInfo) -> Int? {
+//        //let index = unassignedNodeInfo.item.identifier + unassignedNodeInfo.index.rawValue
+//        guard index >= pitches.startIndex && index < pitches.endIndex else { return nil }
+//        return index
+//    }
 }
 
 /// - Returns: A `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
@@ -86,23 +84,17 @@ func makeGraph(source: Node, sink: Node, internalNodes: [Node]) -> Graph<Unassig
     return graph
 }
 
-/// - Returns: A `Node` which wraps an `UnassignedNodeInfo` with the given `item` and `index`.
-func node(item: UnspelledPitchItem, index: Index) -> Graph<UnassignedNodeInfo>.Node {
-    return Graph.Node(UnassignedNodeInfo(item: item, index: index))
-}
-
 /// - Returns: The `source` node for a `FlowNetwork`. This node is given an `identifier` of
 /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
 func source(parsimonyPivot: Pitch.Class) -> Graph<UnassignedNodeInfo>.Node {
-    let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
-    return node(item: item, index: .zero)
+    return node(offset: -1, index: 0)
 }
 
 /// - Returns: The `sink` node for a `FlowNetwork`. This node is given an `identifier` of
 /// `-1`, and is attached to the pitch class defined by the `parsimonyPivot`.
 func sink(parsimonyPivot: Pitch.Class) -> Graph<UnassignedNodeInfo>.Node {
-    let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
-    return node(item: item, index: .one)
+    //let item = UnspelledPitchItem(identifier: -1, pitchClass: parsimonyPivot)
+    return node(offset: -1, index: 1)
 }
 
 /// - Returns: An array of nodes, placed in the given `graph`. Each node is given an
@@ -111,8 +103,13 @@ func sink(parsimonyPivot: Pitch.Class) -> Graph<UnassignedNodeInfo>.Node {
 // FIXME: the `-> [Graph<UnassignedNodeInfo>.Node]` disambiguation should not be necessary. Further,
 // the `flatMap` _should_ become `compactMap`, as `compactMap` seems only to work for optionals?
 func internalNodes(pitches: [Pitch]) -> [Graph<UnassignedNodeInfo>.Node] {
-    return pitches.enumerated().flatMap { identifier, pitch -> [Graph<UnassignedNodeInfo>.Node] in
-        let item = UnspelledPitchItem(identifier: identifier, pitchClass: pitch.class)
-        return [.zero, .one].map { index in node(item: item, index: index) }
+    return pitches.enumerated().flatMap { offset, pitch -> [Graph<UnassignedNodeInfo>.Node] in
+        return [0,1].map { index in node(offset: offset, index: index) }
     }
+}
+
+/// - Returns: A `Node` which wraps an `UnassignedNodeInfo` with the given `item` and `index`.
+func node(offset: Int, index: Int) -> Graph<UnassignedNodeInfo>.Node {
+    //return Graph.Node(UnassignedNodeInfo.init(offset: offset, index: index))
+    return offset + index
 }
