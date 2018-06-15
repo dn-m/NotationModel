@@ -28,18 +28,7 @@ public struct NamedOrderedInterval {
 
         /// Perfect `Size` cases.
         public enum Perfect: InvertibleEnum {
-            case unison, fourth, fifth
-
-            /// Customizes the `InvertibleEnum` `inverse` implementation to return `unison` as the
-            /// inverse of `unison`.
-            ///
-            /// - Returns: Inverse of `self`.
-            public var inverse: Perfect {
-                let index = Perfect.allCases.index(of: self)!
-                guard index > 0 else { return self }
-                let inverseIndex = Perfect.allCases.count - index
-                return Perfect.allCases[inverseIndex]
-            }
+            case fourth, unison, fifth
         }
 
         /// Imperfect `Size` cases
