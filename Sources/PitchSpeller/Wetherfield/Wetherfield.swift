@@ -9,16 +9,24 @@ import Restructure
 import Pitch
 import SpelledPitch
 
-struct AssignedNode {
-    let index: Int
-    let tendency: Tendency
-    init(_ index: Int, _ tendency: Tendency) {
-        self.index = index
-        self.tendency = tendency
-    }
+protocol PitchSpellingNode: Hashable {
+    var index: Int { get }
 }
 
 struct PitchSpeller {
+
+    struct UnassignedNode: PitchSpellingNode {
+        let index: Int
+    }
+
+    struct AssignedNode: PitchSpellingNode {
+        let index: Int
+        let assignment: Tendency
+        init(_ index: Int, _ assignment: Tendency) {
+            self.index = index
+            self.assignment = assignment
+        }
+    }
 
     /// - Returns: The nodes for the `Pitch` at the given `index`.
     private static func nodes(pitchAtIndex index: Int) -> (Int, Int) {
@@ -84,7 +92,7 @@ struct PitchSpeller {
 
     private func spellPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch {
         let pitch = self.pitch(node: up.index)
-        let tendencies = TendencyPair((up.tendency, down.tendency))
+        let tendencies = TendencyPair((up.assignment, down.assignment))
         let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
         return try! pitch.spelled(with: spelling)
     }
