@@ -110,11 +110,17 @@ extension Graph where Value == Int {
         self.init([source, sink] + internalNodes)
         for node in internalNodes {
             insertEdge(from: source, to: node, value: 1)
+            // FIXME: insertEdge(from: source, to: node, value: epsilon *
+            // lookupTable[source.pitchclass, source.index, node.pitchclass, node.index])
             insertEdge(from: node, to: sink, value: 1)
+            // FIXME: insertEdge(from: node, to: sink, value: epsilon *
+            // lookupTable[node.pitchclass, node.index, sink.pitchclass, sink.index])
             for other in internalNodes.lazy.filter({ $0 != node }) {
                 insertEdge(from: node, to: other, value: 1)
                 // FIXME: if node.offset == other.offset && node.index == 1 {
                 //           insertEdge(from: node, to other, value: bigM)
+                // else insertEdge(from: node, to: other,
+                //      value: lookupTable[node.pitchclass, node.index, other.pitchclass, other.index])
             }
         }
     }
