@@ -113,6 +113,8 @@ extension Graph where Value == Int {
             insertEdge(from: node, to: sink, value: 1)
             for other in internalNodes.lazy.filter({ $0 != node }) {
                 insertEdge(from: node, to: other, value: 1)
+                // FIXME: if node.offset == other.offset && node.index == 1 {
+                //           insertEdge(from: node, to other, value: bigM)
             }
         }
     }
