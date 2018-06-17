@@ -89,17 +89,11 @@ extension RhythmSpelling.BeamJunction {
         func middle(_ prev: Int, _ cur: Int, _ next: Int) -> [State] {
 
             // FIXME: Sanitize this input so that negative numbers never get here!
-            guard cur > 0 else {
-                return []
-            }
+            guard cur > 0 else { return [] }
 
             // FIXME: Sanitize this input so that negative numbers never get here!
             guard prev > 0 else {
-                
-                if next <= 0 {
-                    return beamlets(.backward, cur - next > 0 ? cur - next : 0)
-                }
-
+                if next <= 0 { return beamlets(.backward, cur - next > 0 ? cur - next : 0) }
                 return starts(next) + beamlets(.backward, cur - next > 0 ? cur - next : 0)
             }
             
