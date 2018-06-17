@@ -93,13 +93,13 @@ extension RhythmSpelling.BeamJunction {
 
             // FIXME: Sanitize this input so that negative numbers never get here!
             guard prev > 0 else {
-                if next <= 0 { return beamlets(.backward, max(0, cur - next)) }
+                if next <= 0 { return beamlets(.backward, max(0, cur - prev)) }
                 return starts(next) + beamlets(.backward, max(0, cur - next))
             }
             
             guard next > 0 else {
-                if prev <= 0 { return beamlets(.backward, cur - next > 0 ? cur - next : 0) }
-                return stops(prev) + beamlets(.backward, cur - prev > 0 ? cur - prev : 0)
+                if prev <= 0 { return beamlets(.backward, max(0, cur - next)) }
+                return stops(prev) + beamlets(.backward, max(0, cur - prev))
             }
 
             return (
