@@ -82,7 +82,7 @@ extension RhythmSpelling.BeamJunction {
         func first(_ cur: Int, _ next: Int) -> [State] {
             guard cur > 0 else { return [] }
             guard next > 0 else { return beamlets(.forward, cur) }
-            return starts(min(cur,next)) + beamlets(.forward, cur > next ? cur - next : 0)
+            return starts(min(cur,next)) + beamlets(.forward, max(0, cur - next))
         }
         
         /// - returns: `Ranges` for a middle value.
