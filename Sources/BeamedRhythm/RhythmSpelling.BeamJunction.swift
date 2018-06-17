@@ -88,10 +88,8 @@ extension RhythmSpelling.BeamJunction {
         /// - returns: `Ranges` for a middle value.
         func middle(_ prev: Int, _ cur: Int, _ next: Int) -> [State] {
 
-            // FIXME: Sanitize this input so that negative numbers never get here!
             guard cur > 0 else { return [] }
 
-            // FIXME: Sanitize this input so that negative numbers never get here!
             guard prev > 0 else {
                 if next <= 0 { return beamlets(.backward, max(0, cur - prev)) }
                 return starts(next) + beamlets(.backward, max(0, cur - next))
