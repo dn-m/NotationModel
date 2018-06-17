@@ -52,7 +52,7 @@ public struct RhythmSpelling {
     /// - TODO: Add ability to inject customized beaming algorithm.
     /// - Note: Currently, there is a default beaming algorithm which is not customizable.
     // FIXME: Move to RhythmBeamer
-    public init(_ rhythm: Rhythm<Int>) {
+    public init <T> (_ rhythm: Rhythm<T>) {
         let leaves = rhythm.metricalDurationTree.leaves
         let junctions = makeJunctions(leaves)
         let tieStates = makeTieStates(rhythm.leaves.map { $0.context })
