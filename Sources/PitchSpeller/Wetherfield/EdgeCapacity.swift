@@ -2,9 +2,9 @@
 //  EdgeCapacity.swift
 //  NotationModel
 //
-//  Created by Ben Wetherfield on .
-//  Copyright © 2018 Ben Wetherfield. All rights reserved.
+//  Created by Ben Wetherfield on 06/16/18.
 //
+
 enum EdgeCapacity:
     Comparable
 {
