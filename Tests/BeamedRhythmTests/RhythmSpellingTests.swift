@@ -31,14 +31,14 @@ class RhythmSpellingTests: XCTestCase {
     
     func testSingletSetOfBeamlets() {
         
-        let values = [4]
-        let junctions = makeJunctions(values)
+        let beamCounts = [4]
+        let junctions = makeJunctions(beamCounts)
         
-        let expectedStates: [Int: RhythmSpelling.BeamJunction.State] = [
-            1: .beamlet(direction: .forward),
-            2: .beamlet(direction: .forward),
-            3: .beamlet(direction: .forward),
-            4: .beamlet(direction: .forward)
+        let expectedStates: [RhythmSpelling.BeamJunction.State] = [
+            .beamlet(direction: .forward),
+            .beamlet(direction: .forward),
+            .beamlet(direction: .forward),
+            .beamlet(direction: .forward)
         ]
         
         XCTAssertEqual(junctions, [expectedStates].map(RhythmSpelling.BeamJunction.init))
@@ -46,12 +46,12 @@ class RhythmSpellingTests: XCTestCase {
     
     func testDoubletSameValues() {
         
-        let values = [3,3]
-        let junctions = makeJunctions(values)
+        let beamCounts = [3,3]
+        let junctions = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
-            [1: .start, 2: .start, 3: .start],
-            [1: .stop, 2: .stop, 3: .stop],
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
+            [.start, .start, .start],
+            [.stop, .stop, .stop],
         ]
         
         XCTAssertEqual(junctions, expectedStates.map(RhythmSpelling.BeamJunction.init))
@@ -59,18 +59,18 @@ class RhythmSpellingTests: XCTestCase {
     
     func testDoubletFirstHigher() {
         
-        let values = [4,1]
-        let junctions = makeJunctions(values)
+        let beamCounts = [4,1]
+        let junctions = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [
-                1: .start,
-                2: .beamlet(direction: .forward),
-                3: .beamlet(direction: .forward),
-                4: .beamlet(direction: .forward)
+                .start,
+                .beamlet(direction: .forward),
+                .beamlet(direction: .forward),
+                .beamlet(direction: .forward)
             ],
             [
-                1: .stop
+                .stop
             ]
         ]
         
@@ -79,12 +79,12 @@ class RhythmSpellingTests: XCTestCase {
     
     func testDoubletSecondHigher() {
         
-        let values = [2,3]
-        let beaming = makeJunctions(values)
+        let beamCounts = [2,3]
+        let beaming = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
-            [1: .start, 2: .start],
-            [1: .stop, 2: .stop, 3: .beamlet(direction: .backward)]
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
+            [.start, .start],
+            [.stop, .stop, .beamlet(direction: .backward)]
         ]
         
         XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
@@ -92,13 +92,13 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletSameValues() {
         
-        let values = [2,2,2]
-        let beaming = makeJunctions(values)
+        let beamCounts = [2,2,2]
+        let beaming = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
-            [1: .start, 2: .start],
-            [1: .maintain, 2: .maintain],
-            [1: .stop, 2: .stop]
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
+            [.start, .start],
+            [.maintain, .maintain],
+            [.stop, .stop]
         ]
         
         XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
@@ -106,13 +106,13 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletLowMidHigh() {
         
-        let values = [1,2,4]
-        let beaming = makeJunctions(values)
+        let beamCounts = [1,2,4]
+        let beaming = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
-            [1: .start],
-            [1: .maintain, 2: .start],
-            [1: .stop, 2: .stop, 3: .beamlet(direction: .backward), 4: .beamlet(direction: .backward)]
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
+            [.start],
+            [.maintain, .start],
+            [.stop, .stop, .beamlet(direction: .backward), .beamlet(direction: .backward)]
         ]
         
         XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
@@ -120,13 +120,13 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletLowHighMid() {
         
-        let values = [1,3,2]
-        let beaming = makeJunctions(values)
+        let beamCounts = [1,3,2]
+        let beaming = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
-            [1: .start],
-            [1: .maintain, 2: .start, 3: .beamlet(direction: .backward)],
-            [1: .stop, 2: .stop]
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
+            [.start],
+            [.maintain, .start, .beamlet(direction: .backward)],
+            [.stop, .stop]
         ]
 
         XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
@@ -134,17 +134,17 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletMidLowHigh() {
         
-        let values = [2,1,4]
-        let beaming = makeJunctions(values)
+        let beamCounts = [2,1,4]
+        let beaming = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
-            [1: .start, 2: .beamlet(direction: .forward)],
-            [1: .maintain],
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
+            [.start, .beamlet(direction: .forward)],
+            [.maintain],
             [
-                1: .stop,
-                2: .beamlet(direction: .backward),
-                3: .beamlet(direction: .backward),
-                4: .beamlet(direction: .backward)
+                .stop,
+                .beamlet(direction: .backward),
+                .beamlet(direction: .backward),
+                .beamlet(direction: .backward)
             ]
         ]
 
@@ -153,13 +153,13 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletMidHighLow() {
         
-        let values = [2,3,1]
-        let beaming = makeJunctions(values)
+        let beamCounts = [2,3,1]
+        let beaming = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
-            [1: .start, 2: .start],
-            [1: .maintain, 2: .stop, 3: .beamlet(direction: .backward)],
-            [1: .stop]
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
+            [.start, .start],
+            [.maintain, .stop, .beamlet(direction: .backward)],
+            [.stop]
         ]
 
         XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
@@ -167,19 +167,19 @@ class RhythmSpellingTests: XCTestCase {
     
     func testLongSequence() {
         
-        let values = [1,3,2,2,4,3,3,1,3]
-        let beaming = makeJunctions(values)
+        let beamCounts = [1,3,2,2,4,3,3,1,3]
+        let beaming = makeJunctions(beamCounts)
         
-        let expectedStates: [[Int: RhythmSpelling.BeamJunction.State]] = [
-            [1: .start], // 1
-            [1: .maintain, 2: .start, 3: .beamlet(direction: .backward)], // 3
-            [1: .maintain, 2: .maintain], // 2
-            [1: .maintain, 2: .maintain], // 2
-            [1: .maintain, 2: .maintain, 3: .start, 4: .beamlet(direction: .backward)], // 4
-            [1: .maintain, 2: .maintain, 3: .maintain], // 3
-            [1: .maintain, 2: .stop, 3: .stop], // 3
-            [1: .maintain], // 1
-            [1: .stop, 2: .beamlet(direction: .backward), 3: .beamlet(direction: .backward)] // 3
+        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
+            [.start], // 1
+            [.maintain, .start, .beamlet(direction: .backward)], // 3
+            [.maintain, .maintain], // 2
+            [.maintain, .maintain], // 2
+            [.maintain, .maintain, .start, .beamlet(direction: .backward)], // 4
+            [.maintain, .maintain, .maintain], // 3
+            [.maintain, .stop, .stop], // 3
+            [.maintain], // 1
+            [.stop, .beamlet(direction: .backward), .beamlet(direction: .backward)] // 3
         ]
         
         XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
@@ -197,11 +197,11 @@ class RhythmSpellingTests: XCTestCase {
         let junctions = makeJunctions(durationTree.leaves)
         
         let expected = [
-            [1: .start, 2: .start],
-            [1: .stop, 2: .stop],
-            [:],
-            [1: .start, 2: .start],
-            [1: .stop, 2: .stop],
+            [.start, .start],
+            [.stop, .stop],
+            [],
+            [.start, .start],
+            [.stop, .stop],
         ].map(RhythmSpelling.BeamJunction.init)
         
         XCTAssertEqual(junctions, expected)
@@ -219,47 +219,45 @@ class RhythmSpellingTests: XCTestCase {
         
         let junctions = durationTrees.map { makeJunctions($0.leaves) }
         
-        let expected = [
+        let expected: [[RhythmSpelling.BeamJunction]] = [
             [
-                [:],
-                [1: .start, 2: .start],
-                [1: .maintain, 2: .maintain],
-                [1: .maintain, 2: .maintain],
-                [1: .stop, 2: .stop]
+                [],
+                [.start, .start],
+                [.maintain, .maintain],
+                [.maintain, .maintain],
+                [.stop, .stop]
             ],
             [
-                [1: .beamlet(direction: .forward), 2: .beamlet(direction: .forward)],
-                [:],
-                [1: .start, 2: .start],
-                [1: .maintain, 2: .maintain],
-                [1: .stop, 2: .stop]
+                [.beamlet(direction: .forward), .beamlet(direction: .forward)],
+                [],
+                [.start, .start],
+                [.maintain, .maintain],
+                [.stop, .stop]
             ],
             [
-                [1: .start, 2: .start],
-                [1: .stop, 2: .stop],
-                [:],
-                [1: .start, 2: .start],
-                [1: .stop, 2: .stop]
+                [.start, .start],
+                [.stop, .stop],
+                [],
+                [.start, .start],
+                [.stop, .stop]
             ],
             [
-                [1: .start, 2: .start],
-                [1: .maintain, 2: .maintain],
-                [1: .stop, 2: .stop],
-                [:],
-                [1: .beamlet(direction: .backward), 2: .beamlet(direction: .backward)]
+                [.start, .start],
+                [.maintain, .maintain],
+                [.stop, .stop],
+                [],
+                [.beamlet(direction: .backward), .beamlet(direction: .backward)]
             ],
             [
-                [1: .start, 2: .start],
-                [1: .maintain, 2: .maintain],
-                [1: .maintain, 2: .maintain],
-                [1: .stop, 2: .stop],
-                [:]
+                [.start, .start],
+                [.maintain, .maintain],
+                [.maintain, .maintain],
+                [.stop, .stop],
+                []
             ]
         ].map { $0.map(RhythmSpelling.BeamJunction.init) }
-        
-        zip(junctions, expected).forEach { a,b in
-            XCTAssertEqual(a,b)
-        }
+
+        XCTAssertEqual(junctions, expected)
     }
     
     func testTieStateAllNones() {
@@ -316,98 +314,80 @@ class RhythmSpellingTests: XCTestCase {
         
         XCTAssertEqual(makeTieStates(contexts), expected)
     }
-    
-    // FIXME: Groups not yet equatable
+
     func testInitWithRhythmTree() {
-        
+
+        // Construct actual `RhythmSpelling`
         let metricalDurationTree = 4/>8 * [1,1,1,1]
-        
         let metricalContexts: [MetricalContext<Int>] = [
             .instance(.event(1)),
             .continuation,
             .continuation,
             .instance(.absence)
         ]
-        
         let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
         let spelling = RhythmSpelling(rhythmTree)
 
+        // Construct expected `RhythmSpelling` components
         let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
-            [1: .start],
-            [1: .maintain],
-            [1: .maintain],
-            [1: .stop]
+            [.start],
+            [.maintain],
+            [.maintain],
+            [.stop]
         ].map(RhythmSpelling.BeamJunction.init)
-        
         let expectedTieStates: [RhythmSpelling.TieState] = [
             .start,
             .maintain,
             .stop,
             .none
         ]
-        
         let expectedDots = [0,0,0,0]
-        
-        let items = zip(
+        let expectedItems = zip(
             expectedBeamJunctions,
             expectedTieStates,
             expectedDots
         ).map(RhythmSpelling.Item.init)
-        
-        // Groups not yet equatable
-        let context = Group(duration: 4/>8, contentsSum: 4).context(range: 0...8)
-        let groups = Grouping.leaf(context)
-        let expected = RhythmSpelling(items: items, groups: groups)
-        
+        let expectedContext = Group(duration: 4/>8, contentsSum: 4).context(range: 0...3)
+        let expectedGroups = Grouping.leaf(expectedContext)
+        let expected = RhythmSpelling(items: expectedItems, groups: expectedGroups)
         XCTAssertEqual(spelling, expected)
     }
-    
-    // FIXME: Not fully implemented
+
     func testInitWithRhythmTreeDottedValues() {
-        
+
+        // Construct actual `RhythmSpelling`
         let metricalDurationTree = 2/>8 * [1,2,3,7]
-        
         let metricalContexts: [MetricalContext<Int>] = [
             .instance(.event(1)),
             .continuation,
             .continuation,
             .instance(.absence)
         ]
-        
         let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
         let spelling = RhythmSpelling(rhythmTree)
-        
+
+        // Construct expected `RhythmSpelling` components
         let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
-            [1: .start, 2: .start, 3: .start, 4: .beamlet(direction: .backward)],
-            [1: .maintain, 2: .maintain, 3: .maintain],
-            [1: .maintain, 2: .maintain, 3: .stop],
-            [1: .stop, 2: .stop]
+            [.start, .start, .start, .beamlet(direction: .forward)],
+            [.maintain, .maintain, .maintain],
+            [.maintain, .maintain, .stop],
+            [.stop, .stop]
         ].map(RhythmSpelling.BeamJunction.init)
-        
         let expectedTieStates: [RhythmSpelling.TieState] = [
             .start,
             .maintain,
             .stop,
             .none
         ]
-        
         let expectedDots = [0,0,1,2]
-        
-        let contexts = zip(
+        let expectedItems = zip(
             expectedBeamJunctions,
             expectedTieStates,
             expectedDots
         ).map(RhythmSpelling.Item.init)
-        
-        let context = Group(duration: 4/>8, contentsSum: 4).context(range: 0...8)
-        let groups: Grouping = .leaf(context)
-        
-        //let expected = RhythmSpelling(contexts: contexts, groups: [])
-        //XCTAssertEqual(spelling, expected)
-    }
-    
-    func testMakeGroups() {
-        //let tree = 1/>8 * [1,[[1,[1,1]],[1,[[1,[1,1,1]],[1,[1,1,1]]]]]]
-        //let groups = makeGroups(tree)
+        let expectedContext = Group(duration: 2/>8, contentsSum: 13).context(range: 0...3)
+        let expectedGroups: Grouping = .leaf(expectedContext)
+        let expected = RhythmSpelling(items: expectedItems, groups: expectedGroups)
+        XCTAssertEqual(spelling, expected)
     }
 }

@@ -33,11 +33,11 @@ public struct RhythmSpelling {
     // MARK: - Instance Properties
     
     /// `RhythmSpelling.Item` values for each leaf.
-    fileprivate let items: [Item]
+    let items: [Item]
     
     /// `Tree` structure which contains `Group` information, along with its span in terms of
     /// indices of leaves.
-    fileprivate let groups: Grouping
+    let groups: Grouping
     
     // MARK: - Initializers
     
@@ -120,6 +120,35 @@ internal func makeJunctions(_ counts: [Int]) -> [RhythmSpelling.BeamJunction] {
     }
 }
 
+/// - returns: An array of `BeamJunction` values for the given `leaves`.
+//
+// FIXME: Move to RhythmBeamer
+internal func makeJunctions(_ leaves: [MetricalDuration]) -> [RhythmSpelling.BeamJunction] {
+    return makeJunctions(leaves.map(beamCount))
+}
+
+/// - returns: Amount of beams needed to represent the given `duration`.
+//
+// FIXME: Move to RhythmBeamer
+internal func beamCount(_ duration: MetricalDuration) -> Int {
+
+    let reduced = duration.reduced
+
+    guard [1,3,7].contains(reduced.numerator) else {
+        fatalError("Unsanitary duration for beamed representation: \(reduced)")
+    }
+
+    let subdivisionCount = countTrailingZeros(reduced.denominator) - 2
+
+    if reduced.numerator.isDivisible(by: 3) {
+        return subdivisionCount - 1
+    } else if reduced.numerator.isDivisible(by: 7) {
+        return subdivisionCount - 2
+    }
+
+    return subdivisionCount
+}
+
 internal func makeGroups(_ tree: MetricalDurationTree) -> Grouping {
     
     func traverse(_ tree: MetricalDurationTree, offset: Int) -> Grouping {
@@ -163,34 +192,7 @@ internal func makeGroups(_ tree: MetricalDurationTree) -> Grouping {
     return traverse(tree, offset: 0)
 }
 
-/// - returns: An array of `BeamJunction` values for the given `leaves`.
-//
-// FIXME: Move to RhythmBeamer
-internal func makeJunctions(_ leaves: [MetricalDuration]) -> [RhythmSpelling.BeamJunction] {
-    return makeJunctions(leaves.map(beamCount))
-}
 
-/// - returns: Amount of beams needed to represent the given `duration`.
-//
-// FIXME: Move to RhythmBeamer
-internal func beamCount(_ duration: MetricalDuration) -> Int {
-    
-    let reduced = duration.reduced
-    
-    guard [1,3,7].contains(reduced.numerator) else {
-        fatalError("Unsanitary duration for beamed representation: \(reduced)")
-    }
-    
-    let subdivisionCount = countTrailingZeros(reduced.denominator) - 2
-    
-    if reduced.numerator.isDivisible(by: 3) {
-        return subdivisionCount - 1
-    } else if reduced.numerator.isDivisible(by: 7) {
-        return subdivisionCount - 2
-    }
-    
-    return subdivisionCount
-}
 
 /// - returns: The `TieState` values necessary to render the given `MetricalContext` values.
 //
