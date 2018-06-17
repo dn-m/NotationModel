@@ -98,11 +98,7 @@ extension RhythmSpelling.BeamJunction {
             }
             
             guard next > 0 else {
-                
-                if prev <= 0 {
-                    return beamlets(.backward, cur - next > 0 ? cur - next : 0)
-                }
-
+                if prev <= 0 { return beamlets(.backward, cur - next > 0 ? cur - next : 0) }
                 return stops(prev) + beamlets(.backward, cur - prev > 0 ? cur - prev : 0)
             }
 
