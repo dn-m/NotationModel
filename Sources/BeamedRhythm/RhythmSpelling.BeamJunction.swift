@@ -73,19 +73,19 @@ extension RhythmSpelling.BeamJunction {
             return .init(repeating: .beamlet(direction: direction), count: count)
         }
         
-        /// - returns: `Ranges` for a singleton value.
+        /// - Returns: Array of `State` values for a singleton `BeamJunction`.
         func singleton(_ cur: Int) -> [State] {
             return beamlets(.forward, cur)
         }
         
-        /// - returns: `Ranges` for a first value.
+        /// - Returns: Array of `State` values for a first `BeamJunction` in a sequence.
         func first(_ cur: Int, _ next: Int) -> [State] {
             guard cur > 0 else { return [] }
             guard next > 0 else { return beamlets(.forward, cur) }
             return starts(min(cur,next)) + beamlets(.forward, max(0, cur - next))
         }
         
-        /// - returns: `Ranges` for a middle value.
+        /// - Returns: Array of `State` values for a middle `BeamJunction` in a sequence.
         func middle(_ prev: Int, _ cur: Int, _ next: Int) -> [State] {
 
             guard cur > 0 else { return [] }
@@ -108,14 +108,14 @@ extension RhythmSpelling.BeamJunction {
             )
         }
         
-        /// - returns: `Ranges` for a last value.
+        /// - Returns: Array of `State` values for a last `BeamJunction` in a sequence.
         func last(_ prev: Int, _ cur: Int) -> [State] {
             guard cur > 0 else { return [] }
             guard prev > 0 else { return beamlets(.backward, cur) }
             return stops(min(cur,prev)) + beamlets(.backward, max(0, cur - prev))
         }
         
-        /// - returns: `Ranges` for the given context.
+        /// - Returns: Array of `State` values for a given `BeamJunction` context.
         func states(_ prev: Int?, _ cur: Int, _ next: Int?) -> [State] {
             switch (prev, cur, next) {
             case (nil, cur, nil):
