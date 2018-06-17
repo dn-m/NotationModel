@@ -29,8 +29,6 @@ func < (lhs: EdgeCapacity, rhs: EdgeCapacity) -> Bool {
         case .bigM(let rmult):
             return lmult < rmult
         }
-    default:
-        return false
     }
 }
 
@@ -42,4 +40,22 @@ func < (lhs: Float, rhs: EdgeCapacity) -> Bool {
     return EdgeCapacity.real(lhs) < rhs
 }
 
-// - TODO: implement basic math operations on EdgeCapacities
+// MARK: - Math
+func + (augend: EdgeCapacity, addend: EdgeCapacity) -> EdgeCapacity {
+    switch augend {
+    case .real(let lval):
+        switch addend {
+        case .real(let rval):
+            return .real(lval + rval)
+        case .bigM:
+            return addend
+        }
+    case .bigM(let lmult):
+        switch addend {
+        case .real:
+            return augend
+        case .bigM(let rmult):
+            return .bigM(lmult + rmult)
+        }
+    }
+}
