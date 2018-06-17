@@ -390,9 +390,4 @@ class RhythmSpellingTests: XCTestCase {
         let expected = RhythmSpelling(items: expectedItems, groups: expectedGroups)
         XCTAssertEqual(spelling, expected)
     }
-
-    func testMakeGroups() {
-        //let tree = 1/>8 * [1,[[1,[1,1]],[1,[[1,[1,1,1]],[1,[1,1,1]]]]]]
-        //let groups = makeGroups(tree)
-    }
 }
