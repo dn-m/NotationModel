@@ -80,15 +80,8 @@ extension RhythmSpelling.BeamJunction {
         
         /// - returns: `Ranges` for a first value.
         func first(_ cur: Int, _ next: Int) -> [State] {
-
-            guard cur > 0 else {
-                return []
-            }
-
-            guard next > 0 else {
-                return beamlets(.forward, cur)
-            }
-
+            guard cur > 0 else { return [] }
+            guard next > 0 else { return beamlets(.forward, cur) }
             return starts(min(cur,next)) + beamlets(.forward, cur > next ? cur - next : 0)
         }
         
