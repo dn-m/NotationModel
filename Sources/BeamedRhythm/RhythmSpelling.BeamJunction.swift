@@ -86,15 +86,10 @@ extension RhythmSpelling.BeamJunction {
             }
 
             guard next > 0 else {
-                return .init(repeating: .beamlet(direction: .forward), count: cur)
+                return beamlets(.forward, cur)
             }
 
-            let beamletAmount = cur > next ? cur - next : 0
-
-            let starts = Array(repeating: State.start, count: min(cur,next))
-            let beamlets = Array(repeating: State.beamlet(direction: .forward), count: beamletAmount)
-
-            return starts + beamlets
+            return starts(min(cur,next)) + beamlets(.forward, cur > next ? cur - next : 0)
         }
         
         /// - returns: `Ranges` for a middle value.
