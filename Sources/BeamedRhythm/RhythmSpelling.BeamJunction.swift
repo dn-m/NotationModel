@@ -70,14 +70,14 @@ extension RhythmSpelling.BeamJunction {
         }
         
         /// - returns: `Ranges` for a first value.
-        func first(_ cur: Int, _ next: Int) -> Ranges {
+        func first(_ cur: Int, _ next: Int) -> [State] {
 
             guard cur > 0 else {
-                return (start: nil, stop: nil, maintain: nil, beamlet: nil)
+                return []
             }
             
             guard next > 0 else {
-                return (start: nil, stop: nil, maintain: nil, beamlet: (1...cur, .forward))
+                return (0..<cur).map { _ in .beamlet(direction: .forward) }
             }
             
             let startRange = 1 ... min(cur,next)
