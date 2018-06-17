@@ -104,39 +104,27 @@ extension RhythmSpelling.BeamJunction {
             guard prev > 0 else {
                 
                 if next <= 0 {
-                    let beamletAmount = cur - next > 0 ? cur - next : 0
-                    return .init(repeating: .beamlet(direction: .backward), count: beamletAmount)
+                    return beamlets(.backward, cur - next > 0 ? cur - next : 0)
                 }
 
-                let starts = Array(repeating: State.start, count: next)
-                let beamletAmount = cur - next > 0 ? cur - next : 0
-                let beamlets = Array(repeating: State.beamlet(direction: .backward), count: beamletAmount)
-                return starts + beamlets
+                return starts(next) + beamlets(.backward, cur - next > 0 ? cur - next : 0)
             }
             
             guard next > 0 else {
                 
                 if prev <= 0 {
-                    let beamletAmount = cur - next > 0 ? cur - next : 0
-                    return Array(repeating: State.beamlet(direction: .backward), count: beamletAmount)
+                    return beamlets(.backward, cur - next > 0 ? cur - next : 0)
                 }
 
-                let stops = Array(repeating: State.stop, count: prev)
-                let beamletCount = cur - prev > 0 ? cur - prev : 0
-                let beamlets = Array(repeating: State.beamlet(direction: .backward), count: beamletCount)
-                return stops + beamlets
+                return stops(prev) + beamlets(.backward, cur - prev > 0 ? cur - prev : 0)
             }
 
-            let maintains = Array(repeating: State.maintain, count: min(prev,cur,next))
-            let starts = Array(repeating: State.start, count: max(0, min(cur,next) - prev))
-            let stops = Array(repeating: State.stop, count: max(0, min(cur,prev) - next))
-
-            let beamlets = Array(
-                repeating: State.beamlet(direction: .backward),
-                count: max(0, cur - max(prev,next))
+            return (
+                maintains(min(prev,cur,next)) +
+                starts(max(0, min(cur,next) - prev)) +
+                stops(max(0, min(cur,prev) - next)) +
+                beamlets(.backward, max(0, cur - max(prev,next)))
             )
-
-            return maintains + starts + stops + beamlets
         }
         
         /// - returns: `Ranges` for a last value.
