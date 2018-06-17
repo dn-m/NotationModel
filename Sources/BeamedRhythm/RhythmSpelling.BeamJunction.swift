@@ -143,4 +143,3 @@ extension RhythmSpelling.BeamJunction: CustomStringConvertible {
         return states.description
     }
 }
-
