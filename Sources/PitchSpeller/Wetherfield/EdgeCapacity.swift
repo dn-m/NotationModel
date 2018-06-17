@@ -13,6 +13,7 @@ enum EdgeCapacity:
 }
 
 // MARK: - Comparable
+// bigM edges always 'win' comparisons - otherwise like a regular comparison
 func < (lhs: EdgeCapacity, rhs: EdgeCapacity) -> Bool {
     switch lhs {
     case .real(let lval):
