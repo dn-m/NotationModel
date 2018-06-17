@@ -52,9 +52,9 @@ extension RhythmSpelling.BeamJunction {
     
     /// Create a `Junction` with the given context:
     ///
-    /// - prev: Previous beaming value (if it exists)
-    /// - cur: Current beaming value
-    /// - next: Next beaming value (if it exists)
+    /// - prev: Previous beaming count (if it exists)
+    /// - cur: Current beaming count
+    /// - next: Next beaming count (if it exists)
     public init(_ prev: Int?, _ cur: Int, _ next: Int?) {
 
         func maintains(_ count: Int) -> [State] {
