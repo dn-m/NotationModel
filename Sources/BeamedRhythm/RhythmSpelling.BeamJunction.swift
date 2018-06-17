@@ -66,123 +66,98 @@ extension RhythmSpelling.BeamJunction {
         
         /// - returns: `Ranges` for a singleton value.
         func singleton(_ cur: Int) -> [State] {
-            return (0..<cur).map { _ in .beamlet(direction: .forward) }
+            let amount = cur
+            return (0 ..< amount).map { _ in .beamlet(direction: .forward) }
         }
         
         /// - returns: `Ranges` for a first value.
         func first(_ cur: Int, _ next: Int) -> [State] {
 
+            // FIXME: Sanitize this input so that negative numbers never get here!
             guard cur > 0 else {
                 return []
             }
-            
+
+            // FIXME: Sanitize this input so that negative numbers never get here!
             guard next > 0 else {
-                return (0..<cur).map { _ in .beamlet(direction: .forward) }
+                return Array(repeating: .beamlet(direction: .forward), count: cur)
             }
             
-            let startRange = 1 ... min(cur,next)
-            let beamletRange = cur > next ? (next + 1) ... cur : nil
-            
-            return (
-                start: startRange,
-                stop: nil,
-                maintain: nil,
-                beamlet: beamletRange == nil ? nil : (beamletRange!, .forward)
-            )
+            let startAmount = min(cur,next)
+            let beamletAmount = cur > next ? cur - next : 0
+
+            let starts = (0 ..< startAmount).map { _ in State.start }
+            let beamlets = Array(repeating: State.beamlet(direction: .forward), count: beamletAmount)
+
+            return starts + beamlets
         }
         
         /// - returns: `Ranges` for a middle value.
-        func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Ranges {
+        func middle(_ prev: Int, _ cur: Int, _ next: Int) -> [State] {
 
+            // FIXME: Sanitize this input so that negative numbers never get here!
             guard cur > 0 else {
-                return (start: nil, stop: nil, maintain: nil, beamlet: nil)
+                return []
             }
-            
+
+            // FIXME: Sanitize this input so that negative numbers never get here!
             guard prev > 0 else {
                 
                 if next <= 0 {
-                    return (
-                        start: nil,
-                        stop: nil,
-                        maintain: nil,
-                        beamlet: (cur - next) > 0 ? (0 ... (cur - next), .backward) : nil
-                    )
+                    let beamletAmount = cur - next > 0 ? cur - next : 0
+                    return .init(repeating: .beamlet(direction: .backward), count: beamletAmount)
                 }
-                
-                return (
-                    start: 1 ... next,
-                    stop: nil,
-                    maintain: nil,
-                    beamlet: (cur - next) > 0 ? (0 ... (cur - next), .backward) : nil
-                )
+
+                let starts = Array(repeating: State.start, count: next)
+                let beamletAmount = cur - next > 0 ? cur - next : 0
+                let beamlets = Array(repeating: State.beamlet(direction: .backward), count: beamletAmount)
+                return starts + beamlets
             }
             
             guard next > 0 else {
                 
                 if prev <= 0 {
-                    return (
-                        start: nil,
-                        stop: nil,
-                        maintain: nil,
-                        beamlet: (cur - next) > 0 ? (0 ... (cur - next), .backward) : nil
-                    )
+                    let beamletAmount = cur - next > 0 ? cur - next : 0
+                    return Array(repeating: State.beamlet(direction: .backward), count: beamletAmount)
                 }
-                
-                return (
-                    start: nil,
-                    stop: 1 ... prev,
-                    maintain: nil,
-                    beamlet: (cur - prev) > 0 ? (1 ... (cur - prev), .backward) : nil
-                )
+
+                let stops = Array(repeating: State.stop, count: prev)
+                let beamletCount = cur - prev > 0 ? cur - prev : 0
+                let beamlets = Array(repeating: State.beamlet(direction: .backward), count: beamletCount)
+                return stops + beamlets
             }
 
-            let maintain = min(prev,cur,next)
-            let startAmount = max(0, min(cur,next) - prev)
-            let stopAmount = max(0, min(cur,prev) - next)
-            let beamletAmount = cur - max(prev,next)
+            let maintains = Array(repeating: State.maintain, count: min(prev,cur,next))
+            let starts = Array(repeating: State.start, count: max(0, min(cur,next) - prev))
+            let stops = Array(repeating: State.stop, count: max(0, min(cur,prev) - next))
 
-            var beamletRange: CountableClosedRange<Int>? {
-                
-                guard beamletAmount > 0 else {
-                    return nil
-                }
-                
-                let lowerBound = max(maintain,startAmount,stopAmount)
-                return (lowerBound + 2) ... (lowerBound + 1) + beamletAmount
-            }
-            
-            return (
-                start: startAmount > 0 ? (maintain + 1) ... maintain + startAmount : nil,
-                stop: stopAmount > 0 ? (maintain + 1) ... maintain + stopAmount : nil,
-                maintain: 1 ... min(prev,cur,next),
-                beamlet: beamletRange == nil ? nil : (beamletRange!, .backward)
+            let beamlets = Array(
+                repeating: State.beamlet(direction: .backward),
+                count: max(0, cur - max(prev,next))
             )
+
+            return maintains + starts + stops + beamlets
         }
         
         /// - returns: `Ranges` for a last value.
-        func last(_ prev: Int, _ cur: Int) -> Ranges {
+        func last(_ prev: Int, _ cur: Int) -> [State] {
             
             guard cur > 0 else {
-                return (start: nil, stop: nil, maintain: nil, beamlet: nil)
+                return []
             }
             
             guard prev > 0 else {
-                return (start: nil, stop: nil, maintain: nil, beamlet: (1...cur, .backward))
+                return Array(repeating: .beamlet(direction: .backward), count: cur)
             }
 
-            let stopRange =  1 ... min(cur,prev)
-            let beamletRange = cur > prev ? (prev + 1) ... cur : nil
-            
-            return (
-                start: nil,
-                stop: stopRange,
-                maintain: nil,
-                beamlet: beamletRange == nil ? nil : (beamletRange!, .backward)
-            )
+            let stops = Array(repeating: State.stop, count: min(cur,prev))
+            let beamletCount = cur > prev ? cur - prev : 0
+            let beamlets = Array(repeating: State.beamlet(direction: .backward), count: beamletCount)
+            return stops + beamlets
         }
         
         /// - returns: `Ranges` for the given context.
-        func ranges(_ prev: Int?, _ cur: Int, _ next: Int?) -> Ranges {
+        func ranges(_ prev: Int?, _ cur: Int, _ next: Int?) -> [State] {
             switch (prev, cur, next) {
             case (nil, cur, nil):
                 return singleton(cur)
@@ -196,20 +171,8 @@ extension RhythmSpelling.BeamJunction {
                 fatalError("Ill-formed context")
             }
         }
-        
-        // TODO: Refactor
-        var result: [Int: State] = [:]
-        let (start, stop, maintain, beamlets) = ranges(prev,cur,next)
-        start?.forEach { result[$0] = .start }
-        stop?.forEach { result[$0] = .stop }
-        maintain?.forEach { result[$0] = .maintain }
-        
-        // TODO: Refactor
-        let beamletDirection = beamlets?.1
-        let beamletRange = beamlets?.0
-        beamletRange?.forEach { result[$0] = .beamlet(direction: beamletDirection!) }
-        
-        self.init(result)
+
+        self.init(ranges(prev,cur,next))
     }
 }
 
