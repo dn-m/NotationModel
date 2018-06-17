@@ -57,13 +57,6 @@ extension RhythmSpelling.BeamJunction {
     /// - next: Next beaming value (if it exists)
     public init(_ prev: Int?, _ cur: Int, _ next: Int?) {
         
-        typealias Ranges = (
-            start: CountableClosedRange<Int>?,
-            stop: CountableClosedRange<Int>?,
-            maintain: CountableClosedRange<Int>?,
-            beamlet: (CountableClosedRange<Int>, BeamletDirection)?
-        )
-        
         /// - returns: `Ranges` for a singleton value.
         func singleton(_ cur: Int) -> [State] {
             let amount = cur
