@@ -356,53 +356,52 @@ class RhythmSpellingTests: XCTestCase {
         let context = Group(duration: 4/>8, contentsSum: 4).context(range: 0...8)
         let groups = Grouping.leaf(context)
         let expected = RhythmSpelling(items: items, groups: groups)
-        
-        //XCTAssertEqual(spelling, expected)
+        XCTAssertEqual(spelling, expected)
     }
     
-    // FIXME: Not fully implemented
-    func testInitWithRhythmTreeDottedValues() {
-        
-        let metricalDurationTree = 2/>8 * [1,2,3,7]
-        
-        let metricalContexts: [MetricalContext<Int>] = [
-            .instance(.event(1)),
-            .continuation,
-            .continuation,
-            .instance(.absence)
-        ]
-        
-        let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
-        let spelling = RhythmSpelling(rhythmTree)
-        
-        let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
-            [.start, .start, .start, .beamlet(direction: .backward)],
-            [.maintain, .maintain, .maintain],
-            [.maintain, .maintain, .stop],
-            [.stop, .stop]
-        ].map(RhythmSpelling.BeamJunction.init)
-        
-        let expectedTieStates: [RhythmSpelling.TieState] = [
-            .start,
-            .maintain,
-            .stop,
-            .none
-        ]
-        
-        let expectedDots = [0,0,1,2]
-        
-        let contexts = zip(
-            expectedBeamJunctions,
-            expectedTieStates,
-            expectedDots
-        ).map(RhythmSpelling.Item.init)
-        
-        let context = Group(duration: 4/>8, contentsSum: 4).context(range: 0...8)
-        let groups: Grouping = .leaf(context)
-        
-        //let expected = RhythmSpelling(contexts: contexts, groups: [])
-        //XCTAssertEqual(spelling, expected)
-    }
+//    // FIXME: Not fully implemented
+//    func testInitWithRhythmTreeDottedValues() {
+//        
+//        let metricalDurationTree = 2/>8 * [1,2,3,7]
+//        
+//        let metricalContexts: [MetricalContext<Int>] = [
+//            .instance(.event(1)),
+//            .continuation,
+//            .continuation,
+//            .instance(.absence)
+//        ]
+//        
+//        let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
+//        let spelling = RhythmSpelling(rhythmTree)
+//        
+//        let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
+//            [.start, .start, .start, .beamlet(direction: .backward)],
+//            [.maintain, .maintain, .maintain],
+//            [.maintain, .maintain, .stop],
+//            [.stop, .stop]
+//        ].map(RhythmSpelling.BeamJunction.init)
+//        
+//        let expectedTieStates: [RhythmSpelling.TieState] = [
+//            .start,
+//            .maintain,
+//            .stop,
+//            .none
+//        ]
+//        
+//        let expectedDots = [0,0,1,2]
+//        
+//        let contexts = zip(
+//            expectedBeamJunctions,
+//            expectedTieStates,
+//            expectedDots
+//        ).map(RhythmSpelling.Item.init)
+//        
+//        let context = Group(duration: 4/>8, contentsSum: 4).context(range: 0...8)
+//        let groups: Grouping = .leaf(context)
+//        
+//        let expected = RhythmSpelling(items: contexts, groups: groups)
+//        XCTAssertEqual(spelling, expected)
+//    }
     
     func testMakeGroups() {
         //let tree = 1/>8 * [1,[[1,[1,1]],[1,[[1,[1,1,1]],[1,[1,1,1]]]]]]
