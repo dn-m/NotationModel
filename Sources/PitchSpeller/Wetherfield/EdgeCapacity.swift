@@ -9,7 +9,7 @@ enum EdgeCapacity:
     Comparable
 {
     case real(Float)
-    case bigM(Int)
+    case bigM
 }
 
 // MARK: - Comparable
@@ -22,13 +22,8 @@ func < (lhs: EdgeCapacity, rhs: EdgeCapacity) -> Bool {
         case .bigM:
             return true
         }
-    case .bigM(let lmult):
-        switch rhs {
-        case .real:
-            return false
-        case .bigM(let rmult):
-            return lmult < rmult
-        }
+    case .bigM:
+        return false
     }
 }
 
@@ -48,14 +43,9 @@ func + (augend: EdgeCapacity, addend: EdgeCapacity) -> EdgeCapacity {
         case .real(let rval):
             return .real(lval + rval)
         case .bigM:
-            return addend
+            return .bigM
         }
-    case .bigM(let lmult):
-        switch addend {
-        case .real:
-            return augend
-        case .bigM(let rmult):
-            return .bigM(lmult + rmult)
-        }
+    case .bigM:
+        return .bigM
     }
 }
