@@ -65,8 +65,8 @@ extension RhythmSpelling.BeamJunction {
         )
         
         /// - returns: `Ranges` for a singleton value.
-        func singleton(_ cur: Int) -> Ranges {
-            return (start: nil, stop: nil, maintain: nil, beamlet: (1...cur, .forward))
+        func singleton(_ cur: Int) -> [State] {
+            return (0..<cur).map { _ in .beamlet(direction: .forward) }
         }
         
         /// - returns: `Ranges` for a first value.
