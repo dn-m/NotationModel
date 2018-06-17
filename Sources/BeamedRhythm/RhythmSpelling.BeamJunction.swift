@@ -56,29 +56,42 @@ extension RhythmSpelling.BeamJunction {
     /// - cur: Current beaming value
     /// - next: Next beaming value (if it exists)
     public init(_ prev: Int?, _ cur: Int, _ next: Int?) {
+
+        func maintains(_ count: Int) -> [State] {
+            return .init(repeating: .maintain, count: count)
+        }
+
+        func starts(_ count: Int) -> [State] {
+            return .init(repeating: .start, count: count)
+        }
+
+        func stops(_ count: Int) -> [State] {
+            return .init(repeating: .stop, count: count)
+        }
+
+        func beamlets(_ direction: BeamletDirection, _ count: Int) -> [State] {
+            return .init(repeating: .beamlet(direction: direction), count: count)
+        }
         
         /// - returns: `Ranges` for a singleton value.
         func singleton(_ cur: Int) -> [State] {
-            return .init(repeating: .beamlet(direction: .forward), count: cur)
+            return beamlets(.forward, cur)
         }
         
         /// - returns: `Ranges` for a first value.
         func first(_ cur: Int, _ next: Int) -> [State] {
 
-            // FIXME: Sanitize this input so that negative numbers never get here!
             guard cur > 0 else {
                 return []
             }
 
-            // FIXME: Sanitize this input so that negative numbers never get here!
             guard next > 0 else {
-                return Array(repeating: .beamlet(direction: .forward), count: cur)
+                return .init(repeating: .beamlet(direction: .forward), count: cur)
             }
-            
-            let startAmount = min(cur,next)
+
             let beamletAmount = cur > next ? cur - next : 0
 
-            let starts = (0 ..< startAmount).map { _ in State.start }
+            let starts = Array(repeating: State.start, count: min(cur,next))
             let beamlets = Array(repeating: State.beamlet(direction: .forward), count: beamletAmount)
 
             return starts + beamlets
