@@ -49,3 +49,11 @@ func + (augend: EdgeCapacity, addend: EdgeCapacity) -> EdgeCapacity {
         return .bigM
     }
 }
+
+func + (augend: EdgeCapacity, addend: Float) -> EdgeCapacity {
+    return augend + EdgeCapacity.real(addend)
+}
+
+func + (augend: Float, addend: EdgeCapacity) -> EdgeCapacity {
+    return EdgeCapacity.real(augend) + addend
+}
