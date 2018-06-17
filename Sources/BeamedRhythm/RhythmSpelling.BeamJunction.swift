@@ -37,12 +37,12 @@ extension RhythmSpelling {
         
         // MARK: - Instance Properties
         
-        public let states: [Int: State]
+        public let states: [State]
         
         // MARK: - Initializers
         
         /// Creates a `Junction` with a mapping of `State` to beam-level.
-        public init(_ states: [Int: State] = [:]) {
+        public init(_ states: [State] = []) {
             self.states = states
         }
     }
