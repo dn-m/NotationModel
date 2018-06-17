@@ -316,49 +316,40 @@ class RhythmSpellingTests: XCTestCase {
     }
 
     func testInitWithRhythmTree() {
-        
+
+        // Construct actual `RhythmSpelling`
         let metricalDurationTree = 4/>8 * [1,1,1,1]
-        
         let metricalContexts: [MetricalContext<Int>] = [
             .instance(.event(1)),
             .continuation,
             .continuation,
             .instance(.absence)
         ]
-        
         let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
         let spelling = RhythmSpelling(rhythmTree)
 
+        // Construct expected `RhythmSpelling` components
         let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
             [.start],
             [.maintain],
             [.maintain],
             [.stop]
         ].map(RhythmSpelling.BeamJunction.init)
-        
         let expectedTieStates: [RhythmSpelling.TieState] = [
             .start,
             .maintain,
             .stop,
             .none
         ]
-        
         let expectedDots = [0,0,0,0]
-        
-        let items = zip(
+        let expectedItems = zip(
             expectedBeamJunctions,
             expectedTieStates,
             expectedDots
         ).map(RhythmSpelling.Item.init)
-        
-        // Groups not yet equatable
-        let context = Group(duration: 4/>8, contentsSum: 4).context(range: 0...8)
-        let groups = Grouping.leaf(context)
-
-        print(spelling.groups)
-        print(groups)
-
-        let expected = RhythmSpelling(items: items, groups: groups)
+        let expectedContext = Group(duration: 4/>8, contentsSum: 4).context(range: 0...3)
+        let expectedGroups = Grouping.leaf(expectedContext)
+        let expected = RhythmSpelling(items: expectedItems, groups: expectedGroups)
         XCTAssertEqual(spelling, expected)
     }
     
