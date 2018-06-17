@@ -33,11 +33,11 @@ public struct RhythmSpelling {
     // MARK: - Instance Properties
     
     /// `RhythmSpelling.Item` values for each leaf.
-    fileprivate let items: [Item]
+    let items: [Item]
     
     /// `Tree` structure which contains `Group` information, along with its span in terms of
     /// indices of leaves.
-    fileprivate let groups: Grouping
+    let groups: Grouping
     
     // MARK: - Initializers
     
