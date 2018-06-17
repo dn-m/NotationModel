@@ -31,8 +31,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testSingletSetOfBeamlets() {
         
-        let values = [4]
-        let junctions = makeJunctions(values)
+        let beamCounts = [4]
+        let junctions = makeJunctions(beamCounts)
         
         let expectedStates: [RhythmSpelling.BeamJunction.State] = [
             .beamlet(direction: .forward),
@@ -46,8 +46,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testDoubletSameValues() {
         
-        let values = [3,3]
-        let junctions = makeJunctions(values)
+        let beamCounts = [3,3]
+        let junctions = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [.start, .start, .start],
@@ -59,8 +59,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testDoubletFirstHigher() {
         
-        let values = [4,1]
-        let junctions = makeJunctions(values)
+        let beamCounts = [4,1]
+        let junctions = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [
@@ -79,8 +79,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testDoubletSecondHigher() {
         
-        let values = [2,3]
-        let beaming = makeJunctions(values)
+        let beamCounts = [2,3]
+        let beaming = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [.start, .start],
@@ -92,8 +92,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletSameValues() {
         
-        let values = [2,2,2]
-        let beaming = makeJunctions(values)
+        let beamCounts = [2,2,2]
+        let beaming = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [.start, .start],
@@ -106,8 +106,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletLowMidHigh() {
         
-        let values = [1,2,4]
-        let beaming = makeJunctions(values)
+        let beamCounts = [1,2,4]
+        let beaming = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [.start],
@@ -120,8 +120,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletLowHighMid() {
         
-        let values = [1,3,2]
-        let beaming = makeJunctions(values)
+        let beamCounts = [1,3,2]
+        let beaming = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [.start],
@@ -134,8 +134,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletMidLowHigh() {
         
-        let values = [2,1,4]
-        let beaming = makeJunctions(values)
+        let beamCounts = [2,1,4]
+        let beaming = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [.start, .beamlet(direction: .forward)],
@@ -153,8 +153,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testTripletMidHighLow() {
         
-        let values = [2,3,1]
-        let beaming = makeJunctions(values)
+        let beamCounts = [2,3,1]
+        let beaming = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [.start, .start],
@@ -167,8 +167,8 @@ class RhythmSpellingTests: XCTestCase {
     
     func testLongSequence() {
         
-        let values = [1,3,2,2,4,3,3,1,3]
-        let beaming = makeJunctions(values)
+        let beamCounts = [1,3,2,2,4,3,3,1,3]
+        let beaming = makeJunctions(beamCounts)
         
         let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
             [.start], // 1
