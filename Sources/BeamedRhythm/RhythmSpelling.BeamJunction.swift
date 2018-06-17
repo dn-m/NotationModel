@@ -142,7 +142,7 @@ extension RhythmSpelling.BeamJunction {
         }
         
         /// - returns: `Ranges` for the given context.
-        func ranges(_ prev: Int?, _ cur: Int, _ next: Int?) -> [State] {
+        func states(_ prev: Int?, _ cur: Int, _ next: Int?) -> [State] {
             switch (prev, cur, next) {
             case (nil, cur, nil):
                 return singleton(cur)
@@ -157,7 +157,7 @@ extension RhythmSpelling.BeamJunction {
             }
         }
 
-        self.init(ranges(prev,cur,next))
+        self.init(states(prev,cur,next))
     }
 }
 
