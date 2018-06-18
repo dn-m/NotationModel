@@ -9,11 +9,11 @@
 /// - Each edge has a capacity for flow
 /// - A "source" node, which is only emanates flow outward
 /// - A "sink" node, which only receives flow
-public struct FlowNetwork <Value: Hashable>: Hashable {
+public struct FlowNetwork <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
 
-    public typealias Path = Graph<Value>.Path
-    public typealias Edge = Graph<Value>.Edge
-    public typealias Node = Graph<Value>.Node
+    public typealias Path = Graph<Value, EdgeT>.Path
+    public typealias Edge = Graph<Value, EdgeT>.Edge
+    public typealias Node = Graph<Value, EdgeT>.Node
 
     /// - Returns: All of the `Node` values contained herein which are neither the `source` nor
     /// the `sink`.
@@ -32,7 +32,7 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     /// reached zero in the flow-propagation process.
     ///
     /// - TODO: Add backflow to reversed edges.
-    public var residualNetwork: Graph<Value> {
+    public var residualNetwork: Graph<Value, EdgeT> {
         var residualNetwork = graph
         while let path = residualNetwork.shortestPath(from: source, to: sink) {
             residualNetwork.insertPath(path.map { $0 - maximumFlow(of: path) })
@@ -41,7 +41,7 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     }
 
     /// - Returns: The two partitions on either side of the s-t cut.
-    public var partitions: (source: Graph<Value>, sink: Graph<Value>) {
+    public var partitions: (source: Graph<Value, EdgeT>, sink: Graph<Value, EdgeT>) {
         return (graph(sourceReachableNodes), graph(sinkReachableNodes.reversed()))
     }
 
@@ -56,19 +56,19 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     }
 
     /// - Returns: A `Graph` composed of the given `nodes`, and corresponding edges in this graph.
-    private func graph(_ nodes: [Node]) -> Graph<Value> {
+    private func graph(_ nodes: [Node]) -> Graph<Value, EdgeT> {
         return Graph(graph.edges(nodes))
     }
 
     // TODO: Consider more (space-)efficient storage of Nodes.
-    internal var graph: Graph<Value>
+    internal var graph: Graph<Value, EdgeT>
     internal var source: Node
     internal var sink: Node
 
     // MARK: - Initializers
 
     /// Create a `FlowNetwork` with the given `graph` and the given `source` and `sink` nodes.
-    public init(_ graph: Graph<Value>, source: Graph<Value>.Node, sink: Graph<Value>.Node) {
+    public init(_ graph: Graph<Value, EdgeT>, source: Graph<Value, EdgeT>.Node, sink: Graph<Value, EdgeT>.Node) {
         self.graph = graph
         self.source = source
         self.sink = sink
@@ -77,8 +77,8 @@ public struct FlowNetwork <Value: Hashable>: Hashable {
     /// - Returns: The set of edges which were saturated (and therefore removed from the residual
     /// network).
     private func saturatedEdges(
-        in flowNetwork: Graph<Value>,
-        comparingAgainst residualNetwork: Graph<Value>
+        in flowNetwork: Graph<Value, EdgeT>,
+        comparingAgainst residualNetwork: Graph<Value, EdgeT>
     ) -> Set<Edge>
     {
         return Set(
