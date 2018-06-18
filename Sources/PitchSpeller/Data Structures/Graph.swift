@@ -22,34 +22,34 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
 
         /// - Returns: An `Edge` whose direction is reversed.
         public var reversed: Edge {
-            return Edge(from: destination, to: source, value: value)
+            return Edge(from: destination, to: source, weight: weight)
         }
 
         public let source: Node
         public let destination: Node
-        public var value: EdgeT
+        public var weight: EdgeT
 
         // MARK: - Initializers
 
-        public init(from source: Node, to destination: Node, value: EdgeT) {
+        public init(from source: Node, to destination: Node, weight: EdgeT) {
             self.source = source
             self.destination = destination
-            self.value = value
+            self.weight = weight
         }
 
         /// - Returns: Graph with nodes updated by the given `transform`.
         public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U, EdgeT>.Edge {
-            return .init(from: transform(source), to: transform(destination), value: value)
+            return .init(from: transform(source), to: transform(destination), weight: weight)
         }
 
-        /// - Returns: An `Edge` with the value updated with by the given `transform`.
+        /// - Returns: An `Edge` with the weight updated with by the given `transform`.
         public func map(_ transform: (EdgeT) -> EdgeT) -> Edge {
-            return Edge(from: source, to: destination, value: transform(value))
+            return Edge(from: source, to: destination, weight: transform(weight))
         }
 
-        /// Mutates the value of this `Edge`.
-        public mutating func update(value: EdgeT) {
-            self.value = value
+        /// Mutates the weight of this `Edge`.
+        public mutating func update(weight: EdgeT) {
+            self.weight = weight
         }
 
         /// - Returns: `true` if the source and destination nodes of this `Edge` are equivalent to
@@ -64,17 +64,17 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
 
         // MARK: - Instance Properties
 
-        /// The `Graph.Edge` values contained herein.
+        /// The `Graph.Edge` weights contained herein.
         let edges: [Edge]
 
         // MARK: - Initializers
 
-        /// Create a `Graph.Path` with the given array of `Edge` values.
+        /// Create a `Graph.Path` with the given array of `Edge` weights.
         public init(_ edges: [Edge]) {
             self.edges = edges
         }
 
-        /// - Returns: A `Path` with the values of each `Edge` updated by the given `transform`.
+        /// - Returns: A `Path` with the weights of each `Edge` updated by the given `transform`.
         public func map(_ transform: (EdgeT) -> EdgeT) -> Path {
             return Path(edges.map { $0.map(transform) })
         }
@@ -82,9 +82,9 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
 
     // MARK: - Instance Properties
 
-    /// - Returns: All of the `Edge` values in the `Graph`.
+    /// - Returns: All of the `Edge` weights in the `Graph`.
     public var edges: [Edge] {
-        return adjacencyList.flatMap { _, values in values }
+        return adjacencyList.flatMap { _, weights in weights }
     }
 
     /// - Returns: All of the `Node` values in the `Graph`.
@@ -141,9 +141,9 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
     }
 
     /// Add an edge from the given `source` to the given `destination` nodes, with the given
-    /// `value` (i.e., weight, or capacity). If the `value` of the edge is 0, the edge is removed.
-    public mutating func insertEdge(from source: Node, to destination: Node, value: EdgeT) {
-        let edge = Edge(from: source, to: destination, value: value)
+    /// weight. If the `value` of the edge is 0, the edge is removed.
+    public mutating func insertEdge(from source: Node, to destination: Node, weight: EdgeT) {
+        let edge = Edge(from: source, to: destination, weight: weight)
         insertEdge(edge)
     }
 
@@ -152,7 +152,7 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
     /// removed.
     public mutating func insertEdge(_ edge: Edge) {
         removeEdge(from: edge.source, to: edge.destination)
-        if edge.value != 0 {
+        if edge.weight != 0 {
             adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
         }
     }
@@ -163,7 +163,7 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
         adjacencyList[source] = adjacencyList[source]?.filter { $0.destination != destination }
     }
 
-    /// Updates the value of the edge from the given `source` to the given `destination` by the
+    /// Updates the weight of the edge from the given `source` to the given `destination` by the
     /// given `transform`. If no edge currently exists between the given nodes, does nothing.
     /// - TODO: Consider making `throw`.
     public mutating func updateEdge(
@@ -198,25 +198,25 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
         return Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
     }
 
-    /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given
+    /// - Returns: The weight of the `Edge` directed from the given
     /// `source`, to the given `destination`, if the two given nodes are connected. Otherwise,
     /// `nil`.
     public func edgeValue(from source: Node, to destination: Node) -> EdgeT? {
         guard let edges = adjacencyList[source] else { return nil }
         for edge in edges {
             if edge.destination == destination {
-                return edge.value
+                return edge.weight
             }
         }
         return nil
     }
 
-    /// - Returns: All of the `Edge` values directed out from the given `node`.
+    /// - Returns: All of the `Edge` weights directed out from the given `node`.
     public func edges(from source: Node) -> [Edge] {
         return adjacencyList[source] ?? []
     }
 
-    /// - Returns: All of the `Node` values adjacent to the given `node`.
+    /// - Returns: All of the `Node` weights adjacent to the given `node`.
     public func neighbors(of node: Node) -> [Node] {
         return edges(from: node).map { $0.destination }
     }
@@ -292,11 +292,11 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
         return nil
     }
 
-    /// - Returns: An array of `Edge` values for the given sequence of `Node` values.
+    /// - Returns: An array of `Edge` weights for the given sequence of `Node` values.
     internal func edges <S> (_ nodes: S) -> [Edge] where S: Sequence, S.Element == Node {
         return nodes.pairs.compactMap { source, destination in
-            return edgeValue(from: source, to: destination).map { value in
-                Edge(from: source, to: destination, value: value)
+            return edgeValue(from: source, to: destination).map { weight in
+                Edge(from: source, to: destination, weight: weight)
             }
         }
     }
@@ -327,13 +327,13 @@ extension Graph: CustomStringConvertible {
 
 extension Graph.Edge: CustomStringConvertible {
     public var description: String {
-        return "\(source) - \(value) -> \(destination)"
+        return "\(source) - \(weight) -> \(destination)"
     }
 }
 
 extension Graph.Path: ExpressibleByArrayLiteral {
 
-    /// Create a `Graph.Path` with an array literal of `Graph.Edge` values.
+    /// Create a `Graph.Path` with an array literal of `Graph.Edge` weights.
     public init(arrayLiteral elements: Graph.Edge...) {
         self.edges = elements
     }
