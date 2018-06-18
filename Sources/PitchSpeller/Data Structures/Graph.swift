@@ -10,14 +10,12 @@ import StructureWrapping
 import DataStructures
 
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
-public struct Graph <Value: Hashable>: Hashable {
+public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
 
     public typealias Node = Value
 
     /// Directed edge between two `Node` values.
     ///
-    /// - TODO: Consider making `value` generic, rather than `Double`. This would make it possible
-    /// for a `Value` to be of any type (e.g., `Capacity`, `Weight`, etc.)
     public struct Edge: Hashable {
 
         // MARK: - Instance Properties
@@ -29,28 +27,28 @@ public struct Graph <Value: Hashable>: Hashable {
 
         public let source: Node
         public let destination: Node
-        public var value: Double
+        public var value: EdgeT
 
         // MARK: - Initializers
 
-        public init(from source: Node, to destination: Node, value: Double) {
+        public init(from source: Node, to destination: Node, value: EdgeT) {
             self.source = source
             self.destination = destination
             self.value = value
         }
 
         /// - Returns: Graph with nodes updated by the given `transform`.
-        public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U>.Edge {
+        public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U, EdgeT>.Edge {
             return .init(from: transform(source), to: transform(destination), value: value)
         }
 
         /// - Returns: An `Edge` with the value updated with by the given `transform`.
-        public func map(_ transform: (Double) -> Double) -> Edge {
+        public func map(_ transform: (EdgeT) -> EdgeT) -> Edge {
             return Edge(from: source, to: destination, value: transform(value))
         }
 
         /// Mutates the value of this `Edge`.
-        public mutating func update(value: Double) {
+        public mutating func update(value: EdgeT) {
             self.value = value
         }
 
@@ -77,7 +75,7 @@ public struct Graph <Value: Hashable>: Hashable {
         }
 
         /// - Returns: A `Path` with the values of each `Edge` updated by the given `transform`.
-        public func map(_ transform: (Double) -> Double) -> Path {
+        public func map(_ transform: (EdgeT) -> EdgeT) -> Path {
             return Path(edges.map { $0.map(transform) })
         }
     }
@@ -144,7 +142,7 @@ public struct Graph <Value: Hashable>: Hashable {
 
     /// Add an edge from the given `source` to the given `destination` nodes, with the given
     /// `value` (i.e., weight, or capacity). If the `value` of the edge is 0, the edge is removed.
-    public mutating func insertEdge(from source: Node, to destination: Node, value: Double) {
+    public mutating func insertEdge(from source: Node, to destination: Node, value: EdgeT) {
         let edge = Edge(from: source, to: destination, value: value)
         insertEdge(edge)
     }
@@ -171,7 +169,7 @@ public struct Graph <Value: Hashable>: Hashable {
     public mutating func updateEdge(
         from source: Node,
         to destination: Node,
-        by transform: (Double) -> Double
+        by transform: (EdgeT) -> EdgeT
     )
     {
         guard let edge = self.edge(from: source, to: destination) else { return }
@@ -184,8 +182,8 @@ public struct Graph <Value: Hashable>: Hashable {
     }
 
     /// - Returns: A `Graph` with each of the nodes updated by the given `transform`.
-    public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U> {
-        return Graph<U>(
+    public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U, EdgeT> {
+        return Graph<U, EdgeT>(
             Dictionary(
                 adjacencyList.map { (node,edges) in
                     (transform(node), edges.map { $0.mapNodes(transform)})
@@ -196,14 +194,14 @@ public struct Graph <Value: Hashable>: Hashable {
 
     /// - Returns: A `Graph` with each of the edges contained herein updated by the given
     /// `transform`.
-    public func mapEdges (_ transform: (Double) -> Double) -> Graph<Value> {
+    public func mapEdges (_ transform: (EdgeT) -> EdgeT) -> Graph<Value, EdgeT> {
         return Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
     }
 
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given
     /// `source`, to the given `destination`, if the two given nodes are connected. Otherwise,
     /// `nil`.
-    public func edgeValue(from source: Node, to destination: Node) -> Double? {
+    public func edgeValue(from source: Node, to destination: Node) -> EdgeT? {
         guard let edges = adjacencyList[source] else { return nil }
         for edge in edges {
             if edge.destination == destination {
