@@ -19,8 +19,8 @@ class SpelledRhythmTests: XCTestCase {
         let rhythm = Rhythm(durations, contexts)
         let spelling = RhythmSpelling(rhythm)
         let spelledRhythm = SpelledRhythm(rhythm: rhythm, spelling: spelling)
-        for (offset, _, item) in spelledRhythm {
-            print("offset: \(offset); item: \(item)")
+        for item in spelledRhythm {
+            print(item)
         }
     }
 }
