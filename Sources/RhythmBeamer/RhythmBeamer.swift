@@ -99,8 +99,7 @@ extension Rhythm.Beaming.Item {
     }
 }
 
-/// - returns: An array of `BeamJunction` values for the given `counts` (amounts of beams).
-#warning("Move to `Rhyhtm.Beaming.init")
+/// - Returns: An array of `BeamJunction` values for the given `counts` (amounts of beams).
 internal func beamingItems <T> (_ counts: [Int]) -> [Rhythm<T>.Beaming.Item] {
     return counts.indices.map { index in
         let prev = counts[safe: index - 1]
@@ -111,7 +110,6 @@ internal func beamingItems <T> (_ counts: [Int]) -> [Rhythm<T>.Beaming.Item] {
 }
 
 /// - Returns: An array of `BeamJunction` values for the given `leaves`.
-#warning("Move to `Rhyhtm.Beaming.init")
 func beamingItems <T> (_ leaves: [MetricalDuration]) -> [Rhythm<T>.Beaming.Item] {
     return beamingItems(leaves.map(beamCount))
 }

@@ -136,6 +136,7 @@ extension Rhythm.Spelling.Group {
 
 extension Rhythm.Spelling {
 
+    /// - Returns: The `Grouping` required to represent the tuplets in the given `tree`.
     static func makeGroups(_ tree: MetricalDurationTree) -> Rhythm.Spelling.Grouping {
 
         func traverse(_ tree: MetricalDurationTree, offset: Int) -> Rhythm.Spelling.Grouping {
@@ -190,14 +191,19 @@ func dotCount(_ duration: MetricalDuration) -> Int {
 
     let beats = duration.reduced.numerator
 
-    #warning("Implement PowerOfTwoMinusOneSequence (3,7,15,31,...)")
-    guard [1,3,7].contains(beats) else {
+    guard [1,3,7,15].contains(beats) else {
         fatalError("Unsanitary duration for beamed representation: \(beats)")
     }
 
-    return beats == 3 ? 1 : beats == 7 ? 2 : 0
+    switch beats {
+    case 3: return 1
+    case 7: return 2
+    case 15: return 3
+    default: return 0
+    }
 }
 
+/// - Returns: The ties necessary to represent the given `metricalContexts`.
 func makeTies <T> (_ metricalContexts: [MetricalContext<T>]) -> [Rhythm<T>.Spelling.Tie] {
 
     return metricalContexts.indices.map { index in
