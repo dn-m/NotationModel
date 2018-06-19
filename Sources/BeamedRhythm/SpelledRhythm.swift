@@ -23,7 +23,7 @@ public struct SpelledRhythm <T> {
     }
 
     // MARK: - Instance Properties
-    
+
     public let rhythm: Rhythm<T>
     public let spelling: RhythmSpelling
     

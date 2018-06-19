@@ -39,6 +39,10 @@ extension Rhythm {
             ///
             /// They must be ordered as such: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
             private let points: [Point]
+
+            public init(_ points: [Point]) {
+                self.points = points
+            }
         }
 
         private let items: [Item]
