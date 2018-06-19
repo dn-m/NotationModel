@@ -10,30 +10,10 @@ import MetricalDuration
 import Rhythm
 import SpelledRhythm
 
-protocol RhythmBeamer {
-    static func beaming <T> (for rhythm: Rhythm<T>) -> Rhythm<T>.Beaming
-}
-
-extension Rhythm {
-
-    struct DefaultBeamer: RhythmBeamer {
-        static func beaming<T>(for rhythm: Rhythm<T>) -> Rhythm<T>.Beaming {
-            return Rhythm<T>.Beaming(beamingItems(rhythm.metricalDurationTree.leaves))
-        }
+public enum DefaultBeamer {
+    public static func beaming <T> (for rhythm: Rhythm<T>) -> Rhythm<T>.Beaming {
+        return .init(beamingItems(rhythm.metricalDurationTree.leaves))
     }
-}
-
-/// - Returns: The amount of dots required to render the given `duration`.
-internal func dotCount(_ duration: MetricalDuration) -> Int {
-
-    let beats = duration.reduced.numerator
-
-    #warning("Implement PowerOfTwoMinusOneSequence (3,7,15,31,...)")
-    guard [1,3,7].contains(beats) else {
-        fatalError("Unsanitary duration for beamed representation: \(beats)")
-    }
-
-    return beats == 3 ? 1 : beats == 7 ? 2 : 0
 }
 
 extension Rhythm.Beaming.Item {

@@ -210,8 +210,6 @@ class RhythmBeamerTests: XCTestCase {
         ])
     }
 
-
-//
 //    func testInitWithRhythmTree() {
 //
 //        // Construct actual `RhythmSpelling`

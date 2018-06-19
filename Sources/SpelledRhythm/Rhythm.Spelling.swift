@@ -82,6 +82,27 @@ extension Rhythm {
         /// All of the information needed to abstractly represent all of the metrical instances
         /// within a single `Rhythm`.
         let items: [Item]
+
+        /// All of the information needed to abstractly represent tuplet information
+        let grouping: Grouping
+
+        // MARK: - Initializers
+
+        /// Create a `Rhythm.Spelling` with the given `items`.
+        public init(items: [Item], grouping: Grouping) {
+            self.items = items
+            self.grouping = grouping
+        }
+
+        /// Create a `Rhythm.Spelling` for the given `rhythm` using the given `beamer`.
+        public init(rhythm: Rhythm, using beamer: (Rhythm) -> Rhythm.Beaming) {
+            let beaming = beamer(rhythm)
+            let ties = makeTies(rhythm.leaves.map { $0.context })
+            let dots = makeDots(rhythm.metricalDurationTree.leaves)
+            let items = zip(beaming, ties, dots).map(Item.init)
+            let grouping = Spelling.makeGroups(rhythm.metricalDurationTree)
+            self.init(items: items, grouping: grouping)
+        }
     }
 }
 
@@ -157,6 +178,24 @@ extension Rhythm.Spelling {
 
         return traverse(tree, offset: 0)
     }
+}
+
+/// - Returns: The amount of dots for each of the given `durations`.
+func makeDots(_ durations: [MetricalDuration]) -> [Int] {
+    return durations.map(dotCount)
+}
+
+/// - Returns: The amount of dots required to render the given `duration`.
+func dotCount(_ duration: MetricalDuration) -> Int {
+
+    let beats = duration.reduced.numerator
+
+    #warning("Implement PowerOfTwoMinusOneSequence (3,7,15,31,...)")
+    guard [1,3,7].contains(beats) else {
+        fatalError("Unsanitary duration for beamed representation: \(beats)")
+    }
+
+    return beats == 3 ? 1 : beats == 7 ? 2 : 0
 }
 
 func makeTies <T> (_ metricalContexts: [MetricalContext<T>]) -> [Rhythm<T>.Spelling.Tie] {
