@@ -10,13 +10,15 @@ import MetricalDuration
 import Rhythm
 import SpelledRhythm
 
+protocol RhythmBeamer {
+    static func beaming <T> (for rhythm: Rhythm<T>) -> Rhythm<T>.Beaming
+}
+
 extension Rhythm {
 
-    struct Beamer {
-        let rhythm: Rhythm
-
-        func beam() -> [Rhythm.Beaming] {
-            fatalError()
+    struct DefaultBeamer: RhythmBeamer {
+        static func beaming<T>(for rhythm: Rhythm<T>) -> Rhythm<T>.Beaming {
+            return Rhythm<T>.Beaming(beamingItems(rhythm.metricalDurationTree.leaves))
         }
     }
 }

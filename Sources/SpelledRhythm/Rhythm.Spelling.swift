@@ -159,7 +159,7 @@ extension Rhythm.Spelling {
     }
 }
 
-func makeTieStates <T> (_ metricalContexts: [MetricalContext<T>]) -> [Rhythm<T>.Spelling.Tie] {
+func makeTies <T> (_ metricalContexts: [MetricalContext<T>]) -> [Rhythm<T>.Spelling.Tie] {
 
     return metricalContexts.indices.map { index in
 

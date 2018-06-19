@@ -25,7 +25,7 @@ let package = Package(
         .target(name: "SpelledPitch", dependencies: ["Pitch", "DataStructures"]),
         .target(name: "PitchSpeller", dependencies: ["SpelledPitch"]),
         .target(name: "BeamedRhythm", dependencies: ["Rhythm"]),
-        .target(name: "RhythmBeamer", dependencies: ["BeamedRhythm"]),
+        .target(name: "RhythmBeamer", dependencies: ["SpelledRhythm"]),
         .target(name: "SpelledRhythm", dependencies: ["Rhythm"]),
         .target(name: "StaffModel", dependencies: ["PlotModel", "SpelledPitch"]),
 

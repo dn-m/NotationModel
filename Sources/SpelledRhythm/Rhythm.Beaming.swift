@@ -46,6 +46,13 @@ extension Rhythm {
         }
 
         private let items: [Item]
+
+        // MARK: - Initializers
+
+        /// Create a `Beaming` with the given `items`.
+        public init(_ items: [Item]) {
+            self.items = items
+        }
     }
 }
 

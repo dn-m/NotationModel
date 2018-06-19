@@ -210,61 +210,7 @@ class RhythmBeamerTests: XCTestCase {
         ])
     }
 
-//
-//    func testTieStateAllNones() {
-//
-//        let contexts: [MetricalContext<Int>] = [
-//            .instance(.event(1)),
-//            .instance(.event(1)),
-//            .instance(.event(1))
-//        ]
-//
-//        let expected: [RhythmSpelling.TieState] = [.none, .none, .none]
-//
-//        XCTAssertEqual(makeTieStates(contexts), expected)
-//    }
-//
-//    func testTieStateCombo() {
-//
-//        let contexts: [MetricalContext<Int>] = [
-//            .instance(.event(1)),
-//            .continuation,
-//            .instance(.absence)
-//        ]
-//
-//        let expected: [RhythmSpelling.TieState] = [.start, .stop, .none]
-//
-//        XCTAssertEqual(makeTieStates(contexts), expected)
-//    }
-//
-//    func testTieStatesSequence() {
-//
-//        let contexts: [MetricalContext<Int>] = [
-//            .instance(.event(1)),
-//            .instance(.event(1)),
-//            .continuation,
-//            .instance(.absence),
-//            .instance(.event(1)),
-//            .continuation,
-//            .continuation,
-//            .instance(.event(1)),
-//            .instance(.absence)
-//        ]
-//
-//        let expected: [RhythmSpelling.TieState] = [
-//            .none,
-//            .start,
-//            .stop,
-//            .none,
-//            .start,
-//            .maintain,
-//            .stop,
-//            .none,
-//            .none
-//        ]
-//
-//        XCTAssertEqual(makeTieStates(contexts), expected)
-//    }
+
 //
 //    func testInitWithRhythmTree() {
 //
