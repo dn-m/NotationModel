@@ -10,6 +10,8 @@ let package = Package(
         .library(name: "SpelledPitch", targets: ["SpelledPitch"]),
         .library(name: "PitchSpeller", targets: ["PitchSpeller"]),
         .library(name: "BeamedRhythm", targets: ["BeamedRhythm"]),
+        .library(name: "RhythmBeamer", targets: ["RhythmBeamer"]),
+        .library(name: "SpelledRhythm", targets: ["SpelledRhythm"]),
         .library(name: "StaffModel", targets: ["StaffModel"])
     ],
     dependencies: [
@@ -23,6 +25,8 @@ let package = Package(
         .target(name: "SpelledPitch", dependencies: ["Pitch", "DataStructures"]),
         .target(name: "PitchSpeller", dependencies: ["SpelledPitch"]),
         .target(name: "BeamedRhythm", dependencies: ["Rhythm"]),
+        .target(name: "RhythmBeamer", dependencies: ["BeamedRhythm"]),
+        .target(name: "SpelledRhythm", dependencies: ["Rhythm"]),
         .target(name: "StaffModel", dependencies: ["PlotModel", "SpelledPitch"]),
 
         // Tests

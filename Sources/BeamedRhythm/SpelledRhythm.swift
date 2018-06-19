@@ -24,7 +24,6 @@ public struct SpelledRhythm <T> {
 
     // MARK: - Instance Properties
     
-    // Constrain to `Int` for now.
     public let rhythm: Rhythm<T>
     public let spelling: RhythmSpelling
     
