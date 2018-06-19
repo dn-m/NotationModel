@@ -10,17 +10,17 @@ import StructureWrapping
 import DataStructures
 import Rhythm
 
-public struct SpelledRhythm {
+public struct SpelledRhythm <T> {
     
     // MARK: - Instance Properties
     
     // Constrain to `Int` for now.
-    public let rhythm: Rhythm<Int>
+    public let rhythm: Rhythm<T>
     public let spelling: RhythmSpelling
     
     // MARK: - Initializers
     
-    public init(rhythm: Rhythm<Int>, spelling: RhythmSpelling) {
+    public init(rhythm: Rhythm<T>, spelling: RhythmSpelling) {
         self.rhythm = rhythm
         self.spelling = spelling
     }
@@ -32,7 +32,7 @@ extension SpelledRhythm: CollectionWrapping {
     
     /// - Returns: A collection of triples containing the offset, rhythm leaf, and rhythm 
     /// spelling item for each leaf of the spelled rhythm.
-    public var base: [(Double,RhythmLeaf<Int>,RhythmSpelling.Item)] {
+    public var base: [(Double,Rhythm<T>.Leaf,RhythmSpelling.Item)] {
         let offsets = rhythm.metricalDurationTree.offsets.map { $0.doubleValue }
         let items = spelling.map { $0 }
         return Array(zip(offsets, rhythm.leaves, items))
