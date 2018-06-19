@@ -33,7 +33,6 @@ let package = Package(
         .testTarget(name: "PlotModelTests", dependencies: ["PlotModel"]),
         .testTarget(name: "SpelledPitchTests", dependencies: ["SpelledPitch"]),
         .testTarget(name: "PitchSpellerTests", dependencies: ["PitchSpeller"]),
-        .testTarget(name: "BeamedRhythmTests", dependencies: ["BeamedRhythm"]),
         .testTarget(name: "SpelledRhythmTests", dependencies: ["SpelledRhythm"]),
         .testTarget(name: "RhythmBeamerTests", dependencies: ["RhythmBeamer"]),
         .testTarget(name: "StaffModelTests", dependencies: ["StaffModel"])

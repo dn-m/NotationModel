@@ -96,3 +96,93 @@ extension Rhythm.Spelling.Group: CustomStringConvertible {
         return "\(contentsSum):\(duration)"
     }
 }
+
+extension Rhythm.Spelling.Group {
+
+    /// Creates a `Group` for the given `metricalDurationTree`.
+    public init(_ metricalDurationTree: MetricalDurationTree) {
+
+        guard case .branch(let duration, let trees) = metricalDurationTree else {
+            fatalError("Ill-formed MetricalDurationTree!")
+        }
+
+        self.init(
+            duration: duration,
+            contentsSum: trees.map { $0.value.numerator }.sum
+        )
+    }
+}
+
+extension Rhythm.Spelling {
+
+    static func makeGroups(_ tree: MetricalDurationTree) -> Rhythm.Spelling.Grouping {
+
+        func traverse(_ tree: MetricalDurationTree, offset: Int) -> Rhythm.Spelling.Grouping {
+
+            switch tree {
+            case .leaf:
+                fatalError("Ill-formed MetricalDurationTree")
+
+            case .branch(_, let trees):
+
+                let group = Rhythm.Spelling.Group(tree)
+                let range = offset ... offset + (tree.leaves.count - 1)
+
+                // Replace with `Tree.branches`
+                let trees = trees.filter {
+                    switch $0 {
+                    case .leaf:
+                        return false
+                    case .branch:
+                        return true
+                    }
+                }
+
+                // Refactor this as a reduce
+                var newTrees: [Rhythm.Spelling.Grouping] = []
+                var subOffset = offset
+                for subTree in trees {
+                    newTrees.append(traverse(subTree, offset: subOffset))
+                    subOffset += subTree.leaves.count
+                }
+
+                let context = Rhythm.Spelling.Group.Context(for: group, in: range)
+                if newTrees.isEmpty {
+                    return .leaf(context)
+                } else {
+                    return .branch(context, newTrees)
+                }
+            }
+        }
+
+        return traverse(tree, offset: 0)
+    }
+}
+
+func makeTieStates <T> (_ metricalContexts: [MetricalContext<T>]) -> [Rhythm<T>.Spelling.Tie] {
+
+    return metricalContexts.indices.map { index in
+
+        let cur = metricalContexts[index]
+
+        guard let next = metricalContexts[safe: index + 1] else {
+            switch cur {
+            case .continuation:
+                return .stop
+            default:
+                return .none
+            }
+        }
+
+        switch (cur, next) {
+        case (.continuation, .continuation):
+            return .maintain
+        case (.continuation, _):
+            return .stop
+        case (_, .continuation):
+            return .start
+        default:
+            return .none
+        }
+    }
+}

@@ -7,255 +7,209 @@
 
 import XCTest
 import MetricalDuration
+import Rhythm
 @testable import RhythmBeamer
 
 class RhythmBeamerTests: XCTestCase {
 
-//    func testBeamsCountDurationCoefficient2() {
-//        let duration = 8 /> 64 // 1/8
-//        XCTAssertEqual(beamCount(duration), 1)
-//    }
-//
-//    func testBeamsCountDurationCoefficient3() {
-//        let duration = 12 /> 256 // 3/64
-//        XCTAssertEqual(beamCount(duration), 3)
-//    }
-//
-//    func testBeamsCountDurationCoefficient7() {
-//        let duration = 28 /> 32 // 7/8
-//        XCTAssertEqual(beamCount(duration), -1)
-//    }
+    func assertBeamingItems(
+        for beamCounts: [Int],
+        areEqualTo points: [[Rhythm<()>.Beaming.Item.Point]]
+    )
+    {
+        let items: [Rhythm<()>.Beaming.Item] = beamingItems(beamCounts)
+        let expected = points.map(Rhythm<()>.Beaming.Item.init)
+        XCTAssertEqual(items, expected)
+    }
 
-//    func testSingletSetOfBeamlets() {
-//
-//        let beamCounts = [4]
-//        let junctions = makeJunctions(beamCounts)
-//
-//        let expectedStates: [RhythmSpelling.BeamJunction.State] = [
-//            .beamlet(direction: .forward),
-//            .beamlet(direction: .forward),
-//            .beamlet(direction: .forward),
-//            .beamlet(direction: .forward)
-//        ]
-//
-//        XCTAssertEqual(junctions, [expectedStates].map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testDoubletSameValues() {
-//
-//        let beamCounts = [3,3]
-//        let junctions = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [.start, .start, .start],
-//            [.stop, .stop, .stop],
-//            ]
-//
-//        XCTAssertEqual(junctions, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testDoubletFirstHigher() {
-//
-//        let beamCounts = [4,1]
-//        let junctions = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [
-//                .start,
-//                .beamlet(direction: .forward),
-//                .beamlet(direction: .forward),
-//                .beamlet(direction: .forward)
-//            ],
-//            [
-//                .stop
-//            ]
-//        ]
-//
-//        XCTAssertEqual(junctions, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testDoubletSecondHigher() {
-//
-//        let beamCounts = [2,3]
-//        let beaming = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [.start, .start],
-//            [.stop, .stop, .beamlet(direction: .backward)]
-//        ]
-//
-//        XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testTripletSameValues() {
-//
-//        let beamCounts = [2,2,2]
-//        let beaming = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [.start, .start],
-//            [.maintain, .maintain],
-//            [.stop, .stop]
-//        ]
-//
-//        XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testTripletLowMidHigh() {
-//
-//        let beamCounts = [1,2,4]
-//        let beaming = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [.start],
-//            [.maintain, .start],
-//            [.stop, .stop, .beamlet(direction: .backward), .beamlet(direction: .backward)]
-//        ]
-//
-//        XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testTripletLowHighMid() {
-//
-//        let beamCounts = [1,3,2]
-//        let beaming = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [.start],
-//            [.maintain, .start, .beamlet(direction: .backward)],
-//            [.stop, .stop]
-//        ]
-//
-//        XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testTripletMidLowHigh() {
-//
-//        let beamCounts = [2,1,4]
-//        let beaming = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [.start, .beamlet(direction: .forward)],
-//            [.maintain],
-//            [
-//                .stop,
-//                .beamlet(direction: .backward),
-//                .beamlet(direction: .backward),
-//                .beamlet(direction: .backward)
-//            ]
-//        ]
-//
-//        XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testTripletMidHighLow() {
-//
-//        let beamCounts = [2,3,1]
-//        let beaming = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [.start, .start],
-//            [.maintain, .stop, .beamlet(direction: .backward)],
-//            [.stop]
-//        ]
-//
-//        XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testLongSequence() {
-//
-//        let beamCounts = [1,3,2,2,4,3,3,1,3]
-//        let beaming = makeJunctions(beamCounts)
-//
-//        let expectedStates: [[RhythmSpelling.BeamJunction.State]] = [
-//            [.start], // 1
-//            [.maintain, .start, .beamlet(direction: .backward)], // 3
-//            [.maintain, .maintain], // 2
-//            [.maintain, .maintain], // 2
-//            [.maintain, .maintain, .start, .beamlet(direction: .backward)], // 4
-//            [.maintain, .maintain, .maintain], // 3
-//            [.maintain, .stop, .stop], // 3
-//            [.maintain], // 1
-//            [.stop, .beamlet(direction: .backward), .beamlet(direction: .backward)] // 3
-//        ]
-//
-//        XCTAssertEqual(beaming, expectedStates.map(RhythmSpelling.BeamJunction.init))
-//    }
-//
-//    func testMakeJunctionsQuarterNotesHomogenous() {
-//        let durationTree = 4/>4 * [1,1,1,1]
-//        let contexts = durationTree.leaves.map { _ in MetricalContext.instance(.event(0)) }
-//        let rhythmTree = Rhythm(durationTree, contexts)
-//        let spelling = RhythmSpelling(rhythmTree)
-//    }
-//
-//    func testMakeJunctionsHeterogenousGreaterAndLessThanQuarterNotes() {
-//        let durationTree = 4/>8 * [1,1,4,1,1]
-//        let junctions = makeJunctions(durationTree.leaves)
-//
-//        let expected = [
-//            [.start, .start],
-//            [.stop, .stop],
-//            [],
-//            [.start, .start],
-//            [.stop, .stop],
-//            ].map(RhythmSpelling.BeamJunction.init)
-//
-//        XCTAssertEqual(junctions, expected)
-//    }
-//
-//    func testMakeJunctionsShiftingHeterogeneousGreaterAndLessThanQuarterNotes() {
-//
-//        let durationTrees = [
-//            [4,1,1,1,1],
-//            [1,4,1,1,1],
-//            [1,1,4,1,1],
-//            [1,1,1,4,1],
-//            [1,1,1,1,4]
-//            ].map { 4/>8 * $0 }
-//
-//        let junctions = durationTrees.map { makeJunctions($0.leaves) }
-//
-//        let expected: [[RhythmSpelling.BeamJunction]] = [
-//            [
-//                [],
-//                [.start, .start],
-//                [.maintain, .maintain],
-//                [.maintain, .maintain],
-//                [.stop, .stop]
-//            ],
-//            [
-//                [.beamlet(direction: .forward), .beamlet(direction: .forward)],
-//                [],
-//                [.start, .start],
-//                [.maintain, .maintain],
-//                [.stop, .stop]
-//            ],
-//            [
-//                [.start, .start],
-//                [.stop, .stop],
-//                [],
-//                [.start, .start],
-//                [.stop, .stop]
-//            ],
-//            [
-//                [.start, .start],
-//                [.maintain, .maintain],
-//                [.stop, .stop],
-//                [],
-//                [.beamlet(direction: .backward), .beamlet(direction: .backward)]
-//            ],
-//            [
-//                [.start, .start],
-//                [.maintain, .maintain],
-//                [.maintain, .maintain],
-//                [.stop, .stop],
-//                []
-//            ]
-//            ].map { $0.map(RhythmSpelling.BeamJunction.init) }
-//
-//        XCTAssertEqual(junctions, expected)
-//    }
+    func assertBeamingItems(
+        for metricalDurationTree: MetricalDurationTree,
+        areEqualTo points: [[Rhythm<()>.Beaming.Item.Point]]
+    )
+    {
+        let items: [Rhythm<()>.Beaming.Item] = beamingItems(metricalDurationTree.leaves)
+        let expected = points.map(Rhythm<()>.Beaming.Item.init)
+        XCTAssertEqual(items, expected)
+    }
+
+    func testBeamsCountDurationCoefficient2() {
+        let duration = 8 /> 64 // 1/8
+        XCTAssertEqual(beamCount(duration), 1)
+    }
+
+    func testBeamsCountDurationCoefficient3() {
+        let duration = 12 /> 256 // 3/64
+        XCTAssertEqual(beamCount(duration), 3)
+    }
+
+    func testBeamsCountDurationCoefficient7() {
+        let duration = 28 /> 32 // 7/8
+        XCTAssertEqual(beamCount(duration), -1)
+    }
+
+    func testSingletSetOfBeamlets() {
+        let beamCounts = [4]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [
+                .beamlet(direction: .forward),
+                .beamlet(direction: .forward),
+                .beamlet(direction: .forward),
+                .beamlet(direction: .forward)
+            ]
+        ])
+    }
+
+    func testDoubletSameValues() {
+        let beamCounts = [3,3]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [.start, .start, .start],
+            [.stop, .stop, .stop]
+        ])
+    }
+
+    func testDoubletFirstHigher() {
+        let beamCounts = [4,1]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [
+                .start,
+                .beamlet(direction: .forward),
+                .beamlet(direction: .forward),
+                .beamlet(direction: .forward)
+            ],
+            [
+                .stop
+            ]
+        ])
+    }
+
+    func testDoubletSecondHigher() {
+        let beamCounts = [2,3]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [.start, .start],
+            [.stop, .stop, .beamlet(direction: .backward)]
+        ])
+    }
+
+    func testTripletSameValues() {
+        let beamCounts = [2,2,2]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [.start, .start],
+            [.maintain, .maintain],
+            [.stop, .stop]
+        ])
+    }
+
+    func testTripletLowMidHigh() {
+        let beamCounts = [1,2,4]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [.start],
+            [.maintain, .start],
+            [.stop, .stop, .beamlet(direction: .backward), .beamlet(direction: .backward)]
+        ])
+    }
+
+    func testTripletLowHighMid() {
+        let beamCounts = [1,3,2]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [.start],
+            [.maintain, .start, .beamlet(direction: .backward)],
+            [.stop, .stop]
+        ])
+    }
+
+    func testTripletMidLowHigh() {
+        let beamCounts = [2,1,4]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [.start, .beamlet(direction: .forward)],
+            [.maintain],
+            [
+                .stop,
+                .beamlet(direction: .backward),
+                .beamlet(direction: .backward),
+                .beamlet(direction: .backward)
+            ]
+        ])
+    }
+
+    func testTripletMidHighLow() {
+        let beamCounts = [2,3,1]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [.start, .start],
+            [.maintain, .stop, .beamlet(direction: .backward)],
+            [.stop]
+        ])
+    }
+
+    func testLongSequence() {
+        let beamCounts = [1,3,2,2,4,3,3,1,3]
+        assertBeamingItems(for: beamCounts, areEqualTo: [
+            [.start], // 1
+            [.maintain, .start, .beamlet(direction: .backward)], // 3
+            [.maintain, .maintain], // 2
+            [.maintain, .maintain], // 2
+            [.maintain, .maintain, .start, .beamlet(direction: .backward)], // 4
+            [.maintain, .maintain, .maintain], // 3
+            [.maintain, .stop, .stop], // 3
+            [.maintain], // 1
+            [.stop, .beamlet(direction: .backward), .beamlet(direction: .backward)] // 3
+        ])
+    }
+
+    func testFourOneOneOneOne() {
+        let durationTree = 4/>8 * [4,1,1,1,1]
+        assertBeamingItems(for: durationTree, areEqualTo: [
+            [],
+            [.start, .start],
+            [.maintain, .maintain],
+            [.maintain, .maintain],
+            [.stop, .stop]
+        ])
+    }
+
+    func testOneFourOneOneOne() {
+        let durationTree = 4/>8 * [1,4,1,1,1]
+        assertBeamingItems(for: durationTree, areEqualTo: [
+            [.beamlet(direction: .forward), .beamlet(direction: .forward)],
+            [],
+            [.start, .start],
+            [.maintain, .maintain],
+            [.stop, .stop]
+        ])
+    }
+
+    func testOneOneFourOneOne() {
+        let durationTree = 4/>8 * [1,1,4,1,1]
+        assertBeamingItems(for: durationTree, areEqualTo: [
+            [.start, .start],
+            [.stop, .stop],
+            [],
+            [.start, .start],
+            [.stop, .stop]
+        ])
+    }
+
+    func testOneOneOneFourOne() {
+        let durationTree = 4/>8 * [1,1,1,4,1]
+        assertBeamingItems(for: durationTree, areEqualTo: [
+            [.start, .start],
+            [.maintain, .maintain],
+            [.stop, .stop],
+            [],
+            [.beamlet(direction: .backward), .beamlet(direction: .backward)]
+        ])
+    }
+
+    func testOneOneOneOneFour() {
+        let durationTree = 4/>8 * [1,1,1,1,4]
+        assertBeamingItems(for: durationTree, areEqualTo: [
+            [.start, .start],
+            [.maintain, .maintain],
+            [.maintain, .maintain],
+            [.stop, .stop],
+            []
+        ])
+    }
+
 //
 //    func testTieStateAllNones() {
 //
@@ -331,7 +285,7 @@ class RhythmBeamerTests: XCTestCase {
 //            [.maintain],
 //            [.maintain],
 //            [.stop]
-//            ].map(RhythmSpelling.BeamJunction.init)
+//            ].map(Rhythm<()>.Beaming.Item.init)
 //        let expectedTieStates: [RhythmSpelling.TieState] = [
 //            .start,
 //            .maintain,
@@ -369,7 +323,7 @@ class RhythmBeamerTests: XCTestCase {
 //            [.maintain, .maintain, .maintain],
 //            [.maintain, .maintain, .stop],
 //            [.stop, .stop]
-//            ].map(RhythmSpelling.BeamJunction.init)
+//            ].map(Rhythm<()>.Beaming.Item.init)
 //        let expectedTieStates: [RhythmSpelling.TieState] = [
 //            .start,
 //            .maintain,

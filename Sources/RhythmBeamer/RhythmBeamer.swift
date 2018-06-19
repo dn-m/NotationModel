@@ -34,26 +34,6 @@ internal func dotCount(_ duration: MetricalDuration) -> Int {
     return beats == 3 ? 1 : beats == 7 ? 2 : 0
 }
 
-/// - Returns: Amount of beams needed to represent the given `duration`.
-internal func beamCount(_ duration: MetricalDuration) -> Int {
-
-    let reduced = duration.reduced
-
-    guard [1,3,7].contains(reduced.numerator) else {
-        fatalError("Unsanitary duration for beamed representation: \(reduced)")
-    }
-
-    let subdivisionCount = countTrailingZeros(reduced.denominator) - 2
-
-    if reduced.numerator.isDivisible(by: 3) {
-        return subdivisionCount - 1
-    } else if reduced.numerator.isDivisible(by: 7) {
-        return subdivisionCount - 2
-    }
-
-    return subdivisionCount
-}
-
 extension Rhythm.Beaming.Item {
 
     /// Create a `Junction` with the given context:
@@ -104,9 +84,9 @@ extension Rhythm.Beaming.Item {
             }
             return (
                 maintains(Swift.min(prev,cur,next)) +
-                    starts(Swift.max(0, Swift.min(cur,next) - prev)) +
-                    stops(Swift.max(0, Swift.min(cur,prev) - next)) +
-                    beamlets(.backward, Swift.max(0, cur - Swift.max(prev,next)))
+                starts(Swift.max(0, Swift.min(cur,next) - prev)) +
+                stops(Swift.max(0, Swift.min(cur,prev) - next)) +
+                beamlets(.backward, Swift.max(0, cur - Swift.max(prev,next)))
             )
         }
 
@@ -135,4 +115,41 @@ extension Rhythm.Beaming.Item {
 
         self.init(points(prev,cur,next))
     }
+}
+
+/// - returns: An array of `BeamJunction` values for the given `counts` (amounts of beams).
+#warning("Move to `Rhyhtm.Beaming.init")
+internal func beamingItems <T> (_ counts: [Int]) -> [Rhythm<T>.Beaming.Item] {
+    return counts.indices.map { index in
+        let prev = counts[safe: index - 1]
+        let cur = counts[index]
+        let next = counts[safe: index + 1]
+        return Rhythm<T>.Beaming.Item(prev, cur, next)
+    }
+}
+
+/// - Returns: An array of `BeamJunction` values for the given `leaves`.
+#warning("Move to `Rhyhtm.Beaming.init")
+func beamingItems <T> (_ leaves: [MetricalDuration]) -> [Rhythm<T>.Beaming.Item] {
+    return beamingItems(leaves.map(beamCount))
+}
+
+/// - Returns: Amount of beams needed to represent the given `duration`.
+func beamCount(_ duration: MetricalDuration) -> Int {
+
+    let reduced = duration.reduced
+
+    guard [1,3,7].contains(reduced.numerator) else {
+        fatalError("Unsanitary duration for beamed representation: \(reduced)")
+    }
+
+    let subdivisionCount = countTrailingZeros(reduced.denominator) - 2
+
+    if reduced.numerator.isDivisible(by: 3) {
+        return subdivisionCount - 1
+    } else if reduced.numerator.isDivisible(by: 7) {
+        return subdivisionCount - 2
+    }
+
+    return subdivisionCount
 }
