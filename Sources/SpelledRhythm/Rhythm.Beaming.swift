@@ -37,7 +37,7 @@ extension Rhythm {
             /// Array of `Point` values ordered from lowest subdivision value (quarter, eighth,
             /// sixteenth, etc.) to highest.
             ///
-            /// They must be ordered as such: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
+            /// They must be ordered in groups of: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
             private let points: [Point]
 
             public init(_ points: [Point]) {
