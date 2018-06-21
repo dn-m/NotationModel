@@ -49,8 +49,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testSingletSetOfBeamlets() {
-        let beamCounts = [4]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [4], areEqualTo: [
             [
                 .beamlet(direction: .forward),
                 .beamlet(direction: .forward),
@@ -61,16 +60,14 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testDoubletSameValues() {
-        let beamCounts = [3,3]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [3,3], areEqualTo: [
             [.start, .start, .start],
             [.stop, .stop, .stop]
         ])
     }
 
     func testDoubletFirstHigher() {
-        let beamCounts = [4,1]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [4,1], areEqualTo: [
             [
                 .start,
                 .beamlet(direction: .forward),
@@ -84,16 +81,14 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testDoubletSecondHigher() {
-        let beamCounts = [2,3]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [2,3], areEqualTo: [
             [.start, .start],
             [.stop, .stop, .beamlet(direction: .backward)]
         ])
     }
 
     func testTripletSameValues() {
-        let beamCounts = [2,2,2]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [2,2,2], areEqualTo: [
             [.start, .start],
             [.maintain, .maintain],
             [.stop, .stop]
@@ -101,8 +96,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testTripletLowMidHigh() {
-        let beamCounts = [1,2,4]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [1,2,4], areEqualTo: [
             [.start],
             [.maintain, .start],
             [.stop, .stop, .beamlet(direction: .backward), .beamlet(direction: .backward)]
@@ -110,8 +104,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testTripletLowHighMid() {
-        let beamCounts = [1,3,2]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [1,3,2], areEqualTo: [
             [.start],
             [.maintain, .start, .beamlet(direction: .backward)],
             [.stop, .stop]
@@ -119,8 +112,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testTripletMidLowHigh() {
-        let beamCounts = [2,1,4]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for:  [2,1,4], areEqualTo: [
             [.start, .beamlet(direction: .forward)],
             [.maintain],
             [
@@ -133,8 +125,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testTripletMidHighLow() {
-        let beamCounts = [2,3,1]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [2,3,1], areEqualTo: [
             [.start, .start],
             [.maintain, .stop, .beamlet(direction: .backward)],
             [.stop]
@@ -142,8 +133,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testLongSequence() {
-        let beamCounts = [1,3,2,2,4,3,3,1,3]
-        assertBeamingItems(for: beamCounts, areEqualTo: [
+        assertBeamingItems(for: [1,3,2,2,4,3,3,1,3], areEqualTo: [
             [.start], // 1
             [.maintain, .start, .beamlet(direction: .backward)], // 3
             [.maintain, .maintain], // 2
@@ -157,8 +147,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testFourOneOneOneOne() {
-        let durationTree = 4/>8 * [4,1,1,1,1]
-        assertBeamingItems(for: durationTree, areEqualTo: [
+        assertBeamingItems(for: 4/>8 * [4,1,1,1,1], areEqualTo: [
             [],
             [.start, .start],
             [.maintain, .maintain],
@@ -168,8 +157,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testOneFourOneOneOne() {
-        let durationTree = 4/>8 * [1,4,1,1,1]
-        assertBeamingItems(for: durationTree, areEqualTo: [
+        assertBeamingItems(for: 4/>8 * [1,4,1,1,1], areEqualTo: [
             [.beamlet(direction: .forward), .beamlet(direction: .forward)],
             [],
             [.start, .start],
@@ -179,8 +167,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testOneOneFourOneOne() {
-        let durationTree = 4/>8 * [1,1,4,1,1]
-        assertBeamingItems(for: durationTree, areEqualTo: [
+        assertBeamingItems(for: 4/>8 * [1,1,4,1,1], areEqualTo: [
             [.start, .start],
             [.stop, .stop],
             [],
@@ -190,8 +177,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testOneOneOneFourOne() {
-        let durationTree = 4/>8 * [1,1,1,4,1]
-        assertBeamingItems(for: durationTree, areEqualTo: [
+        assertBeamingItems(for: 4/>8 * [1,1,1,4,1], areEqualTo: [
             [.start, .start],
             [.maintain, .maintain],
             [.stop, .stop],
@@ -201,8 +187,7 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testOneOneOneOneFour() {
-        let durationTree = 4/>8 * [1,1,1,1,4]
-        assertBeamingItems(for: durationTree, areEqualTo: [
+        assertBeamingItems(for: 4/>8 * [1,1,1,1,4], areEqualTo: [
             [.start, .start],
             [.maintain, .maintain],
             [.maintain, .maintain],
@@ -211,80 +196,12 @@ class RhythmBeamerTests: XCTestCase {
         ])
     }
 
-//    func testInitWithRhythmTree() {
-//
-//        // Construct actual `RhythmSpelling`
-//        let metricalDurationTree = 4/>8 * [1,1,1,1]
-//        let metricalContexts: [MetricalContext<Int>] = [
-//            .instance(.event(1)),
-//            .continuation,
-//            .continuation,
-//            .instance(.absence)
-//        ]
-//        let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
-//        let spelling = RhythmSpelling(rhythmTree)
-//
-//        // Construct expected `RhythmSpelling` components
-//        let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
-//            [.start],
-//            [.maintain],
-//            [.maintain],
-//            [.stop]
-//            ].map(Rhythm<()>.Beaming.Item.init)
-//        let expectedTieStates: [RhythmSpelling.TieState] = [
-//            .start,
-//            .maintain,
-//            .stop,
-//            .none
-//        ]
-//        let expectedDots = [0,0,0,0]
-//        let expectedItems = zip(
-//            expectedBeamJunctions,
-//            expectedTieStates,
-//            expectedDots
-//            ).map(RhythmSpelling.Item.init)
-//        let expectedContext = Group(duration: 4/>8, contentsSum: 4).context(range: 0...3)
-//        let expectedGroups = Grouping.leaf(expectedContext)
-//        let expected = RhythmSpelling(items: expectedItems, groups: expectedGroups)
-//        XCTAssertEqual(spelling, expected)
-//    }
-//
-//    func testInitWithRhythmTreeDottedValues() {
-//
-//        // Construct actual `RhythmSpelling`
-//        let metricalDurationTree = 2/>8 * [1,2,3,7]
-//        let metricalContexts: [MetricalContext<Int>] = [
-//            .instance(.event(1)),
-//            .continuation,
-//            .continuation,
-//            .instance(.absence)
-//        ]
-//        let rhythmTree = Rhythm(metricalDurationTree, metricalContexts)
-//        let spelling = RhythmSpelling(rhythmTree)
-//
-//        // Construct expected `RhythmSpelling` components
-//        let expectedBeamJunctions: [RhythmSpelling.BeamJunction] = [
-//            [.start, .start, .start, .beamlet(direction: .forward)],
-//            [.maintain, .maintain, .maintain],
-//            [.maintain, .maintain, .stop],
-//            [.stop, .stop]
-//            ].map(Rhythm<()>.Beaming.Item.init)
-//        let expectedTieStates: [RhythmSpelling.TieState] = [
-//            .start,
-//            .maintain,
-//            .stop,
-//            .none
-//        ]
-//        let expectedDots = [0,0,1,2]
-//        let expectedItems = zip(
-//            expectedBeamJunctions,
-//            expectedTieStates,
-//            expectedDots
-//            ).map(RhythmSpelling.Item.init)
-//        let expectedContext = Group(duration: 2/>8, contentsSum: 13).context(range: 0...3)
-//        let expectedGroups: Grouping = .leaf(expectedContext)
-//        let expected = RhythmSpelling(items: expectedItems, groups: expectedGroups)
-//        XCTAssertEqual(spelling, expected)
-//    }
-
+    func testInitWithRhythmTreeDottedValues() {
+        assertBeamingItems(for: 2/>8 * [1,2,3,7], areEqualTo: [
+            [.start, .start, .start, .beamlet(direction: .forward)],
+            [.maintain, .maintain, .maintain],
+            [.maintain, .maintain, .stop],
+            [.stop, .stop]
+        ])
+    }
 }
