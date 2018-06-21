@@ -5,6 +5,7 @@
 //  Created by James Bean on 6/18/18.
 //
 
+import DataStructures
 import StructureWrapping
 import Rhythm
 
@@ -38,9 +39,9 @@ extension Rhythm {
             /// sixteenth, etc.) to highest.
             ///
             /// They must be ordered in groups of: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
-            private let points: [Point]
+            private let points: Stack<Point>
 
-            public init(_ points: [Point]) {
+            public init(_ points: Stack<Point>) {
                 self.points = points
             }
         }
@@ -57,7 +58,7 @@ extension Rhythm {
 }
 
 extension Rhythm.Beaming.Item: CollectionWrapping {
-    public var base: [Point] {
+    public var base: Stack<Point> {
         return points
     }
 }

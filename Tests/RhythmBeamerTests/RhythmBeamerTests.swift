@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import DataStructures
 import MetricalDuration
 import Rhythm
 @testable import RhythmBeamer
@@ -14,7 +15,7 @@ class RhythmBeamerTests: XCTestCase {
 
     func assertBeamingItems(
         for beamCounts: [Int],
-        areEqualTo points: [[Rhythm<()>.Beaming.Item.Point]]
+        areEqualTo points: [Stack<Rhythm<()>.Beaming.Item.Point>]
     )
     {
         let items: [Rhythm<()>.Beaming.Item] = beamingItems(beamCounts)
@@ -24,7 +25,7 @@ class RhythmBeamerTests: XCTestCase {
 
     func assertBeamingItems(
         for metricalDurationTree: MetricalDurationTree,
-        areEqualTo points: [[Rhythm<()>.Beaming.Item.Point]]
+        areEqualTo points: [Stack<Rhythm<()>.Beaming.Item.Point>]
     )
     {
         let items: [Rhythm<()>.Beaming.Item] = beamingItems(metricalDurationTree.leaves)
