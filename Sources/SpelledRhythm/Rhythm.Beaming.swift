@@ -8,13 +8,55 @@
 import DataStructures
 import Rhythm
 
+
+
+/// Rhythm.Beaming.Point.Vertical
+struct Vertical {
+
+    enum StartOrStop {
+
+        var points: [Rhythm<()>.Beaming.Point] {
+            switch self {
+            case .neither: return []
+            case .start(let count):
+                return Array(repeating: .start, count: count)
+            case .stop(let count):
+                return Array(repeating: .stop, count: count)
+            }
+        }
+
+        case neither
+        case start(count: Int)
+        case stop(count: Int)
+    }
+
+    var points: [Rhythm<()>.Beaming.Point] {
+        return
+            Array(repeating: .maintain, count: maintainCount) +
+            startOrStop.points +
+            Array(repeating: .beamlet(direction: .forward), count: beamletCount)
+    }
+
+    var maintainCount: Int
+    var startOrStop: StartOrStop
+    var beamletCount: Int
+}
+
 extension Rhythm {
 
     /// The beaming information for an entire `Rhythm`.
     public struct Beaming: Equatable {
 
-        /// The collection of points for a single beamed event (metrical `.instance`)
-        public struct Item: Equatable {
+        public enum Error: Swift.Error {
+            case itemOutOfRange
+        }
+
+        /// A single point of the beaming for a single beaming item (metrical `.instance`).
+        public enum Point: Equatable {
+
+            public enum Error: Swift.Error {
+                case cuttingIneligibleState(Point)
+            }
 
             /// Whether a beamlet is pointed forward or backward.
             public enum BeamletDirection: Double {
@@ -22,30 +64,35 @@ extension Rhythm {
                 case backward = -1
             }
 
-            /// A single point of the beaming for a single beaming item (metrical `.instance`).
-            public enum Point: Equatable {
-                /// Maintain a beam on a given level.
-                case maintain
-                /// Start a beam on a given level.
-                case start
-                /// Stop a beam on a given level.
-                case stop
-                /// Add a beamlet on a given level.
-                case beamlet(direction: BeamletDirection)
+            /// Maintain a beam on a given level.
+            case maintain
+            /// Start a beam on a given level.
+            case start
+            /// Stop a beam on a given level.
+            case stop
+            /// Add a beamlet on a given level.
+            case beamlet(direction: BeamletDirection)
+        }
+
+        /// The collection of points for a single beamed event (metrical `.instance`)
+        public struct Item: Equatable {
+
+            public enum Error: Swift.Error {
+                case empty
             }
 
             /// Array of `Point` values ordered from lowest subdivision value (quarter, eighth,
             /// sixteenth, etc.) to highest.
             ///
             /// They must be ordered in groups of: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
-            private let points: Stack<Point>
+            var points: Stack<Point>
 
             public init(_ points: Stack<Point>) {
                 self.points = points
             }
         }
 
-        private let items: [Item]
+        var items: [Item]
 
         // MARK: - Initializers
 
@@ -53,11 +100,19 @@ extension Rhythm {
         public init(_ items: [Item]) {
             self.items = items
         }
+
+        ///
+        ///
+        /// - Throws: Error if the `Item` at the given `index` is empty.
+        /// - Throws: Error if the `Item` at the given `index` is not
+        public mutating func cut(amount: Int, at index: Int) throws {
+            fatalError()
+        }
     }
 }
 
 extension Rhythm.Beaming.Item: CollectionWrapping {
-    public var base: Stack<Point> {
+    public var base: Stack<Rhythm.Beaming.Point> {
         return points
     }
 }

@@ -26,36 +26,36 @@ extension Rhythm.Beaming.Item {
     /// - next: Next beaming count (if it exists)
     public init(_ prev: Int?, _ cur: Int, _ next: Int?) {
 
-        func maintains(_ count: Int) -> Stack<Point> {
+        func maintains(_ count: Int) -> Stack<Rhythm.Beaming.Point> {
             return .init(repeating: .maintain, count: count)
         }
 
-        func starts(_ count: Int) -> Stack<Point> {
+        func starts(_ count: Int) -> Stack<Rhythm.Beaming.Point> {
             return .init(repeating: .start, count: count)
         }
 
-        func stops(_ count: Int) -> Stack<Point> {
+        func stops(_ count: Int) -> Stack<Rhythm.Beaming.Point> {
             return .init(repeating: .stop, count: count)
         }
 
-        func beamlets(_ direction: BeamletDirection, _ count: Int) -> Stack<Point> {
+        func beamlets(_ direction: Rhythm.Beaming.Point.BeamletDirection, _ count: Int) -> Stack<Rhythm.Beaming.Point> {
             return .init(repeating: .beamlet(direction: direction), count: count)
         }
 
         /// - Returns: Array of `State` values for a singleton `BeamJunction`.
-        func singleton(_ cur: Int) -> Stack<Point> {
+        func singleton(_ cur: Int) -> Stack<Rhythm.Beaming.Point> {
             return beamlets(.forward, cur)
         }
 
         /// - Returns: Array of `State` values for a first `BeamJunction` in a sequence.
-        func first(_ cur: Int, _ next: Int) -> Stack<Point> {
+        func first(_ cur: Int, _ next: Int) -> Stack<Rhythm.Beaming.Point> {
             guard cur > 0 else { return [] }
             guard next > 0 else { return beamlets(.forward, cur) }
             return starts(Swift.min(cur,next)) + beamlets(.forward, Swift.max(0, cur - next))
         }
 
         /// - Returns: Array of `State` values for a middle `BeamJunction` in a sequence.
-        func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Stack<Point> {
+        func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Stack<Rhythm.Beaming.Point> {
             guard cur > 0 else { return [] }
             guard prev > 0 else {
                 guard next > 0 else { return beamlets(.backward, Swift.max(0, cur - prev)) }
@@ -74,14 +74,14 @@ extension Rhythm.Beaming.Item {
         }
 
         /// - Returns: Array of `State` values for a last `BeamJunction` in a sequence.
-        func last(_ prev: Int, _ cur: Int) -> Stack<Point> {
+        func last(_ prev: Int, _ cur: Int) -> Stack<Rhythm.Beaming.Point> {
             guard cur > 0 else { return [] }
             guard prev > 0 else { return beamlets(.backward, cur) }
             return stops(Swift.min(cur,prev)) + beamlets(.backward, Swift.max(0, cur - prev))
         }
 
         /// - Returns: Array of `State` values for a given `BeamJunction` context.
-        func points(_ prev: Int?, _ cur: Int, _ next: Int?) -> Stack<Point> {
+        func points(_ prev: Int?, _ cur: Int, _ next: Int?) -> Stack<Rhythm.Beaming.Point> {
             switch (prev, cur, next) {
             case (nil, cur, nil):
                 return singleton(cur)
