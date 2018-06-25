@@ -10,9 +10,7 @@ import StructureWrapping
 import DataStructures
 
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
-public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
-
-    public typealias Node = Value
+public struct Graph <Node: Hashable, EdgeT: Numeric & Hashable>: Hashable {
 
     /// Directed edge between two `Node` values.
     ///
@@ -38,7 +36,7 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
         }
 
         /// - Returns: Graph with nodes updated by the given `transform`.
-        public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U, EdgeT>.Edge {
+        public func mapNodes <U> (_ transform: (Node) -> U) -> Graph<U, EdgeT>.Edge {
             return .init(from: transform(source), to: transform(destination), weight: weight)
         }
 
@@ -182,7 +180,7 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
     }
 
     /// - Returns: A `Graph` with each of the nodes updated by the given `transform`.
-    public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U, EdgeT> {
+    public func mapNodes <U> (_ transform: (Node) -> U) -> Graph<U, EdgeT> {
         return Graph<U, EdgeT>(
             Dictionary(
                 adjacencyList.map { (node,edges) in
@@ -194,7 +192,7 @@ public struct Graph <Value: Hashable, EdgeT: Numeric & Hashable>: Hashable {
 
     /// - Returns: A `Graph` with each of the edges contained herein updated by the given
     /// `transform`.
-    public func mapEdges (_ transform: (EdgeT) -> EdgeT) -> Graph<Value, EdgeT> {
+    public func mapEdges (_ transform: (EdgeT) -> EdgeT) -> Graph<Node, EdgeT> {
         return Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
     }
 
