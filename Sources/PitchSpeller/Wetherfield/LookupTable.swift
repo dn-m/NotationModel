@@ -40,7 +40,7 @@ struct LookupPair: Hashable {
     }
 }
 
-struct LookupTable<Weight: Hashable & Numeric> {
+class LookupTable<Weight: Hashable & Numeric> {
     
     private let storage: [LookupPair: Weight]
     
