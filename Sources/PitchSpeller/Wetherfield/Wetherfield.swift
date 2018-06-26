@@ -104,7 +104,7 @@ extension FlowNetwork where Value == Int {
     }
 }
 
-extension Graph where Value == Int {
+extension Graph where Node == Int {
     /// Create a `Graph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
     init(source: Int, sink: Int, internalNodes: [Int]) {
         self.init([source, sink] + internalNodes)
