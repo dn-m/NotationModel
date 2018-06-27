@@ -8,40 +8,6 @@
 import DataStructures
 import Rhythm
 
-
-
-/// Rhythm.Beaming.Point.Vertical
-struct Vertical {
-
-    enum StartOrStop {
-
-        var points: [Rhythm<()>.Beaming.Point] {
-            switch self {
-            case .neither: return []
-            case .start(let count):
-                return Array(repeating: .start, count: count)
-            case .stop(let count):
-                return Array(repeating: .stop, count: count)
-            }
-        }
-
-        case neither
-        case start(count: Int)
-        case stop(count: Int)
-    }
-
-    var points: [Rhythm<()>.Beaming.Point] {
-        return
-            Array(repeating: .maintain, count: maintainCount) +
-            startOrStop.points +
-            Array(repeating: .beamlet(direction: .forward), count: beamletCount)
-    }
-
-    var maintainCount: Int
-    var startOrStop: StartOrStop
-    var beamletCount: Int
-}
-
 extension Rhythm {
 
     /// The beaming information for an entire `Rhythm`.
@@ -53,6 +19,38 @@ extension Rhythm {
 
         /// A single point of the beaming for a single beaming item (metrical `.instance`).
         public enum Point: Equatable {
+
+            /// Rhythm.Beaming.Point.Vertical
+            struct Vertical {
+
+                enum StartOrStop {
+
+                    var points: [Point] {
+                        switch self {
+                        case .neither: return []
+                        case .start(let count):
+                            return Array(repeating: .start, count: count)
+                        case .stop(let count):
+                            return Array(repeating: .stop, count: count)
+                        }
+                    }
+
+                    case neither
+                    case start(count: Int)
+                    case stop(count: Int)
+                }
+
+                var points: [Point] {
+                    return
+                        Array(repeating: .maintain, count: maintainCount) +
+                        startOrStop.points +
+                        Array(repeating: .beamlet(direction: .forward), count: beamletCount)
+                }
+
+                var maintainCount: Int
+                var startOrStop: StartOrStop
+                var beamletCount: Int
+            }
 
             public enum Error: Swift.Error {
                 case cuttingIneligibleState(Point)
