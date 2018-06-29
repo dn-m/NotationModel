@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
           "branch": "swift-4.2",
-          "revision": "1abd6faa5eb4d5c1e00da0978717e4ddaa18b9d4",
+          "revision": "bbe5d7ca9c37a98482949b49a57f7cb5fdbc860e",
           "version": null
         }
       },
@@ -33,7 +33,7 @@
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
           "branch": "swift-4.2",
-          "revision": "7df50a073c28a9dbcbee30da4f5f1fce17d2a6cd",
+          "revision": "54200e82cea6e93d871a8bc3e1a72fd4fdae323c",
           "version": null
         }
       }
