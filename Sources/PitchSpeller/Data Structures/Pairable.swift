@@ -14,3 +14,7 @@ protocol Pairable {
     init(_ pair: (A,B))
     init(_ a: A, _ b: B)
 }
+
+extension Pairable {
+    var tuple: (A,B) { get { return (a, b) }}
+}
