@@ -24,4 +24,10 @@ class UnorderedPairTests: XCTestCase {
         let dict = [pair: "Hash Value"]
         XCTAssertEqual(dict[riap], "Hash Value")
     }
+    
+    func testTuple() {
+        let pair = UnorderedPair<Int>(3,6)
+        XCTAssertEqual(pair.tuple.0, 3)
+        XCTAssertEqual(pair.tuple.1, 6)
+    }
 }
