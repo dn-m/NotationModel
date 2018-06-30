@@ -7,3 +7,7 @@
 
 import XCTest
 @testable import PitchSpeller
+
+class UnorderedPairTests: XCTestCase {
+    
+}
