@@ -18,6 +18,12 @@ class UnorderedPairTests: XCTestCase {
         XCTAssertEqual(pair1, pair3)
     }
     
+    func testUnEqual() {
+        let pair1 = UnorderedPair<Int>(1,2)
+        let pair2 = UnorderedPair<Int>(1,3)
+        XCTAssertNotEqual(pair1, pair2)
+    }
+    
     func testHashability() {
         let pair = UnorderedPair<Int>(2,4)
         let riap = UnorderedPair<Int>(4,2)
