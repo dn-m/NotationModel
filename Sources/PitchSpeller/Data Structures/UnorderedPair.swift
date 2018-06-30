@@ -22,3 +22,10 @@ struct UnorderedPair<T>: Symmetric {
         self.b = b
     }
 }
+
+extension UnorderedPair: Equatable where T: Equatable {
+    
+    static func == (_ lhs: UnorderedPair, _ rhs: UnorderedPair) -> Bool {
+        return (lhs.a == rhs.a && lhs.b == rhs.b) || (lhs.a == rhs.b && lhs.b == rhs.a)
+    }
+}
