@@ -33,4 +33,8 @@ extension UnorderedPair: Equatable where T: Equatable {
 extension UnorderedPair: Hashable where T: Hashable {
     
     var hashvalue: Int { return Set<T>([a,b]).hashValue }
+    
+    func hash (into hasher: inout Hasher) {
+        return Set<T>([a,b]).hash(into: &hasher)
+    }
 }
