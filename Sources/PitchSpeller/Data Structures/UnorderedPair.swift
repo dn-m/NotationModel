@@ -29,3 +29,8 @@ extension UnorderedPair: Equatable where T: Equatable {
         return (lhs.a == rhs.a && lhs.b == rhs.b) || (lhs.a == rhs.b && lhs.b == rhs.a)
     }
 }
+
+extension UnorderedPair: Hashable where T: Hashable {
+    
+    var hashvalue: Int { return Set<T>([a,b]).hashValue }
+}
