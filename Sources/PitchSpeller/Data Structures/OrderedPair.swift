@@ -22,3 +22,6 @@ struct OrderedPair<T>: Swappable {
         self.b = b
     }
 }
+
+extension OrderedPair: Hashable where T: Hashable { }
+extension OrderedPair: Equatable where T: Equatable { }
