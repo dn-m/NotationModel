@@ -5,4 +5,7 @@
 //  Created by Benjamin Wetherfield on 6/30/18.
 //
 
-import Foundation
+protocol Swappable: Symmetric {
+    var elput: (A,A) { get }
+    var swapped: Self { get }
+}
