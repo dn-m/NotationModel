@@ -25,4 +25,10 @@ class OrderedPairTests: XCTestCase {
         XCTAssertEqual(dict[pair], "Hash Value")
         XCTAssertNil(dict[riap])
     }
+    
+    func testTuple() {
+        let pair = OrderedPair<Int>(3,6)
+        XCTAssertEqual(pair.tuple.0, 3)
+        XCTAssertEqual(pair.tuple.1, 6)
+    }
 }
