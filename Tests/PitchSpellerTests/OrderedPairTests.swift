@@ -44,4 +44,11 @@ class OrderedPairTests: XCTestCase {
         XCTAssertEqual(pair1, pair2.swapped)
         XCTAssertEqual(pair1, pair1.swapped.swapped)
     }
+    
+    func testInitializers() {
+        let pair1 = OrderedPair<Int>(2,5)
+        let tuple = (2,5)
+        let pair2 = OrderedPair<Int>(tuple)
+        XCTAssertEqual(pair1, pair2)
+    }
 }
