@@ -6,7 +6,7 @@
 //
 //
 
-import StructureWrapping
+import DataStructures
 
 /// Model represented by a `PlotView`.
 public protocol PlotModel: CollectionWrapping {

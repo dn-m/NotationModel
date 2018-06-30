@@ -5,7 +5,6 @@
 //  Created by James Bean on 6/18/18.
 //
 
-import StructureWrapping
 import DataStructures
 import Rhythm
 

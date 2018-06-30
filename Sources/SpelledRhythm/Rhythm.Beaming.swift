@@ -6,7 +6,6 @@
 //
 
 import DataStructures
-import StructureWrapping
 import Rhythm
 
 extension Rhythm {

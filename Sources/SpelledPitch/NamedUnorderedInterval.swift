@@ -6,7 +6,6 @@
 //
 //
 
-import Restructure
 import DataStructures
 import Math
 import Pitch
