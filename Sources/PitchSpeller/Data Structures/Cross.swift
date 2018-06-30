@@ -23,3 +23,6 @@ struct Cross<T,U>: Pairable {
         self.b = pair.1
     }
 }
+
+extension Cross: Equatable where T: Equatable, U: Equatable { }
+extension Cross: Hashable where T: Hashable, U: Hashable { }
