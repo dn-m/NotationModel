@@ -17,4 +17,10 @@ class CrossTests: XCTestCase {
         XCTAssertEqual(pair1, pair2)
         XCTAssertNotEqual(pair1, pair3)
     }
+    
+    func testHashability() {
+        let pair = Cross<Int, String>(2, "two")
+        let dict = [pair: "Hash Value"]
+        XCTAssertEqual(dict[pair], "Hash Value")
+    }
 }
