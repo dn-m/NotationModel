@@ -10,4 +10,11 @@ import XCTest
 
 class UnorderedPairTests: XCTestCase {
     
+    func testEqualityFunction() {
+        let pair1 = UnorderedPair<Int>(3,5)
+        let pair2 = UnorderedPair<Int>(3,5)
+        let pair3 = UnorderedPair<Int>(5,3)
+        XCTAssertEqual(pair1, pair2)
+        XCTAssertEqual(pair1, pair3)
+    }
 }
