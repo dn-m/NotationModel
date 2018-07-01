@@ -5,7 +5,7 @@
 //  Created by Benjamin Wetherfield on 7/1/18.
 //
 
-public struct DirectedEdge<Node, Num>: Weighted & NodePair {
+public struct DirectedEdge<Node, Num>: EdgeLike {
 
     typealias Weight = Num
     typealias Pair = OrderedPair<Node>
