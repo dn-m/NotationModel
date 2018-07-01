@@ -12,4 +12,9 @@ public struct DirectedEdge<Node, Num>: Weighted & NodePair {
 
     var weight: Weight
     let nodes: Pair
+    
+    init (_ source: Node, _ destination: Node, _ weight: Weight) {
+        self.nodes = Pair(source, destination)
+        self.weight = weight
+    }
 }
