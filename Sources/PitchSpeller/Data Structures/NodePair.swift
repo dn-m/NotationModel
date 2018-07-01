@@ -8,4 +8,6 @@
 protocol NodePair {
     associatedtype Pair: Symmetric
     var nodes: Pair { get }
+    var source: Pair.A { get }
+    var destination: Pair.A { get }
 }
