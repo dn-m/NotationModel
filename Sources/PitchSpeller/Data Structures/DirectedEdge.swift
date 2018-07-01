@@ -17,4 +17,9 @@ public struct DirectedEdge<Node, Num>: Weighted & NodePair {
         self.nodes = Pair(source, destination)
         self.weight = weight
     }
+    
+    init (_ nodepair: Pair, _ weight: Weight) {
+        self.nodes = nodepair
+        self.weight = weight
+    }
 }
