@@ -10,5 +10,6 @@ public struct DirectedEdge<Node, Num>: Weighted & NodePair {
     typealias Weight = Num
     typealias Pair = OrderedPair<Node>
 
-    
+    var weight: Weight
+    let nodes: Pair
 }
