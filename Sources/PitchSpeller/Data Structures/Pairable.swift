@@ -16,5 +16,5 @@ protocol Pairable {
 }
 
 extension Pairable {
-    var tuple: (A,B) { get { return (a, b) }}
+    var tuple: (A,B) { return (a, b) }
 }
