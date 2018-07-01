@@ -11,9 +11,9 @@ protocol Swappable: Symmetric {
 }
 
 extension Swappable {
-    var elput: (A,A) { get { return (tuple.1, tuple.0) } }
+    var elput: (A,A) { return (tuple.1, tuple.0) }
 }
 
 extension Swappable {
-    var swapped: Self { get { return Self(elput) }}
+    var swapped: Self { return Self(elput) }
 }
