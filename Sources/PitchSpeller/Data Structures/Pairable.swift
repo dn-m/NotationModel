@@ -15,6 +15,8 @@ protocol Pairable {
     var a: A { get }
     var b: B { get }
     var tuple: (A,B) { get }
+    
+    // MARK: - Initializers
     init(_ a: A, _ b: B)
 }
 
