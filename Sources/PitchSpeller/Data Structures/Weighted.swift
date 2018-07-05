@@ -6,6 +6,12 @@
 //
 
 protocol Weighted {
+    
+    // MARK: - Associated Types
+    
     associatedtype Weight
+    
+    // MARK: - Instance Properties
+    
     var weight: Weight { get set }
 }
