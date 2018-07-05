@@ -6,6 +6,12 @@
 //
 
 protocol NodePair {
+    
+    // MARK: - Associated Types
+    
     associatedtype Pair: Symmetric
+    
+    // MARK: - Instance Properties
+    
     var nodes: Pair { get }
 }
