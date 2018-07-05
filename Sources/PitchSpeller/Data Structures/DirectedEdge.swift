@@ -18,8 +18,8 @@ public struct DirectedEdge<Node, Num>: EdgeLike {
         self.weight = weight
     }
     
-    init (_ nodepair: Pair, _ weight: Weight) {
-        self.nodes = nodepair
+    init (_ nodes: Pair, _ weight: Weight) {
+        self.nodes = nodes
         self.weight = weight
     }
 }
