@@ -10,6 +10,8 @@ protocol Pairable {
     // MARK: - Associated Types
     associatedtype A
     associatedtype B
+    
+    // MARK: - Instance Properties
     var a: A { get }
     var b: B { get }
     var tuple: (A,B) { get }
