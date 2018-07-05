@@ -14,12 +14,7 @@ protocol Pairable {
     // MARK: - Instance Properties
     var a: A { get }
     var b: B { get }
-    var tuple: (A,B) { get }
     
     // MARK: - Initializers
     init(_ a: A, _ b: B)
-}
-
-extension Pairable {
-    var tuple: (A,B) { return (a, b) }
 }
