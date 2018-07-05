@@ -11,6 +11,10 @@ protocol NodePair {
     
     associatedtype Pair: Symmetric
     
+    // MARK: - Typealiases
+    
+    typealias Node = Pair.A
+    
     // MARK: - Instance Properties
     
     var nodes: Pair { get }
