@@ -26,18 +26,6 @@ class OrderedPairTests: XCTestCase {
         XCTAssertNil(dict[riap])
     }
     
-    func testTuple() {
-        let pair = OrderedPair<Int>(3,6)
-        XCTAssertEqual(pair.tuple.0, 3)
-        XCTAssertEqual(pair.tuple.1, 6)
-    }
-    
-    func testElput() {
-        let pair = OrderedPair<Int>(3,6)
-        XCTAssertEqual(pair.elput.0, 6)
-        XCTAssertEqual(pair.elput.1, 3)
-    }
-    
     func testSwapped() {
         let pair1 = OrderedPair<Int>(3,6)
         let pair2 = OrderedPair<Int>(6,3)

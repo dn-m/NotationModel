@@ -6,14 +6,9 @@
 //
 
 protocol Swappable: Symmetric {
-    var elput: (A,A) { get }
     var swapped: Self { get }
 }
 
 extension Swappable {
-    var elput: (A,A) { return (tuple.1, tuple.0) }
-}
-
-extension Swappable {
-    var swapped: Self { return Self(elput) }
+    var swapped: Self { return .init(b, a) }
 }
