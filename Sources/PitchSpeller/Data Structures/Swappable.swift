@@ -9,6 +9,6 @@ protocol Swappable: Symmetric {
     var swapped: Self { get }
 }
 
-//extension Swappable {
-//    var swapped: Self { return Self(elput) }
-//}
+extension Swappable {
+    var swapped: Self { return .init(b, a) }
+}
