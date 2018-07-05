@@ -6,6 +6,8 @@
 //
 
 protocol Pairable {
+    
+    // MARK: - Associated Types
     associatedtype A
     associatedtype B
     var a: A { get }
