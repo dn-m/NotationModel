@@ -5,13 +5,16 @@
 //  Created by Benjamin Wetherfield on 6/30/18.
 //
 
-struct OrderedPair<T>: Swappable {
-    
-    typealias A = T
-    
+/// Pair of values for which the order matters.
+struct OrderedPair <T>: Swappable {
+
+    // MARK: - Instance Properties
+
     let a: T
     let b: T
-    
+
+    // MARK: - Initializers
+
     init(_ pair: (T, T)) {
         self.a = pair.0
         self.b = pair.1
@@ -23,5 +26,9 @@ struct OrderedPair<T>: Swappable {
     }
 }
 
-extension OrderedPair: Hashable where T: Hashable { }
+// MARK: - Equatable
 extension OrderedPair: Equatable where T: Equatable { }
+
+// MARK: - Hashable
+extension OrderedPair: Hashable where T: Hashable { }
+
