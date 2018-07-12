@@ -32,9 +32,15 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
+<<<<<<< HEAD
           "branch": null,
           "revision": "95a3c7e50118006ae7d415dbe24d724936c3ad07",
           "version": "0.3.1"
+=======
+          "branch": "swift-4.2",
+          "revision": "7df50a073c28a9dbcbee30da4f5f1fce17d2a6cd",
+          "version": null
+>>>>>>> d2f15942be68451145963626980bfb8f699b3fb9
         }
       }
     ]
