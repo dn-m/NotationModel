@@ -5,27 +5,36 @@
         "package": "Math",
         "repositoryURL": "https://github.com/dn-m/Math",
         "state": {
-          "branch": "master",
-          "revision": "d1284e043377c0b924cba2ffa2ab0b9aa9dd246f",
-          "version": null
+          "branch": null,
+          "revision": "dc8703a15bac281f30d9ae2802d583b02c89f4ee",
+          "version": "0.1.3"
         }
       },
       {
         "package": "Music",
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
-          "branch": "master",
-          "revision": "25590f06824bd405cc0c8a269274262bb3487e8c",
-          "version": null
+          "branch": null,
+          "revision": "4a7367927050bcef6cb0595c99d1efc5c678286d",
+          "version": "0.1.0"
+        }
+      },
+      {
+        "package": "PerformanceTesting",
+        "repositoryURL": "https://github.com/dn-m/PerformanceTesting",
+        "state": {
+          "branch": null,
+          "revision": "fc96795471fce16de0277ec0dbd0f69f5dd013d6",
+          "version": "0.1.0"
         }
       },
       {
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "master",
-          "revision": "76040aafd147d36ca0553de78ad3cdda21045665",
-          "version": null
+          "branch": null,
+          "revision": "95a3c7e50118006ae7d415dbe24d724936c3ad07",
+          "version": "0.3.1"
         }
       }
     ]

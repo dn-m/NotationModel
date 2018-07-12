@@ -6,7 +6,7 @@
 //
 //
 
-import DictionaryProtocol
+import DataStructures
 
 extension StaffModel {
     

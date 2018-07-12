@@ -18,7 +18,7 @@ extension Pitch {
     ///     Pitch(noteNumber: 68) // => false (.a, .flat) / (.g, .sharp)
     ////
     public var canBeSpelledObjectively: Bool {
-        return spellings.any { $0.quarterStep == .natural && $0.eighthStep == .none }
+        return spellings.contains { $0.quarterStep == .natural && $0.eighthStep == .none }
     }
 
 
