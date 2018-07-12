@@ -24,17 +24,22 @@ struct UnorderedPair<T>: Symmetric {
 }
 
 extension UnorderedPair: Equatable where T: Equatable {
-    
+
+    // MARK: - Equatable
+
+    /// - Returns: `true` if both values contained by the given `UnorderedPair` values are
+    /// equivalent, regardless of order. Otherwise, `false`.
     static func == (_ lhs: UnorderedPair, _ rhs: UnorderedPair) -> Bool {
         return (lhs.a == rhs.a && lhs.b == rhs.b) || (lhs.a == rhs.b && lhs.b == rhs.a)
     }
 }
 
 extension UnorderedPair: Hashable where T: Hashable {
-    
-    var hashvalue: Int { return Set<T>([a,b]).hashValue }
-    
-    func hash (into hasher: inout Hasher) {
-        return Set<T>([a,b]).hash(into: &hasher)
+
+    // MARK: - Hashable
+
+    /// Implements hashable requirement.
+    func hash(into hasher: inout Hasher) {
+        return Set([a,b]).hash(into: &hasher)
     }
 }
