@@ -6,7 +6,7 @@
 //
 
 protocol EdgeLike: Weighted & NodePair {
-    init(_ nodepair: Pair, _ weight: Weight)
+    init(_ nodes: Pair, _ weight: Weight)
 }
 
 extension EdgeLike where Pair: Swappable {
