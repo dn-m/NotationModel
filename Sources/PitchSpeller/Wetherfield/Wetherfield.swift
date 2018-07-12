@@ -5,7 +5,6 @@
 //  Created by James Bean on 5/23/18.
 //
 
-import Restructure
 import Pitch
 import SpelledPitch
 
