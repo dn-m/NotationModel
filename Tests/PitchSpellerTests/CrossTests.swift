@@ -23,10 +23,4 @@ class CrossTests: XCTestCase {
         let dict = [pair: "Hash Value"]
         XCTAssertEqual(dict[pair], "Hash Value")
     }
-    
-    func testTuple() {
-        let pair = Cross<Int, String>(3, "three")
-        XCTAssertEqual(pair.tuple.0, 3)
-        XCTAssertEqual(pair.tuple.1, "three")
-    }
 }
