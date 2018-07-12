@@ -8,16 +8,24 @@
 import Pitch
 import SpelledPitch
 
-struct AssignedNode {
-    let index: Int
-    let tendency: Tendency
-    init(_ index: Int, _ tendency: Tendency) {
-        self.index = index
-        self.tendency = tendency
-    }
+protocol PitchSpellingNode: Hashable {
+    var index: Int { get }
 }
 
 struct PitchSpeller {
+
+    struct UnassignedNode: PitchSpellingNode {
+        let index: Int
+    }
+
+    struct AssignedNode: PitchSpellingNode {
+        let index: Int
+        let assignment: Tendency
+        init(_ index: Int, _ assignment: Tendency) {
+            self.index = index
+            self.assignment = assignment
+        }
+    }
 
     /// - Returns: The nodes for the `Pitch` at the given `index`.
     private static func nodes(pitchAtIndex index: Int) -> (Int, Int) {
@@ -41,7 +49,7 @@ struct PitchSpeller {
     // MARK: - Instance Properties
 
     /// The omnipresent, tie-breaking `Pitch.Class` value.
-    let parsimonyPivot: Pitch.Class
+    let parsimonyPivot: Pitch.Spelling
 
     /// The unspelled `Pitch` values to be spelled.
     let pitches: [Pitch]
@@ -56,7 +64,7 @@ struct PitchSpeller {
     // MARK: - Initializers
 
     /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
-    init(pitches: [Pitch], parsimonyPivot: Pitch.Class = 2) {
+    init(pitches: [Pitch], parsimonyPivot: Pitch.Spelling = .init(.d)) {
         self.pitches = pitches
         self.parsimonyPivot = parsimonyPivot
         self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
@@ -83,7 +91,7 @@ struct PitchSpeller {
 
     private func spellPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch {
         let pitch = self.pitch(node: up.index)
-        let tendencies = TendencyPair((up.tendency, down.tendency))
+        let tendencies = TendencyPair((up.assignment, down.assignment))
         let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
         return try! pitch.spelled(with: spelling)
     }
