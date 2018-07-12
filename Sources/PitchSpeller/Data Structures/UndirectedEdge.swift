@@ -5,13 +5,18 @@
 //  Created by Benjamin Wetherfield on 7/1/18.
 //
 
-public struct UndirectedEdge<Node, Num>: EdgeLike {
-    
-    typealias Weight = Num
+public struct UndirectedEdge <Node,Weight>: EdgeLike {
+
+    // MARK: - Associated Types
+
     typealias Pair = UnorderedPair<Node>
-    
+
+    // MARK: - Instance Properties
+
     var weight: Weight
     let nodes: Pair
+
+    // MARK: - Initializers
     
     init (_ source: Node, _ destination: Node, _ weight: Weight) {
         self.nodes = Pair(source, destination)

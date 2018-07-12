@@ -5,13 +5,18 @@
 //  Created by Benjamin Wetherfield on 7/1/18.
 //
 
-public struct DirectedEdge<Node, Num>: EdgeLike {
+public struct DirectedEdge <Node,Weight>: EdgeLike {
 
-    typealias Weight = Num
+    // MARK: - Associated Types
+
     typealias Pair = OrderedPair<Node>
+
+    // MARK: - Instance Properties
 
     var weight: Weight
     let nodes: Pair
+
+    // MARK: - Initializers
     
     init (_ source: Node, _ destination: Node, _ weight: Weight) {
         self.nodes = Pair(source, destination)
