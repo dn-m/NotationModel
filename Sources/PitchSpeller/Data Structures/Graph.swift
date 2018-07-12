@@ -5,8 +5,6 @@
 //  Created by James Bean on 5/24/18.
 //
 
-import Restructure
-import StructureWrapping
 import DataStructures
 
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
