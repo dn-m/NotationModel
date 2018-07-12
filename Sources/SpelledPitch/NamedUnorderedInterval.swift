@@ -6,7 +6,7 @@
 //
 //
 
-import DataStructures
+import Algorithms
 import Math
 import Pitch
 
