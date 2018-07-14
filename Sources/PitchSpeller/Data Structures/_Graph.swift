@@ -18,6 +18,7 @@ enum WithUndirectedEdges: Undirected { }
 
 protocol Weightedness { }
 protocol Unweighted: Weightedness { }
+extension Double: Weightedness { }
 
 enum WithoutWeights: Unweighted { }
 
