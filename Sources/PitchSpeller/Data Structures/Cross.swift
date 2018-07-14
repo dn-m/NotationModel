@@ -5,7 +5,7 @@
 //  Created by Benjamin Wetherfield on 6/30/18.
 //
 
-struct Cross<T,U>: Pairable {
+struct Cross<T,U>: Pair {
     
     typealias A = T
     typealias B = U
