@@ -14,6 +14,13 @@ protocol Undirected: Directedness { }
 enum WithDirectedEdges: Directed { }
 enum WithUndirectedEdges: Undirected { }
 
+// MARK: - Weightedness Flags
+
+protocol Weightedness { }
+protocol Unweighted: Weightedness { }
+
+enum WithoutWeights: Unweighted { }
+
 struct _Graph<DirectednessFlag: Directedness> {
     
 }
