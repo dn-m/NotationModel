@@ -5,10 +5,10 @@
 //  Created by Benjamin Wetherfield on 6/30/18.
 //
 
-protocol Swappable: SymmetricPair {
+protocol SwappablePair: SymmetricPair {
     var swapped: Self { get }
 }
 
-extension Swappable {
+extension SwappablePair {
     var swapped: Self { return .init(b, a) }
 }
