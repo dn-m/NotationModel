@@ -20,8 +20,7 @@ protocol Weightedness { }
 protocol Unweighted: Weightedness { }
 protocol AsWeight: Weightedness { }
 
-extension Double: Weightedness { }
-
+extension Double: AsWeight { }
 enum WithoutWeights: Unweighted { }
 
 struct _Graph<DirectednessFlag: Directedness> {
