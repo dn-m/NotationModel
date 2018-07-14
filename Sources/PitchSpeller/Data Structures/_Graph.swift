@@ -15,3 +15,7 @@ enum WithUndirectedEdges: Undirected { }
 struct _Graph<DirectednessFlag: Directedness> {
     
 }
+
+extension _Graph where DirectednessFlag: Directed {
+    
+}
