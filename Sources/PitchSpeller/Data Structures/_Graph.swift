@@ -11,3 +11,7 @@ protocol Undirected: Directedness { }
 
 enum WithDirectedEdges: Directed { }
 enum WithUndirectedEdges: Undirected { }
+
+struct _Graph<DirectednessFlag: Directedness> {
+    
+}
