@@ -27,6 +27,6 @@ struct _Graph<WeightednessFlag: Weightedness, DirectednessFlag: Directedness> {
     
 }
 
-extension _Graph where DirectednessFlag: Directed {
+extension _Graph where WeightednessFlag: Numeric, DirectednessFlag: Directed {
     
 }
