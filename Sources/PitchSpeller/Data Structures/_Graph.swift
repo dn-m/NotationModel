@@ -5,6 +5,8 @@
 //  Created by Benjamin Wetherfield on 7/14/18.
 //
 
+// MARK: - Directedness Flags
+
 protocol Directedness { }
 protocol Directed: Directedness { }
 protocol Undirected: Directedness { }
