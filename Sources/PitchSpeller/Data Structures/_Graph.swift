@@ -20,6 +20,7 @@ protocol Weightedness { }
 protocol Unweighted: Weightedness { }
 protocol AsWeight: Weightedness { }
 
+// Allows Double to be used as an edge weight
 extension Double: AsWeight { }
 enum WithoutWeights: Unweighted { }
 
