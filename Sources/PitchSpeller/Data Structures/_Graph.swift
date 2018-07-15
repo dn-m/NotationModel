@@ -67,6 +67,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
     
     init() {
         nodes = []
+        edges = []
     }
 }
 
