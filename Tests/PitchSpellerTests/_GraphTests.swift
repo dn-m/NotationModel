@@ -44,7 +44,7 @@ class _GraphTests: XCTestCase {
         var graph = _Graph<Double, DirectedOver<Int> >()
         graph.insertNode(0)
         graph.insertNode(1)
-        graph.insertEdge(from: 0, to: 1, value: 0.5)
+        graph.insertEdge(from: 0, to: 1, withWeight: 0.5)
         XCTAssertEqual(graph.edgeValue(from: 0, to: 1), 0.5)
     }
 //
