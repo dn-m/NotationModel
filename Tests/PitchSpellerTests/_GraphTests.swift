@@ -40,13 +40,13 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.edges.count, 5)
     }
 //
-//    func testEdgeValue() {
-//        var graph = Graph<Int>()
-//        graph.insertNode(0)
-//        graph.insertNode(1)
-//        graph.insertEdge(from: 0, to: 1, value: 0.5)
-//        XCTAssertEqual(graph.edgeValue(from: 0, to: 1), 0.5)
-//    }
+    func testEdgeValue() {
+        var graph = Graph<Int>()
+        graph.insertNode(0)
+        graph.insertNode(1)
+        graph.insertEdge(from: 0, to: 1, value: 0.5)
+        XCTAssertEqual(graph.edgeValue(from: 0, to: 1), 0.5)
+    }
 //
 //    func testRemoveEdge() {
 //        var graph = Graph<String>()
