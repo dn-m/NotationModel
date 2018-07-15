@@ -8,7 +8,7 @@
 import XCTest
 @testable import PitchSpeller
 
-//class GraphTests: XCTestCase {
+class _GraphTests: XCTestCase {
 //
 //    var simpleGraph: Graph<Int> {
 //        var graph = Graph<Int>()
@@ -181,4 +181,4 @@ import XCTest
 //        graph.insertEdge(from: "b", to: "c", value: 1)
 //        XCTAssertEqual(graph.breadthFirstSearch(from: "a"), ["a","b","c"])
 //    }
-//}
+}
