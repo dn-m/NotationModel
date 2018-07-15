@@ -25,7 +25,9 @@ protocol AsWeight: Weightedness { }
 
 // Allows Double to be used as an edge weight
 extension Double: AsWeight { }
-enum WithoutWeights: Unweighted { }
+enum WithoutWeights: Unweighted {
+    case unweighted
+}
 
 struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
     
