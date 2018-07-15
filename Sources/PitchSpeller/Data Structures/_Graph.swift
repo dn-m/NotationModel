@@ -39,6 +39,14 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
     }
 }
 
+extension _Graph.Edge where Pair: Directed {
+    
+    // MARK: - Instance Properties
+    
+    var source: _Graph.Node { return nodes.a }
+    var destination: _Graph.Node { return nodes.b }
+}
+
 extension _Graph where Weight: Numeric, Pair: Directed {
     
 }
