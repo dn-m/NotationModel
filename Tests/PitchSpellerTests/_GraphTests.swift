@@ -48,16 +48,16 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.weight(from: 0, to: 1), 0.5)
     }
 //
-//    func testRemoveEdge() {
-//        var graph = Graph<String>()
-//        graph.insertNode("a")
-//        graph.insertNode("b")
-//        graph.insertNode("c")
-//        graph.insertEdge(from: "a", to: "b", value: 1)
-//        graph.insertEdge(from: "b", to: "c", value: 1)
-//        graph.removeEdge(from: "a", to: "b")
-//        XCTAssertNil(graph.edgeValue(from: "a", to: "b"))
-//    }
+    func testRemoveEdge() {
+        var graph = Graph<String>()
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertNode("c")
+        graph.insertEdge(from: "a", to: "b", value: 1)
+        graph.insertEdge(from: "b", to: "c", value: 1)
+        graph.removeEdge(from: "a", to: "b")
+        XCTAssertNil(graph.edgeValue(from: "a", to: "b"))
+    }
 //
 //    func testEdgesFromNode() {
 //        var graph = Graph<String>()
