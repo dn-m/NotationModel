@@ -60,7 +60,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     var adjacents: [Pair: Weight]
     
     var edges: [Edge] {
-        return adjacents.compactMap{ Edge($0.key.a, $0.key.b, withWeight: $0.value) }
+        return adjacents.compactMap{ Edge($0.key, withWeight: $0.value) }
     }
     
     // MARK: - Instance Methods
