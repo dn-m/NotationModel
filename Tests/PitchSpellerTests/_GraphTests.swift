@@ -57,6 +57,7 @@ class _GraphTests: XCTestCase {
         graph.insertEdge(from: "b", to: "c", withWeight: 1)
         graph.removeEdge(from: "a", to: "b")
         XCTAssertNil(graph.weight(from: "a", to: "b"))
+        XCTAssertEqual(graph.edges.count, 1)
     }
 //
 //    func testEdgesFromNode() {
