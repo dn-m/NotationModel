@@ -51,6 +51,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
     // MARK: - Instance Properties
      
     var nodes: [Node]
+    var edges: [Edge]
     
     // MARK: - Instance Methods
     
