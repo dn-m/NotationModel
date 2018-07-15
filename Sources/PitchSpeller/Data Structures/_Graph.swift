@@ -30,6 +30,13 @@ enum WithoutWeights: Unweighted { }
 struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
     
     typealias Node = Pair.A
+    
+    struct Edge {
+        
+        // MARK: - Instance Properties
+        
+        let nodes: Pair
+    }
 }
 
 extension _Graph where Weight: Numeric, Pair: Directed {
