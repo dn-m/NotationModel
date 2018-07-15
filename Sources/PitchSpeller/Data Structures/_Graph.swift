@@ -47,6 +47,12 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
             self.weight = weight
         }
     }
+    
+    // MARK: - Instance Methods
+    
+    func insertNode (_ node: Node) {
+        
+    }
 }
 
 extension _Graph.Edge where Weight == WithoutWeights {
