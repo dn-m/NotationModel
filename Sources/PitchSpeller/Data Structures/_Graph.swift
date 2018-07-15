@@ -11,7 +11,9 @@ protocol Directedness { }
 protocol Directed: Directedness { }
 protocol Undirected: Directedness { }
 
-enum WithDirectedEdges: Directed { }
+typealias DirectedOver = OrderedPair
+extension DirectedOver: Directed { }
+
 enum WithUndirectedEdges: Undirected { }
 
 // MARK: - Weightedness Flags
