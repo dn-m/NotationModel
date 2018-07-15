@@ -27,10 +27,11 @@ protocol AsWeight: Weightedness { }
 extension Double: AsWeight { }
 enum WithoutWeights: Unweighted { }
 
-struct _Graph<Weight: Weightedness, DirectednessFlag: Directedness> {
+struct _Graph<Weight: Weightedness, Pair: Directedness> {
+    
     
 }
 
-extension _Graph where Weight: Numeric, DirectednessFlag: Directed {
+extension _Graph where Weight: Numeric, Pair: Directed {
     
 }
