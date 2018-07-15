@@ -41,7 +41,7 @@ class _GraphTests: XCTestCase {
     }
 //
     func testEdgeValue() {
-        var graph = Graph<Int>()
+        var graph = _Graph<Double, DirectedOver<Int> >()
         graph.insertNode(0)
         graph.insertNode(1)
         graph.insertEdge(from: 0, to: 1, value: 0.5)
