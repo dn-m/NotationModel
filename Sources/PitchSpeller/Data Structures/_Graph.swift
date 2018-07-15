@@ -66,7 +66,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
     
     func edgeValue (from source: Node, to destination: Node) -> Weight? {
-        return nil
+        return adjacents[Pair(source, destination)]
     }
     
     // MARK: - Initializers
