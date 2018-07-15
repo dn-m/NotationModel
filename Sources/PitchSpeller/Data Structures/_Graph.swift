@@ -48,6 +48,10 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
         }
     }
     
+    // MARK: - Instance Properties
+     
+    var nodes: [Node]
+    
     // MARK: - Instance Methods
     
     func insertNode (_ node: Node) {
