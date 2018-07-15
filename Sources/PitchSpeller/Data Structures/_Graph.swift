@@ -65,7 +65,6 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
     
     mutating func insertEdge(from source: Node, to destination: Node, withWeight weight: Weight) {
-        edges.append(Edge(source, destination, withWeight: weight))
         adjacents[Pair(source, destination)] = weight
     }
     
