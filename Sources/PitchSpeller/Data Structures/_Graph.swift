@@ -29,7 +29,7 @@ enum WithoutWeights: Unweighted { }
 
 struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
     
-    
+    typealias Node = Pair.A
 }
 
 extension _Graph where Weight: Numeric, Pair: Directed {
