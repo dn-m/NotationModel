@@ -53,8 +53,8 @@ class _GraphTests: XCTestCase {
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
-        graph.insertEdge(from: "a", to: "b", value: 1)
-        graph.insertEdge(from: "b", to: "c", value: 1)
+        graph.insertEdge(from: "a", to: "b", withWeight: 1)
+        graph.insertEdge(from: "b", to: "c", withWeight: 1)
         graph.removeEdge(from: "a", to: "b")
         XCTAssertNil(graph.edgeValue(from: "a", to: "b"))
     }
