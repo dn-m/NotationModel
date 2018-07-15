@@ -39,6 +39,13 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
         
         let nodes: Pair
         let weight: Weight
+        
+        // MARK: - Initializers
+        
+        init (_ a: _Graph.Node, _ b: _Graph.Node, withWeight weight: Weight) {
+            self.nodes = Pair(a, b)
+            self.weight = weight
+        }
     }
 }
 
