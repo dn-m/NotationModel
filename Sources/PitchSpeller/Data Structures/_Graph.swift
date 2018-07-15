@@ -54,7 +54,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
         
     }
     
-    func insertEdge(from source: Node, to destination: Node, value weight: Weight) {
+    func insertEdge(from source: Node, to destination: Node, withWeight weight: Weight) {
         
     }
 }
