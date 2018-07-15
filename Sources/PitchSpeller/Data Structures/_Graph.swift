@@ -54,8 +54,8 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
     
     // MARK: - Instance Methods
     
-    func insertNode (_ node: Node) {
-        
+    mutating func insertNode (_ node: Node) {
+        nodes.append(node)
     }
     
     func insertEdge(from source: Node, to destination: Node, withWeight weight: Weight) {
