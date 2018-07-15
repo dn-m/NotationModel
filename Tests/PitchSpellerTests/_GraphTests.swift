@@ -40,7 +40,7 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.edges.count, 5)
     }
 //
-    func testEdgeValue() {
+    func testEdgeWeight() {
         var graph = _Graph<Double, DirectedOver<Int> >()
         graph.insertNode(0)
         graph.insertNode(1)
