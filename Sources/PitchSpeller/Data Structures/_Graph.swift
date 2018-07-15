@@ -46,6 +46,11 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
             self.nodes = Pair(a, b)
             self.weight = weight
         }
+        
+        init (_ nodes: Pair, withWeight weight: Weight) {
+            self.nodes = nodes
+            self.weight = weight
+        }
     }
     
     // MARK: - Instance Properties
