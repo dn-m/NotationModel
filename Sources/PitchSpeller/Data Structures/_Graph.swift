@@ -42,6 +42,14 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
     }
 }
 
+extension _Graph.Edge where Weight == WithoutWeights {
+    
+    init (_ a: _Graph.Node, _ b: _Graph.Node) {
+        self.nodes = Pair(a, b)
+        self.weight = .unweighted
+    }
+}
+
 extension _Graph.Edge where Pair: Directed {
     
     // MARK: - Instance Properties
