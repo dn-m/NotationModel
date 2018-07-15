@@ -35,10 +35,10 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.nodes.count, 10)
     }
 //
-//    func testEdgesCount() {
-//        let graph = simpleGraph
-//        XCTAssertEqual(graph.edges.count, 5)
-//    }
+    func testEdgesCount() {
+        let graph = simpleGraph
+        XCTAssertEqual(graph.edges.count, 5)
+    }
 //
 //    func testEdgeValue() {
 //        var graph = Graph<Int>()
