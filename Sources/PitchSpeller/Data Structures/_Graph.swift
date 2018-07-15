@@ -38,6 +38,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
         // MARK: - Instance Properties
         
         let nodes: Pair
+        let weight: Weight
     }
 }
 
