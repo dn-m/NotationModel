@@ -49,7 +49,7 @@ class _GraphTests: XCTestCase {
     }
 //
     func testRemoveEdge() {
-        var graph = Graph<String>()
+        var graph = _Graph<Double, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
