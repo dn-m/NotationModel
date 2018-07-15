@@ -63,6 +63,10 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness> {
         edges.append(Edge(source, destination, withWeight: weight))
     }
     
+    func edgeValue (from source: Node, to destination: Node) {
+        
+    }
+    
     // MARK: - Initializers
     
     init() {
