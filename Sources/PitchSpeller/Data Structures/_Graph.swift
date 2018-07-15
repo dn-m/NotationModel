@@ -73,6 +73,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     init() {
         nodes = []
         edges = []
+        adjacents = [:]
     }
 }
 
