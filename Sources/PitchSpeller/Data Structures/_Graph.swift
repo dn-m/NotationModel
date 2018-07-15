@@ -66,7 +66,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
     
     mutating func removeEdge(from source: Node, to destination: Node) {
-        
+        adjacents[Pair(source, destination)] = nil
     }
     
     func weight (from source: Node, to destination: Node) -> Weight? {
