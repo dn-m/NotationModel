@@ -106,6 +106,18 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.neighbors(of: "b"), [])
         XCTAssertEqual(graph.neighbors(of: "c"), [])
     }
+    
+    func testNodesAdjacentToNodeUndirected() {
+        var graph = _Graph<WithoutWeights, UndirectedOver<String>>()
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertNode("c")
+        graph.insertEdge(from: "a", to: "b")
+        graph.insertEdge(from: "a", to: "c")
+        XCTAssertEqual(Set(graph.neighbors(of: "a")), Set(["b","c"]))
+        XCTAssertEqual(graph.neighbors(of: "b"), [])
+        XCTAssertEqual(graph.neighbors(of: "c"), [])
+    }
 //
 //    func testShortestPathSingleNode() {
 //        var graph = Graph<String>()
