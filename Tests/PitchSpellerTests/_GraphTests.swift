@@ -35,7 +35,7 @@ class _GraphTests: XCTestCase {
         for indexPair in [(0,2), (1,4), (1,5), (4,7), (4,9)] {
             let (sourceIndex, destinationIndex) = indexPair
             let (source, destination) = (nodes[sourceIndex], nodes[destinationIndex])
-            graph.insertEdge(from: source, to: destination, withWeight: Double.random(in: 0...1))
+            graph.insertEdge(from: source, to: destination)
         }
         return graph
     }
