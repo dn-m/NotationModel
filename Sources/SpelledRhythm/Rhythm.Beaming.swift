@@ -35,7 +35,7 @@ extension Rhythm {
                         }
                     }
 
-                    case neither
+                    case none
                     case start(count: Int)
                     case stop(count: Int)
                 }
