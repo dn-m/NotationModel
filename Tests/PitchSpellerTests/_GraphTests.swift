@@ -91,6 +91,17 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(edges[0].weight, 0.5)
         XCTAssertEqual(edges.count, 1)
     }
+    
+    func testEdgesFromNodeUndirected() {
+        var graph = _Graph<Double, UndirectedOver<String>>()
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertNode("c")
+        graph.insertEdge(from: "a", to: "c", withWeight: 0.5)
+        let edges = graph.edges(from: "a")
+        XCTAssertEqual(edges[0].weight, 0.5)
+        XCTAssertEqual(edges.count, 1)
+    }
 //
     func testNodesAdjacentToNodeDirected() {
         var graph = _Graph<WithoutWeights, DirectedOver<String>>()
