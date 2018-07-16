@@ -76,6 +76,7 @@ extension Rhythm {
         /// The collection of points for a single beamed event (metrical `.instance`)
         public struct Item: Equatable {
 
+            /// Errors which may occur when performing an operation on an `Item`.
             public enum Error: Swift.Error {
                 case empty
             }
