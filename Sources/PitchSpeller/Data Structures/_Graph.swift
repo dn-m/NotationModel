@@ -81,6 +81,10 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         return adjacents[Pair(source, destination)]
     }
     
+    func neighbors (of source: Node) -> [Node] {
+        
+    }
+    
     // MARK: - Initializers
     
     init() {
