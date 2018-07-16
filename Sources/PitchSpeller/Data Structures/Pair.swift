@@ -5,7 +5,7 @@
 //  Created by Benjamin Wetherfield on 6/30/18.
 //
 
-protocol Pairable {
+protocol Pair {
     
     // MARK: - Associated Types
     
