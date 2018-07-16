@@ -21,6 +21,14 @@ class Rhythm_BeamingTests: XCTestCase {
         #warning("Implement testCutSingleBeamingThrowsItemOutOfRange()")
     }
 
+    func testCutQuarterNotesThrowsCurrentStackEmpty() {
+        #warning("Implement testCutQuarterNotesThrowsCurrentStackEmpty()")
+    }
+
+    func testCutQuarterNotesThrowsPreviousStackEmpty() {
+        #warning("Implement testCutQuarterNotesThrowsPreviousStackEmpty()")
+    }
+
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
         #warning("Implement testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets()")
     }
