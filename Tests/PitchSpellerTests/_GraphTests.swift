@@ -81,7 +81,7 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.edges.count, 1)
     }
 //
-    func testEdgesFromNode() {
+    func testEdgesFromNodeDirected() {
         var graph = Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
