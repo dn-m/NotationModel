@@ -92,6 +92,11 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
 
 extension _Graph where Weight == WithoutWeights {
     
+    // MARK: - Instance Methods
+    
+    mutating func insertEdge(from source: Node, to destination: Node) {
+        insertEdge(from: source, to: destination, withWeight: .unweighted)
+    }
 }
 
 extension _Graph.Edge where Weight == WithoutWeights {
