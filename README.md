@@ -6,7 +6,7 @@ Model of musical notation.
 
 ## Development
 
-Work on this branch requires High Sierra, Xcode 9.4-beta, and the Swift 4.2 [toolchain](https://swift.org/download/#snapshots).
+Work on this branch requires Swift 4.2, via Xcode 10 beta, or [toolchain](https://swift.org/download/#snapshots).
 
 ### Build instructions
 
