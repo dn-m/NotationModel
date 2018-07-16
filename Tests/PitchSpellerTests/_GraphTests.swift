@@ -54,6 +54,12 @@ class _GraphTests: XCTestCase {
         let graph = simpleGraph
         XCTAssertEqual(graph.edges.count, 5)
     }
+    
+    func testUnweightedEdgesCount() {
+        let graph = unweightedGraph
+        XCTAssertEqual(graph.edges.count, 5)
+    }
+
 //
     func testEdgeWeight() {
         var graph = _Graph<Double, DirectedOver<Int>>()
