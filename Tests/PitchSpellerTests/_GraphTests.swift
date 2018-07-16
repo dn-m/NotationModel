@@ -86,8 +86,8 @@ class _GraphTests: XCTestCase {
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
-        graph.insertEdge(from: "a", to: "b", value: 1)
-        graph.insertEdge(from: "a", to: "c", value: 0.5)
+        graph.insertEdge(from: "a", to: "b", withWeight: 1)
+        graph.insertEdge(from: "a", to: "c", withWeight: 0.5)
         let edges = graph.edges(from: "a")
         let ab = edges[0]
         let ac = edges[1]
