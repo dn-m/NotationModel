@@ -24,6 +24,21 @@ class _GraphTests: XCTestCase {
         }
         return graph
     }
+    
+    var unweightedGraph: _Graph<WithoutWeights, DirectedOver<Int>> {
+        var graph = _Graph<WithoutWeights, DirectedOver<Int>>()
+        var nodes: [Int] = []
+        for value in 0..<10 {
+            graph.insertNode(value)
+            nodes.append(value)
+        }
+        for indexPair in [(0,2), (1,4), (1,5), (4,7), (4,9)] {
+            let (sourceIndex, destinationIndex) = indexPair
+            let (source, destination) = (nodes[sourceIndex], nodes[destinationIndex])
+            graph.insertEdge(from: source, to: destination, withWeight: Double.random(in: 0...1))
+        }
+        return graph
+    }
 //
 //    func testCount() {
 //        let graph = simpleGraph
