@@ -54,10 +54,6 @@ extension Rhythm {
                 var beamletCount: Int
             }
 
-            public enum Error: Swift.Error {
-                case cuttingIneligibleState(Point)
-            }
-
             /// Whether a beamlet is pointed forward or backward.
             public enum BeamletDirection: Double {
                 case forward = 1
@@ -77,9 +73,11 @@ extension Rhythm {
         /// The collection of points for a single beamed event (metrical `.instance`)
         public struct Item: Equatable {
 
-            /// Errors which may occur when performing an operation on an `Item`.
+            /// Errors which may occur when performing an cutting operation on an `Item`.
             public enum Error: Swift.Error {
-                case empty
+                case cuttingIneligibleIndex(Int)
+                case previousStackEmpty
+                case currentStackEmpty
             }
 
             /// Array of `Point` values ordered from lowest subdivision value (quarter, eighth,
@@ -109,6 +107,7 @@ extension Rhythm {
         /// - Throws: Error if the `Item` at the given `index` is empty.
         /// - Throws: Error if the `Item` at the given `index` is not
         public mutating func cut(amount: Int, at index: Int) throws {
+
             fatalError()
         }
     }
