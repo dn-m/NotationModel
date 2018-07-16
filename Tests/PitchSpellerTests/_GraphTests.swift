@@ -81,19 +81,19 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.edges.count, 1)
     }
 //
-//    func testEdgesFromNode() {
-//        var graph = Graph<String>()
-//        graph.insertNode("a")
-//        graph.insertNode("b")
-//        graph.insertNode("c")
-//        graph.insertEdge(from: "a", to: "b", value: 1)
-//        graph.insertEdge(from: "a", to: "c", value: 0.5)
-//        let edges = graph.edges(from: "a")
-//        let ab = edges[0]
-//        let ac = edges[1]
-//        XCTAssertEqual(ab.value, 1)
-//        XCTAssertEqual(ac.value, 0.5)
-//    }
+    func testEdgesFromNode() {
+        var graph = Graph<String>()
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertNode("c")
+        graph.insertEdge(from: "a", to: "b", value: 1)
+        graph.insertEdge(from: "a", to: "c", value: 0.5)
+        let edges = graph.edges(from: "a")
+        let ab = edges[0]
+        let ac = edges[1]
+        XCTAssertEqual(ab.value, 1)
+        XCTAssertEqual(ac.value, 0.5)
+    }
 //
     func testNodesAdjacentToNodeDirected() {
         var graph = _Graph<WithoutWeights, DirectedOver<String>>()
