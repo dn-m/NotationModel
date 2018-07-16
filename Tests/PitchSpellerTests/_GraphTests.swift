@@ -95,7 +95,7 @@ class _GraphTests: XCTestCase {
 //        XCTAssertEqual(ac.value, 0.5)
 //    }
 //
-    func testNodesAdjacentToNode() {
+    func testNodesAdjacentToNodeDirected() {
         var graph = _Graph<WithoutWeights, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
