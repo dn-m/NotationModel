@@ -5,4 +5,4 @@
 //  Created by Benjamin Wetherfield on 6/30/18.
 //
 
-protocol Symmetric: Pair where A == B { }
+protocol SymmetricPair: Pair where A == B { }

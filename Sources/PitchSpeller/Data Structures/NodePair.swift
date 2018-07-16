@@ -9,7 +9,7 @@ protocol NodePair {
     
     // MARK: - Associated Types
     
-    associatedtype Pair: Symmetric
+    associatedtype Pair: SymmetricPair
     
     // MARK: - Typealiases
     
