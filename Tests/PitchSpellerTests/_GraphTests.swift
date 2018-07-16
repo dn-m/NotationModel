@@ -102,7 +102,7 @@ class _GraphTests: XCTestCase {
         graph.insertNode("c")
         graph.insertEdge(from: "a", to: "b")
         graph.insertEdge(from: "a", to: "c")
-        XCTAssertEqual(graph.neighbors(of: "a"), ["b","c"])
+        XCTAssertEqual(Set(graph.neighbors(of: "a")), Set(["b","c"]))
         XCTAssertEqual(graph.neighbors(of: "b"), [])
         XCTAssertEqual(graph.neighbors(of: "c"), [])
     }
