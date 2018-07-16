@@ -89,6 +89,11 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
 }
 
+
+extension _Graph where Weight == WithoutWeights {
+    
+}
+
 extension _Graph.Edge where Weight == WithoutWeights {
     
     // MARK: - Initializers
