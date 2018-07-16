@@ -134,7 +134,3 @@ extension _Graph.Edge where Pair: Directed {
     var source: _Graph.Node { return nodes.a }
     var destination: _Graph.Node { return nodes.b }
 }
-
-extension _Graph where Weight: Numeric, Pair: Directed {
-    
-}
