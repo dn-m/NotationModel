@@ -18,19 +18,14 @@ class Rhythm_BeamingTests: XCTestCase {
     }
 
     func testCutSingleBeamingThrowsItemOutOfRange() {
-        var beams = beaming(beamCounts: [1])
-        //XCTAssertThrowsError(try beams.cut(amount: 1, at: 1))
+        #warning("Implement testCutSingleBeamingThrowsItemOutOfRange()")
     }
 
-    func testTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
-        var beams = beaming(beamCounts: [1,1])
-        do {
-            //try beams.cut(amount: 1, at: 1)
-            //XCTAssertEqual(beams, beaming([]))
-        } catch { }
+    func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
+        #warning("Implement testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets()")
     }
 
     func testCutFourSixteenthsIntoTwoPairs() {
-
+        #warning("Implement testCutFourSixteenthsIntoTwoPairs()")
     }
 }
