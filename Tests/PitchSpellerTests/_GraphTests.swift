@@ -82,7 +82,7 @@ class _GraphTests: XCTestCase {
     }
 //
     func testEdgesFromNodeDirected() {
-        var graph = Graph<String>()
+        var graph = _Graph<Double, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
