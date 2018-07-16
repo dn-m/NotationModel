@@ -13,10 +13,6 @@ extension Rhythm {
     /// The beaming information for an entire `Rhythm`.
     public struct Beaming: Equatable {
 
-        public enum Error: Swift.Error {
-            case itemOutOfRange
-        }
-
         /// A single point of the beaming for a single beaming item (metrical `.instance`).
         public enum Point: Equatable {
 
