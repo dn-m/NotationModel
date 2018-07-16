@@ -87,7 +87,7 @@ extension Rhythm {
             ///
             /// They must be ordered in groups of: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
             var points: Stack<Point>
-            
+
             // MARK: - Initializers
 
             public init(_ points: Stack<Point>) {
@@ -104,7 +104,7 @@ extension Rhythm {
             self.items = items
         }
 
-        ///
+        /// 
         ///
         /// - Throws: Error if the `Item` at the given `index` is empty.
         /// - Throws: Error if the `Item` at the given `index` is not
