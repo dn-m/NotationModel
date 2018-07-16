@@ -21,7 +21,7 @@ Defines pitches with names (`G Sharp`, `A Flat`, `B Double Sharp`, etc.) as well
 
 ### PitchSpeller
 
-Implementation of Ben Wetherfield's `Graphical Theory of Musical Pitch Spelling`, which converts unspelled pitch values (e.g., MIDI note numbers) into spelled pitch values given context and user-specifiable rules.
+Implements Ben Wetherfield's `Graphical Theory of Musical Pitch Spelling`, which converts unspelled pitch values (e.g., MIDI note numbers) into spelled pitch values given context and user-specifiable rules.
 
 ### SpelledRhythm
 
