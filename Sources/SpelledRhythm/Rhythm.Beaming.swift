@@ -85,6 +85,8 @@ extension Rhythm {
             /// They must be ordered in groups of: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
             var points: Stack<Point>
 
+            // MARK: - Initializers
+
             public init(_ points: Stack<Point>) {
                 self.points = points
             }
