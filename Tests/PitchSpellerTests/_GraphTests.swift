@@ -95,17 +95,17 @@ class _GraphTests: XCTestCase {
 //        XCTAssertEqual(ac.value, 0.5)
 //    }
 //
-//    func testNodesAdjacentToNode() {
-//        var graph = Graph<String>()
-//        graph.insertNode("a")
-//        graph.insertNode("b")
-//        graph.insertNode("c")
-//        graph.insertEdge(from: "a", to: "b", value: 1)
-//        graph.insertEdge(from: "a", to: "c", value: 0.5)
-//        XCTAssertEqual(graph.neighbors(of: "a"), ["b","c"])
-//        XCTAssertEqual(graph.neighbors(of: "b"), [])
-//        XCTAssertEqual(graph.neighbors(of: "c"), [])
-//    }
+    func testNodesAdjacentToNode() {
+        var graph = _Graph<WithoutWeights, DirectedOver<String>>()
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertNode("c")
+        graph.insertEdge(from: "a", to: "b")
+        graph.insertEdge(from: "a", to: "c")
+        XCTAssertEqual(graph.neighbors(of: "a"), ["b","c"])
+        XCTAssertEqual(graph.neighbors(of: "b"), [])
+        XCTAssertEqual(graph.neighbors(of: "c"), [])
+    }
 //
 //    func testShortestPathSingleNode() {
 //        var graph = Graph<String>()
