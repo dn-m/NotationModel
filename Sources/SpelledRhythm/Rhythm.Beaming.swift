@@ -47,8 +47,13 @@ extension Rhythm {
                         Array(repeating: .beamlet(direction: .forward), count: beamletCount)
                 }
 
+                /// The amount of `.maintain` points.
                 var maintainCount: Int
+
+                /// The amount of `.start` or `.stop` points.
                 var startOrStop: StartOrStop
+
+                /// The amount of `.beamlet` points.
                 var beamletCount: Int
             }
 
