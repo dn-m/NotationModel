@@ -115,8 +115,8 @@ class _GraphTests: XCTestCase {
         graph.insertEdge(from: "a", to: "b")
         graph.insertEdge(from: "a", to: "c")
         XCTAssertEqual(Set(graph.neighbors(of: "a")), Set(["b","c"]))
-        XCTAssertEqual(graph.neighbors(of: "b"), [])
-        XCTAssertEqual(graph.neighbors(of: "c"), [])
+        XCTAssertEqual(graph.neighbors(of: "b"), ["a"])
+        XCTAssertEqual(graph.neighbors(of: "c"), ["a"])
     }
 //
 //    func testShortestPathSingleNode() {
