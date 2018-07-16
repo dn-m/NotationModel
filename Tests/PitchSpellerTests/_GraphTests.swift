@@ -87,9 +87,9 @@ class _GraphTests: XCTestCase {
         graph.insertNode("b")
         graph.insertNode("c")
         graph.insertEdge(from: "a", to: "c", withWeight: 0.5)
-        let edges = graph.edges(from: "a")
-        XCTAssertEqual(edges[0].weight, 0.5)
-        XCTAssertEqual(edges.count, 1)
+        let edgesFromA = graph.edges(from: "a")
+        XCTAssertEqual(edgesFromA[0].weight, 0.5)
+        XCTAssertEqual(edgesFromA.count, 1)
     }
     
     func testEdgesFromNodeUndirected() {
