@@ -9,6 +9,6 @@ protocol EdgeLike: Weighted & NodePair {
     init(_ nodes: Pair, _ weight: Weight)
 }
 
-extension EdgeLike where Pair: Swappable {
+extension EdgeLike where Pair: SwappablePair {
     var reversed: Self { return Self(nodes.swapped, weight) }
 }

@@ -6,7 +6,7 @@
 //
 
 /// Pair of values for which the order matters.
-struct OrderedPair <T>: Swappable {
+struct OrderedPair <T>: SwappablePair {
 
     // MARK: - Instance Properties
 
