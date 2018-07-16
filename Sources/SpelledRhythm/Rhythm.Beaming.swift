@@ -27,7 +27,7 @@ extension Rhythm {
 
                     var points: [Point] {
                         switch self {
-                        case .neither: return []
+                        case .none: return []
                         case .start(let count):
                             return Array(repeating: .start, count: count)
                         case .stop(let count):
