@@ -113,31 +113,6 @@ extension Rhythm {
             self.verticals = verticals
         }
 
-//        /// The collection of points for a single beamed event (metrical `.instance`)
-//        public struct Item: Equatable {
-//
-//            /// Array of `Point` values ordered from lowest subdivision value (quarter, eighth,
-//            /// sixteenth, etc.) to highest.
-//            ///
-//            /// They must be ordered in groups of: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
-//            var points: Stack<Point>
-//
-//            // MARK: - Initializers
-//
-//            public init(_ points: Stack<Point>) {
-//                self.points = points
-//            }
-//        }
-//
-//        var items: [Item]
-//
-//        // MARK: - Initializers
-//
-//        /// Create a `Beaming` with the given `items`.
-//        public init(_ items: [Item]) {
-//            self.items = items
-//        }
-
         /// Errors which may occur when performing an cutting operation on an `Item`.
         public enum Error: Swift.Error {
             case indexOutOfBounds(Int)
