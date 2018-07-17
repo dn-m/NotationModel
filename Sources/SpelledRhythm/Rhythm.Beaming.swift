@@ -81,6 +81,28 @@ extension Rhythm {
                     self.startOrStop = startOrStop
                     self.beamletCount = beamletCount
                 }
+
+                public init(
+                    maintain: Int = 0,
+                    start: Int,
+                    beamlets: Int = 0
+                )
+                {
+                    self.maintainCount = maintain
+                    self.startOrStop = .start(count: start)
+                    self.beamletCount = beamlets
+                }
+
+                public init(
+                    maintain: Int = 0,
+                    stop: Int,
+                    beamlets: Int = 0
+                )
+                {
+                    self.maintainCount = maintain
+                    self.startOrStop = .stop(count: stop)
+                    self.beamletCount = beamlets
+                }
             }
 
             /// Maintain a beam on a given level.
@@ -106,7 +128,7 @@ extension Rhythm {
         /// - Throws: Error if the `Item` at the given `index` is not
         public mutating func cut(amount: Int, at index: Int) throws {
             guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
-            fatalError()
+            #warning("Implement cut(amount:at:)")
         }
     }
 }
