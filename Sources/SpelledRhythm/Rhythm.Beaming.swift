@@ -13,6 +13,13 @@ extension Rhythm {
     /// The beaming information for an entire `Rhythm`.
     public struct Beaming: Equatable {
 
+        /// Errors which may occur when performing an cutting operation on an `Item`.
+        public enum Error: Swift.Error {
+            case indexOutOfBounds(Int)
+            case previousStackEmpty
+            case currentStackEmpty
+        }
+
         /// Whether a beamlet is pointed forward or backward.
         public enum BeamletDirection: Double {
             case forward = 1
@@ -92,13 +99,6 @@ extension Rhythm {
         /// Create a `Beaming` with the given `verticals`.
         public init(_ verticals: [Point.Vertical]) {
             self.verticals = verticals
-        }
-
-        /// Errors which may occur when performing an cutting operation on an `Item`.
-        public enum Error: Swift.Error {
-            case indexOutOfBounds(Int)
-            case previousStackEmpty
-            case currentStackEmpty
         }
 
         /// - Throws: Error if the `Item` at the given `index` is empty.
