@@ -62,11 +62,10 @@ class SpelledRhythmTests: XCTestCase {
 
         let expectedBeamingVerticals: [Rhythm<Int>.Beaming.Point.Vertical] = [
             .init(startOrStop: .start(count: 1)),
-            .init(maintainCount: 1),
-            .init(maintainCount: 1),
+            .init(maintain: 1),
+            .init(maintain: 1),
             .init(startOrStop: .stop(count: 1))
         ]
-//        let expectedBeamingItems = expectedBeamingPoints.map(Rhythm<Int>.Beaming.Point.Vertical.init)
         let expectedTies: [Rhythm<Int>.Spelling.Tie] = [.start, .maintain, .stop, .none]
         let expectedDots = [0,0,0,0]
         let expectedItems = zip(expectedBeamingVerticals, expectedTies, expectedDots)

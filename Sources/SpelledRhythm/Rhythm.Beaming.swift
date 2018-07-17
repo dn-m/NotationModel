@@ -72,12 +72,12 @@ extension Rhythm {
                 // MARK: - Initializers
 
                 public init(
-                    maintainCount: Int = 0,
+                    maintain: Int = 0,
                     startOrStop: StartOrStop = .none,
                     beamlets: Int = 0
                 )
                 {
-                    self.maintainCount = maintainCount
+                    self.maintainCount = maintain
                     self.startOrStop = startOrStop
                     self.beamletCount = beamlets
                 }

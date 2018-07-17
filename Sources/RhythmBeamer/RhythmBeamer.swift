@@ -27,16 +27,9 @@ extension Rhythm.Beaming.Point.Vertical {
 
     /// - Returns: The `Vertical` for the first context in a rhythm.
     static func first(_ cur: Int, _ next: Int) -> Rhythm.Beaming.Point.Vertical {
-        guard cur > 0 else {
-            return .init()
-        }
-        guard next > 0 else {
-            return .init(beamlets: cur)
-        }
-        return .init(
-            startOrStop: .start(count: Swift.min(cur,next)),
-            beamlets: Swift.max(0, cur - next)
-        )
+        guard cur > 0 else { return .init() }
+        guard next > 0 else { return .init(beamlets: cur) }
+        return .init(start: Swift.min(cur,next), beamlets: Swift.max(0, cur - next))
     }
 
     /// - Returns: The `Vertical` for the context in a rhythm.
@@ -44,17 +37,11 @@ extension Rhythm.Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
         guard prev > 0 else {
             guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }
-            return .init(
-                startOrStop: .start(count: next),
-                beamlets: Swift.max(0, cur - next)
-            )
+            return .init(start: next, beamlets: Swift.max(0, cur - next))
         }
         guard next > 0 else {
             guard prev > 0 else { return .init(beamlets: Swift.max(0, cur - next)) }
-            return .init(
-                startOrStop: .stop(count: prev),
-                beamlets: Swift.max(0, cur - prev)
-            )
+            return .init(stop: prev, beamlets: Swift.max(0, cur - prev))
         }
         let startCount = Swift.max(0, Swift.min(cur,next) - prev)
         let stopCount = Swift.max(0, Swift.min(cur,prev) - next)
@@ -64,7 +51,7 @@ extension Rhythm.Beaming.Point.Vertical {
                 : .none
         )
         return .init(
-            maintainCount: Swift.min(prev,cur,next),
+            maintain: Swift.min(prev,cur,next),
             startOrStop: startOrStop,
             beamlets: Swift.max(0, cur - Swift.max(prev,next))
         )

@@ -72,7 +72,7 @@ class RhythmBeamerTests: XCTestCase {
         let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
         let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
             .init(start: 2),
-            .init(maintainCount: 2),
+            .init(maintain: 2),
             .init(stop: 2)
         ]
         XCTAssertEqual(verticals, expected)
@@ -105,7 +105,7 @@ class RhythmBeamerTests: XCTestCase {
         let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
         let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
             .init(start: 1, beamlets: 1),
-            .init(maintainCount: 1),
+            .init(maintain: 1),
             .init(stop: 1, beamlets: 3)
         ]
         XCTAssertEqual(verticals, expected)
@@ -127,13 +127,13 @@ class RhythmBeamerTests: XCTestCase {
         let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
         let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
             .init(start: 1), // 1
-            .init(maintainCount: 1, startOrStop: .start(count: 1), beamlets: 1), // 3
-            .init(maintainCount: 2), // 2
-            .init(maintainCount: 2), // 2
+            .init(maintain: 1, startOrStop: .start(count: 1), beamlets: 1), // 3
+            .init(maintain: 2), // 2
+            .init(maintain: 2), // 2
             .init(maintain: 2, start: 1, beamlets: 1), // 4
-            .init(maintainCount: 3), // 3
+            .init(maintain: 3), // 3
             .init(maintain: 1, stop: 2), // 3
-            .init(maintainCount: 1), // 1
+            .init(maintain: 1), // 1
             .init(stop: 1, beamlets: 2) // 3
         ]
         XCTAssertEqual(verticals, expected)
@@ -145,8 +145,8 @@ class RhythmBeamerTests: XCTestCase {
         let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
             .init(),
             .init(start: 2),
-            .init(maintainCount: 2),
-            .init(maintainCount: 2),
+            .init(maintain: 2),
+            .init(maintain: 2),
             .init(stop: 2)
         ]
         XCTAssertEqual(verticals, expected)
@@ -159,7 +159,7 @@ class RhythmBeamerTests: XCTestCase {
             .init(beamlets: 2),
             .init(),
             .init(start: 2),
-            .init(maintainCount: 2),
+            .init(maintain: 2),
             .init(stop: 2)
         ]
         XCTAssertEqual(verticals, expected)
@@ -183,7 +183,7 @@ class RhythmBeamerTests: XCTestCase {
         let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
         let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
             .init(start: 2),
-            .init(maintainCount: 2),
+            .init(maintain: 2),
             .init(stop: 2),
             .init(),
             .init(beamlets: 2),
@@ -196,8 +196,8 @@ class RhythmBeamerTests: XCTestCase {
         let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
         let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
             .init(start: 2),
-            .init(maintainCount: 2),
-            .init(maintainCount: 2),
+            .init(maintain: 2),
+            .init(maintain: 2),
             .init(stop: 2),
             .init(),
         ]
@@ -209,7 +209,7 @@ class RhythmBeamerTests: XCTestCase {
         let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
         let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
             .init(start: 3, beamlets: 1),
-            .init(maintainCount: 3),
+            .init(maintain: 3),
             .init(maintain: 2, stop: 1),
             .init(stop: 2)
         ]
