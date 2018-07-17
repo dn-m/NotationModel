@@ -14,10 +14,11 @@ import Rhythm
 class Rhythm_BeamingTests: XCTestCase {
 
     func beaming(beamCounts: [Int]) -> Rhythm<()>.Beaming {
-        return Rhythm<()>.Beaming(beamingItems(beamCounts))
+        return Rhythm<()>.Beaming(beamingVerticals(beamCounts))
     }
 
     func testCutSingleBeamingThrowsItemOutOfRange() {
+
         #warning("Implement testCutSingleBeamingThrowsItemOutOfRange()")
     }
 

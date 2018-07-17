@@ -73,7 +73,7 @@ extension Rhythm {
 
         /// Information needed to abstractly represent a single metrical instance.
         public struct Item: Equatable {
-            let beamItem: Beaming.Item
+            let beamItem: Beaming.Point.Vertical
             let tie: Tie
             let dots: Int
         }

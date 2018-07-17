@@ -13,13 +13,21 @@ extension Rhythm {
     /// The beaming information for an entire `Rhythm`.
     public struct Beaming: Equatable {
 
+        /// Whether a beamlet is pointed forward or backward.
+        public enum BeamletDirection: Double {
+            case forward = 1
+            case backward = -1
+        }
+
         /// A single point of the beaming for a single beaming item (metrical `.instance`).
         public enum Point: Equatable {
 
             /// Rhythm.Beaming.Point.Vertical
-            struct Vertical {
+            public struct Vertical: Equatable {
 
-                enum StartOrStop {
+                #warning("Implement beamlet direction if neither start nor stop")
+
+                public enum StartOrStop: Equatable {
 
                     var points: [Point] {
                         switch self {
@@ -52,12 +60,41 @@ extension Rhythm {
 
                 /// The amount of `.beamlet` points.
                 var beamletCount: Int
-            }
 
-            /// Whether a beamlet is pointed forward or backward.
-            public enum BeamletDirection: Double {
-                case forward = 1
-                case backward = -1
+                // MARK: - Initializers
+
+                public init(
+                    maintainCount: Int = 0,
+                    startOrStop: StartOrStop = .none,
+                    beamletCount: Int = 0
+                )
+                {
+                    self.maintainCount = maintainCount
+                    self.startOrStop = startOrStop
+                    self.beamletCount = beamletCount
+                }
+//
+//                public init(
+//                    maintaining maintainCount: Int = 0,
+//                    starting startCount: Int = 0,
+//                    beamlets beamletCount: Int = 0
+//                )
+//                {
+//                    self.maintainCount = maintainCount
+//                    self.startOrStop = .start(count: startCount)
+//                    self.beamletCount = beamletCount
+//                }
+//
+//                public init(
+//                    maintaining maintainCount: Int = 0,
+//                    stopping stopCount: Int = 0,
+//                    beamlets beamletCount: Int = 0
+//                )
+//                {
+//                    self.maintainCount = maintainCount
+//                    self.startOrStop = .stop(count: stopCount)
+//                    self.beamletCount = beamletCount
+//                }
             }
 
             /// Maintain a beam on a given level.
@@ -70,57 +107,61 @@ extension Rhythm {
             case beamlet(direction: BeamletDirection)
         }
 
-        /// The collection of points for a single beamed event (metrical `.instance`)
-        public struct Item: Equatable {
+        var verticals: [Point.Vertical]
 
-            /// Errors which may occur when performing an cutting operation on an `Item`.
-            public enum Error: Swift.Error {
-                case cuttingIneligibleIndex(Int)
-                case previousStackEmpty
-                case currentStackEmpty
-            }
-
-            /// Array of `Point` values ordered from lowest subdivision value (quarter, eighth,
-            /// sixteenth, etc.) to highest.
-            ///
-            /// They must be ordered in groups of: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
-            var points: Stack<Point>
-
-            // MARK: - Initializers
-
-            public init(_ points: Stack<Point>) {
-                self.points = points
-            }
+        public init(_ verticals: [Point.Vertical]) {
+            self.verticals = verticals
         }
 
-        var items: [Item]
+//        /// The collection of points for a single beamed event (metrical `.instance`)
+//        public struct Item: Equatable {
+//
+//            /// Array of `Point` values ordered from lowest subdivision value (quarter, eighth,
+//            /// sixteenth, etc.) to highest.
+//            ///
+//            /// They must be ordered in groups of: `.maintain`, `.start`, `.stop`, `beamlet(...)`.
+//            var points: Stack<Point>
+//
+//            // MARK: - Initializers
+//
+//            public init(_ points: Stack<Point>) {
+//                self.points = points
+//            }
+//        }
+//
+//        var items: [Item]
+//
+//        // MARK: - Initializers
+//
+//        /// Create a `Beaming` with the given `items`.
+//        public init(_ items: [Item]) {
+//            self.items = items
+//        }
 
-        // MARK: - Initializers
-
-        /// Create a `Beaming` with the given `items`.
-        public init(_ items: [Item]) {
-            self.items = items
+        /// Errors which may occur when performing an cutting operation on an `Item`.
+        public enum Error: Swift.Error {
+            case indexOutOfBounds(Int)
+            case previousStackEmpty
+            case currentStackEmpty
         }
 
-        /// 
-        ///
         /// - Throws: Error if the `Item` at the given `index` is empty.
         /// - Throws: Error if the `Item` at the given `index` is not
         public mutating func cut(amount: Int, at index: Int) throws {
-
+            guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
             fatalError()
         }
     }
 }
 
-extension Rhythm.Beaming.Item: CollectionWrapping {
-    public var base: Stack<Rhythm.Beaming.Point> {
+extension Rhythm.Beaming.Point.Vertical: CollectionWrapping {
+    public var base: [Rhythm.Beaming.Point] {
         return points
     }
 }
 
 extension Rhythm.Beaming: CollectionWrapping {
-    public var base: [Item] {
-        return items
+    public var base: [Point.Vertical] {
+        return verticals
     }
 }
