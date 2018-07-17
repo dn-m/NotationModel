@@ -73,28 +73,6 @@ extension Rhythm {
                     self.startOrStop = startOrStop
                     self.beamletCount = beamletCount
                 }
-//
-//                public init(
-//                    maintaining maintainCount: Int = 0,
-//                    starting startCount: Int = 0,
-//                    beamlets beamletCount: Int = 0
-//                )
-//                {
-//                    self.maintainCount = maintainCount
-//                    self.startOrStop = .start(count: startCount)
-//                    self.beamletCount = beamletCount
-//                }
-//
-//                public init(
-//                    maintaining maintainCount: Int = 0,
-//                    stopping stopCount: Int = 0,
-//                    beamlets beamletCount: Int = 0
-//                )
-//                {
-//                    self.maintainCount = maintainCount
-//                    self.startOrStop = .stop(count: stopCount)
-//                    self.beamletCount = beamletCount
-//                }
             }
 
             /// Maintain a beam on a given level.
