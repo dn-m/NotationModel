@@ -74,12 +74,12 @@ extension Rhythm {
                 public init(
                     maintainCount: Int = 0,
                     startOrStop: StartOrStop = .none,
-                    beamletCount: Int = 0
+                    beamlets: Int = 0
                 )
                 {
                     self.maintainCount = maintainCount
                     self.startOrStop = startOrStop
-                    self.beamletCount = beamletCount
+                    self.beamletCount = beamlets
                 }
 
                 public init(

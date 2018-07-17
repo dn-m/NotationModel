@@ -22,7 +22,7 @@ extension Rhythm.Beaming.Point.Vertical {
 
     /// - Returns: Singleton `Vertical`.
     static func singleton(_ cur: Int) -> Rhythm.Beaming.Point.Vertical {
-        return .init(beamletCount: cur)
+        return .init(beamlets: cur)
     }
 
     /// - Returns: The `Vertical` for the first context in a rhythm.
@@ -31,11 +31,11 @@ extension Rhythm.Beaming.Point.Vertical {
             return .init()
         }
         guard next > 0 else {
-            return .init(beamletCount: cur)
+            return .init(beamlets: cur)
         }
         return .init(
             startOrStop: .start(count: Swift.min(cur,next)),
-            beamletCount: Swift.max(0, cur - next)
+            beamlets: Swift.max(0, cur - next)
         )
     }
 
@@ -43,17 +43,17 @@ extension Rhythm.Beaming.Point.Vertical {
     static func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Rhythm.Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
         guard prev > 0 else {
-            guard next > 0 else { return .init(beamletCount: Swift.max(0, cur - prev)) }
+            guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }
             return .init(
                 startOrStop: .start(count: next),
-                beamletCount: Swift.max(0, cur - next)
+                beamlets: Swift.max(0, cur - next)
             )
         }
         guard next > 0 else {
-            guard prev > 0 else { return .init(beamletCount: Swift.max(0, cur - next)) }
+            guard prev > 0 else { return .init(beamlets: Swift.max(0, cur - next)) }
             return .init(
                 startOrStop: .stop(count: prev),
-                beamletCount: Swift.max(0, cur - prev)
+                beamlets: Swift.max(0, cur - prev)
             )
         }
         let startCount = Swift.max(0, Swift.min(cur,next) - prev)
@@ -66,17 +66,17 @@ extension Rhythm.Beaming.Point.Vertical {
         return .init(
             maintainCount: Swift.min(prev,cur,next),
             startOrStop: startOrStop,
-            beamletCount: Swift.max(0, cur - Swift.max(prev,next))
+            beamlets: Swift.max(0, cur - Swift.max(prev,next))
         )
     }
 
     /// - Returns: The `Vertical` for the last context in a rhythm.
     static func last(_ prev: Int, _ cur: Int) -> Rhythm.Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
-        guard prev > 0 else { return .init(beamletCount: cur) }
+        guard prev > 0 else { return .init(beamlets: cur) }
         return .init(
             startOrStop: .stop(count: Swift.min(cur,prev)),
-            beamletCount: Swift.max(0, cur - prev)
+            beamlets: Swift.max(0, cur - prev)
         )
     }
 
