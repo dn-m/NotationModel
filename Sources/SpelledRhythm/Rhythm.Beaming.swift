@@ -87,6 +87,9 @@ extension Rhythm {
 
         var verticals: [Point.Vertical]
 
+        // MARK: - Initializers
+
+        /// Create a `Beaming` with the given `verticals`.
         public init(_ verticals: [Point.Vertical]) {
             self.verticals = verticals
         }
