@@ -51,6 +51,7 @@ extension Rhythm {
                     case stop(count: Int)
                 }
 
+                /// - Returns: The `Point` values contained herein.
                 var points: [Point] {
                     return
                         Array(repeating: .maintain, count: maintainCount) +
