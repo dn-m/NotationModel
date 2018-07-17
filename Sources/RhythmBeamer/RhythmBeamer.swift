@@ -61,10 +61,7 @@ extension Rhythm.Beaming.Point.Vertical {
     static func last(_ prev: Int, _ cur: Int) -> Rhythm.Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
         guard prev > 0 else { return .init(beamlets: cur) }
-        return .init(
-            startOrStop: .stop(count: Swift.min(cur,prev)),
-            beamlets: Swift.max(0, cur - prev)
-        )
+        return .init(stop: Swift.min(cur,prev), beamlets: Swift.max(0, cur - prev))
     }
 
     /// Create a `Vertical` with the given context:
