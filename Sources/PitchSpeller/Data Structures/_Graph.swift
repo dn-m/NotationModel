@@ -147,13 +147,14 @@ extension _Graph {
     
     func shortestUnweightedPath (from source: Node, to destination: Node) {
         
+        var breadcrumbs: [Node: Node] = [:]
+        
         func backtrace () -> [Node] {
             #warning("TODO: Implement")
             return []
         }
         
         var unvisited = nodes
-        var breadcrumbs: [Node: Node] = [:]
         var queue: Queue<Node> = []
         
         queue.push(source)
