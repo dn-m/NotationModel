@@ -68,11 +68,11 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         nodes.append(node)
     }
     
-    mutating func insertEdge(from source: Node, to destination: Node, withWeight weight: Weight) {
+    mutating func insertEdge (from source: Node, to destination: Node, withWeight weight: Weight) {
         adjacents[Pair(source, destination)] = weight
     }
     
-    mutating func removeEdge(from source: Node, to destination: Node) {
+    mutating func removeEdge (from source: Node, to destination: Node) {
         adjacents[Pair(source, destination)] = nil
     }
     
@@ -100,7 +100,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     
     // MARK: - Initializers
     
-    init() {
+    init () {
         nodes = []
         adjacents = [:]
     }
@@ -111,7 +111,7 @@ extension _Graph where Weight == WithoutWeights {
     
     // MARK: - Instance Methods
     
-    mutating func insertEdge(from source: Node, to destination: Node) {
+    mutating func insertEdge (from source: Node, to destination: Node) {
         insertEdge(from: source, to: destination, withWeight: .unweighted)
     }
 }
