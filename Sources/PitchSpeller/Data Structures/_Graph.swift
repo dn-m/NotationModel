@@ -29,7 +29,7 @@ enum WithoutWeights: Unweighted {
     case unweighted
 }
 
-struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable> {
+struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
     
     typealias Node = Pair.A
     
