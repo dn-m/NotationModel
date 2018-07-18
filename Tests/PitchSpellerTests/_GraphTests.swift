@@ -108,7 +108,7 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(edgesFromC.count, 1)
     }
 //
-    func testNodesAdjacentToNodeDirected() {
+    func testNeighborsDirected() {
         var graph = _Graph<WithoutWeights, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
@@ -120,7 +120,7 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.neighbors(of: "c"), [])
     }
     
-    func testNodesAdjacentToNodeUndirected() {
+    func testNeighborsUndirected() {
         var graph = _Graph<WithoutWeights, UndirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
