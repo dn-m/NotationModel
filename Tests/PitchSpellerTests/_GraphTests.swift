@@ -149,7 +149,7 @@ class _GraphTests: XCTestCase {
     func testShortestUnweightedPathSingleNode() {
         var graph = _Graph<WithoutWeights, DirectedOver<String>>()
         graph.insertNode("a")
-        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "a")!, [])
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "a")!, ["a"])
     }
 //
 //    func testShortestPathTwoUnconnectedNodes() {
