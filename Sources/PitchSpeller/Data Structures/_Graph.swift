@@ -159,7 +159,7 @@ extension _Graph {
             for neighbor in neighbors(of: node, from: unvisited) {
                 queue.push(neighbor)
                 unvisited.remove(neighbor)
-                #warning("TODO: Add breadcrumbs")
+                breadcrumbs[neighbor] = node
             }
         }
 
