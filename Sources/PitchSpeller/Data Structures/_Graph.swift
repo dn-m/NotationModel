@@ -159,6 +159,8 @@ extension _Graph {
             return path
         }
         
+        if source == destination { return [destination] }
+        
         var unvisited = nodes
         var queue: Queue<Node> = []
         
