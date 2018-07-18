@@ -55,7 +55,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     
     // MARK: - Instance Properties
      
-    var nodes: [Node]
+    var nodes: Set<Node>
     var adjacents: [Pair: Weight]
     
     var edges: [Edge] {
@@ -65,7 +65,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     // MARK: - Instance Methods
     
     mutating func insertNode (_ node: Node) {
-        nodes.append(node)
+        nodes.insert(node)
     }
     
     mutating func insertEdge (from source: Node, to destination: Node, withWeight weight: Weight) {
