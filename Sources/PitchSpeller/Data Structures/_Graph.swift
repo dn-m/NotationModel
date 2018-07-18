@@ -165,13 +165,11 @@ extension _Graph {
         queue.push(source)
         while !queue.isEmpty {
             let node = queue.pop()
-            if node == destination {
-                return backtrace()
-            }
             for neighbor in neighbors(of: node, from: unvisited) {
                 queue.push(neighbor)
                 unvisited.remove(neighbor)
                 breadcrumbs[neighbor] = node
+                if neighbor == destination { return backtrace() }
             }
         }
         return []
