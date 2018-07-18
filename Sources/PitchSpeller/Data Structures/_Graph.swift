@@ -87,6 +87,14 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         }
     }
     
+    func neighbors (of source: Node, from nodes: Set<Node>) -> [Node] {
+        return nodes.compactMap {
+            guard let _ = adjacents[Pair(source, $0)] else { return nil }
+            return $0
+            #warning("TODO: enforce `Node: Hashable`")
+        }
+    }
+    
     func edges (from source: Node) -> [Edge] {
         return nodes.compactMap {
             guard let weight = adjacents[Pair(source, $0)] else { return nil }
