@@ -174,6 +174,6 @@ extension _Graph {
                 breadcrumbs[neighbor] = node
             }
         }
-
+        return []
     }
 }
