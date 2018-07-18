@@ -145,7 +145,7 @@ extension _Graph {
     
     // MARK: - Instance Methods
     
-    func shortestUnweightedPath (from source: Node, to destination: Node) {
+    func shortestUnweightedPath (from source: Node, to destination: Node) -> [Node] {
         
         var breadcrumbs: [Node: Node] = [:]
         
