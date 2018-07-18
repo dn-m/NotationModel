@@ -84,8 +84,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         return nodes.compactMap {
             if (adjacents[Pair(source, $0)] != nil) {
                 return $0
-            }
-            else {
+            } else {
                 return nil
             }
         }
