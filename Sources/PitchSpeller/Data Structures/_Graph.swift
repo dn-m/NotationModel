@@ -140,3 +140,27 @@ extension _Graph.Edge where Pair: Directed {
     var source: _Graph.Node { return nodes.a }
     var destination: _Graph.Node { return nodes.b }
 }
+
+extension _Graph {
+    
+    // MARK: - Instance Methods
+    
+    func shortestUnweightedPath (from source: Node, to destination: Node) {
+        var unvisited = nodes
+        var queue: Queue<Node> = []
+        
+        queue.push(source)
+        while !queue.isEmpty {
+            let node = queue.pop()
+            if node == destination {
+                #warning("TODO: Implement")
+            }
+            for neighbor in neighbors(of: node, from: unvisited) {
+                queue.push(neighbor)
+                unvisited.remove(neighbor)
+                #warning("TODO: Add breadcrumbs")
+            }
+        }
+
+    }
+}
