@@ -82,11 +82,8 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     
     func neighbors (of source: Node) -> [Node] {
         return nodes.compactMap {
-            if (adjacents[Pair(source, $0)] != nil) {
-                return $0
-            } else {
-                return nil
-            }
+            guard let _ = adjacents[Pair(source, $0)] else { return nil }
+            return $0
         }
     }
     
