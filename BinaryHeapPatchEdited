@@ -1,0 +1,2204 @@
+From f2a02d601ef0be860996507afbb8135c5c90556b Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Sun, 15 Jul 2018 23:18:08 -0700
+Subject: [PATCH] Add Binary Heap data structure (TODO)
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+new file mode 100644
+index 0000000000000000000000000000000000000000..9d9843489aea32d63c39aa91683a7718c8ceceba
+--- /dev/null
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -0,0 +1,10 @@
++//
++//  BinaryHeap.swift
++//  PitchSpeller
++//
++//  Created by Benjamin Wetherfield on 7/15/18.
++//
++
++struct BinaryHeap {
++    #warning("TODO")
++}
+
+From 8e26132888446ff94036e07293087c333fa06ada Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Sun, 15 Jul 2018 23:20:58 -0700
+Subject: [PATCH] Add generic parameters to BinaryHeap
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 9d9843489aea32d63c39aa91683a7718c8ceceba..3ece36f41f31dced20a19888985aac5bffb859d6 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -5,6 +5,6 @@
+ //  Created by Benjamin Wetherfield on 7/15/18.
+ //
+ 
+-struct BinaryHeap {
++struct BinaryHeap<Element, Value: Comparable> {
+     #warning("TODO")
+ }
+
+From 112bec375b5cb20c119e85288c1811e28d4717e6 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Sun, 15 Jul 2018 23:22:22 -0700
+Subject: [PATCH] Add internal storage to BinaryHeap
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 3ece36f41f31dced20a19888985aac5bffb859d6..4809b24c2602f851c8c97df2ab25928abbb0baaf 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -6,5 +6,8 @@
+ //
+ 
+ struct BinaryHeap<Element, Value: Comparable> {
+-    #warning("TODO")
++
++    // MARK: - Instance Properties
++    
++    private let storage: [(Element, Value)]
+ }
+
+From 1b1039e6345a3544ead418df282155865a398e59 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Sun, 15 Jul 2018 23:24:57 -0700
+Subject: [PATCH] Add basic initializer
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 4809b24c2602f851c8c97df2ab25928abbb0baaf..27408a768df581494595f279da93e077a4bab166 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -10,4 +10,10 @@ struct BinaryHeap<Element, Value: Comparable> {
+     // MARK: - Instance Properties
+     
+     private let storage: [(Element, Value)]
++    
++    // MARK: - Initializers
++    
++    init () {
++        storage = []
++    }
+ }
+
+From 3a8cbb6c8e066deb68fc053f51525d6601f29029 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Sun, 15 Jul 2018 23:28:04 -0700
+Subject: [PATCH] Add insert function (TODO)
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 27408a768df581494595f279da93e077a4bab166..2b9b8c261911e010e8d7546257ef65e3ebc432c6 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -11,6 +11,12 @@ struct BinaryHeap<Element, Value: Comparable> {
+     
+     private let storage: [(Element, Value)]
+     
++    // MARK: - Instance Methods
++    
++    mutating func insert(_ element: Element, _ value: Value) {
++        storage.append((element, value))
++    }
++    
+     // MARK: - Initializers
+     
+     init () {
+
+From 5e644482cb5dcd94ace17d00e57cb179eaf4356e Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Sun, 15 Jul 2018 23:28:20 -0700
+Subject: [PATCH] Make storage mutable
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 2b9b8c261911e010e8d7546257ef65e3ebc432c6..f3e7fd73a42dc49603efde28b1759129ee1b4c61 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -9,7 +9,7 @@ struct BinaryHeap<Element, Value: Comparable> {
+ 
+     // MARK: - Instance Properties
+     
+-    private let storage: [(Element, Value)]
++    private var storage: [(Element, Value)]
+     
+     // MARK: - Instance Methods
+     
+
+From ddbf4c25cb33bf4929afa0eb1d525e96c1def762 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Sun, 15 Jul 2018 23:40:20 -0700
+Subject: [PATCH] Implement insert method for BinaryHeap
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index f3e7fd73a42dc49603efde28b1759129ee1b4c61..06dee03bb6296c57f7ff5c71cb5130598efd61c0 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -13,8 +13,16 @@ struct BinaryHeap<Element, Value: Comparable> {
+     
+     // MARK: - Instance Methods
+     
+-    mutating func insert(_ element: Element, _ value: Value) {
++    mutating func insert (_ element: Element, _ value: Value) {
+         storage.append((element, value))
++        var i = storage.count - 1
++        while (i != 0) {
++            if (storage[i].1 < storage[(i-1)/2].1) {
++                storage.swapAt(i, (i-1)/2)
++                i /= 2
++            }
++            else { break }
++        }
+     }
+     
+     // MARK: - Initializers
+
+From 6c7437f62b02ef5a7599b7c3501fd83fd0010e94 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Sun, 15 Jul 2018 23:50:11 -0700
+Subject: [PATCH] Implement pop partially
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 06dee03bb6296c57f7ff5c71cb5130598efd61c0..db02d326a46764345b5a9c170257836d3801b832 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -25,6 +25,13 @@ struct BinaryHeap<Element, Value: Comparable> {
+         }
+     }
+     
++    mutating func pop () -> (Element, Value)? {
++        guard let minimum = storage.first else { return nil }
++        storage[0] = storage.removeLast()
++        #warning("TODO: balance heap")
++        return minimum
++    }
++    
+     // MARK: - Initializers
+     
+     init () {
+
+From 7a86e61cce66ad900e9459cb120a3ab28259ca36 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 00:19:01 -0700
+Subject: [PATCH] Implement argmin for scoped usage
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index db02d326a46764345b5a9c170257836d3801b832..69de556c0ac68efe04233c334a5f026e3ab317ab 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -32,6 +32,14 @@ struct BinaryHeap<Element, Value: Comparable> {
+         return minimum
+     }
+     
++    mutating func balance () {
++        
++        func argmin(_ i: Int, _ j: Int) -> Int {
++            return storage[i].1 == min(storage[i].1, storage[j].1) ? i : j
++        }
++        
++    }
++    
+     // MARK: - Initializers
+     
+     init () {
+
+From b22d06bcf0948f2d27c3c3c73a3f0fbd8b47aa3f Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 00:56:46 -0700
+Subject: [PATCH] Implement balance
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 69de556c0ac68efe04233c334a5f026e3ab317ab..8b4c5256901e8fed4fc4145a82e3708d883f14e9 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -38,6 +38,23 @@ struct BinaryHeap<Element, Value: Comparable> {
+             return storage[i].1 == min(storage[i].1, storage[j].1) ? i : j
+         }
+         
++        var i = 0
++        while (2 * i + 1 <= storage.count - 1) {
++            if (2 * i + 2 > storage.count - 1) {
++                let j = 2 * i + 1
++                if (storage[j].1 < storage[i].1) {
++                    storage.swapAt(i, j)
++                    i = j
++                    continue
++                }
++            }
++            let j = argmin(2 * i + 1, 2 * i + 2)
++            if (storage[j].1 < storage[i].1) {
++                storage.swapAt(i, j)
++                i = j
++                continue
++            }
++        }
+     }
+     
+     // MARK: - Initializers
+
+From b6e603bde311f226a4002856953db54c942c74ef Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 00:59:24 -0700
+Subject: [PATCH] Add call to balance
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 8b4c5256901e8fed4fc4145a82e3708d883f14e9..5a6f0431930d34e82c039a9f3ac9fd24495d285b 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -28,7 +28,7 @@ struct BinaryHeap<Element, Value: Comparable> {
+     mutating func pop () -> (Element, Value)? {
+         guard let minimum = storage.first else { return nil }
+         storage[0] = storage.removeLast()
+-        #warning("TODO: balance heap")
++        balance()
+         return minimum
+     }
+     
+
+From c08e336bfa1921e1ef232f73e2a38946aea0b509 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:16:16 -0700
+Subject: [PATCH] Add lookup table for values
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 5a6f0431930d34e82c039a9f3ac9fd24495d285b..2f8f40c98333ab98e2634706dfb6e31b82b395f4 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -5,11 +5,12 @@
+ //  Created by Benjamin Wetherfield on 7/15/18.
+ //
+ 
+-struct BinaryHeap<Element, Value: Comparable> {
++struct BinaryHeap<Element: Hashable, Value: Comparable> {
+ 
+     // MARK: - Instance Properties
+     
+     private var storage: [(Element, Value)]
++    private var lookup: [Element: Value]
+     
+     // MARK: - Instance Methods
+     
+
+From da3a12d55989d9adcc048bd4a462e54d0c9c05ab Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:17:38 -0700
+Subject: [PATCH] Add lookup to initializer
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 2f8f40c98333ab98e2634706dfb6e31b82b395f4..b7decadbc41652b6536e07be27345ffe77d8e5ff 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -62,5 +62,6 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     init () {
+         storage = []
++        lookup = [:]
+     }
+ }
+
+From cae61575f34c691a73ae7be5272190f4129dc21a Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:18:06 -0700
+Subject: [PATCH] Add lookup update to insert method
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Sources/DataStructureDataStructures b/Sources/DataStructures/BinaryHeap.swift
+index b7decadbc41652b6536e07be27345ffe77d8e5ff..dd749af29cc87f8b6b69404779305e7aad61e0da 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -16,6 +16,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     mutating func insert (_ element: Element, _ value: Value) {
+         storage.append((element, value))
++        lookup[element] = value
+         var i = storage.count - 1
+         while (i != 0) {
+             if (storage[i].1 < storage[(i-1)/2].1) {
+
+From f03f2ee5069d272a42b4e02e8ddf810b4744d592 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:21:03 -0700
+Subject: [PATCH] Change storage to elements only
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index dd749af29cc87f8b6b69404779305e7aad61e0da..255aa048f6d4b027a7816827e4ff167a3388e667 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -9,7 +9,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+ 
+     // MARK: - Instance Properties
+     
+-    private var storage: [(Element, Value)]
++    private var storage: [Element]
+     private var lookup: [Element: Value]
+     
+     // MARK: - Instance Methods
+
+From e2eeb370e48f72dc97bf772486775a9e6efbd12f Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:22:49 -0700
+Subject: [PATCH] Fix value lookup in insert method
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 255aa048f6d4b027a7816827e4ff167a3388e667..84562325c33f5dccec41d7e68eaaa379b4a73b7d 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -15,11 +15,11 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     // MARK: - Instance Methods
+     
+     mutating func insert (_ element: Element, _ value: Value) {
+-        storage.append((element, value))
++        storage.append(element)
+         lookup[element] = value
+         var i = storage.count - 1
+         while (i != 0) {
+-            if (storage[i].1 < storage[(i-1)/2].1) {
++            if (lookup[storage[i]]! < lookup[storage[(i-1)/2]]!) {
+                 storage.swapAt(i, (i-1)/2)
+                 i /= 2
+             }
+
+From ecebea72f0bb090890c86cff7da2f69692682a63 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:23:28 -0700
+Subject: [PATCH] Fix signature of pop to return element only
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 84562325c33f5dccec41d7e68eaaa379b4a73b7d..87f2eaca88efb984eadb95bc30703685fea5747a 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -27,7 +27,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         }
+     }
+     
+-    mutating func pop () -> (Element, Value)? {
++    mutating func pop () -> Element? {
+         guard let minimum = storage.first else { return nil }
+         storage[0] = storage.removeLast()
+         balance()
+
+From 8986131e6e3d7d511d654ec65d3d01bf15167157 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:24:46 -0700
+Subject: [PATCH] Fix argmin def in terms of lookup
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 87f2eaca88efb984eadb95bc30703685fea5747a..0000253ef8f1b5cd2bbf77d6df175839e2bd5a61 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -37,7 +37,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     mutating func balance () {
+         
+         func argmin(_ i: Int, _ j: Int) -> Int {
+-            return storage[i].1 == min(storage[i].1, storage[j].1) ? i : j
++            return lookup[storage[i]]! == min(lookup[storage[i]]!, lookup[storage[j]]!) ? i : j
+         }
+         
+         var i = 0
+
+From a820c069fc789878080fd2d6860337ecc56b69a7 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:26:07 -0700
+Subject: [PATCH] Fix balance method using lookup
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 0000253ef8f1b5cd2bbf77d6df175839e2bd5a61..e8003bee3d3412251fe0d16eb7714858a363f305 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -44,14 +44,14 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         while (2 * i + 1 <= storage.count - 1) {
+             if (2 * i + 2 > storage.count - 1) {
+                 let j = 2 * i + 1
+-                if (storage[j].1 < storage[i].1) {
++                if (lookup[storage[j]]! < lookup[storage[i]]!) {
+                     storage.swapAt(i, j)
+                     i = j
+                     continue
+                 }
+             }
+             let j = argmin(2 * i + 1, 2 * i + 2)
+-            if (storage[j].1 < storage[i].1) {
++            if (lookup[storage[j]]! < lookup[storage[i]]!) {
+                 storage.swapAt(i, j)
+                 i = j
+                 continue
+
+From cd0e77af269e074625a28c28b6d75233a64f07e1 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:28:06 -0700
+Subject: [PATCH] Add comparison function to refactor verbose lines
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index e8003bee3d3412251fe0d16eb7714858a363f305..40f4df8974d6ce7c645832a3a3aaba7f0a12371e 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -14,6 +14,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     // MARK: - Instance Methods
+     
++    private func compareAt(_ i: Int, _ j: Int) -> Bool {
++        return lookup[storage[i]]! < lookup[storage[j]]!
++    }
++    
+     mutating func insert (_ element: Element, _ value: Value) {
+         storage.append(element)
+         lookup[element] = value
+
+From 19245d8d09b35ff3726355ee3cf5bd1a0a624915 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:29:08 -0700
+Subject: [PATCH] Update insert to use comparison func
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 40f4df8974d6ce7c645832a3a3aaba7f0a12371e..e3a102124c2fbc7b15a610da28bed78fc1ce4cbe 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -23,7 +23,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         lookup[element] = value
+         var i = storage.count - 1
+         while (i != 0) {
+-            if (lookup[storage[i]]! < lookup[storage[(i-1)/2]]!) {
++            if compareAt(i,(i-1)/2) {
+                 storage.swapAt(i, (i-1)/2)
+                 i /= 2
+             }
+
+From 4151d49ad6f18751627fa9c5fcd5f2e06c4588a1 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:30:21 -0700
+Subject: [PATCH] Update balance to make use of compareAt
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index e3a102124c2fbc7b15a610da28bed78fc1ce4cbe..6680bbbe6a8c7c615aa6117f62a64a6710674c01 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -48,14 +48,14 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         while (2 * i + 1 <= storage.count - 1) {
+             if (2 * i + 2 > storage.count - 1) {
+                 let j = 2 * i + 1
+-                if (lookup[storage[j]]! < lookup[storage[i]]!) {
++                if compareAt(j, i) {
+                     storage.swapAt(i, j)
+                     i = j
+                     continue
+                 }
+             }
+             let j = argmin(2 * i + 1, 2 * i + 2)
+-            if (lookup[storage[j]]! < lookup[storage[i]]!) {
++            if compareAt(j, i) {
+                 storage.swapAt(i, j)
+                 i = j
+                 continue
+
+From a8db54fb39a21fbce7a525816aa103da29189146 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:34:01 -0700
+Subject: [PATCH] Make balance function private
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 6680bbbe6a8c7c615aa6117f62a64a6710674c01..89107c7f71732b0df7b508455461c236e2dcb4b7 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -38,7 +38,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         return minimum
+     }
+     
+-    mutating func balance () {
++    private mutating func balance () {
+         
+         func argmin(_ i: Int, _ j: Int) -> Int {
+             return lookup[storage[i]]! == min(lookup[storage[i]]!, lookup[storage[j]]!) ? i : j
+
+From 6290c708a390fe90858a88559946f99f98b3812c Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:35:17 -0700
+Subject: [PATCH] Add update to set lookup table
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 89107c7f71732b0df7b508455461c236e2dcb4b7..f2c9035965ee97897fdf3ac5b33d9ab4188518cf 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -38,6 +38,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         return minimum
+     }
+     
++    mutating func update(_ element: Element, _ value: Value) {
++        lookup[element] = value
++    }
++    
+     private mutating func balance () {
+         
+         func argmin(_ i: Int, _ j: Int) -> Int {
+
+From c716fe3c9fba01179db5003c6e080f2559cac305 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:41:47 -0700
+Subject: [PATCH] Fix balance and its brevity
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index f2c9035965ee97897fdf3ac5b33d9ab4188518cf..a1e500b66592355491313a5db0cbfe28f962e977 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -50,20 +50,12 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         
+         var i = 0
+         while (2 * i + 1 <= storage.count - 1) {
+-            if (2 * i + 2 > storage.count - 1) {
+-                let j = 2 * i + 1
+-                if compareAt(j, i) {
+-                    storage.swapAt(i, j)
+-                    i = j
+-                    continue
+-                }
+-            }
+-            let j = argmin(2 * i + 1, 2 * i + 2)
+-            if compareAt(j, i) {
+-                storage.swapAt(i, j)
++            let j = (2 * i + 2 == storage.count) ? 2 * i + 1 : argmin(2 * i + 1, 2 * i + 2)
++            if compareAt(j,i) {
++                storage.swapAt(i,j)
+                 i = j
+-                continue
+             }
++            else { break }
+         }
+     }
+     
+
+From 2235b84d7c569bc24831ade45013e10ca7897446 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:44:28 -0700
+Subject: [PATCH] Add hasOneChild predicate to balance internals
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index a1e500b66592355491313a5db0cbfe28f962e977..354e250145413ee6e6bc2e13459f03241ee9ced7 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -48,6 +48,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+             return lookup[storage[i]]! == min(lookup[storage[i]]!, lookup[storage[j]]!) ? i : j
+         }
+         
++        func hasOneChild(_ i: Int) -> Bool {
++            return 2 * i + 2 == storage.count
++        }
++        
+         var i = 0
+         while (2 * i + 1 <= storage.count - 1) {
+             let j = (2 * i + 2 == storage.count) ? 2 * i + 1 : argmin(2 * i + 1, 2 * i + 2)
+
+From d96f8941a05d3b8c95ee18b22097b99c0221e692 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:47:51 -0700
+Subject: [PATCH] Fix legibility of check for only one child in binary tree
+ structure
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 354e250145413ee6e6bc2e13459f03241ee9ced7..50f2ca91cac12a6006c790e09da86e165d371776 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -54,7 +54,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         
+         var i = 0
+         while (2 * i + 1 <= storage.count - 1) {
+-            let j = (2 * i + 2 == storage.count) ? 2 * i + 1 : argmin(2 * i + 1, 2 * i + 2)
++            let j = hasOneChild(i) ? 2 * i + 1 : argmin(2 * i + 1, 2 * i + 2)
+             if compareAt(j,i) {
+                 storage.swapAt(i,j)
+                 i = j
+
+From 20f9ad0f07def956c55929a047013ee7abc85aa2 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:53:10 -0700
+Subject: [PATCH] Rename compareAt to lessAt
+
+To improve legibility
+---
+ Sources/DataStructures/BinaryHeap.swift | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 50f2ca91cac12a6006c790e09da86e165d371776..45c46260c2949495bd755339651303fc252f2523 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -14,7 +14,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     // MARK: - Instance Methods
+     
+-    private func compareAt(_ i: Int, _ j: Int) -> Bool {
++    private func lessAt(_ i: Int, than j: Int) -> Bool {
+         return lookup[storage[i]]! < lookup[storage[j]]!
+     }
+     
+@@ -23,7 +23,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         lookup[element] = value
+         var i = storage.count - 1
+         while (i != 0) {
+-            if compareAt(i,(i-1)/2) {
++            if lessAt(i, than: (i-1)/2) {
+                 storage.swapAt(i, (i-1)/2)
+                 i /= 2
+             }
+@@ -55,7 +55,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         var i = 0
+         while (2 * i + 1 <= storage.count - 1) {
+             let j = hasOneChild(i) ? 2 * i + 1 : argmin(2 * i + 1, 2 * i + 2)
+-            if compareAt(j,i) {
++            if lessAt(j,than: i) {
+                 storage.swapAt(i,j)
+                 i = j
+             }
+
+From 3450f57979e728e26fcb7828f651863492ce3e81 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 12:58:04 -0700
+Subject: [PATCH] Make update function more human readable
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 45c46260c2949495bd755339651303fc252f2523..6b499e532e9431ed58081cd3e83d32fe910421e9 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -38,7 +38,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         return minimum
+     }
+     
+-    mutating func update(_ element: Element, _ value: Value) {
++    mutating func updateValue(at element: Element, with value: Value) {
+         lookup[element] = value
+     }
+     
+
+From 0ac57cb1fbeba570d5f430b122cb05ec35cfbbed Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 13:01:10 -0700
+Subject: [PATCH] Make pop return value as well as element
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 6b499e532e9431ed58081cd3e83d32fe910421e9..320a2e6c40efdf84580afef8805267ffcfacf7b2 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -31,11 +31,11 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         }
+     }
+     
+-    mutating func pop () -> Element? {
++    mutating func pop () -> (Element, Value)? {
+         guard let minimum = storage.first else { return nil }
+         storage[0] = storage.removeLast()
+         balance()
+-        return minimum
++        return (minimum, lookup[minimum]!)
+     }
+     
+     mutating func updateValue(at element: Element, with value: Value) {
+
+From 2a1184a6527b2dcc3092290b1a4655f2d0831f4d Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 13:33:07 -0700
+Subject: [PATCH] Add BinaryHeapTests
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ae5274a6a122572b15afa817fedc222f80f450e
+--- /dev/null
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -0,0 +1,13 @@
++//
++//  BinaryHeapTests.swift
++//  DataStructuresTests
++//
++//  Created by Benjamin Wetherfield on 7/16/18.
++//
++
++import XCTest
++@testable import PitchSpeller
++
++class BinaryHeapTests: XCTestCase {
++    
++}
+
+From 1f39296be5942df3b548b7af095ef9a34ce97616 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 13:37:56 -0700
+Subject: [PATCH] Add basic insert pop test
+
+Fatal error
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index 8ae5274a6a122572b15afa817fedc222f80f450e..c57e6ddea635086e6d3a82708734db1d2ae34dbe 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -10,4 +10,11 @@ import XCTest
+ 
+ class BinaryHeapTests: XCTestCase {
+     
++    func testBasicInsertPop() {
++        var heap = BinaryHeap<Int, Double>()
++        heap.insert(4, 3.5)
++        let (minimum, value) = heap.pop()!
++        XCTAssertEqual(minimum, 4)
++        XCTAssertEqual(value, 3.5)
++    }
+ }
+
+From b7aa4cd3036ce1999455462fb39a5ef0c2a14906 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 13:47:56 -0700
+Subject: [PATCH] Remove offending line from pop
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 320a2e6c40efdf84580afef8805267ffcfacf7b2..9a12fa21ec5db9175cd232c6d1dd85715ad36163 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -33,7 +33,6 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     mutating func pop () -> (Element, Value)? {
+         guard let minimum = storage.first else { return nil }
+-        storage[0] = storage.removeLast()
+         balance()
+         return (minimum, lookup[minimum]!)
+     }
+
+From d0358218995ebedc79a428be06cba9f1d7b4414c Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 13:57:54 -0700
+Subject: [PATCH] Add pop nil behavior test
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index c57e6ddea635086e6d3a82708734db1d2ae34dbe..db4e3a2dd594cbed74f90c8db2c4e4d69533927e 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -10,6 +10,11 @@ import XCTest
+ 
+ class BinaryHeapTests: XCTestCase {
+     
++    func testPopNil() {
++        var heap = BinaryHeap<Int, Double>()
++        XCTAssertNil(heap.pop())
++    }
++    
+     func testBasicInsertPop() {
+         var heap = BinaryHeap<Int, Double>()
+         heap.insert(4, 3.5)
+
+From 9c98b36b10f135ca9cb65e4b1652212334e41430 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:00:14 -0700
+Subject: [PATCH] Add simple balancing test
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index db4e3a2dd594cbed74f90c8db2c4e4d69533927e..c2ae32503a68ccd69fbf571cb6bdc11a0e1dce1e 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -22,4 +22,13 @@ class BinaryHeapTests: XCTestCase {
+         XCTAssertEqual(minimum, 4)
+         XCTAssertEqual(value, 3.5)
+     }
++    
++    func testSimpleBalance() {
++        var heap = BinaryHeap<Int, Double>()
++        heap.insert(1, 3.5)
++        heap.insert(2, 0.5)
++        let (minimum, value) = heap.pop()!
++        XCTAssertEqual(minimum, 2)
++        XCTAssertEqual(value, 0.5)
++    }
+ }
+
+From 6af172afb2b991aa8f0159b9bbaebcc570ec3c45 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:01:18 -0700
+Subject: [PATCH] Rename constant
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index c2ae32503a68ccd69fbf571cb6bdc11a0e1dce1e..1c38ac1c490db5484f2a4e2259ebc160a129fe1e 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -27,8 +27,8 @@ class BinaryHeapTests: XCTestCase {
+         var heap = BinaryHeap<Int, Double>()
+         heap.insert(1, 3.5)
+         heap.insert(2, 0.5)
+-        let (minimum, value) = heap.pop()!
+-        XCTAssertEqual(minimum, 2)
+-        XCTAssertEqual(value, 0.5)
++        let first = heap.pop()!
++        XCTAssertEqual(first.0, 2)
++        XCTAssertEqual(first.1, 0.5)
+     }
+ }
+
+From 538c89b663f70875ae49aab939baf65abd40d46b Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:02:26 -0700
+Subject: [PATCH] Add further testing to balance
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index 1c38ac1c490db5484f2a4e2259ebc160a129fe1e..6e20b4e47f5d4dcc5c2b13cc0bedd6e61ce799bf 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -28,7 +28,11 @@ class BinaryHeapTests: XCTestCase {
+         heap.insert(1, 3.5)
+         heap.insert(2, 0.5)
+         let first = heap.pop()!
++        let second = heap.pop()!
+         XCTAssertEqual(first.0, 2)
+         XCTAssertEqual(first.1, 0.5)
++        XCTAssertEqual(second.0, 1)
++        XCTAssertEqual(second.1, 3.5)
++        XCTAssertNil(heap.pop())
+     }
+ }
+
+From 8407ea77551e980ba679205a5739db12bfbfbe34 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:15:01 -0700
+Subject: [PATCH] Fix pop
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 9a12fa21ec5db9175cd232c6d1dd85715ad36163..7338c19a3d306321ec6b2374ed0b331a6f8c9e5a 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -32,9 +32,16 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     }
+     
+     mutating func pop () -> (Element, Value)? {
+-        guard let minimum = storage.first else { return nil }
+-        balance()
+-        return (minimum, lookup[minimum]!)
++        if storage.isEmpty { return nil }
++        else if storage.count == 1 {
++            let least = storage.removeFirst()
++            return (least, lookup[least]!)
++        }
++        else {
++            let least = storage.first!
++            storage[0] = storage.removeLast()
++            return (least, lookup[least]!)
++        }
+     }
+     
+     mutating func updateValue(at element: Element, with value: Value) {
+
+From 050e32203c61ad1b295be3be75b739bd9fd22a74 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:18:46 -0700
+Subject: [PATCH] Refactor pop
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 7338c19a3d306321ec6b2374ed0b331a6f8c9e5a..8cbf97b69de9f421705e7b7b883b6d2026683209 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -33,13 +33,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     mutating func pop () -> (Element, Value)? {
+         if storage.isEmpty { return nil }
+-        else if storage.count == 1 {
+-            let least = storage.removeFirst()
+-            return (least, lookup[least]!)
+-        }
+         else {
+             let least = storage.first!
+-            storage[0] = storage.removeLast()
++            if storage.count > 1 { storage[0] = storage.last! }
++            storage.removeLast()
+             return (least, lookup[least]!)
+         }
+     }
+
+From cbcfd830aa0c2caf3b599210cc20864b02c96806 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:37:41 -0700
+Subject: [PATCH] Add balance test
+
+Fail test
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index 6e20b4e47f5d4dcc5c2b13cc0bedd6e61ce799bf..4e30a31e8a779a038084c9506807c6fdbb9d1e75 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -35,4 +35,21 @@ class BinaryHeapTests: XCTestCase {
+         XCTAssertEqual(second.1, 3.5)
+         XCTAssertNil(heap.pop())
+     }
++    
++    func testBalance() {
++        var heap = BinaryHeap<Int, Double>()
++        var toInsert: [(Int, Double)] = []
++        for i in 0..<10 {
++            toInsert.append( (i, Double.random(in: 0...1)) )
++        }
++        for (element, value) in toInsert {
++            heap.insert(element, value)
++        }
++        var toCompare: [(Int, Double)] = []
++        for i in 0..<10 {
++            toCompare.append(heap.pop()!)
++        }
++        toInsert.sort(by: { $0.1 < $1.1 })
++        XCTAssertEqual(toInsert.compactMap { $0.1 }, toCompare.compactMap { $0.1 })
++    }
+ }
+
+From 19963c9bba943c196705092d37babe3ee555527e Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:40:40 -0700
+Subject: [PATCH] Fix insert method
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 8cbf97b69de9f421705e7b7b883b6d2026683209..e6270764973e2294f9ec4bd2105990d92f55fed0 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -23,9 +23,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         lookup[element] = value
+         var i = storage.count - 1
+         while (i != 0) {
+-            if lessAt(i, than: (i-1)/2) {
+-                storage.swapAt(i, (i-1)/2)
+-                i /= 2
++            let j = (i-1)/2
++            if lessAt(i, than: j) {
++                storage.swapAt(i, j)
++                i = j
+             }
+             else { break }
+         }
+
+From 3e04e6c290fbb0c2d53a7630078fd068301e47bb Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:54:12 -0700
+Subject: [PATCH] Fix pop with call to balance
+
+Pass test
+---
+ Sources/DataStructures/BinaryHeap.swift | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index e6270764973e2294f9ec4bd2105990d92f55fed0..9e83e42765d4e0b80da353b88d50aff38fd83f0e 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -38,6 +38,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+             let least = storage.first!
+             if storage.count > 1 { storage[0] = storage.last! }
+             storage.removeLast()
++            balance()
+             return (least, lookup[least]!)
+         }
+     }
+
+From 3e01e986ee7204bb6824e2dd24abdcb4825a36d1 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:54:56 -0700
+Subject: [PATCH] Clean up balance test
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index 4e30a31e8a779a038084c9506807c6fdbb9d1e75..be21b3dd7c53f0f20b1201dd05b91d14c002f670 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -45,11 +45,11 @@ class BinaryHeapTests: XCTestCase {
+         for (element, value) in toInsert {
+             heap.insert(element, value)
+         }
+-        var toCompare: [(Int, Double)] = []
+-        for i in 0..<10 {
+-            toCompare.append(heap.pop()!)
++        var toCompare: [Double] = []
++        for _ in 0..<10 {
++            toCompare.append(heap.pop()!.1)
+         }
+         toInsert.sort(by: { $0.1 < $1.1 })
+-        XCTAssertEqual(toInsert.compactMap { $0.1 }, toCompare.compactMap { $0.1 })
++        XCTAssertEqual(toInsert.compactMap { $0.1 }, toCompare)
+     }
+ }
+
+From dcf5928f96e84f0b478eaf86cfcbec333ff8464f Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 14:58:00 -0700
+Subject: [PATCH] Add final nil check to heap test
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index be21b3dd7c53f0f20b1201dd05b91d14c002f670..950bb6ce1c5c5514273c7bbc485805cea4f26ee5 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -39,17 +39,18 @@ class BinaryHeapTests: XCTestCase {
+     func testBalance() {
+         var heap = BinaryHeap<Int, Double>()
+         var toInsert: [(Int, Double)] = []
+-        for i in 0..<10 {
++        for i in 0..<100 {
+             toInsert.append( (i, Double.random(in: 0...1)) )
+         }
+         for (element, value) in toInsert {
+             heap.insert(element, value)
+         }
+         var toCompare: [Double] = []
+-        for _ in 0..<10 {
++        for _ in 0..<100 {
+             toCompare.append(heap.pop()!.1)
+         }
+         toInsert.sort(by: { $0.1 < $1.1 })
+         XCTAssertEqual(toInsert.compactMap { $0.1 }, toCompare)
++        XCTAssertNil(heap.pop())
+     }
+ }
+
+From 8f1062b2f86ab10380dd8b15fb896c67a5488aa4 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:16:20 -0700
+Subject: [PATCH] Specialize value update to decrease
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 9e83e42765d4e0b80da353b88d50aff38fd83f0e..f938e85d342a04ce05090ae09630fa4477c0bffe 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -43,8 +43,9 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         }
+     }
+     
+-    mutating func updateValue(at element: Element, with value: Value) {
++    mutating func decreaseValue(of element: Element, to value: Value) {
+         lookup[element] = value
++        #warning("TODO: implement balancing")
+     }
+     
+     private mutating func balance () {
+
+From 82ea3329bb2df626d8d0be839ee54b8b57bd7818 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:20:01 -0700
+Subject: [PATCH] Add private bubbleUp method for decrease implementation
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index f938e85d342a04ce05090ae09630fa4477c0bffe..1542c63865cf1a0f6330ad6c8b69dd76f7917fc4 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -48,6 +48,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         #warning("TODO: implement balancing")
+     }
+     
++    private mutating func bubbleUp (_ i: Int) {
++        #warning("TODO: implement")
++    }
++    
+     private mutating func balance () {
+         
+         func argmin(_ i: Int, _ j: Int) -> Int {
+
+From 38bcd8e315605d6eb87c64a0cb08fe022c807135 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:21:16 -0700
+Subject: [PATCH] Add indices lookup table
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 1542c63865cf1a0f6330ad6c8b69dd76f7917fc4..46296b8288597c26ad95d13c1854c62c7362ced0 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -11,6 +11,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     private var storage: [Element]
+     private var lookup: [Element: Value]
++    private var indices: [Element: Int]
+     
+     // MARK: - Instance Methods
+     
+@@ -78,5 +79,6 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     init () {
+         storage = []
+         lookup = [:]
++        indices = [:]
+     }
+ }
+
+From b7e9d8089e2bcd696dcd9b330882406a3a571c03 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:23:23 -0700
+Subject: [PATCH] Add method for updating indices
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 46296b8288597c26ad95d13c1854c62c7362ced0..c2a0c78924f482a9a7dc64f97e583537eb3d0167 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -49,6 +49,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         #warning("TODO: implement balancing")
+     }
+     
++    private func updateIndex (of i: Int, to j: Int) {
++        #warning("TODO: implement")
++    }
++    
+     private mutating func bubbleUp (_ i: Int) {
+         #warning("TODO: implement")
+     }
+
+From a5e116878672c7c50778670e5484ffebb9eebb13 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:24:13 -0700
+Subject: [PATCH] Make updateIndex method act upon Element
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index c2a0c78924f482a9a7dc64f97e583537eb3d0167..c377a6dc2c1f744f484459a61234431ddf7c8b04 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -49,7 +49,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         #warning("TODO: implement balancing")
+     }
+     
+-    private func updateIndex (of i: Int, to j: Int) {
++    private func updateIndex (of element: Element, to i: Int) {
+         #warning("TODO: implement")
+     }
+     
+
+From f1b6e68785ae3a84e18ff39eacb055f90157445b Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:25:02 -0700
+Subject: [PATCH] Implement updateIndex method
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index c377a6dc2c1f744f484459a61234431ddf7c8b04..f977c795a2cd0ce9e29a83e068f0aca894c1d47a 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -49,8 +49,8 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         #warning("TODO: implement balancing")
+     }
+     
+-    private func updateIndex (of element: Element, to i: Int) {
+-        #warning("TODO: implement")
++    private mutating func updateIndex (of element: Element, to i: Int) {
++        indices[element] = i
+     }
+     
+     private mutating func bubbleUp (_ i: Int) {
+
+From d8496d0d1b25dc73c8241ae86a80c84993ed27b5 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:33:21 -0700
+Subject: [PATCH] Add internal swapAt method
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index f977c795a2cd0ce9e29a83e068f0aca894c1d47a..7523d05577851b89044216d44cb9aa4d13d36ae1 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -53,6 +53,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         indices[element] = i
+     }
+     
++    private mutating func swapAt (_ i: Int, _ j: Int) {
++        #warning("TODO: implement")
++    }
++    
+     private mutating func bubbleUp (_ i: Int) {
+         #warning("TODO: implement")
+     }
+
+From b95b854c3ecc0f93e8412715016593d3013e1b48 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:34:23 -0700
+Subject: [PATCH] Implement swapAt
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 7523d05577851b89044216d44cb9aa4d13d36ae1..8dfc9ea9a4d778509f8cf993ab31df8abf1a7817 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -54,7 +54,8 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     }
+     
+     private mutating func swapAt (_ i: Int, _ j: Int) {
+-        #warning("TODO: implement")
++        storage.swapAt(i, j)
++        updateIndex(of: storage[i], to: j)
+     }
+     
+     private mutating func bubbleUp (_ i: Int) {
+
+From ca7b34eee257fb394d4e7bbca253b8e848fa9e34 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:35:18 -0700
+Subject: [PATCH] Replace calls to swapAt with decorated version
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 8dfc9ea9a4d778509f8cf993ab31df8abf1a7817..823ae7966ad720fa9e483e11a5d7e2c868f8f39b 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -26,7 +26,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         while (i != 0) {
+             let j = (i-1)/2
+             if lessAt(i, than: j) {
+-                storage.swapAt(i, j)
++                swapAt(i, j)
+                 i = j
+             }
+             else { break }
+@@ -76,7 +76,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         while (2 * i + 1 <= storage.count - 1) {
+             let j = hasOneChild(i) ? 2 * i + 1 : argmin(2 * i + 1, 2 * i + 2)
+             if lessAt(j,than: i) {
+-                storage.swapAt(i,j)
++                swapAt(i,j)
+                 i = j
+             }
+             else { break }
+
+From 16c70ca68155fe8d8a459a5d9f73c716089de2e5 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:36:49 -0700
+Subject: [PATCH] Allow nil index updates
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 823ae7966ad720fa9e483e11a5d7e2c868f8f39b..6dae766d100adf2587114da249fcd988ecdc119f 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -49,7 +49,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         #warning("TODO: implement balancing")
+     }
+     
+-    private mutating func updateIndex (of element: Element, to i: Int) {
++    private mutating func updateIndex (of element: Element, to i: Int?) {
+         indices[element] = i
+     }
+     
+
+From a35211e9c46d777168e630dd46991cadb41a98b3 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:40:05 -0700
+Subject: [PATCH] Decorate removeLast to update index
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 6dae766d100adf2587114da249fcd988ecdc119f..c0faf44ef58ac67706f67e4abdd5c3f0c3cc60ca 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -53,6 +53,11 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         indices[element] = i
+     }
+     
++    private mutating func removeLast () {
++        let element = storage.removeLast()
++        updateIndex (of: element, to: nil)
++    }
++    
+     private mutating func swapAt (_ i: Int, _ j: Int) {
+         storage.swapAt(i, j)
+         updateIndex(of: storage[i], to: j)
+
+From 1b7d830d46a83fecb7572e43aedf9a0a6d3b8cd8 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:40:57 -0700
+Subject: [PATCH] Give removeLast return value
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index c0faf44ef58ac67706f67e4abdd5c3f0c3cc60ca..3ce67058777ab2e7dbf522dbced54d82eeed1604 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -53,9 +53,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         indices[element] = i
+     }
+     
+-    private mutating func removeLast () {
++    private mutating func removeLast () -> Element {
+         let element = storage.removeLast()
+         updateIndex (of: element, to: nil)
++        return element
+     }
+     
+     private mutating func swapAt (_ i: Int, _ j: Int) {
+
+From 2de3eaf3c1d339f83854b03a5575ed9142859f36 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:42:40 -0700
+Subject: [PATCH] Add converse index update to swapAt decorator
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 3ce67058777ab2e7dbf522dbced54d82eeed1604..799b65b9549248d4104c9bc8ce174ddc08077851 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -62,6 +62,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     private mutating func swapAt (_ i: Int, _ j: Int) {
+         storage.swapAt(i, j)
+         updateIndex(of: storage[i], to: j)
++        updateIndex(of: storage[j], to: i)
+     }
+     
+     private mutating func bubbleUp (_ i: Int) {
+
+From 6a2e5235ab1ba35e1fda690630050f23cc3e1f1c Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:44:47 -0700
+Subject: [PATCH] Refactor pop with swapAt decorator
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 799b65b9549248d4104c9bc8ce174ddc08077851..69319562dfae72a0fdbe494da16363bb60419965 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -36,9 +36,8 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     mutating func pop () -> (Element, Value)? {
+         if storage.isEmpty { return nil }
+         else {
+-            let least = storage.first!
+-            if storage.count > 1 { storage[0] = storage.last! }
+-            storage.removeLast()
++            if storage.count > 1 { swapAt(0, storage.count - 1) }
++            let least = storage.removeLast()
+             balance()
+             return (least, lookup[least]!)
+         }
+
+From fc789e247e9148cdbe66256667e8efa2113a1684 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:45:10 -0700
+Subject: [PATCH] Replace with decorated verion call to removeLast
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 69319562dfae72a0fdbe494da16363bb60419965..22a557b202068a5b3c80ab38f143a1c3523d2083 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -37,7 +37,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         if storage.isEmpty { return nil }
+         else {
+             if storage.count > 1 { swapAt(0, storage.count - 1) }
+-            let least = storage.removeLast()
++            let least = removeLast()
+             balance()
+             return (least, lookup[least]!)
+         }
+
+From 12a4e5e181417d8cd06131d1c5fae03883044a2f Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:48:12 -0700
+Subject: [PATCH] Add index getter
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 22a557b202068a5b3c80ab38f143a1c3523d2083..3a603453d0fcc12662b6ba63ac58910bf7497eff 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -52,6 +52,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         indices[element] = i
+     }
+     
++    private func index(of element: Element) -> Int {
++        return indices[element]!
++    }
++    
+     private mutating func removeLast () -> Element {
+         let element = storage.removeLast()
+         updateIndex (of: element, to: nil)
+
+From 335ad2b77ae1dadaef541a49528e5c739c65e4f9 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:48:42 -0700
+Subject: [PATCH] Add from preposition
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 3a603453d0fcc12662b6ba63ac58910bf7497eff..cf96c93005f93689d30f3b88a86e16d6f3938588 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -68,7 +68,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         updateIndex(of: storage[j], to: i)
+     }
+     
+-    private mutating func bubbleUp (_ i: Int) {
++    private mutating func bubbleUp (from i: Int) {
+         #warning("TODO: implement")
+     }
+     
+
+From e04a950e7b96ad06e099975a1cd8e46d62616801 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:50:17 -0700
+Subject: [PATCH] Add interface for value updates
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index cf96c93005f93689d30f3b88a86e16d6f3938588..9625ffd1610d918aa42451785ffe81f0c79bfa17 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -52,6 +52,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         indices[element] = i
+     }
+     
++    private mutating func updateValue (of element: Element, to value: Value) {
++        lookup[element] = value
++    }
++    
+     private func index(of element: Element) -> Int {
+         return indices[element]!
+     }
+
+From a426eeb2f1238c700a957321792fa5b6bbc2d407 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:51:11 -0700
+Subject: [PATCH] Replace value update with its interface
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 9625ffd1610d918aa42451785ffe81f0c79bfa17..76b36a9a7e104e93ac8fe2a9aa0dd3dbb5e86fcc 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -44,7 +44,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     }
+     
+     mutating func decreaseValue(of element: Element, to value: Value) {
+-        lookup[element] = value
++        updateValue(of: element, to: value)
+         #warning("TODO: implement balancing")
+     }
+     
+
+From 6210154f6dd9a3240ef574fc75f63f7ecca707e9 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:52:58 -0700
+Subject: [PATCH] Add call to bubbleUp (unimplemented)
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 76b36a9a7e104e93ac8fe2a9aa0dd3dbb5e86fcc..0188eb5d4eef21493732569d7fad5ec17cabd8ef 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -45,7 +45,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     mutating func decreaseValue(of element: Element, to value: Value) {
+         updateValue(of: element, to: value)
+-        #warning("TODO: implement balancing")
++        bubbleUp(from: index(of: element))
+     }
+     
+     private mutating func updateIndex (of element: Element, to i: Int?) {
+
+From b02c83dc0ee4fbbc8454e90a3b11360044045633 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:53:28 -0700
+Subject: [PATCH] Make private value decrease function
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 0188eb5d4eef21493732569d7fad5ec17cabd8ef..cffd80936f99036ef940d240f78b25a5140afd5e 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -43,7 +43,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         }
+     }
+     
+-    mutating func decreaseValue(of element: Element, to value: Value) {
++    private mutating func decreaseValue(of element: Element, to value: Value) {
+         updateValue(of: element, to: value)
+         bubbleUp(from: index(of: element))
+     }
+
+From 2cd17381d902e87f8cc1f40d76b8b0f854f5af65 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:55:50 -0700
+Subject: [PATCH] Add value decrease check for user
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index cffd80936f99036ef940d240f78b25a5140afd5e..9bb2979621f3d423762575ac3e5c5279e568dd03 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -43,6 +43,12 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         }
+     }
+     
++    mutating func suggestDecrease(of element: Element, to value: Value) {
++        if value < lookup[element]! {
++            decreaseValue(of: element, to: value)
++        }
++    }
++    
+     private mutating func decreaseValue(of element: Element, to value: Value) {
+         updateValue(of: element, to: value)
+         bubbleUp(from: index(of: element))
+
+From 51dda42218b3a4258a399b2b6e9d105e17e7d5bd Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 15:58:28 -0700
+Subject: [PATCH] Implement bubbleUp
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 9bb2979621f3d423762575ac3e5c5279e568dd03..75a90907a7159a0238c5f0e1a0ba0ea402e9658f 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -79,7 +79,15 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     }
+     
+     private mutating func bubbleUp (from i: Int) {
+-        #warning("TODO: implement")
++        var i = i
++        while (i != 0) {
++            let j = (i-1)/2
++            if lessAt(i, than: j) {
++                swapAt(i, j)
++                i = j
++            }
++            else { return }
++        }
+     }
+     
+     private mutating func balance () {
+
+From 4dccb0d93185ea47bd390a575419139d2c22e1ce Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 16:00:22 -0700
+Subject: [PATCH] Refactor insert to call bubbleUp
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 75a90907a7159a0238c5f0e1a0ba0ea402e9658f..c296d90e9de76ca40ad234514fff8c5db2677233 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -22,15 +22,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     mutating func insert (_ element: Element, _ value: Value) {
+         storage.append(element)
+         lookup[element] = value
+-        var i = storage.count - 1
+-        while (i != 0) {
+-            let j = (i-1)/2
+-            if lessAt(i, than: j) {
+-                swapAt(i, j)
+-                i = j
+-            }
+-            else { break }
+-        }
++        bubbleUp(from: storage.count - 1)
+     }
+     
+     mutating func pop () -> (Element, Value)? {
+
+From 7d19b6b54f3b500a57a992658a1a121ad7743d89 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 16:03:43 -0700
+Subject: [PATCH] Add value wrapper for lookup
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index c296d90e9de76ca40ad234514fff8c5db2677233..7b37e529f000a8e8aec31d15a9051085736e4a85 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -41,6 +41,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         }
+     }
+     
++    private mutating func value(of element: Element) -> Value {
++        return lookup[element]!
++    }
++    
+     private mutating func decreaseValue(of element: Element, to value: Value) {
+         updateValue(of: element, to: value)
+         bubbleUp(from: index(of: element))
+
+From 8d531b1e383dde54e7dacae444da1338912c7d80 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 16:05:20 -0700
+Subject: [PATCH] Add value getter to suggestDecrease
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 7b37e529f000a8e8aec31d15a9051085736e4a85..c5fb584b51ce2ca7ab503d98bbeb814c1f4607fa 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -35,9 +35,9 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         }
+     }
+     
+-    mutating func suggestDecrease(of element: Element, to value: Value) {
+-        if value < lookup[element]! {
+-            decreaseValue(of: element, to: value)
++    mutating func suggestDecrease(of element: Element, to suggestion: Value) {
++        if suggestion < value(of: element) {
++            decreaseValue(of: element, to: suggestion)
+         }
+     }
+     
+
+From ffcba155775e45c48ec4a4c09b7c146d4c859220 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 16:06:55 -0700
+Subject: [PATCH] Add value at index wrapper
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index c5fb584b51ce2ca7ab503d98bbeb814c1f4607fa..0dd239c64f490f9a3b937984cc3a698584b76b44 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -45,6 +45,10 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         return lookup[element]!
+     }
+     
++    private mutating func value(at i: Int) -> Value {
++        return value(of: storage[i])
++    }
++    
+     private mutating func decreaseValue(of element: Element, to value: Value) {
+         updateValue(of: element, to: value)
+         bubbleUp(from: index(of: element))
+
+From 31b54181784f62f8d65e285a2910f492dce59557 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 16:08:37 -0700
+Subject: [PATCH] Remove mutating keyword from getters
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 0dd239c64f490f9a3b937984cc3a698584b76b44..ee9044675af99c963b1224336e5d1319c6648339 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -41,11 +41,11 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+         }
+     }
+     
+-    private mutating func value(of element: Element) -> Value {
++    private func value(of element: Element) -> Value {
+         return lookup[element]!
+     }
+     
+-    private mutating func value(at i: Int) -> Value {
++    private func value(at i: Int) -> Value {
+         return value(of: storage[i])
+     }
+     
+
+From 2a0ffa2ce140d9a946a5c1f104b030ee5b179b06 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 16:09:15 -0700
+Subject: [PATCH] Refactor lessAt in terms of value at method
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index ee9044675af99c963b1224336e5d1319c6648339..6fbff7f227f1fa22ed8d3a49ac2196e2cbd003cb 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -16,7 +16,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     // MARK: - Instance Methods
+     
+     private func lessAt(_ i: Int, than j: Int) -> Bool {
+-        return lookup[storage[i]]! < lookup[storage[j]]!
++        return value(at: i) < value(at: j)
+     }
+     
+     mutating func insert (_ element: Element, _ value: Value) {
+
+From 1c8103eb63b8ba52603f66e27f21cac16975e12a Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 16:10:30 -0700
+Subject: [PATCH] Refactor argmin in terms of value at method
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 6fbff7f227f1fa22ed8d3a49ac2196e2cbd003cb..8bde66b1f81c3755a8a01907ab8597100f01c2f3 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -93,7 +93,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     private mutating func balance () {
+         
+         func argmin(_ i: Int, _ j: Int) -> Int {
+-            return lookup[storage[i]]! == min(lookup[storage[i]]!, lookup[storage[j]]!) ? i : j
++            return value(at: i) == min(value(at: i), value(at: j)) ? i : j
+         }
+         
+         func hasOneChild(_ i: Int) -> Bool {
+
+From 516eee7e30225eeaa403938140a2037aac0f6685 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 17:08:13 -0700
+Subject: [PATCH] Add index insertion to insert
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 8bde66b1f81c3755a8a01907ab8597100f01c2f3..f3bd5dd20891b3166c865ffcb27e1bef28910488 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -22,6 +22,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     mutating func insert (_ element: Element, _ value: Value) {
+         storage.append(element)
+         lookup[element] = value
++        indices[element] = storage.count - 1
+         bubbleUp(from: storage.count - 1)
+     }
+     
+
+From aa01315c0f8d184c3284dd3e7dde586d20fff41e Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 17:09:54 -0700
+Subject: [PATCH] Fix order of operations in swapAt
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index f3bd5dd20891b3166c865ffcb27e1bef28910488..1a5c7e7606d3bc838cb9995cecc35a2df97b325c 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -74,9 +74,9 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     }
+     
+     private mutating func swapAt (_ i: Int, _ j: Int) {
+-        storage.swapAt(i, j)
+         updateIndex(of: storage[i], to: j)
+         updateIndex(of: storage[j], to: i)
++        storage.swapAt(i, j)
+     }
+     
+     private mutating func bubbleUp (from i: Int) {
+
+From 1a5cb13154872bcb891db06b126de274d381bdbb Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 17:10:34 -0700
+Subject: [PATCH] Wrap call to dictionary in insert
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 1a5c7e7606d3bc838cb9995cecc35a2df97b325c..473d7a32bbea1d5f2b404f43cdaa3bb85ab82a2e 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -22,7 +22,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     mutating func insert (_ element: Element, _ value: Value) {
+         storage.append(element)
+         lookup[element] = value
+-        indices[element] = storage.count - 1
++        updateIndex(of: element, to: storage.count - 1)
+         bubbleUp(from: storage.count - 1)
+     }
+     
+
+From 4f91f124c935d2cb0c2695a9f8655cbdd4ca73dd Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 17:12:50 -0700
+Subject: [PATCH] Rename arrays in balance test to input and output
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index 950bb6ce1c5c5514273c7bbc485805cea4f26ee5..475390d3f26dc42a3f6d3190aba6817b69743cbf 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -38,19 +38,19 @@ class BinaryHeapTests: XCTestCase {
+     
+     func testBalance() {
+         var heap = BinaryHeap<Int, Double>()
+-        var toInsert: [(Int, Double)] = []
++        var input: [(Int, Double)] = []
+         for i in 0..<100 {
+-            toInsert.append( (i, Double.random(in: 0...1)) )
++            input.append( (i, Double.random(in: 0...1)) )
+         }
+-        for (element, value) in toInsert {
++        for (element, value) in input {
+             heap.insert(element, value)
+         }
+-        var toCompare: [Double] = []
++        var output: [Double] = []
+         for _ in 0..<100 {
+-            toCompare.append(heap.pop()!.1)
++            output.append(heap.pop()!.1)
+         }
+-        toInsert.sort(by: { $0.1 < $1.1 })
+-        XCTAssertEqual(toInsert.compactMap { $0.1 }, toCompare)
++        input.sort(by: { $0.1 < $1.1 })
++        XCTAssertEqual(input.compactMap { $0.1 }, output)
+         XCTAssertNil(heap.pop())
+     }
+ }
+
+From 7f0eacce1709621ea74d110cb0e4bbc1d0555f7d Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 17:19:38 -0700
+Subject: [PATCH] Add test for updating values
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index 475390d3f26dc42a3f6d3190aba6817b69743cbf..1abe61974a2696df1e045b72ef46ef3c082854b5 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -53,4 +53,30 @@ class BinaryHeapTests: XCTestCase {
+         XCTAssertEqual(input.compactMap { $0.1 }, output)
+         XCTAssertNil(heap.pop())
+     }
++    
++    func testUpdate() {
++        var heap = BinaryHeap<Int, Double>()
++        var input: [(Int, Double)] = []
++        var throughput: [(Int, Double)] = []
++        for i in 0..<10 {
++            input.append( (i, Double.random(in: 0...1)) )
++            throughput.append( (i, Double.random(in: 0...1)) )
++        }
++        for (element, value) in input {
++            heap.insert(element, value)
++        }
++        for (element, value) in throughput {
++            heap.suggestDecrease(of: element, to: value)
++        }
++        for i in 0..<10 {
++            if input[i].1 < throughput[i].1 { throughput[i] = input[i] }
++        }
++        var output: [Double] = []
++        for _ in 0..<10 {
++            output.append(heap.pop()!.1)
++        }
++        input.sort(by: { $0.1 < $1.1 })
++        XCTAssertEqual(throughput.compactMap { $0.1 }, output)
++        XCTAssertNil(heap.pop())
++    }
+ }
+
+From fd49d185444338e0924485863f02b961d6ed7bca Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 17:40:59 -0700
+Subject: [PATCH] Fix typo in test
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index 1abe61974a2696df1e045b72ef46ef3c082854b5..549fe20be05c37575caedb6e99ba75910cfa5fe1 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -75,7 +75,7 @@ class BinaryHeapTests: XCTestCase {
+         for _ in 0..<10 {
+             output.append(heap.pop()!.1)
+         }
+-        input.sort(by: { $0.1 < $1.1 })
++        throughput.sort(by: { $0.1 < $1.1 })
+         XCTAssertEqual(throughput.compactMap { $0.1 }, output)
+         XCTAssertNil(heap.pop())
+     }
+
+From 475182d374a6fd70a218bfc2dd047546a2e7e534 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 17:41:17 -0700
+Subject: [PATCH] Increase scale of test
+
+---
+ Tests/DataStructuresTests/BinaryHeapTests.swift | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Tests/DataStructuresTests/BinaryHeapTests.swift b/Tests/DataStructuresTests/BinaryHeapTests.swift
+index 549fe20be05c37575caedb6e99ba75910cfa5fe1..19a9e3fbc146914c1206d76b0b4c676f8c57aa7d 100644
+--- a/Tests/DataStructuresTests/BinaryHeapTests.swift
++++ b/Tests/DataStructuresTests/BinaryHeapTests.swift
+@@ -58,7 +58,7 @@ class BinaryHeapTests: XCTestCase {
+         var heap = BinaryHeap<Int, Double>()
+         var input: [(Int, Double)] = []
+         var throughput: [(Int, Double)] = []
+-        for i in 0..<10 {
++        for i in 0..<100 {
+             input.append( (i, Double.random(in: 0...1)) )
+             throughput.append( (i, Double.random(in: 0...1)) )
+         }
+@@ -68,11 +68,11 @@ class BinaryHeapTests: XCTestCase {
+         for (element, value) in throughput {
+             heap.suggestDecrease(of: element, to: value)
+         }
+-        for i in 0..<10 {
++        for i in 0..<100 {
+             if input[i].1 < throughput[i].1 { throughput[i] = input[i] }
+         }
+         var output: [Double] = []
+-        for _ in 0..<10 {
++        for _ in 0..<100 {
+             output.append(heap.pop()!.1)
+         }
+         throughput.sort(by: { $0.1 < $1.1 })
+
+From 1c837cf8ab0995ba0e9d0c47b7c749162f857033 Mon Sep 17 00:00:00 2001
+From: Ben Wetherfield <bwetherfield@gmail.com>
+Date: Mon, 16 Jul 2018 17:42:37 -0700
+Subject: [PATCH] Refactor insert with call to private function
+
+---
+ Sources/DataStructures/BinaryHeap.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/DataStructures/BinaryHeap.swift b/Sources/DataStructures/BinaryHeap.swift
+index 473d7a32bbea1d5f2b404f43cdaa3bb85ab82a2e..03784eafd9c25cd4f9b18ba041199ee58c4650f4 100644
+--- a/Sources/DataStructures/BinaryHeap.swift	
++++ b/Sources/DataStructures/BinaryHeap.swift	
+@@ -21,7 +21,7 @@ struct BinaryHeap<Element: Hashable, Value: Comparable> {
+     
+     mutating func insert (_ element: Element, _ value: Value) {
+         storage.append(element)
+-        lookup[element] = value
++        updateValue(of: element, to: value)
+         updateIndex(of: element, to: storage.count - 1)
+         bubbleUp(from: storage.count - 1)
+     }

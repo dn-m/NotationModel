@@ -56,7 +56,6 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     // MARK: - Instance Properties
      
     var nodes: [Node]
-//    var edges: [Edge]
     var adjacents: [Pair: Weight]
     
     var edges: [Edge] {
