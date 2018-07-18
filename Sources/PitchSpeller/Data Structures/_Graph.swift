@@ -150,8 +150,13 @@ extension _Graph {
         var breadcrumbs: [Node: Node] = [:]
         
         func backtrace () -> [Node] {
-            #warning("TODO: Implement")
-            return []
+            var path = [destination]
+            var cursor = destination
+            while (cursor != source) {
+                path.insert(breadcrumbs[cursor]!, at: 0)
+                cursor = breadcrumbs[cursor]!
+            }
+            return path
         }
         
         var unvisited = nodes
