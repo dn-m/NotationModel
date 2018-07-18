@@ -168,17 +168,17 @@ class _GraphTests: XCTestCase {
         XCTAssertEqual(graph.shortestUnweightedPath(from: "b", to: "a"), nil)
     }
 //
-//    func testShortestPathThreeNodes() {
-//        var graph = Graph<String>()
-//        graph.insertNode("a")
-//        graph.insertNode("b")
-//        graph.insertNode("c")
-//        graph.insertEdge(from: "a", to: "b", value: 1)
-//        graph.insertEdge(from: "b", to: "c", value: 0.66)
-//        graph.insertEdge(from: "a", to: "c", value: 0.33)
-//        XCTAssertEqual(graph.shortestPath(from: "a", to: "c"), [Graph.Edge(from: "a", to: "c", value: 0.33)])
-//        XCTAssertEqual(graph.shortestPath(from: "b", to: "c"), [Graph.Edge(from: "b", to: "c", value: 0.66)])
-//    }
+    func testShortestPathThreeNodes() {
+        var graph = _Graph<WithoutWeights, DirectedOver<String>>()
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertNode("c")
+        graph.insertEdge(from: "a", to: "b")
+        graph.insertEdge(from: "b", to: "c")
+        graph.insertEdge(from: "c", to: "b")
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "c"), ["a", "b", "c"])
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "b"), ["a", "b"])
+    }
 //
 //    func testInsertEdgeReplacesEdges() {
 //        var graph = Graph<String>()
