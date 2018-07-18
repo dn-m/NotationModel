@@ -59,7 +59,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     var adjacents: [Pair: Weight]
     
     var edges: [Edge] {
-        return adjacents.compactMap{ Edge($0.key, withWeight: $0.value) }
+        return adjacents.compactMap { Edge($0.key, withWeight: $0.value) }
     }
     
     // MARK: - Instance Methods
@@ -81,7 +81,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
     
     func neighbors (of source: Node) -> [Node] {
-        return nodes.compactMap{
+        return nodes.compactMap {
             if (adjacents[Pair(source, $0)] != nil) {
                 return $0
             }
@@ -92,7 +92,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
     
     func edges (from source: Node) -> [Edge] {
-        return nodes.compactMap{
+        return nodes.compactMap {
             guard let weight = adjacents[Pair(source, $0)] else { return nil }
             return Edge(source, $0, withWeight: weight)
         }
