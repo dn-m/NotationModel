@@ -147,6 +147,7 @@ extension _Graph {
     
     func shortestUnweightedPath (from source: Node, to destination: Node) {
         var unvisited = nodes
+        var breadcrumbs: [Node: Node] = [:]
         var queue: Queue<Node> = []
         
         queue.push(source)
