@@ -146,6 +146,12 @@ extension _Graph {
     // MARK: - Instance Methods
     
     func shortestUnweightedPath (from source: Node, to destination: Node) {
+        
+        func backtrace () -> [Node] {
+            #warning("TODO: Implement")
+            return []
+        }
+        
         var unvisited = nodes
         var breadcrumbs: [Node: Node] = [:]
         var queue: Queue<Node> = []
@@ -154,7 +160,7 @@ extension _Graph {
         while !queue.isEmpty {
             let node = queue.pop()
             if node == destination {
-                #warning("TODO: Implement")
+                return backtrace()
             }
             for neighbor in neighbors(of: node, from: unvisited) {
                 queue.push(neighbor)
