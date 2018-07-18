@@ -152,7 +152,7 @@ extension _Graph {
         func backtrace () -> [Node] {
             var path = [destination]
             var cursor = destination
-            while (cursor != source) {
+            while cursor != source {
                 path.insert(breadcrumbs[cursor]!, at: 0)
                 cursor = breadcrumbs[cursor]!
             }
