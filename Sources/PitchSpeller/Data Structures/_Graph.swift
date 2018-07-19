@@ -140,6 +140,16 @@ extension _Graph.Edge where Weight == WithoutWeights {
     }
 }
 
+extension _Graph where Pair: SwappablePair {
+    
+    // MARK: - Instance Methods
+    
+    mutating func flipEdge (at nodes: Pair) {
+        adjacents[nodes.swapped] = adjacents[nodes]
+        adjacents[nodes] = nil
+    }
+}
+
 extension _Graph.Edge where Pair: Directed {
     
     // MARK: - Instance Properties
