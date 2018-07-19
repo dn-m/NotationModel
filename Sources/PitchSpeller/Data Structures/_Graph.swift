@@ -104,6 +104,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         return neighbors(of: source, from: Set(nodes))
     }
     
+    /// - Returns: Array of edges emanating from `source`
     func edges (from source: Node) -> [Edge] {
         return nodes.compactMap {
             guard let weight = adjacents[Pair(source, $0)] else { return nil }
