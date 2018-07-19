@@ -79,6 +79,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         adjacents[Pair(source, destination)] = nil
     }
     
+    /// - Returns: Weight of the edge from `source` to `destination` if it exists, else nil
     func weight (from source: Node, to destination: Node) -> Weight? {
         return adjacents[Pair(source, destination)]
     }
