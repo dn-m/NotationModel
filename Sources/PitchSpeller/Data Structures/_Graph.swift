@@ -29,6 +29,7 @@ enum WithoutWeights: Unweighted {
     case unweighted
 }
 
+// Weightable, directable implementation of a Graph structure
 struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
     
     typealias Node = Pair.A
