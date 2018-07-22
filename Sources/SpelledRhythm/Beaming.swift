@@ -70,68 +70,6 @@ extension Beaming {
     /// A single point of the beaming for a single beaming item (metrical context).
     public enum Point: Equatable {
 
-        /// A `Point` which can be either a `start` or `stop` or `none`.
-        public enum StartOrStop: Equatable {
-
-            // MARK: - Cases
-
-            case none
-            case start(count: Int)
-            case stop(count: Int)
-
-            // MARK: - Instance Properties
-
-            /// The `Point` values contained herein.
-            var points: [Point] {
-                switch self {
-                case .none: return []
-                case .start(let count):
-                    return Array(repeating: .start, count: count)
-                case .stop(let count):
-                    return Array(repeating: .stop, count: count)
-                }
-            }
-
-            // MARK: - Initializers
-
-            /// Create a `StartOrStop.start` with the given `start` amount. If `start` is `0`, a
-            /// `.none` value will be created.
-            init(start: Int) {
-                precondition(start >= 0)
-                self = start == 0 ? .none : .start(count: start)
-            }
-
-            /// Create a `StartOrStop.stop` with the given `stop` amount. If `stop` is `0`, a
-            /// `.none` value will be created.
-            init(stop: Int) {
-                precondition(stop >= 0)
-                self = stop == 0 ? .none : .stop(count: stop)
-            }
-
-            // MARK: - Instance Methods
-
-            /// - Returns: A `StartOrStop` transformed by reducing the count to the degree possible,
-            /// along with the remaining amount that could not be absorbed.
-            func cut(amount: Int) -> (StartOrStop, Int) {
-                switch self {
-                case .none:
-                    return (.none, amount)
-                case .start(let count):
-                    if count > amount {
-                        return (.start(count: count - amount), 0)
-                    } else {
-                        return (.none, amount - count)
-                    }
-                case .stop(let count):
-                    if count > amount {
-                        return (.stop(count: count - amount), 0)
-                    } else {
-                        return (.none, amount - count)
-                    }
-                }
-            }
-        }
-
         /// Maintain a beam on a given level.
         case maintain
         /// Start a beam on a given level.
@@ -144,7 +82,73 @@ extension Beaming {
 }
 
 extension Beaming.Point {
-    /// Rhythm.Beaming.Point.Vertical
+
+    /// A `Point` which can be either a `start` or `stop` or `none`.
+    public enum StartOrStop: Equatable {
+
+        // MARK: - Cases
+
+        case none
+        case start(count: Int)
+        case stop(count: Int)
+
+        // MARK: - Instance Properties
+
+        /// The `Point` values contained herein.
+        var points: [Beaming.Point] {
+            switch self {
+            case .none: return []
+            case .start(let count):
+                return Array(repeating: .start, count: count)
+            case .stop(let count):
+                return Array(repeating: .stop, count: count)
+            }
+        }
+
+        // MARK: - Initializers
+
+        /// Create a `StartOrStop.start` with the given `start` amount. If `start` is `0`, a
+        /// `.none` value will be created.
+        init(start: Int) {
+            precondition(start >= 0)
+            self = start == 0 ? .none : .start(count: start)
+        }
+
+        /// Create a `StartOrStop.stop` with the given `stop` amount. If `stop` is `0`, a
+        /// `.none` value will be created.
+        init(stop: Int) {
+            precondition(stop >= 0)
+            self = stop == 0 ? .none : .stop(count: stop)
+        }
+
+        // MARK: - Instance Methods
+
+        /// - Returns: A `StartOrStop` transformed by reducing the count to the degree possible,
+        /// along with the remaining amount that could not be absorbed.
+        func cut(amount: Int) -> (StartOrStop, Int) {
+            switch self {
+            case .none:
+                return (.none, amount)
+            case .start(let count):
+                if count > amount {
+                    return (.start(count: count - amount), 0)
+                } else {
+                    return (.none, amount - count)
+                }
+            case .stop(let count):
+                if count > amount {
+                    return (.stop(count: count - amount), 0)
+                } else {
+                    return (.none, amount - count)
+                }
+            }
+        }
+    }
+}
+
+extension Beaming.Point {
+
+    /// Rhythm.Beaming.Point.Vertical.
     public struct Vertical: Equatable {
 
         #warning("Implement beamlet direction if neither start nor stop")
