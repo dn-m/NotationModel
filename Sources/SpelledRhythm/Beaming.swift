@@ -398,6 +398,8 @@ extension Beaming: CollectionWrapping {
 
 extension Beaming: CustomStringConvertible {
     public var description: String {
-        return verticals.enumerated().map { (index,vertical) in "\(index): \(vertical)" }.joined(separator: "\n")
+        return verticals.enumerated()
+            .map { (index,vertical) in "\(index): \(vertical)" }
+            .joined(separator: "\n")
     }
 }
