@@ -125,10 +125,12 @@ extension Rhythm {
         }
 
         /// - Throws: Error if the `Item` at the given `index` is empty.
-        /// - Throws: Error if the `Item` at the given `index` is not
+        /// - Throws: Error if the `Item` at the given `index` is less than 1 or greater than equal
+        /// to the amount of events contained herein.
         public mutating func cut(amount: Int, at index: Int) throws {
             guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
-            #warning("Implement cut(amount:at:)")
+            guard !verticals[index].isEmpty else { throw Error.currentStackEmpty }
+            #warning("TODO: Implement cut(amount:at:)")
         }
     }
 }

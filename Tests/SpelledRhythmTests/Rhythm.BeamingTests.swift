@@ -18,8 +18,12 @@ class Rhythm_BeamingTests: XCTestCase {
     }
 
     func testCutSingleBeamingThrowsItemOutOfRange() {
-
         #warning("Implement testCutSingleBeamingThrowsItemOutOfRange()")
+    }
+
+    func testCutFirstThrowsIndexOutOfBounds() {
+        var beaming = self.beaming(beamCounts: [1,2,3,4])
+        XCTAssertThrowsError(try beaming.cut(amount: 1, at: 0))
     }
 
     func testCutQuarterNotesThrowsCurrentStackEmpty() {
