@@ -269,7 +269,7 @@ public struct Beaming: Equatable {
                 let vertical = Vertical(
                     maintain: maintainCount,
                     startOrStop: newStartOrStop,
-                    beamlets: amount - remaining
+                    beamlets: beamletCount + (amount - remaining)
                 )
                 return (vertical, remaining)
             }
