@@ -16,6 +16,7 @@ public struct Beaming: Equatable {
         case indexOutOfBounds(Int)
         case previousStackEmpty
         case currentStackEmpty
+        case notEnoughPoints
     }
 
     /// Whether a beamlet is pointed forward or backward.
@@ -47,6 +48,30 @@ public struct Beaming: Equatable {
                 case none
                 case start(count: Int)
                 case stop(count: Int)
+
+                /// - Returns: Remaining levels to cut.
+                mutating func cut(amount: Int) throws -> Int {
+                    switch self {
+                    case .none:
+                        return amount
+                    case .start(let count):
+                        if amount >= count {
+                            self = .none
+                            return amount - count
+                        } else {
+                            self = .start(count: count - amount)
+                            return 0
+                        }
+                    case .stop(let count):
+                        if amount >= count {
+                            self = .none
+                            return amount - count
+                        } else {
+                            self = .stop(count: count - amount)
+                            return 0
+                        }
+                    }
+                }
             }
 
             /// - Returns: The `Point` values contained herein.
@@ -102,12 +127,17 @@ public struct Beaming: Equatable {
                 self.beamletCount = beamlets
             }
 
-            /// Cuts `Vertical`
+            /// Cuts `Vertical` when the current is `current`.
             mutating func cutAt(amount: Int) throws {
+                precondition(amount >= 0)
                 guard !isEmpty else { throw Error.currentStackEmpty }
+                let remaining = try startOrStop.cut(amount: amount)
+                print("remaining after cut at: \(remaining)")
             }
 
+            /// Cuts `Vertical` when the current is `previous`.
             mutating func cutAfter(amount: Int) throws {
+                precondition(amount >= 0)
                 guard !isEmpty else { throw  Error.previousStackEmpty }
             }
         }

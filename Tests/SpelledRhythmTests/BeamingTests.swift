@@ -52,4 +52,48 @@ class BeamingTests: XCTestCase {
     func testCutFourSixteenthsIntoTwoPairs() {
         #warning("Implement testCutFourSixteenthsIntoTwoPairs()")
     }
+
+    func testStartOrStopCutStartEqual() {
+        let amount = 7
+        var startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: amount)
+        let remaining = try! startOrStop.cut(amount: 7)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(startOrStop, .none)
+    }
+
+    func testStartOrStopCutStartAmountGreaterThanCount() {
+        var startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: 1)
+        let remaining = try! startOrStop.cut(amount: 2)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(startOrStop, .none)
+    }
+
+    func testStartOrStopCutStartAmountLessThanCount() {
+        var startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: 2)
+        let remaining = try! startOrStop.cut(amount: 1)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(startOrStop, .start(count: 1))
+    }
+
+    func testStartOrStopCutStopEqual() {
+        let amount = 7
+        var startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: amount)
+        let remaining = try! startOrStop.cut(amount: 7)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(startOrStop, .none)
+    }
+
+    func testStartOrStopCutStopAmountGreaterThanCount() {
+        var startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: 1)
+        let remaining = try! startOrStop.cut(amount: 2)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(startOrStop, .none)
+    }
+
+    func testStartOrStopCutStopAmountLessThanCount() {
+        var startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: 2)
+        let remaining = try! startOrStop.cut(amount: 1)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(startOrStop, .stop(count: 1))
+    }
 }
