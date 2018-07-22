@@ -45,7 +45,7 @@ extension Beaming.Point.Vertical {
         }
         let startCount = Swift.max(0, Swift.min(cur,next) - prev)
         let stopCount = Swift.max(0, Swift.min(cur,prev) - next)
-        let startOrStop: StartOrStop = (
+        let startOrStop: Beaming.Point.StartOrStop = (
             startCount > 0 ? .start(count: startCount)
                 : stopCount > 0 ? .stop(count: stopCount)
                 : .none
