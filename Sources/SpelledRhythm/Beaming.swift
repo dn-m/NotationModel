@@ -225,7 +225,6 @@ extension Beaming.Point {
                     )
                     return (vertical, remaining)
                 } else {
-                    let remaining = amount - maintainCount
                     let vertical = Vertical(
                         maintain: newMaintain,
                         start: count + starts,
