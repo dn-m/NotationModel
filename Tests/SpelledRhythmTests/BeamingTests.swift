@@ -227,38 +227,6 @@ class BeamingTests: XCTestCase {
         XCTAssertEqual(cut, expected)
     }
 
-
-
-
-
-
-
-
-
-
-//
-//    cur: .stop -> .beamlet
-//    prev: .maintain -> .stop
-//
-//    :--:  :      :---:   :
-//    :--:  :      :- -:   :
-//    :- :  :  ->  :-  :   :
-//    x
-//
-//    cur: .stop -> .beamlet
-//    prev: .start -> .beamlet
-//
-//    :--:--:      :-  :---:
-//    :--:  :      :-  :-  :
-//    :- :  :  ->  :-  :   :
-//    x
-//    x
-//
-//    cur:
-//    .stop -> .beamlet
-//    .maintain -> .start
-//    prev: .start -> .beamlet
-
     /// :---:---:      :---:---:
     /// :---:---:      :-  :---:
     /// :   :  -:  ->  :   :  -:
