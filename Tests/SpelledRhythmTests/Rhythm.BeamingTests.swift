@@ -13,8 +13,8 @@ import Rhythm
 
 class Rhythm_BeamingTests: XCTestCase {
 
-    func beaming(beamCounts: [Int]) -> Rhythm<()>.Beaming {
-        return Rhythm<()>.Beaming(beamingVerticals(beamCounts))
+    func beaming(beamCounts: [Int]) -> Beaming {
+        return Beaming(beamingVerticals(beamCounts))
     }
 
     func testCutSingleBeamingThrowsItemOutOfRange() {
@@ -43,7 +43,11 @@ class Rhythm_BeamingTests: XCTestCase {
     }
 
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
-        #warning("Implement testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets()")
+        var beaming = self.beaming(beamCounts: [1,1])
+//        XCTAssertEqual(
+//            try beaming.cut(amount: 1, at: 1),
+//            [.init(beamlets: 1),.init(beamlets: 1)]
+//        )
     }
 
     func testCutFourSixteenthsIntoTwoPairs() {

@@ -9,6 +9,7 @@ import XCTest
 import DataStructures
 import MetricalDuration
 import Rhythm
+import SpelledRhythm
 @testable import RhythmBeamer
 
 class RhythmBeamerTests: XCTestCase {
@@ -30,8 +31,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testSingletSetOfBeamlets() {
         let beamCounts = [4]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(beamlets: 4)
         ]
         XCTAssertEqual(verticals, expected)
@@ -39,8 +40,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testDoubletSameValues() {
         let beamCounts = [3,3]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 3),
             .init(stop: 3)
         ]
@@ -49,8 +50,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testDoubletFirstHigher() {
         let beamCounts = [4,1]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 1, beamlets: 3),
             .init(stop: 1)
         ]
@@ -59,8 +60,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testDoubletSecondHigher() {
         let beamCounts = [2,3]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 2),
             .init(stop: 2, beamlets: 1)
         ]
@@ -69,8 +70,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testTripletSameValues() {
         let beamCounts = [2,2,2]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 2),
             .init(maintain: 2),
             .init(stop: 2)
@@ -80,8 +81,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testTripletLowMidHigh() {
         let beamCounts = [1,2,4]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 1),
             .init(maintain: 1, start: 1),
             .init(stop: 2, beamlets: 2)
@@ -91,8 +92,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testTripletLowHighMid() {
         let beamCounts = [1,3,2]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 1),
             .init(maintain: 1, start: 1, beamlets: 1),
             .init(stop: 2)
@@ -102,8 +103,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testTripletMidLowHigh() {
         let beamCounts = [2,1,4]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 1, beamlets: 1),
             .init(maintain: 1),
             .init(stop: 1, beamlets: 3)
@@ -113,8 +114,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testTripletMidHighLow() {
         let beamCounts = [2,3,1]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 2),
             .init(maintain: 1, stop: 1, beamlets: 1),
             .init(stop: 1)
@@ -124,8 +125,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testLongSequence() {
         let beamCounts = [1,3,2,2,4,3,3,1,3]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(beamCounts)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(beamCounts)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 1), // 1
             .init(maintain: 1, startOrStop: .start(count: 1), beamlets: 1), // 3
             .init(maintain: 2), // 2
@@ -141,8 +142,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testFourOneOneOneOne() {
         let tree = 4/>8 * [4,1,1,1,1]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
+        let expected: [Beaming.Point.Vertical] = [
             .init(),
             .init(start: 2),
             .init(maintain: 2),
@@ -154,8 +155,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testOneFourOneOneOne() {
         let tree = 4/>8 * [1,4,1,1,1]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
+        let expected: [Beaming.Point.Vertical] = [
             .init(beamlets: 2),
             .init(),
             .init(start: 2),
@@ -167,8 +168,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testOneOneFourOneOne() {
         let tree = 4/>8 * [1,1,4,1,1]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 2),
             .init(stop: 2),
             .init(),
@@ -180,8 +181,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testOneOneOneFourOne() {
         let tree = 4/>8 * [1,1,1,4,1]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 2),
             .init(maintain: 2),
             .init(stop: 2),
@@ -193,8 +194,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testOneOneOneOneFour() {
         let tree = 4/>8 * [1,1,1,1,4]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 2),
             .init(maintain: 2),
             .init(maintain: 2),
@@ -206,8 +207,8 @@ class RhythmBeamerTests: XCTestCase {
 
     func testInitWithRhythmTreeDottedValues() {
         let tree = 2/>8 * [1,2,3,7]
-        let verticals: [Rhythm<()>.Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
-        let expected: [Rhythm<()>.Beaming.Point.Vertical] = [
+        let verticals: [Beaming.Point.Vertical] = beamingVerticals(tree.leaves)
+        let expected: [Beaming.Point.Vertical] = [
             .init(start: 3, beamlets: 1),
             .init(maintain: 3),
             .init(maintain: 2, stop: 1),

@@ -13,27 +13,27 @@ import SpelledRhythm
 
 public enum DefaultBeamer {
     /// - Returns: A reasonable `Beaming` for the given `rhythm`.
-    public static func beaming <T> (for rhythm: Rhythm<T>) -> Rhythm<T>.Beaming {
+    public static func beaming <T> (for rhythm: Rhythm<T>) -> Beaming {
         return .init(beamingVerticals(rhythm.metricalDurationTree.leaves))
     }
 }
 
-extension Rhythm.Beaming.Point.Vertical {
+extension Beaming.Point.Vertical {
 
     /// - Returns: Singleton `Vertical`.
-    static func singleton(_ cur: Int) -> Rhythm.Beaming.Point.Vertical {
+    static func singleton(_ cur: Int) -> Beaming.Point.Vertical {
         return .init(beamlets: cur)
     }
 
     /// - Returns: The `Vertical` for the first context in a rhythm.
-    static func first(_ cur: Int, _ next: Int) -> Rhythm.Beaming.Point.Vertical {
+    static func first(_ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
         guard next > 0 else { return .init(beamlets: cur) }
         return .init(start: Swift.min(cur,next), beamlets: Swift.max(0, cur - next))
     }
 
     /// - Returns: The `Vertical` for the context in a rhythm.
-    static func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Rhythm.Beaming.Point.Vertical {
+    static func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
         guard prev > 0 else {
             guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }
@@ -58,7 +58,7 @@ extension Rhythm.Beaming.Point.Vertical {
     }
 
     /// - Returns: The `Vertical` for the last context in a rhythm.
-    static func last(_ prev: Int, _ cur: Int) -> Rhythm.Beaming.Point.Vertical {
+    static func last(_ prev: Int, _ cur: Int) -> Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
         guard prev > 0 else { return .init(beamlets: cur) }
         return .init(stop: Swift.min(cur,prev), beamlets: Swift.max(0, cur - prev))
@@ -86,17 +86,17 @@ extension Rhythm.Beaming.Point.Vertical {
 }
 
 /// - Returns: An array of `Point.Vertical` values for the given `counts` (amounts of beams).
-internal func beamingVerticals <T> (_ counts: [Int]) -> [Rhythm<T>.Beaming.Point.Vertical] {
+internal func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
     return counts.indices.map { index in
         let prev = counts[safe: index - 1]
         let cur = counts[index]
         let next = counts[safe: index + 1]
-        return Rhythm<T>.Beaming.Point.Vertical(prev, cur, next)
+        return Beaming.Point.Vertical(prev, cur, next)
     }
 }
 
 /// - Returns: An array of `BeamJunction` values for the given `leaves`.
-func beamingVerticals <T> (_ leaves: [MetricalDuration]) -> [Rhythm<T>.Beaming.Point.Vertical] {
+func beamingVerticals (_ leaves: [MetricalDuration]) -> [Beaming.Point.Vertical] {
     return beamingVerticals(leaves.map(beamCount))
 }
 

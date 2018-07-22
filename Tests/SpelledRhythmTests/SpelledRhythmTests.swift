@@ -60,7 +60,7 @@ class SpelledRhythmTests: XCTestCase {
         let rhythm = Rhythm(4/>8, [event(1), tie(), tie(), rest()])
         let spelling = Rhythm.Spelling(rhythm: rhythm, using: DefaultBeamer.beaming)
 
-        let expectedBeamingVerticals: [Rhythm<Int>.Beaming.Point.Vertical] = [
+        let expectedBeamingVerticals: [Beaming.Point.Vertical] = [
             .init(startOrStop: .start(count: 1)),
             .init(maintain: 1),
             .init(maintain: 1),
