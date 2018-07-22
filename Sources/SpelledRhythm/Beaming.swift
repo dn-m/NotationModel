@@ -337,21 +337,15 @@ extension Beaming.Point {
             precondition(amount >= 0)
             guard !isEmpty else { throw Beaming.Error.currentStackEmpty }
 
-            // 1. Convert stops to beamlets
-            let (verticalAfterBeamletsTransform, remainingAfterBeamletsTransform) = self.stopsToBeamlets(amount: amount)
+            // Phase 1: Convert stops to beamlets
+            let (vertical1, remaining1) = stopsToBeamlets(amount: amount)
+            if remaining1 == 0 { return vertical1 }
 
-            if remainingAfterBeamletsTransform == 0 {
-                return verticalAfterBeamletsTransform
-            }
+            // Phase 2. Convert maintains to starts
+            let (vertical2, remaining2) = vertical1.maintainsToStarts(amount: remaining1)
 
-            // 2. Convert maintains to starts
-            let (verticalAfterMaintainsTransform, remainingAfterMaintainsTransform) = verticalAfterBeamletsTransform.maintainsToStarts(amount: remainingAfterBeamletsTransform)
-
-            guard remainingAfterMaintainsTransform == 0 else {
-                throw Beaming.Error.notEnoughPoints
-            }
-
-            return verticalAfterMaintainsTransform
+            guard remaining2 == 0 else { throw Beaming.Error.notEnoughPoints }
+            return vertical2
         }
 
         /// Cuts `Vertical` when the current is `previous`.
@@ -360,20 +354,13 @@ extension Beaming.Point {
             guard !isEmpty else { throw Beaming.Error.previousStackEmpty }
 
             // 1. Convert starts to beamlets
-            let (verticalAfterBeamletsTransform, remainingAfterBeamletsTransform) = self.startsToBeamlets(amount: amount)
-
-            if remainingAfterBeamletsTransform == 0 {
-                return verticalAfterBeamletsTransform
-            }
+            let (vertical1, remaining1) = self.startsToBeamlets(amount: amount)
+            guard remaining1 > 0 else { return vertical1 }
 
             // 2. Convert maintains to stops
-            let (verticalAfterMaintainsTransform, remainingAfterMaintainsTransform) = verticalAfterBeamletsTransform.maintainsToStops(amount: remainingAfterBeamletsTransform)
-
-            guard remainingAfterMaintainsTransform == 0 else {
-                throw Beaming.Error.notEnoughPoints
-            }
-
-            return verticalAfterMaintainsTransform
+            let (vertical2, remaining2) = vertical1.maintainsToStops(amount: remaining1)
+            guard remaining2 == 0 else { throw Beaming.Error.notEnoughPoints }
+            return vertical2
         }
     }
 }
