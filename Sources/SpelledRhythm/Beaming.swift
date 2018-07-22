@@ -284,7 +284,6 @@ extension Beaming.Point {
 
             // Phase 2. Convert maintains to starts
             let (vertical2, remaining2) = vertical1.maintainsToStarts(amount: remaining1)
-
             guard remaining2 == 0 else { throw Beaming.Error.notEnoughPoints }
             return vertical2
         }
