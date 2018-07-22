@@ -74,7 +74,7 @@ extension Beaming.Point.Vertical {
         case (nil, cur, nil):
             self = .singleton(cur)
         case (nil, let cur, let next?):
-            self = .first(cur,next)
+            self = .first(cur, next)
         case (let prev?, let cur, let next?):
             self = .middle(prev, cur, next)
         case (let prev?, let cur, nil):
