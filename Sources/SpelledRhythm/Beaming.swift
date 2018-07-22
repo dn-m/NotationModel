@@ -62,32 +62,6 @@ public struct Beaming: Equatable {
                     }
                 }
             }
-
-            func cutAt(amount: Int) throws -> (before: StartOrStop, after: StartOrStop, remaining: Int) {
-                switch self {
-                case .none, .start:
-                    return (self, self, amount)
-                case .stop(let count):
-                    if amount >= count {
-                        return (self, .none, amount - count)
-                    } else {
-                        return (self, .stop(count: count - amount), count - amount)
-                    }
-                }
-            }
-
-            func cutAfter(amount: Int) throws -> (before: StartOrStop, after: StartOrStop, remaining: Int) {
-                switch self {
-                case .none, .stop:
-                    return (self, self, amount)
-                case .start(let count):
-                    if amount >= count {
-                        return (self, .none, amount - count)
-                    } else {
-                        return (self, .start(count: count - amount), count - amount)
-                    }
-                }
-            }
         }
 
         /// Rhythm.Beaming.Point.Vertical
