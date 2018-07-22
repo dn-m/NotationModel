@@ -280,7 +280,7 @@ extension Beaming.Point {
 
             // Phase 1: Convert stops to beamlets
             let (vertical1, remaining1) = stopsToBeamlets(amount: amount)
-            if remaining1 == 0 { return vertical1 }
+            guard remaining1 > 0 else { return vertical1 }
 
             // Phase 2. Convert maintains to starts
             let (vertical2, remaining2) = vertical1.maintainsToStarts(amount: remaining1)
