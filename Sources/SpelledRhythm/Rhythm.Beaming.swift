@@ -124,6 +124,8 @@ extension Rhythm {
             self.verticals = verticals
         }
 
+        /// Subdivides beaming verticals by the given `amount` at the given `index`.
+        ///
         /// - Throws: Error if the `Item` at the given `index` is empty.
         /// - Throws: Error if the `Item` at the given `index` is less than 1 or greater than equal
         /// to the amount of events contained herein.
