@@ -162,7 +162,6 @@ extension Beaming.Point {
             )
         }
 
-
         /// The amount of `.maintain` points.
         let maintainCount: Int
 
@@ -178,7 +177,7 @@ extension Beaming.Point {
             maintain: Int = 0,
             startOrStop: StartOrStop = .none,
             beamlets: Int = 0
-            )
+        )
         {
             self.maintainCount = maintain
             self.startOrStop = startOrStop
@@ -189,7 +188,7 @@ extension Beaming.Point {
             maintain: Int = 0,
             start: Int,
             beamlets: Int = 0
-            )
+        )
         {
             self.maintainCount = maintain
             self.startOrStop = .init(start: start)
@@ -200,7 +199,7 @@ extension Beaming.Point {
             maintain: Int = 0,
             stop: Int,
             beamlets: Int = 0
-            )
+        )
         {
             self.maintainCount = maintain
             self.startOrStop = .init(stop: stop)
@@ -321,7 +320,7 @@ extension Beaming.Point {
             return startOrStopToBeamlets(amount: amount)
         }
 
-        /// - Returns:The `Vertical` updated by transforming is `.startOrStop` points into
+        /// - Returns: The `Vertical` updated by transforming is `.startOrStop` points into
         /// the given `amount` of `.beamlet` points, to the degree possible.
         private func startOrStopToBeamlets(amount: Int) -> (Vertical,Int) {
             let (newStartOrStop, remaining) = startOrStop.cut(amount: amount)
