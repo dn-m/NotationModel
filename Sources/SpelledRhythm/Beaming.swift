@@ -82,6 +82,7 @@ public struct Beaming: Equatable {
                     }
                 case .stop(let count):
                     if count > amount {
+                        print("stop: count: \(count), amount: \(amount)")
                         return (.stop(count: count - amount), 0)
                     } else {
                         return (.none, amount - count)
@@ -248,6 +249,8 @@ public struct Beaming: Equatable {
             ///
             /// Should only be used by the `cutAt` method.
             func stopsToBeamlets(amount: Int) -> (Vertical,Int) {
+                print("stops to beamlets")
+                print("start or stop: \(startOrStop)")
                 guard case .stop = startOrStop else { return (self,amount) }
                 return startOrStopToBeamlets(amount: amount)
             }
@@ -264,8 +267,9 @@ public struct Beaming: Equatable {
 
             /// - Returns:The `Vertical` updated by transforming is `.startOrStop` points into
             /// the given `amount` of `.beamlet` points, to the degree possible.
-            private func startOrStopToBeamlets(amount: Int) -> (Vertical, Int) {
+            private func startOrStopToBeamlets(amount: Int) -> (Vertical,Int) {
                 let (newStartOrStop, remaining) = startOrStop.cut(amount: amount)
+                print("beamletCount: \(beamletCount), amount: \(amount), remaining: \(remaining)")
                 let vertical = Vertical(
                     maintain: maintainCount,
                     startOrStop: newStartOrStop,
@@ -280,14 +284,15 @@ public struct Beaming: Equatable {
                 guard !isEmpty else { throw Error.currentStackEmpty }
 
                 // 1. Convert stops to beamlets
-                let (verticalAfterBeamletsTransform, remainingAfterStopsTransform) = self.stopsToBeamlets(amount: amount)
+                let (verticalAfterBeamletsTransform, remainingAfterBeamletsTransform) = self.stopsToBeamlets(amount: amount)
 
-                if remainingAfterStopsTransform == 0 {
+                if remainingAfterBeamletsTransform == 0 {
+                    print("remaining after stps: \(remainingAfterBeamletsTransform), \(verticalAfterBeamletsTransform)")
                     return verticalAfterBeamletsTransform
                 }
 
                 // 2. Convert maintains to starts
-                let (verticalAfterMaintainsTransform, remainingAfterMaintainsTransform) = verticalAfterBeamletsTransform.maintainsToStarts(amount: remainingAfterStopsTransform)
+                let (verticalAfterMaintainsTransform, remainingAfterMaintainsTransform) = verticalAfterBeamletsTransform.maintainsToStarts(amount: remainingAfterBeamletsTransform)
 
                 guard remainingAfterMaintainsTransform == 0 else {
                     throw Error.notEnoughPoints
@@ -302,14 +307,14 @@ public struct Beaming: Equatable {
                 guard !isEmpty else { throw  Error.previousStackEmpty }
 
                 // 1. Convert starts to beamlets
-                let (verticalAfterBeamletsTransform, remainingAfterStopsTransform) = self.startsToBeamlets(amount: amount)
+                let (verticalAfterBeamletsTransform, remainingAfterBeamletsTransform) = self.startsToBeamlets(amount: amount)
 
-                if remainingAfterStopsTransform == 0 {
+                if remainingAfterBeamletsTransform == 0 {
                     return verticalAfterBeamletsTransform
                 }
 
                 // 2. Convert maintains to stops
-                let (verticalAfterMaintainsTransform, remainingAfterMaintainsTransform) = verticalAfterBeamletsTransform.maintainsToStops(amount: remainingAfterStopsTransform)
+                let (verticalAfterMaintainsTransform, remainingAfterMaintainsTransform) = verticalAfterBeamletsTransform.maintainsToStops(amount: remainingAfterBeamletsTransform)
 
                 guard remainingAfterMaintainsTransform == 0 else {
                     throw Error.notEnoughPoints
@@ -351,8 +356,8 @@ public struct Beaming: Equatable {
     /// to the amount of events contained herein.
     public func cut(amount: Int, at index: Int) throws -> Beaming {
         guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
-        let current = try verticals[index].cutAt(amount: amount)
         let previous = try verticals[index - 1].cutAfter(amount: amount)
+        let current = try verticals[index].cutAt(amount: amount)
         return Beaming(
             verticals.prefix(upTo: index - 1) +
             [previous,current] +
