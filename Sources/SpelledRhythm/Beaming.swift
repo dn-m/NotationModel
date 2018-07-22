@@ -173,34 +173,19 @@ extension Beaming.Point {
 
         // MARK: - Initializers
 
-        public init(
-            maintain: Int = 0,
-            startOrStop: StartOrStop = .none,
-            beamlets: Int = 0
-        )
-        {
+        public init(maintain: Int = 0, startOrStop: StartOrStop = .none, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = startOrStop
             self.beamletCount = beamlets
         }
 
-        public init(
-            maintain: Int = 0,
-            start: Int,
-            beamlets: Int = 0
-        )
-        {
+        public init(maintain: Int = 0, start: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(start: start)
             self.beamletCount = beamlets
         }
 
-        public init(
-            maintain: Int = 0,
-            stop: Int,
-            beamlets: Int = 0
-        )
-        {
+        public init(maintain: Int = 0, stop: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(stop: stop)
             self.beamletCount = beamlets
