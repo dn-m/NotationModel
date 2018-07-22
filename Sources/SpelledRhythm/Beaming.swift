@@ -224,38 +224,20 @@ extension Beaming.Point {
                 return (self,amount)
             case .none:
                 let remaining = Swift.max(amount - maintainCount, 0)
-                if maintainCount >= amount {
-                    let vertical = Vertical(
-                        maintain: maintainCount - amount,
-                        stop: amount,
-                        beamlets: beamletCount
-                    )
-                    return (vertical, remaining)
-                } else {
-                    let vertical = Vertical(
-                        maintain: 0,
-                        stop: maintainCount,
-                        beamlets: beamletCount
-                    )
-                    return (vertical, remaining)
-                }
+                let vertical = Vertical(
+                    maintain: Swift.max(maintainCount - amount, 0),
+                    stop: Swift.min(amount, maintainCount),
+                    beamlets: beamletCount
+                )
+                return (vertical, remaining)
             case .stop(let count):
                 let remaining = Swift.max(amount - maintainCount, 0)
-                if maintainCount >= amount {
-                    let vertical = Vertical(
-                        maintain: maintainCount - amount,
-                        stop: count + amount,
-                        beamlets: beamletCount
-                    )
-                    return (vertical, remaining)
-                } else {
-                    let vertical = Vertical(
-                        maintain: 0,
-                        stop: count + maintainCount,
-                        beamlets: beamletCount
-                    )
-                    return (vertical, remaining)
-                }
+                let vertical = Vertical(
+                    maintain: Swift.max(maintainCount - amount, 0),
+                    stop: Swift.min(amount, maintainCount) + count,
+                    beamlets: beamletCount
+                )
+                return (vertical, remaining)
             }
         }
 
