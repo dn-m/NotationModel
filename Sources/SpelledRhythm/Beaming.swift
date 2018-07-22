@@ -125,7 +125,7 @@ extension Beaming.Point {
 
         /// - Returns: A `StartOrStop` transformed by reducing the count to the degree possible,
         /// along with the remaining amount that could not be absorbed.
-        func cut(amount: Int) -> (StartOrStop, Int) {
+        func cut(amount: Int) -> (StartOrStop,Int) {
             switch self {
             case .none:
                 return (.none, amount)
