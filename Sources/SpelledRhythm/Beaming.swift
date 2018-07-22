@@ -158,7 +158,14 @@ public struct Beaming: Equatable {
             func cutAfter(amount: Int) throws -> Vertical {
                 precondition(amount >= 0)
                 guard !isEmpty else { throw  Error.previousStackEmpty }
-                let (before,after,remaining) = try startOrStop.cutAfter(amount: amount)
+
+                // Cut start/stop -> Increment beamlet
+                // Cut maintain
+
+
+
+
+                let (startOrStopBefore,startOrStopAfter,remaining) = try startOrStop.cutAfter(amount: amount)
                 let beamletBump = amount - remaining
                 if remaining > 0 {
                     if remaining > maintainCount {
@@ -166,14 +173,14 @@ public struct Beaming: Equatable {
                     } else {
                         return Vertical(
                             maintain: maintainCount - remaining,
-                            startOrStop: after,
+                            startOrStop: startOrStopAfter,
                             beamlets: beamletCount + remaining
                         )
                     }
                 }
                 return Vertical(
                     maintain: maintainCount,
-                    startOrStop: after,
+                    startOrStop: startOrStopAfter,
                     beamlets: beamletCount + beamletBump
                 )
             }

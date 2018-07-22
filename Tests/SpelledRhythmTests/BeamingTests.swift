@@ -45,13 +45,13 @@ class BeamingTests: XCTestCase {
     func testCutAfterEqualToStartCountSingleLevel() {
         let vertical = Beaming.Point.Vertical(start: 1)
         let cut = try! vertical.cutAfter(amount: 1)
-        XCTAssertEqual(cut, .init())
+        XCTAssertEqual(cut, .init(beamlets: 1))
     }
 
     func testCutAtEqualToStopCountSingleLevel() {
         let vertical = Beaming.Point.Vertical(stop: 1)
         let cut = try! vertical.cutAt(amount: 1)
-        XCTAssertEqual(cut, .init())
+        XCTAssertEqual(cut, .init(beamlets: 1))
     }
 
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
