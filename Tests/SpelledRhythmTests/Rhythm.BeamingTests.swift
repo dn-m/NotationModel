@@ -27,6 +27,11 @@ class Rhythm_BeamingTests: XCTestCase {
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 0))
     }
 
+    func testCutAfterLastThrowsOutOfBounds() {
+        var beaming = self.beaming(beamCounts: [1,2,3])
+        XCTAssertThrowsError(try beaming.cut(amount: 1, at: 3))
+    }
+
     func testCutQuarterNotesThrowsCurrentStackEmpty() {
         #warning("Implement testCutQuarterNotesThrowsCurrentStackEmpty()")
     }
