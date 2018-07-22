@@ -295,7 +295,7 @@ extension Beaming.Point {
             guard !isEmpty else { throw Beaming.Error.previousStackEmpty }
 
             // 1. Convert starts to beamlets
-            let (vertical1, remaining1) = self.startsToBeamlets(amount: amount)
+            let (vertical1, remaining1) = startsToBeamlets(amount: amount)
             guard remaining1 > 0 else { return vertical1 }
 
             // 2. Convert maintains to stops
