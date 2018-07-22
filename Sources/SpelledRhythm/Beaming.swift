@@ -1,5 +1,5 @@
 //
-//  Rhythm.Beaming.swift
+//  Beaming.swift
 //  SpelledRhythm
 //
 //  Created by James Bean on 6/18/18.
@@ -129,8 +129,10 @@ public struct Beaming: Equatable {
     /// to the amount of events contained herein.
     public mutating func cut(amount: Int, at index: Int) throws {
         guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
-        guard !verticals[index].isEmpty else { throw Error.currentStackEmpty }
-        guard !verticals[index - 1].isEmpty else { throw Error.previousStackEmpty }
+        let current = verticals[index]
+        let previous = verticals[index - 1]
+        guard !current.isEmpty else { throw Error.currentStackEmpty }
+        guard !previous.isEmpty else { throw Error.previousStackEmpty }
 
         #warning("TODO: Implement cut(amount:at:)")
     }

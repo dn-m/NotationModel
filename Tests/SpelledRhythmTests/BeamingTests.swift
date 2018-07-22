@@ -1,5 +1,5 @@
 //
-//  Rhythm.swift
+//  BeamingTests.swift
 //  SpelledRhythmTests
 //
 //  Created by James Bean on 6/20/18.
@@ -11,7 +11,7 @@ import Rhythm
 @testable import RhythmBeamer
 @testable import SpelledRhythm
 
-class Rhythm_BeamingTests: XCTestCase {
+class BeamingTests: XCTestCase {
 
     func beaming(beamCounts: [Int]) -> Beaming {
         return Beaming(beamingVerticals(beamCounts))
@@ -44,10 +44,9 @@ class Rhythm_BeamingTests: XCTestCase {
 
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
         var beaming = self.beaming(beamCounts: [1,1])
-//        XCTAssertEqual(
-//            try beaming.cut(amount: 1, at: 1),
-//            [.init(beamlets: 1),.init(beamlets: 1)]
-//        )
+        try! beaming.cut(amount: 1, at: 1)
+        let expected = Beaming([.init(beamlets: 1), .init(beamlets: 1)])
+        XCTAssertEqual(beaming,expected)
     }
 
     func testCutFourSixteenthsIntoTwoPairs() {
