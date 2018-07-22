@@ -49,26 +49,28 @@ public struct Beaming: Equatable {
                 case start(count: Int)
                 case stop(count: Int)
 
-                /// - Returns: Remaining levels to cut.
-                mutating func cut(amount: Int) throws -> Int {
+                func cutAt(amount: Int) throws -> (before: StartOrStop, after: StartOrStop, remaining: Int) {
                     switch self {
-                    case .none:
-                        return amount
-                    case .start(let count):
-                        if amount >= count {
-                            self = .none
-                            return amount - count
-                        } else {
-                            self = .start(count: count - amount)
-                            return 0
-                        }
+                    case .none, .start:
+                        return (self, self, amount)
                     case .stop(let count):
                         if amount >= count {
-                            self = .none
-                            return amount - count
+                            return (self, .none, amount - count)
                         } else {
-                            self = .stop(count: count - amount)
-                            return 0
+                            return (self, .stop(count: count - amount), count - amount)
+                        }
+                    }
+                }
+
+                func cutAfter(amount: Int) throws -> (before: StartOrStop, after: StartOrStop, remaining: Int) {
+                    switch self {
+                    case .none, .stop:
+                        return (self, self, amount)
+                    case .start(let count):
+                        if amount >= count {
+                            return (self, .none, amount - count)
+                        } else {
+                            return (self, .start(count: count - amount), count - amount)
                         }
                     }
                 }
@@ -84,13 +86,13 @@ public struct Beaming: Equatable {
 
 
             /// The amount of `.maintain` points.
-            var maintainCount: Int
+            let maintainCount: Int
 
             /// The amount of `.start` or `.stop` points.
-            var startOrStop: StartOrStop
+            let startOrStop: StartOrStop
 
             /// The amount of `.beamlet` points.
-            var beamletCount: Int
+            let beamletCount: Int
 
             // MARK: - Initializers
 
@@ -128,17 +130,52 @@ public struct Beaming: Equatable {
             }
 
             /// Cuts `Vertical` when the current is `current`.
-            mutating func cutAt(amount: Int) throws {
+            func cutAt(amount: Int) throws -> Vertical {
                 precondition(amount >= 0)
                 guard !isEmpty else { throw Error.currentStackEmpty }
-                let remaining = try startOrStop.cut(amount: amount)
-                print("remaining after cut at: \(remaining)")
+                let (startOrStopBefore,startOrStopAfter,remaining) = try startOrStop.cutAt(amount: amount)
+                let beamletBump = amount - remaining
+                if remaining > 0 {
+                    if remaining > maintainCount {
+                        throw Error.notEnoughPoints
+                    } else {
+                        // Transform maintain to beamlets
+                        return Vertical(
+                            maintain: maintainCount - remaining,
+                            startOrStop: startOrStopAfter,
+                            beamlets: beamletCount + remaining
+                        )
+                    }
+                }
+                return Vertical(
+                    maintain: maintainCount,
+                    startOrStop: startOrStopAfter,
+                    beamlets: beamletCount + beamletBump
+                )
             }
 
             /// Cuts `Vertical` when the current is `previous`.
-            mutating func cutAfter(amount: Int) throws {
+            func cutAfter(amount: Int) throws -> Vertical {
                 precondition(amount >= 0)
                 guard !isEmpty else { throw  Error.previousStackEmpty }
+                let (before,after,remaining) = try startOrStop.cutAfter(amount: amount)
+                let beamletBump = amount - remaining
+                if remaining > 0 {
+                    if remaining > maintainCount {
+                        throw Error.notEnoughPoints
+                    } else {
+                        return Vertical(
+                            maintain: maintainCount - remaining,
+                            startOrStop: after,
+                            beamlets: beamletCount + remaining
+                        )
+                    }
+                }
+                return Vertical(
+                    maintain: maintainCount,
+                    startOrStop: after,
+                    beamlets: beamletCount + beamletBump
+                )
             }
         }
 
@@ -161,17 +198,27 @@ public struct Beaming: Equatable {
         self.verticals = verticals
     }
 
+    public init <S> (_ sequence: S) where S: Sequence, S.Element == Point.Vertical {
+        self.verticals = Array(sequence)
+    }
+
     /// Subdivides beaming verticals by the given `amount` at the given `index`.
     ///
     /// - Throws: Error if the `Item` at the given `index` is empty.
     /// - Throws: Error if the `Item` at the given `index` is less than 1 or greater than equal
     /// to the amount of events contained herein.
-    public mutating func cut(amount: Int, at index: Int) throws {
+    public func cut(amount: Int, at index: Int) throws -> Beaming {
         guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
-        try verticals[index].cutAt(amount: amount)
-        try verticals[index - 1].cutAt(amount: amount)
+        let current = try verticals[index].cutAt(amount: amount)
+        let previous = try verticals[index - 1].cutAfter(amount: amount)
 
         #warning("TODO: Implement cut(amount:at:)")
+
+        return Beaming(
+            verticals.prefix(upTo: index - 1) +
+            [previous,current] +
+            verticals.suffix(from: index + 1)
+        )
     }
 }
 

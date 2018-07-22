@@ -18,82 +18,146 @@ class BeamingTests: XCTestCase {
     }
 
     func testCutSingleBeamingThrowsItemOutOfRange() {
-        var beaming = self.beaming(beamCounts: [8])
+        let beaming = self.beaming(beamCounts: [8])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 0))
     }
 
     func testCutFirstThrowsIndexOutOfBounds() {
-        var beaming = self.beaming(beamCounts: [1,2,3,4])
+        let beaming = self.beaming(beamCounts: [1,2,3,4])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 0))
     }
 
     func testCutAfterLastThrowsOutOfBounds() {
-        var beaming = self.beaming(beamCounts: [1,2,3])
+        let beaming = self.beaming(beamCounts: [1,2,3])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 3))
     }
 
     func testCutQuarterNotesThrowsCurrentStackEmpty() {
-        var beaming = self.beaming(beamCounts: [4,0])
+        let beaming = self.beaming(beamCounts: [4,0])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 1))
     }
 
     func testCutQuarterNotesThrowsPreviousStackEmpty() {
-        var beaming = self.beaming(beamCounts: [0,4])
+        let beaming = self.beaming(beamCounts: [0,4])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 1))
     }
 
+    func testCutAfterEqualToStartCountSingleLevel() {
+        let vertical = Beaming.Point.Vertical(start: 1)
+        let cut = try! vertical.cutAfter(amount: 1)
+        XCTAssertEqual(cut, .init())
+    }
+
+    func testCutAtEqualToStopCountSingleLevel() {
+        let vertical = Beaming.Point.Vertical(stop: 1)
+        let cut = try! vertical.cutAt(amount: 1)
+        XCTAssertEqual(cut, .init())
+    }
+
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
-        var beaming = self.beaming(beamCounts: [1,1])
-        try! beaming.cut(amount: 1, at: 1)
+        let beaming = self.beaming(beamCounts: [1,1])
+        let cut = try! beaming.cut(amount: 1, at: 1)
         let expected = Beaming([.init(beamlets: 1), .init(beamlets: 1)])
-        XCTAssertEqual(beaming, expected)
+        dump(cut)
+        dump(expected)
+        XCTAssertEqual(cut, expected)
     }
 
     func testCutFourSixteenthsIntoTwoPairs() {
         #warning("Implement testCutFourSixteenthsIntoTwoPairs()")
     }
 
-    func testStartOrStopCutStartEqual() {
+    // Don't consume start when cutting _at_
+    func testStartOrStopCutAtStartEqual() {
         let amount = 7
-        var startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: amount)
-        let remaining = try! startOrStop.cut(amount: 7)
-        XCTAssertEqual(remaining, 0)
-        XCTAssertEqual(startOrStop, .none)
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: amount)
+        let (before,after,remaining) = try! startOrStop.cutAt(amount: 7)
+        XCTAssertEqual(remaining, 7)
+        XCTAssertEqual(startOrStop, .start(count: amount))
     }
 
-    func testStartOrStopCutStartAmountGreaterThanCount() {
-        var startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: 1)
-        let remaining = try! startOrStop.cut(amount: 2)
-        XCTAssertEqual(remaining, 1)
-        XCTAssertEqual(startOrStop, .none)
-    }
-
-    func testStartOrStopCutStartAmountLessThanCount() {
-        var startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: 2)
-        let remaining = try! startOrStop.cut(amount: 1)
-        XCTAssertEqual(remaining, 0)
+    // Don't consume start when cutting _at_
+    func testStartOrStopCutAtStartAmountGreaterThanCount() {
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: 1)
+        let (before,after,remaining) = try! startOrStop.cutAt(amount: 2)
+        XCTAssertEqual(remaining, 2)
         XCTAssertEqual(startOrStop, .start(count: 1))
     }
 
-    func testStartOrStopCutStopEqual() {
-        let amount = 7
-        var startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: amount)
-        let remaining = try! startOrStop.cut(amount: 7)
-        XCTAssertEqual(remaining, 0)
-        XCTAssertEqual(startOrStop, .none)
-    }
-
-    func testStartOrStopCutStopAmountGreaterThanCount() {
-        var startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: 1)
-        let remaining = try! startOrStop.cut(amount: 2)
+    // Don't consume start when cutting _at_
+    func testStartOrStopCutAtStartAmountLessThanCount() {
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: 2)
+        let (before,after,remaining) = try! startOrStop.cutAt(amount: 1)
         XCTAssertEqual(remaining, 1)
-        XCTAssertEqual(startOrStop, .none)
+        XCTAssertEqual(startOrStop, .start(count: 2))
     }
 
-    func testStartOrStopCutStopAmountLessThanCount() {
-        var startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: 2)
-        let remaining = try! startOrStop.cut(amount: 1)
+    // Consume stop when cutting _at_
+    func testStartOrStopCutAtStopEqual() {
+        let amount = 7
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: amount)
+        let (before,after,remaining) = try! startOrStop.cutAt(amount: 7)
         XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(after, .none)
+    }
+
+    // Consume stop when cutting _at_
+    func testStartOrStopCutAtStopAmountGreaterThanCount() {
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: 1)
+        let (before,after,remaining) = try! startOrStop.cutAt(amount: 2)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(after, .none)
+    }
+
+    // Consume stop when cutting _at_
+    func testStartOrStopCutAtStopAmountLessThanCount() {
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: 2)
+        let (before,after,remaining) = try! startOrStop.cutAt(amount: 1)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(after, .stop(count: 1))
+    }
+
+    func testStartOrStopCutAfterStartEqual() {
+        let amount = 7
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: amount)
+        let (before,after,remaining) = try! startOrStop.cutAfter(amount: 7)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(after, .none)
+    }
+
+    func testStartOrStopCutAfterStartAmountGreaterThanCount() {
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: 1)
+        let (before,after,remaining) = try! startOrStop.cutAfter(amount: 2)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(after, .none)
+    }
+
+    func testStartOrStopCutAfterStartAmountLessThanCount() {
+        var startOrStop = Beaming.Point.Vertical.StartOrStop.start(count: 2)
+        let (before,after,remaining) = try! startOrStop.cutAfter(amount: 1)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(after, .start(count: 1))
+    }
+
+    func testStartOrStopCutAfterStopEqual() {
+        let amount = 7
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: amount)
+        let (before,after,remaining) = try! startOrStop.cutAfter(amount: 7)
+        XCTAssertEqual(remaining, 7)
+        XCTAssertEqual(startOrStop, .stop(count: amount))
+    }
+
+    func testStartOrStopCutAfterStopAmountGreaterThanCount() {
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: 1)
+        let (before,after,remaining) = try! startOrStop.cutAfter(amount: 2)
+        XCTAssertEqual(remaining, 2)
         XCTAssertEqual(startOrStop, .stop(count: 1))
+    }
+
+    func testStartOrStopCutAfterStopAmountLessThanCount() {
+        let startOrStop = Beaming.Point.Vertical.StartOrStop.stop(count: 2)
+        let (before,after,remaining) = try! startOrStop.cutAfter(amount: 1)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(startOrStop, .stop(count: 2))
     }
 }
