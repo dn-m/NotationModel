@@ -115,6 +115,48 @@ class BeamingTests: XCTestCase {
         XCTAssertEqual(startOrStop, .stop(count: 2))
     }
 
+    func testCutStartCountEqualToAmount() {
+        let startOrStop = Beaming.Point.StartOrStop.start(count: 2)
+        let (cut, remaining) = startOrStop.cut(amount: 2)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(cut, .none)
+    }
+
+    func testCutStartCountGreaterThanAmount() {
+        let startOrStop = Beaming.Point.StartOrStop.start(count: 2)
+        let (cut, remaining) = startOrStop.cut(amount: 1)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(cut, .start(count: 1))
+    }
+
+    func testCutStartCountLessThanAmount() {
+        let startOrStop = Beaming.Point.StartOrStop.start(count: 1)
+        let (cut, remaining) = startOrStop.cut(amount: 2)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(cut, .none)
+    }
+
+    func testCutStopCountEqualToAmount() {
+        let startOrStop = Beaming.Point.StartOrStop.stop(count: 2)
+        let (cut, remaining) = startOrStop.cut(amount: 2)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(cut, .none)
+    }
+
+    func testCutStopCountGreaterThanAmount() {
+        let startOrStop = Beaming.Point.StartOrStop.stop(count: 2)
+        let (cut, remaining) = startOrStop.cut(amount: 1)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(cut, .stop(count: 1))
+    }
+
+    func testCutStopCountLessThanAmount() {
+        let startOrStop = Beaming.Point.StartOrStop.stop(count: 1)
+        let (cut, remaining) = startOrStop.cut(amount: 2)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(cut, .none)
+    }
+
     // MARK: - Vertical
 
     func testCutAfterEqualToStartCountSingleLevel() {
@@ -127,6 +169,48 @@ class BeamingTests: XCTestCase {
         let vertical = Beaming.Point.Vertical(stop: 1)
         let cut = try! vertical.cutAt(amount: 1)
         XCTAssertEqual(cut, .init(beamlets: 1))
+    }
+
+    func testStopsToBeamletsNoStops() {
+        let vertical = Beaming.Point.Vertical()
+        let (newVertical, remaining) = vertical.stopsToBeamlets(amount: 1)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(newVertical, vertical)
+    }
+
+    func testStopsToBeamletsAmountGreaterThanCount() {
+        let vertical = Beaming.Point.Vertical(stop: 1)
+        let (newVertical, remaining) = vertical.stopsToBeamlets(amount: 2)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(newVertical, .init(beamlets: 1))
+    }
+
+    func testStopsToBeamletsCountGreaterThanAmount() {
+        let vertical = Beaming.Point.Vertical(stop: 4)
+        let (newVertical, remaining) = vertical.stopsToBeamlets(amount: 1)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(newVertical, .init(stop: 3, beamlets: 1))
+    }
+
+    func testStartsToBeamletsNoStarts() {
+        let vertical = Beaming.Point.Vertical()
+        let (newVertical, remaining) = vertical.startsToBeamlets(amount: 1)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(newVertical, vertical)
+    }
+
+    func testStartsToBeamletsAmountGreaterThanCount() {
+        let vertical = Beaming.Point.Vertical(start: 1)
+        let (newVertical, remaining) = vertical.startsToBeamlets(amount: 2)
+        XCTAssertEqual(remaining, 1)
+        XCTAssertEqual(newVertical, .init(beamlets: 1))
+    }
+
+    func testStartsToBeamletsCountGreaterThanAmount() {
+        let vertical = Beaming.Point.Vertical(start: 4)
+        let (newVertical, remaining) = vertical.startsToBeamlets(amount: 1)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(newVertical, .init(start: 3, beamlets: 1))
     }
 
     // MARK: - Beaming
@@ -166,12 +250,65 @@ class BeamingTests: XCTestCase {
         let beaming = self.beaming(beamCounts: [1,1])
         let cut = try! beaming.cut(amount: 1, at: 1)
         let expected = Beaming([.init(beamlets: 1), .init(beamlets: 1)])
-        dump(cut)
-        dump(expected)
         XCTAssertEqual(cut, expected)
     }
 
-    func testCutFourSixteenthsIntoTwoPairs() {
-        #warning("Implement testCutFourSixteenthsIntoTwoPairs()")
+    /// :---:---:      :-   :---:
+    /// :   :   :  ->  :    :   :
+    ///     x
+    func testTripletEighthsCutAt1() {
+        let beaming = self.beaming(beamCounts: [1,1,1])
+        let cut = try! beaming.cut(amount: 1, at: 1)
+        let expected = Beaming([
+            .init(beamlets: 1),
+            .init(start: 1),
+            .init(stop: 1)
+        ])
+        XCTAssertEqual(cut, expected)
+    }
+
+    /// :---:---:      :---:   -:
+    /// :   :   :  ->  :   :    :
+    ///         x
+    func testTripletEighthsCutAt2() {
+        let beaming = self.beaming(beamCounts: [1,1,1])
+        let cut = try! beaming.cut(amount: 1, at: 2)
+        let expected = Beaming([
+            .init(start: 1),
+            .init(stop: 1),
+            .init(beamlets: 1)
+        ])
+        XCTAssertEqual(cut, expected)
+    }
+
+    /// :---:---:      :---:---:
+    /// :---:---:      :-  :---:
+    /// :   :  -:  ->  :   :  -:
+    ///     x
+    func testSixteenthSixteenthThirtySecondCutAt1() {
+//        let beaming = self.beaming(beamCounts: [2,2,3])
+//        do {
+//            let cut = try beaming.cut(amount: 1, at: 1)
+//            let expected = Beaming([
+//                .init(start: 1, beamlets: 1),
+//                .init(maintain: 1, start: 1),
+//                .init(stop: 2, beamlets: 1)
+//            ])
+//            XCTAssertEqual(cut, expected)
+//        } catch {
+//            XCTFail("\(error)")
+//        }
+    }
+
+    func testCutFourSixteenthsIntoTwoPairsCutOneLevel() {
+        let beaming = self.beaming(beamCounts: [2,2,2,2])
+        let cut = try! beaming.cut(amount: 1, at: 2)
+        let expected = Beaming([
+            .init(start: 2),
+            .init(maintain: 1, stop: 1),
+            .init(maintain: 1, start: 1),
+            .init(stop: 2)
+        ])
+        XCTAssertEqual(cut, expected)
     }
 }
