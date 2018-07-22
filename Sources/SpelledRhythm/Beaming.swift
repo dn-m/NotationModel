@@ -133,7 +133,7 @@ public struct Beaming: Equatable {
             )
             {
                 self.maintainCount = maintain
-                self.startOrStop = .start(count: start)
+                self.startOrStop = start == 0 ? .none : .start(count: start)
                 self.beamletCount = beamlets
             }
 
@@ -144,7 +144,7 @@ public struct Beaming: Equatable {
             )
             {
                 self.maintainCount = maintain
-                self.startOrStop = .stop(count: stop)
+                self.startOrStop = stop == 0 ? .none : .stop(count: stop)
                 self.beamletCount = beamlets
             }
 
@@ -156,7 +156,45 @@ public struct Beaming: Equatable {
 
             // cut at
             func maintainsToStarts(amount: Int) -> (Vertical,Int) {
-                fatalError()
+                switch startOrStop {
+                case .stop:
+                    return (self,amount)
+                case .none:
+                    if maintainCount >= amount {
+                        // absorb all amount, return 0 remaining
+                        let vertical = Vertical(
+                            maintain: maintainCount - amount,
+                            start: amount,
+                            beamlets: beamletCount
+                        )
+                        return (vertical, 0)
+                    } else {
+                        let remaining = amount - maintainCount
+                        let vertical = Vertical(
+                            maintain: 0,
+                            start: maintainCount,
+                            beamlets: beamletCount
+                        )
+                        return (vertical, remaining)
+                    }
+                case .start(let count):
+                    if maintainCount >= amount {
+                        let vertical = Vertical(
+                            maintain: maintainCount - amount,
+                            start: count + amount,
+                            beamlets: beamletCount
+                        )
+                        return (vertical, 0)
+                    } else {
+                        let remaining = amount - maintainCount
+                        let vertical = Vertical(
+                            maintain: 0,
+                            start: count + maintainCount,
+                            beamlets: beamletCount
+                        )
+                        return (vertical, remaining)
+                    }
+                }
             }
 
             // cutAfter
@@ -177,89 +215,91 @@ public struct Beaming: Equatable {
 
             // cutAfter
             func maintainsToStops(amount: Int) -> (Vertical,Int) {
-                fatalError()
+                switch startOrStop {
+                case .start:
+                    return (self,amount)
+                case .none:
+                    if maintainCount >= amount {
+                        // absorb all amount, return 0 remaining
+                        let vertical = Vertical(
+                            maintain: maintainCount - amount,
+                            stop: amount,
+                            beamlets: beamletCount
+                        )
+                        return (vertical, 0)
+                    } else {
+                        let remaining = amount - maintainCount
+                        let vertical = Vertical(
+                            maintain: 0,
+                            stop: maintainCount,
+                            beamlets: beamletCount
+                        )
+                        return (vertical, remaining)
+                    }
+                case .stop(let count):
+                    if maintainCount >= amount {
+                        let vertical = Vertical(
+                            maintain: maintainCount - amount,
+                            stop: count + amount,
+                            beamlets: beamletCount
+                        )
+                        return (vertical, 0)
+                    } else {
+                        let remaining = amount - maintainCount
+                        let vertical = Vertical(
+                            maintain: 0,
+                            stop: count + maintainCount,
+                            beamlets: beamletCount
+                        )
+                        return (vertical, remaining)
+                    }
+                }
             }
 
             /// Cuts `Vertical` when the current is `current`.
             func cutAt(amount: Int) throws -> Vertical {
                 precondition(amount >= 0)
                 guard !isEmpty else { throw Error.currentStackEmpty }
-                let (startOrStopBefore,startOrStopAfter,remaining) = try startOrStop.cutAt(amount: amount)
-                let beamletBump = amount - remaining
 
-                // maintain -> stop
-                if remaining > 0 {
-                    if remaining > maintainCount {
-                        throw Error.notEnoughPoints
-                    } else {
+                // 1. Convert stops to beamlets
+                // stop -> beamlet
+                let (verticalAfterBeamletsTransform, remainingAfterStopsTransform) = self.stopsToBeamlets(amount: amount)
 
-                        if startOrStopAfter == .none {
-                            return Vertical(
-                                maintain: maintainCount - remaining,
-                                startOrStop: .start(count: remaining),
-                                beamlets: beamletCount
-                            )
-                        }
-
-                        return Vertical(
-                            maintain: maintainCount - remaining,
-                            startOrStop: startOrStopAfter,
-                            beamlets: beamletCount + remaining
-                        )
-                    }
+                if remainingAfterStopsTransform == 0 {
+                    return verticalAfterBeamletsTransform
                 }
-                return Vertical(
-                    maintain: maintainCount,
-                    startOrStop: startOrStopAfter,
-                    beamlets: beamletCount + beamletBump
-                )
+
+                // 2. Convert maintains to starts
+                let (verticalAfterMaintainsTransform, remainingAfterMaintainsTransform) = verticalAfterBeamletsTransform.maintainsToStarts(amount: remainingAfterStopsTransform)
+
+                guard remainingAfterMaintainsTransform == 0 else {
+                    throw Error.notEnoughPoints
+                }
+
+                return verticalAfterMaintainsTransform
             }
 
             /// Cuts `Vertical` when the current is `previous`.
             func cutAfter(amount: Int) throws -> Vertical {
-                print("cut after")
                 precondition(amount >= 0)
                 guard !isEmpty else { throw  Error.previousStackEmpty }
 
-                var beamletBump: Int = 0
+                // 1. Convert starts to beamlets
+                // stop -> beamlet
+                let (verticalAfterBeamletsTransform, remainingAfterStopsTransform) = self.startsToBeamlets(amount: amount)
 
-
-                // start -> beamlet
-                // Maintain -> stop
-
-                let (startOrStopBefore,startOrStopAfter,remainingAfterStartOrStopCut) =
-                    try startOrStop.cutAfter(amount: amount)
-                beamletBump += amount - remainingAfterStartOrStopCut
-
-                if remainingAfterStartOrStopCut > 0 {
-                    // start -> beamlet
-                    print("remaining: \(remainingAfterStartOrStopCut)")
-//                    if remainingAfterStartOrStopCut > maintainCount {
-//                        throw Error.notEnoughPoints
-//                    } else {
-
-                    //
-                    if startOrStopAfter == .none {
-                        return Vertical(
-                            maintain: maintainCount - remainingAfterStartOrStopCut,
-                            startOrStop: .stop(count: remainingAfterStartOrStopCut),
-                            beamlets: beamletCount
-                        )
-                    }
-
-                    // start -> beamlet
-                    return Vertical(
-                        maintain: maintainCount - remainingAfterStartOrStopCut,
-                        startOrStop: startOrStopAfter,
-                        beamlets: beamletCount + remainingAfterStartOrStopCut
-                    )
-//                    }
+                if remainingAfterStopsTransform == 0 {
+                    return verticalAfterBeamletsTransform
                 }
-                return Vertical(
-                    maintain: maintainCount,
-                    startOrStop: startOrStopAfter,
-                    beamlets: beamletCount + beamletBump
-                )
+
+                // 2. Convert maintains to stops
+                let (verticalAfterMaintainsTransform, remainingAfterMaintainsTransform) = verticalAfterBeamletsTransform.maintainsToStops(amount: remainingAfterStopsTransform)
+
+                guard remainingAfterMaintainsTransform == 0 else {
+                    throw Error.notEnoughPoints
+                }
+
+                return verticalAfterMaintainsTransform
             }
         }
 

@@ -171,6 +171,8 @@ class BeamingTests: XCTestCase {
         XCTAssertEqual(cut, .init(beamlets: 1))
     }
 
+    // MARK: - Vertical Transforms
+
     func testStopsToBeamletsNoStops() {
         let vertical = Beaming.Point.Vertical()
         let (newVertical, remaining) = vertical.stopsToBeamlets(amount: 1)
@@ -213,6 +215,48 @@ class BeamingTests: XCTestCase {
         XCTAssertEqual(newVertical, .init(start: 3, beamlets: 1))
     }
 
+    func testMaintainsToStartsNone() {
+        let vertical = Beaming.Point.Vertical()
+        let (newVertical, remaining) = vertical.maintainsToStarts(amount: 3)
+        XCTAssertEqual(remaining, 3)
+        XCTAssertEqual(newVertical, vertical)
+    }
+
+    func testMaintainsToStartsAmountGreaterThanCount() {
+        let vertical = Beaming.Point.Vertical(maintain: 2)
+        let (newVertical, remaining) = vertical.maintainsToStarts(amount: 5)
+        XCTAssertEqual(remaining, 3)
+        XCTAssertEqual(newVertical, .init(start: 2))
+    }
+
+    func testMaintainsToStartsAmountLessThanCount() {
+        let vertical = Beaming.Point.Vertical(maintain: 4)
+        let (newVertical, remaining) = vertical.maintainsToStarts(amount: 3)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(newVertical, .init(maintain: 1, start: 3))
+    }
+
+    func testMaintainsToStopsNone() {
+        let vertical = Beaming.Point.Vertical()
+        let (newVertical, remaining) = vertical.maintainsToStops(amount: 3)
+        XCTAssertEqual(remaining, 3)
+        XCTAssertEqual(newVertical, vertical)
+    }
+
+    func testMaintainsToStopsAmountGreaterThanCount() {
+        let vertical = Beaming.Point.Vertical(maintain: 2)
+        let (newVertical, remaining) = vertical.maintainsToStops(amount: 5)
+        XCTAssertEqual(remaining, 3)
+        XCTAssertEqual(newVertical, .init(stop: 2))
+    }
+
+    func testMaintainsToStopsAmountLessThanCount() {
+        let vertical = Beaming.Point.Vertical(maintain: 4)
+        let (newVertical, remaining) = vertical.maintainsToStops(amount: 3)
+        XCTAssertEqual(remaining, 0)
+        XCTAssertEqual(newVertical, .init(maintain: 1, stop: 3))
+    }
+
     // MARK: - Beaming
 
     func beaming(beamCounts: [Int]) -> Beaming {
@@ -245,6 +289,8 @@ class BeamingTests: XCTestCase {
         let beaming = self.beaming(beamCounts: [0,4])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 1))
     }
+
+    // MARK: - Cut
 
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
         let beaming = self.beaming(beamCounts: [1,1])
@@ -286,20 +332,20 @@ class BeamingTests: XCTestCase {
     /// :   :  -:  ->  :   :  -:
     ///     x
     func testSixteenthSixteenthThirtySecondCutAt1() {
-//        let beaming = self.beaming(beamCounts: [2,2,3])
-//        do {
-//            let cut = try beaming.cut(amount: 1, at: 1)
-//            let expected = Beaming([
-//                .init(start: 1, beamlets: 1),
-//                .init(maintain: 1, start: 1),
-//                .init(stop: 2, beamlets: 1)
-//            ])
-//            XCTAssertEqual(cut, expected)
-//        } catch {
-//            XCTFail("\(error)")
-//        }
+        let beaming = self.beaming(beamCounts: [2,2,3])
+        let cut = try! beaming.cut(amount: 1, at: 1)
+        let expected = Beaming([
+            .init(start: 1, beamlets: 1),
+            .init(maintain: 1, start: 1),
+            .init(stop: 2, beamlets: 1)
+        ])
+        XCTAssertEqual(cut, expected)
     }
 
+    /// :---:---:---:      :---:---:---:
+    /// :---:---:---:      :---:   :---:
+    /// :   :   :   :  ->  :   :   :   :
+    ///         x
     func testCutFourSixteenthsIntoTwoPairsCutOneLevel() {
         let beaming = self.beaming(beamCounts: [2,2,2,2])
         let cut = try! beaming.cut(amount: 1, at: 2)
