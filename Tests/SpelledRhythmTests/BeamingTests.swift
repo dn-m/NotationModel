@@ -289,10 +289,10 @@ class BeamingTests: XCTestCase {
         XCTAssertEqual(cut, expected)
     }
 
-    ///    :---:   :      :---:   :
-    ///    :---:   :      :- -:   :
-    ///    :-  :   :  ->  :-  :   :
-    ///        x
+    /// :---:   :      :---:   :
+    /// :---:   :      :- -:   :
+    /// :-  :   :  ->  :-  :   :
+    ///     x
     func testThritySecondSixteenthQuarterCutAt1() {
         let beaming = self.beaming(beamCounts: [3,2,0])
         let cut = try! beaming.cut(amount: 1, at: 1)
@@ -304,11 +304,11 @@ class BeamingTests: XCTestCase {
         XCTAssertEqual(cut, expected)
     }
 
-    ///    :---:   :      :-  :-  :
-    ///    :---:   :      :-  :-  :
-    ///    :-  :   :  ->  :-  :   :
-    ///        x
-    ///        x
+    /// :---:   :      :-  :-  :
+    /// :---:   :      :-  :-  :
+    /// :-  :   :  ->  :-  :   :
+    ///     x
+    ///     x
     func testThirtySecondSixteenthQuarterCutAt1Amount2() {
         let beaming = self.beaming(beamCounts: [3,2,0])
         let cut = try! beaming.cut(amount: 2, at: 1)
