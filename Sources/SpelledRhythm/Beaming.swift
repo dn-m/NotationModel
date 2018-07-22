@@ -196,16 +196,17 @@ extension Beaming.Point {
                 return (self,amount)
             case .none:
                 let remaining = Swift.max(amount - maintainCount, 0)
+                let newMaintain = Swift.max(maintainCount - amount, 0)
                 if maintainCount >= amount {
                     let vertical = Vertical(
-                        maintain: maintainCount - amount,
+                        maintain: newMaintain,
                         start: amount,
                         beamlets: beamletCount
                     )
                     return (vertical, remaining)
                 } else {
                     let vertical = Vertical(
-                        maintain: 0,
+                        maintain: newMaintain,
                         start: maintainCount,
                         beamlets: beamletCount
                     )
@@ -213,9 +214,10 @@ extension Beaming.Point {
                 }
             case .start(let count):
                 let remaining = Swift.max(amount - maintainCount, 0)
+                let newMaintain = Swift.max(maintainCount - amount, 0)
                 if maintainCount >= amount {
                     let vertical = Vertical(
-                        maintain: maintainCount - amount,
+                        maintain: newMaintain,
                         start: count + amount,
                         beamlets: beamletCount
                     )
@@ -223,7 +225,7 @@ extension Beaming.Point {
                 } else {
                     let remaining = amount - maintainCount
                     let vertical = Vertical(
-                        maintain: 0,
+                        maintain: newMaintain,
                         start: count + maintainCount,
                         beamlets: beamletCount
                     )
