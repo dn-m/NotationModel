@@ -130,16 +130,18 @@ extension Beaming.Point {
             case .none:
                 return (.none, amount)
             case .start(let count):
+                let remaining = Swift.max(amount - count, 0)
                 if count > amount {
-                    return (.start(count: count - amount), 0)
+                    return (.start(count: count - amount), remaining)
                 } else {
-                    return (.none, amount - count)
+                    return (.none, remaining)
                 }
             case .stop(let count):
+                let remaining = Swift.max(amount - count, 0)
                 if count > amount {
-                    return (.stop(count: count - amount), 0)
+                    return (.stop(count: count - amount), remaining)
                 } else {
-                    return (.none, amount - count)
+                    return (.none, remaining)
                 }
             }
         }
