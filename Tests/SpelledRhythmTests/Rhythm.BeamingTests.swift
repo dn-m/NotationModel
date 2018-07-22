@@ -38,7 +38,8 @@ class Rhythm_BeamingTests: XCTestCase {
     }
 
     func testCutQuarterNotesThrowsPreviousStackEmpty() {
-        #warning("Implement testCutQuarterNotesThrowsPreviousStackEmpty()")
+        var beaming = self.beaming(beamCounts: [0,4])
+        XCTAssertThrowsError(try beaming.cut(amount: 1, at: 1))
     }
 
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {

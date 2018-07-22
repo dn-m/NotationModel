@@ -130,6 +130,7 @@ extension Rhythm {
         public mutating func cut(amount: Int, at index: Int) throws {
             guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
             guard !verticals[index].isEmpty else { throw Error.currentStackEmpty }
+            guard !verticals[index - 1].isEmpty else { throw Error.previousStackEmpty }
             #warning("TODO: Implement cut(amount:at:)")
         }
     }
