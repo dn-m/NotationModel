@@ -34,7 +34,6 @@ extension Beaming.Point.Vertical {
 
     /// - Returns: The `Vertical` for the context in a rhythm.
     static func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
-        print("middle")
         guard cur > 0 else { return .init() }
         guard prev > 0 else {
             guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }

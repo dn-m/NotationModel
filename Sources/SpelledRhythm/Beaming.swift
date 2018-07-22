@@ -82,7 +82,6 @@ public struct Beaming: Equatable {
                     }
                 case .stop(let count):
                     if count > amount {
-                        print("stop: count: \(count), amount: \(amount)")
                         return (.stop(count: count - amount), 0)
                     } else {
                         return (.none, amount - count)
@@ -249,8 +248,6 @@ public struct Beaming: Equatable {
             ///
             /// Should only be used by the `cutAt` method.
             func stopsToBeamlets(amount: Int) -> (Vertical,Int) {
-                print("stops to beamlets")
-                print("start or stop: \(startOrStop)")
                 guard case .stop = startOrStop else { return (self,amount) }
                 return startOrStopToBeamlets(amount: amount)
             }
@@ -269,7 +266,6 @@ public struct Beaming: Equatable {
             /// the given `amount` of `.beamlet` points, to the degree possible.
             private func startOrStopToBeamlets(amount: Int) -> (Vertical,Int) {
                 let (newStartOrStop, remaining) = startOrStop.cut(amount: amount)
-                print("beamletCount: \(beamletCount), amount: \(amount), remaining: \(remaining)")
                 let vertical = Vertical(
                     maintain: maintainCount,
                     startOrStop: newStartOrStop,
@@ -287,7 +283,6 @@ public struct Beaming: Equatable {
                 let (verticalAfterBeamletsTransform, remainingAfterBeamletsTransform) = self.stopsToBeamlets(amount: amount)
 
                 if remainingAfterBeamletsTransform == 0 {
-                    print("remaining after stps: \(remainingAfterBeamletsTransform), \(verticalAfterBeamletsTransform)")
                     return verticalAfterBeamletsTransform
                 }
 
