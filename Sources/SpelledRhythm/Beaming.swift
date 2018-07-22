@@ -335,10 +335,7 @@ public struct Beaming: Equatable {
     public func cut(amount: Int, at index: Int) throws -> Beaming {
         guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
         let current = try verticals[index].cutAt(amount: amount)
-        print("made it to prev")
         let previous = try verticals[index - 1].cutAfter(amount: amount)
-        #warning("TODO: Implement cut(amount:at:)")
-
         return Beaming(
             verticals.prefix(upTo: index - 1) +
             [previous,current] +
