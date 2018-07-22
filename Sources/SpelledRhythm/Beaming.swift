@@ -31,6 +31,15 @@ public struct Beaming: Equatable {
         /// A `Point` which can be either a `start` or `stop` or `none`.
         public enum StartOrStop: Equatable {
 
+            // MARK: - Cases
+
+            case none
+            case start(count: Int)
+            case stop(count: Int)
+
+            // MARK: - Instance Properties
+
+            /// The `Point` values contained herein.
             var points: [Point] {
                 switch self {
                 case .none: return []
@@ -41,19 +50,23 @@ public struct Beaming: Equatable {
                 }
             }
 
-            case none
-            case start(count: Int)
-            case stop(count: Int)
+            // MARK: - Initializers
 
+            /// Create a `StartOrStop.start` with the given `start` amount. If `start` is `0`, a
+            /// `.none` value will be created.
             init(start: Int) {
                 precondition(start >= 0)
                 self = start == 0 ? .none : .start(count: start)
             }
 
+            /// Create a `StartOrStop.stop` with the given `stop` amount. If `stop` is `0`, a
+            /// `.none` value will be created.
             init(stop: Int) {
                 precondition(stop >= 0)
                 self = stop == 0 ? .none : .stop(count: stop)
             }
+
+            // MARK: - Instance Methods
 
             /// - Returns: A `StartOrStop` transformed by reducing the count to the degree possible,
             /// along with the remaining amount that could not be absorbed.
@@ -316,6 +329,7 @@ public struct Beaming: Equatable {
         case beamlet(direction: BeamletDirection)
     }
 
+    /// The `Point.Vertical` values contained herein.
     var verticals: [Point.Vertical]
 
     // MARK: - Initializers
