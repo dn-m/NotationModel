@@ -53,8 +53,8 @@ public struct Beaming: Equatable {
             var points: [Point] {
                 return
                     Array(repeating: .maintain, count: maintainCount) +
-                        startOrStop.points +
-                        Array(repeating: .beamlet(direction: .forward), count: beamletCount)
+                    startOrStop.points +
+                    Array(repeating: .beamlet(direction: .forward), count: beamletCount)
             }
 
 
@@ -73,7 +73,7 @@ public struct Beaming: Equatable {
                 maintain: Int = 0,
                 startOrStop: StartOrStop = .none,
                 beamlets: Int = 0
-                )
+            )
             {
                 self.maintainCount = maintain
                 self.startOrStop = startOrStop
@@ -84,7 +84,7 @@ public struct Beaming: Equatable {
                 maintain: Int = 0,
                 start: Int,
                 beamlets: Int = 0
-                )
+            )
             {
                 self.maintainCount = maintain
                 self.startOrStop = .start(count: start)
@@ -95,11 +95,20 @@ public struct Beaming: Equatable {
                 maintain: Int = 0,
                 stop: Int,
                 beamlets: Int = 0
-                )
+            )
             {
                 self.maintainCount = maintain
                 self.startOrStop = .stop(count: stop)
                 self.beamletCount = beamlets
+            }
+
+            /// Cuts `Vertical`
+            mutating func cutAt(amount: Int) throws {
+                guard !isEmpty else { throw Error.currentStackEmpty }
+            }
+
+            mutating func cutAfter(amount: Int) throws {
+                guard !isEmpty else { throw  Error.previousStackEmpty }
             }
         }
 
@@ -129,10 +138,8 @@ public struct Beaming: Equatable {
     /// to the amount of events contained herein.
     public mutating func cut(amount: Int, at index: Int) throws {
         guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
-        let current = verticals[index]
-        let previous = verticals[index - 1]
-        guard !current.isEmpty else { throw Error.currentStackEmpty }
-        guard !previous.isEmpty else { throw Error.previousStackEmpty }
+        try verticals[index].cutAt(amount: amount)
+        try verticals[index - 1].cutAt(amount: amount)
 
         #warning("TODO: Implement cut(amount:at:)")
     }
@@ -144,8 +151,20 @@ extension Beaming.Point.Vertical: CollectionWrapping {
     }
 }
 
+extension Beaming.Point.Vertical: CustomStringConvertible {
+    public var description: String {
+        return points.map { "\($0)" }.joined(separator: "\n")
+    }
+}
+
 extension Beaming: CollectionWrapping {
     public var base: [Point.Vertical] {
         return verticals
+    }
+}
+
+extension Beaming: CustomStringConvertible {
+    public var description: String {
+        return verticals.enumerated().map { (index,vertical) in "\(index): \(vertical)" }.joined(separator: "\n")
     }
 }

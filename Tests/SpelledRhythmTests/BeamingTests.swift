@@ -46,7 +46,7 @@ class BeamingTests: XCTestCase {
         var beaming = self.beaming(beamCounts: [1,1])
         try! beaming.cut(amount: 1, at: 1)
         let expected = Beaming([.init(beamlets: 1), .init(beamlets: 1)])
-        XCTAssertEqual(beaming,expected)
+        XCTAssertEqual(beaming, expected)
     }
 
     func testCutFourSixteenthsIntoTwoPairs() {
