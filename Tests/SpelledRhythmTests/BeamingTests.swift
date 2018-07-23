@@ -190,7 +190,7 @@ class BeamingTests: XCTestCase {
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 1))
     }
 
-    func testFuzzBeamingNoCrashes() {
+    func testFuzzingTenThousandRandomBeamings() {
         // Try 10_000 random beamings
         for _ in 0..<10_000 {
             // Create a beaming with 0 to 99 events
@@ -320,5 +320,24 @@ class BeamingTests: XCTestCase {
             .init(stop: 2)
         ])
         XCTAssertEqual(cut, expected)
+    }
+
+    func testFuzzingTenThousandRandomBeamingsCutAtRandomIndicesWithRandomAmounts() {
+        // Try 10_000 random beamings
+        for _ in 0..<10_000 {
+            // Create a beaming with 0 to 99 events
+            let eventCount = Int.random(in: 0..<100)
+            // Each event will have 0 to 9 beams
+            let beamCounts = (0..<eventCount).map { _ in Int.random(in: 0..<10) }
+            // If this crashes, something is bad
+            let beaming = self.beaming(beamCounts: beamCounts)
+
+            // Cut potentially more beams than possible
+            let cutAmount = Int.random(in: 0 ... 20)
+            // Cut potentially out of range
+            let cutIndex = Int.random(in: 0 ... eventCount * 2)
+            // If this crashes, something is wrong
+            _ = try? beaming.cut(amount: cutAmount, at: cutIndex)
+        }
     }
 }
