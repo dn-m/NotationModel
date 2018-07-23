@@ -333,9 +333,9 @@ class BeamingTests: XCTestCase {
             let beaming = self.beaming(beamCounts: beamCounts)
 
             // Cut potentially more beams than possible
-            let cutAmount = Int.random(in: 0 ... 20)
+            let cutAmount = Int.random(in: 0...20)
             // Cut potentially out of range
-            let cutIndex = Int.random(in: 0 ... eventCount * 2)
+            let cutIndex = Int.random(in: 0...(eventCount * 2))
             // If this crashes, something is wrong
             _ = try? beaming.cut(amount: cutAmount, at: cutIndex)
         }
