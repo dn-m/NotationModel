@@ -40,16 +40,22 @@ public struct Beaming: Equatable {
             [previous,current] +
             verticals.suffix(from: index + 1)
         )
-        for (index,vertical) in updated.enumerated() {
-            if vertical.startOrStop == .none && vertical.beamletCount > 0 {
-                if index == 0 {
-                    updated[index].beamletDirection = .forward
-                } else if index == updated.count - 1 {
-                    updated[index].beamletDirection = .backward
-                }
+        return Beaming(sanitizeBeamletDirections(for: updated))
+    }
+}
+
+func sanitizeBeamletDirections <C> (for verticals: C) -> [Beaming.Point.Vertical]
+    where C: Collection, C.Element == Beaming.Point.Vertical
+{
+    return verticals.enumerated().map { (index,vertical) in
+        if vertical.startOrStop == .none && vertical.beamletCount > 0 {
+            if index == 0 {
+                return vertical.with(beamletDirection: .forward)
+            } else if index == verticals.count - 1 {
+                return vertical.with(beamletDirection: .backward)
             }
         }
-        return Beaming(updated)
+        return vertical
     }
 }
 
@@ -163,7 +169,7 @@ extension Beaming.Point {
 extension Beaming.Point {
 
     /// Rhythm.Beaming.Point.Vertical.
-    public struct Vertical: Equatable {
+    public struct Vertical {
 
         #warning("Implement beamlet direction if neither start nor stop")
 
@@ -189,7 +195,7 @@ extension Beaming.Point {
         let beamletCount: Int
 
         /// The direction of beamlets if they are present.
-        public var beamletDirection: Beaming.BeamletDirection?
+        let beamletDirection: Beaming.BeamletDirection?
 
         // MARK: - Initializers
 
@@ -214,7 +220,29 @@ extension Beaming.Point {
             self.beamletDirection = startOrStop.beamletDirection
         }
 
+        public init(
+            maintainCount: Int,
+            startOrStop: StartOrStop,
+            beamletCount: Int,
+            beamletDirection: Beaming.BeamletDirection?
+        )
+        {
+            self.maintainCount = maintainCount
+            self.startOrStop = startOrStop
+            self.beamletCount = beamletCount
+            self.beamletDirection = beamletDirection
+        }
+
         // MARK: - Instance Methods
+
+        func with(beamletDirection: Beaming.BeamletDirection) -> Vertical {
+            return .init(
+                maintainCount: maintainCount,
+                startOrStop: startOrStop,
+                beamletCount: beamletCount,
+                beamletDirection: beamletDirection
+            )
+        }
 
         /// - Returns: The `Vertical` updated by transforming its `.maintain` points into
         /// `.start` points, to the degree possible, along with the remaining amount which
@@ -333,6 +361,15 @@ extension Beaming.Point {
             guard remaining2 == 0 else { throw Beaming.Error.notEnoughPoints }
             return vertical2
         }
+    }
+}
+
+extension Beaming.Point.Vertical: Equatable {
+
+    // MARK: - Equatable
+
+    public static func == (lhs: Beaming.Point.Vertical, rhs: Beaming.Point.Vertical) -> Bool {
+        return lhs.points == rhs.points
     }
 }
 

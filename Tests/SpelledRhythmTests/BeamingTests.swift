@@ -192,11 +192,17 @@ class BeamingTests: XCTestCase {
 
     // MARK: - Cut
 
+    /// :---:      :- -:
+    /// :   :  ->  :   :
+    ///     x
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
         let beaming = self.beaming(beamCounts: [1,1])
         let cut = try! beaming.cut(amount: 1, at: 1)
-        let expected = Beaming([.init(beamlets: 1), .init(beamlets: 1)])
-        XCTAssertEqual(cut, expected)
+        let expected: [[Beaming.Point]] = [
+            [.beamlet(direction: .forward)],
+            [.beamlet(direction: .backward)]
+        ]
+        XCTAssertEqual(cut.map { $0.points }, expected)
     }
 
     /// :---:---:      :-   :---:
@@ -205,12 +211,12 @@ class BeamingTests: XCTestCase {
     func testTripletEighthsCutAt1() {
         let beaming = self.beaming(beamCounts: [1,1,1])
         let cut = try! beaming.cut(amount: 1, at: 1)
-        let expected = Beaming([
-            .init(beamlets: 1),
-            .init(start: 1),
-            .init(stop: 1)
-        ])
-        XCTAssertEqual(cut, expected)
+        let expected: [[Beaming.Point]] = [
+            [.beamlet(direction: .forward)],
+            [.start],
+            [.stop]
+        ]
+        XCTAssertEqual(cut.map { $0.points }, expected)
     }
 
     /// :---:---:      :---:   -:
@@ -219,12 +225,12 @@ class BeamingTests: XCTestCase {
     func testTripletEighthsCutAt2() {
         let beaming = self.beaming(beamCounts: [1,1,1])
         let cut = try! beaming.cut(amount: 1, at: 2)
-        let expected = Beaming([
-            .init(start: 1),
-            .init(stop: 1),
-            .init(beamlets: 1)
-        ])
-        XCTAssertEqual(cut, expected)
+        let expected: [[Beaming.Point]] = [
+            [.start],
+            [.stop],
+            [.beamlet(direction: .backward)]
+        ]
+        XCTAssertEqual(cut.map { $0.points }, expected)
     }
 
     /// :---:---:      :---:---:
@@ -272,8 +278,8 @@ class BeamingTests: XCTestCase {
         XCTAssertEqual(cut, expected)
     }
 
-    /// :---:   :      :-  :-  :
-    /// :---:   :      :-  :-  :
+    /// :---:   :      :- -:   :
+    /// :---:   :      :- -:   :
     /// :-  :   :  ->  :-  :   :
     ///     x
     ///     x
