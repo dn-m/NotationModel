@@ -190,6 +190,18 @@ class BeamingTests: XCTestCase {
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 1))
     }
 
+    func testFuzzBeamingNoCrashes() {
+        // Try 10_000 random beamings
+        for _ in 0..<10_000 {
+            // Create a beaming with 0 to 99 events
+            let eventCount = Int.random(in: 0..<100)
+            // Each event will have 0 to 9 beams
+            let beamCounts = (0..<eventCount).map { _ in Int.random(in: 0..<10) }
+            // If this crashes, something is bad
+            let _ = self.beaming(beamCounts: beamCounts)
+        }
+    }
+
     // MARK: - Cut
 
     /// :---:      :- -:
