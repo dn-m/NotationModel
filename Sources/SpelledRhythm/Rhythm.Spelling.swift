@@ -73,7 +73,7 @@ extension Rhythm {
 
         /// Information needed to abstractly represent a single metrical instance.
         public struct Item: Equatable {
-            let beamItem: Beaming.Item
+            let beamItem: Beaming.Point.Vertical
             let tie: Tie
             let dots: Int
         }
@@ -94,7 +94,7 @@ extension Rhythm {
         }
 
         /// Create a `Rhythm.Spelling` for the given `rhythm` using the given `beamer`.
-        public init(rhythm: Rhythm, using beamer: (Rhythm) -> Rhythm.Beaming) {
+        public init(rhythm: Rhythm, using beamer: (Rhythm) -> Beaming) {
             let beaming = beamer(rhythm)
             let ties = makeTies(rhythm.leaves.map { $0.context })
             let dots = makeDots(rhythm.metricalDurationTree.leaves)

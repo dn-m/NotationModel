@@ -60,16 +60,15 @@ class SpelledRhythmTests: XCTestCase {
         let rhythm = Rhythm(4/>8, [event(1), tie(), tie(), rest()])
         let spelling = Rhythm.Spelling(rhythm: rhythm, using: DefaultBeamer.beaming)
 
-        let expectedBeamingPoints: [Stack<Rhythm<Int>.Beaming.Point>] = [
-            [.start],
-            [.maintain],
-            [.maintain],
-            [.stop]
+        let expectedBeamingVerticals: [Beaming.Point.Vertical] = [
+            .init(startOrStop: .start(count: 1)),
+            .init(maintain: 1),
+            .init(maintain: 1),
+            .init(startOrStop: .stop(count: 1))
         ]
-        let expectedBeamingItems = expectedBeamingPoints.map(Rhythm<Int>.Beaming.Item.init)
         let expectedTies: [Rhythm<Int>.Spelling.Tie] = [.start, .maintain, .stop, .none]
         let expectedDots = [0,0,0,0]
-        let expectedItems = zip(expectedBeamingItems, expectedTies, expectedDots)
+        let expectedItems = zip(expectedBeamingVerticals, expectedTies, expectedDots)
             .map(Rhythm<Int>.Spelling.Item.init)
         XCTAssertEqual(spelling.items, expectedItems)
 
