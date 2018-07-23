@@ -12,10 +12,10 @@ import Rhythm
 import SpelledRhythm
 
 public enum DefaultBeamer {
+    
     /// - Returns: A reasonable `Beaming` for the given `rhythm`.
     public static func beaming <T> (for rhythm: Rhythm<T>) -> Beaming {
-        let verticals = beamingVerticals(rhythm.metricalDurationTree.leaves)
-        return .init(verticals)
+        return .init(beamingVerticals(rhythm.metricalDurationTree.leaves))
     }
 }
 

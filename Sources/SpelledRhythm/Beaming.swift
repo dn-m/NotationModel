@@ -35,11 +35,21 @@ public struct Beaming: Equatable {
         guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
         let previous = try verticals[index - 1].cutAfter(amount: amount)
         let current = try verticals[index].cutAt(amount: amount)
-        return Beaming(
+        var updated = (
             verticals.prefix(upTo: index - 1) +
             [previous,current] +
             verticals.suffix(from: index + 1)
         )
+        for (index,vertical) in updated.enumerated() {
+            if vertical.startOrStop == .none && vertical.beamletCount > 0 {
+                if index == 0 {
+                    updated[index].beamletDirection = .forward
+                } else if index == updated.count - 1 {
+                    updated[index].beamletDirection = .backward
+                }
+            }
+        }
+        return Beaming(updated)
     }
 }
 
@@ -135,6 +145,18 @@ extension Beaming.Point {
                 return (.init(stop: max(0, count - amount)), max(amount - count, 0))
             }
         }
+
+        var beamletDirection: Beaming.BeamletDirection? {
+            switch self {
+            case .none:
+                return nil
+            case .start:
+                return .forward
+            case .stop:
+                return .backward
+            }
+        }
+
     }
 }
 
@@ -150,7 +172,10 @@ extension Beaming.Point {
             return (
                 Array(repeating: .maintain, count: maintainCount) +
                 startOrStop.points +
-                Array(repeating: .beamlet(direction: .forward), count: beamletCount)
+                Array(
+                    repeating: .beamlet(direction: beamletDirection ?? .forward),
+                    count: beamletCount
+                )
             )
         }
 
@@ -163,24 +188,30 @@ extension Beaming.Point {
         /// The amount of `.beamlet` points.
         let beamletCount: Int
 
+        /// The direction of beamlets if they are present.
+        public var beamletDirection: Beaming.BeamletDirection?
+
         // MARK: - Initializers
 
         public init(maintain: Int = 0, startOrStop: StartOrStop = .none, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = startOrStop
             self.beamletCount = beamlets
+            self.beamletDirection = startOrStop.beamletDirection
         }
 
         public init(maintain: Int = 0, start: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(start: start)
             self.beamletCount = beamlets
+            self.beamletDirection = startOrStop.beamletDirection
         }
 
         public init(maintain: Int = 0, stop: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(stop: stop)
             self.beamletCount = beamlets
+            self.beamletDirection = startOrStop.beamletDirection
         }
 
         // MARK: - Instance Methods
