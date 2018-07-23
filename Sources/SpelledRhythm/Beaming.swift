@@ -426,10 +426,12 @@ extension Beaming: CustomStringConvertible {
         let air = " "
         let beamlessStem = air + air + stem + air + air
 
+        /// - Returns: An `ASCII` represenation of a `Beaming.Point.Vertical`.
         func toASCII(vertical: Beaming.Point.Vertical) -> [String] {
             return vertical.map(toASCII)
         }
 
+        /// - Returns: An `ASCII` representation of a `Beaming.Point`.
         func toASCII(point: Beaming.Point) -> String {
             switch point {
             case .maintain:
@@ -448,6 +450,8 @@ extension Beaming: CustomStringConvertible {
             }
         }
 
+        /// - Returns: A `String` representation of a `Vertical` with the amount of beam counts
+        /// (which should be present) prepended.
         func addingBeamCounts(index: Int, event: [String]) -> [String] {
             let beamCountString = String(verticals[index].count)
             let width = beamCountString.count
@@ -457,12 +461,15 @@ extension Beaming: CustomStringConvertible {
             return [result] + event
         }
 
+        /// - Returns: A `String` representation of a `Vertical` with little stemlets appended
+        /// to match the maximum height.
         func normalizing(_ event: [String]) -> (_ maxHeight: Int) -> [String] {
             return { maxHeight in
                 event + repeatElement(beamlessStem, count: maxHeight - event.count)
             }
         }
 
+        /// - Returns: A `String` representation of a `Vertical` with a little stemlet appended.
         func addingTrailingStem(event: [String]) -> [String] {
             return event + [beamlessStem]
         }
@@ -478,13 +485,14 @@ extension Beaming: CustomStringConvertible {
             return result
         }
 
+        /// - Returns: A single `String`representation of the nested array of `Beaming.Point` string
+        /// representations.
         func joining(_ levels: [[String]]) -> String {
             return levels.map { level in level.joined() }.joined(separator: "\n")
         }
 
         let maxHeight = verticals.map { $0.count }.max() ?? 0
 
-        // Map each of the `Point` values to strings, along with their widths
         return joining(
             pivot(
                 verticals
