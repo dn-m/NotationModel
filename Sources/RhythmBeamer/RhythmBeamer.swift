@@ -105,7 +105,7 @@ func beamCount(_ duration: MetricalDuration) -> Int {
 
     let reduced = duration.reduced
 
-    #warning("Support longer multi-dot durations")
+    #warning("Support longer multi-dot durations with a (2 to the n) - 1 sequence")
     guard [1,3,7].contains(reduced.numerator) else {
         fatalError("Unsanitary duration for beamed representation: \(reduced)")
     }

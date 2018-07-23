@@ -146,7 +146,7 @@ extension Beaming.Point {
         #warning("Implement beamlet direction if neither start nor stop")
 
         /// - Returns: The `Point` values contained herein.
-        var points: [Beaming.Point] {
+        public var points: [Beaming.Point] {
             return (
                 Array(repeating: .maintain, count: maintainCount) +
                 startOrStop.points +
