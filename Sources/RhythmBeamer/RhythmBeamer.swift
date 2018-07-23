@@ -6,7 +6,7 @@
 //
 
 import DataStructures
-import func Math.countTrailingZeros
+import Math
 import MetricalDuration
 import Rhythm
 import SpelledRhythm
