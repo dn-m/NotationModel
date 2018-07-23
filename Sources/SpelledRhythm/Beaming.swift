@@ -40,11 +40,11 @@ public struct Beaming: Equatable {
             [previous,current] +
             verticals.suffix(from: index + 1)
         )
-        return Beaming(sanitizeBeamletDirections(for: updated))
+        return Beaming(sanitizingBeamletDirections(for: updated))
     }
 }
 
-func sanitizeBeamletDirections <C> (for verticals: C) -> [Beaming.Point.Vertical]
+public func sanitizingBeamletDirections <C> (for verticals: C) -> [Beaming.Point.Vertical]
     where C: Collection, C.Element == Beaming.Point.Vertical
 {
     return verticals.enumerated().map { (index,vertical) in
@@ -170,8 +170,6 @@ extension Beaming.Point {
     /// Rhythm.Beaming.Point.Vertical.
     public struct Vertical {
 
-        #warning("Implement beamlet direction if neither start nor stop")
-
         /// - Returns: The `Point` values contained herein.
         public var points: [Beaming.Point] {
             return (
@@ -234,6 +232,7 @@ extension Beaming.Point {
 
         // MARK: - Instance Methods
 
+        /// - Returns: `Vertical` with the given `beamletDirection`.
         func with(beamletDirection: Beaming.BeamletDirection) -> Vertical {
             return .init(
                 maintainCount: maintainCount,

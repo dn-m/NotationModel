@@ -159,34 +159,30 @@ class BeamingTests: XCTestCase {
 
     // MARK: - Beaming
 
-    func beaming(beamCounts: [Int]) -> Beaming {
-        return Beaming(beamingVerticals(beamCounts))
-    }
-
     // MARK: Errors
 
     func testCutSingleBeamingThrowsItemOutOfRange() {
-        let beaming = self.beaming(beamCounts: [8])
+        let beaming = Beaming(beamCounts: [8])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 0))
     }
 
     func testCutFirstThrowsIndexOutOfBounds() {
-        let beaming = self.beaming(beamCounts: [1,2,3,4])
+        let beaming = Beaming(beamCounts: [1,2,3,4])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 0))
     }
 
     func testCutAfterLastThrowsOutOfBounds() {
-        let beaming = self.beaming(beamCounts: [1,2,3])
+        let beaming = Beaming(beamCounts: [1,2,3])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 3))
     }
 
     func testCutQuarterNotesThrowsCurrentStackEmpty() {
-        let beaming = self.beaming(beamCounts: [4,0])
+        let beaming = Beaming(beamCounts: [4,0])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 1))
     }
 
     func testCutQuarterNotesThrowsPreviousStackEmpty() {
-        let beaming = self.beaming(beamCounts: [0,4])
+        let beaming = Beaming(beamCounts: [0,4])
         XCTAssertThrowsError(try beaming.cut(amount: 1, at: 1))
     }
 
@@ -198,7 +194,7 @@ class BeamingTests: XCTestCase {
             // Each event will have 0 to 9 beams
             let beamCounts = (0..<eventCount).map { _ in Int.random(in: 0..<10) }
             // If this crashes, something is bad
-            let _ = self.beaming(beamCounts: beamCounts)
+            let _ = Beaming(beamCounts: beamCounts)
         }
     }
 
@@ -210,7 +206,7 @@ class BeamingTests: XCTestCase {
             // Each event will have 0 to 9 beams
             let beamCounts = (0..<eventCount).map { _ in Int.random(in: 0..<10) }
             // If this crashes, something is bad
-            let beaming = Beaming(beamingVerticals(beamCounts))
+            let beaming = Beaming(beamCounts: beamCounts)
             // Monitor ASCII representations for any untested errors
             print(beaming)
             print("\n")
@@ -220,7 +216,7 @@ class BeamingTests: XCTestCase {
     // Error found in printed fuzzing
     func testTwoSevenZero() {
         let beamCounts = [2,7,0]
-        let beaming = Beaming(beamingVerticals(beamCounts))
+        let beaming = Beaming(beamCounts: beamCounts)
         let expected = Beaming([
             .init(start: 2),
             .init(stop: 2, beamlets: 5),
@@ -232,7 +228,7 @@ class BeamingTests: XCTestCase {
     // Error found in printed fuzzing
     func testSevenTwoZero() {
         let beamCounts = [7,2,0]
-        let beaming = Beaming(beamingVerticals(beamCounts))
+        let beaming = Beaming(beamCounts: beamCounts)
         let expected = Beaming([
             .init(start: 2, beamlets: 5),
             .init(stop: 2),
@@ -247,7 +243,7 @@ class BeamingTests: XCTestCase {
     /// :   :  ->  :   :
     ///     x
     func testCutTwoBeamedEighthsIntoTwoQuarterNoteBeamlets() {
-        let beaming = self.beaming(beamCounts: [1,1])
+        let beaming = Beaming(beamCounts: [1,1])
         let cut = try! beaming.cut(amount: 1, at: 1)
         let expected: [[Beaming.Point]] = [
             [.beamlet(direction: .forward)],
@@ -260,7 +256,7 @@ class BeamingTests: XCTestCase {
     /// :   :   :  ->  :    :   :
     ///     x
     func testTripletEighthsCutAt1() {
-        let beaming = self.beaming(beamCounts: [1,1,1])
+        let beaming = Beaming(beamCounts: [1,1,1])
         let cut = try! beaming.cut(amount: 1, at: 1)
         let expected: [[Beaming.Point]] = [
             [.beamlet(direction: .forward)],
@@ -274,7 +270,7 @@ class BeamingTests: XCTestCase {
     /// :   :   :  ->  :   :    :
     ///         x
     func testTripletEighthsCutAt2() {
-        let beaming = self.beaming(beamCounts: [1,1,1])
+        let beaming = Beaming(beamCounts: [1,1,1])
         let cut = try! beaming.cut(amount: 1, at: 2)
         let expected: [[Beaming.Point]] = [
             [.start],
@@ -289,7 +285,7 @@ class BeamingTests: XCTestCase {
     /// :   :  -:  ->  :   :  -:
     ///     x
     func testSixteenthSixteenthThirtySecondCutAt1() {
-        let beaming = self.beaming(beamCounts: [2,2,3])
+        let beaming = Beaming(beamCounts: [2,2,3])
         let cut = try! beaming.cut(amount: 1, at: 1)
         let expected = Beaming([
             .init(start: 1, beamlets: 1),
@@ -304,7 +300,7 @@ class BeamingTests: XCTestCase {
     /// :   :  -:  ->  :   :  -:
     ///         x
     func testSixteenthSixteenthThirtySecondCutAt2() {
-        let beaming = self.beaming(beamCounts: [2,2,3])
+        let beaming = Beaming(beamCounts: [2,2,3])
         let cut = try! beaming.cut(amount: 1, at: 2)
         let expected = Beaming([
             .init(start: 2),
@@ -319,7 +315,7 @@ class BeamingTests: XCTestCase {
     /// :-  :   :  ->  :-  :   :
     ///     x
     func testThritySecondSixteenthQuarterCutAt1() {
-        let beaming = self.beaming(beamCounts: [3,2,0])
+        let beaming = Beaming(beamCounts: [3,2,0])
         let cut = try! beaming.cut(amount: 1, at: 1)
         let expected = Beaming([
             .init(start: 1, beamlets: 2),
@@ -335,7 +331,7 @@ class BeamingTests: XCTestCase {
     ///     x
     ///     x
     func testThirtySecondSixteenthQuarterCutAt1Amount2() {
-        let beaming = self.beaming(beamCounts: [3,2,0])
+        let beaming = Beaming(beamCounts: [3,2,0])
         let cut = try! beaming.cut(amount: 2, at: 1)
         let expected = Beaming([
             .init(beamlets: 3),
@@ -350,7 +346,7 @@ class BeamingTests: XCTestCase {
     /// :   :   :   :  ->  :   :   :   :
     ///         x
     func testCutFourSixteenthsIntoTwoPairsCutOneLevel() {
-        let beaming = self.beaming(beamCounts: [2,2,2,2])
+        let beaming = Beaming(beamCounts: [2,2,2,2])
         let cut = try! beaming.cut(amount: 1, at: 2)
         let expected = Beaming([
             .init(start: 2),
@@ -369,7 +365,7 @@ class BeamingTests: XCTestCase {
             // Each event will have 0 to 9 beams
             let beamCounts = (0..<eventCount).map { _ in Int.random(in: 0..<10) }
             // If this crashes, something is bad
-            let beaming = self.beaming(beamCounts: beamCounts)
+            let beaming = Beaming(beamCounts: beamCounts)
 
             // Cut potentially more beams than possible
             let cutAmount = Int.random(in: 0...20)

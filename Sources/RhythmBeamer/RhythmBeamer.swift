@@ -14,7 +14,9 @@ import SpelledRhythm
 public enum DefaultBeamer {
     /// - Returns: A reasonable `Beaming` for the given `rhythm`.
     public static func beaming <T> (for rhythm: Rhythm<T>) -> Beaming {
-        return .init(beamingVerticals(rhythm.metricalDurationTree.leaves))
+        return Beaming(
+            sanitizingBeamletDirections(for: beamingVerticals(rhythm.metricalDurationTree.leaves))
+        )
     }
 }
 
@@ -85,8 +87,15 @@ extension Beaming.Point.Vertical {
     }
 }
 
+extension Beaming {
+    /// Create a `Beaming` with the given amount of beams per vertical.
+    init(beamCounts: [Int]) {
+        self.init(beamingVerticals(beamCounts))
+    }
+}
+
 /// - Returns: An array of `Point.Vertical` values for the given `counts` (amounts of beams).
-internal func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
+func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
     return counts.indices.map { index in
         let prev = counts[safe: index - 1]
         let cur = counts[index]
