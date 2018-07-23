@@ -457,10 +457,6 @@ extension Beaming: CustomStringConvertible {
             return [result] + event
         }
 
-        func addingBeamCounts(events: [[String]]) -> [[String]] {
-            return events.enumerated().map(addingBeamCounts)
-        }
-
         func normalizing(_ event: [String]) -> (_ maxHeight: Int) -> [String] {
             return { maxHeight in
                 event + repeatElement(beamlessStem, count: maxHeight - event.count)
