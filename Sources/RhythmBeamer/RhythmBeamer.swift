@@ -12,7 +12,6 @@ import Rhythm
 import SpelledRhythm
 
 public enum DefaultBeamer {
-    
     /// - Returns: A reasonable `Beaming` for the given `rhythm`.
     public static func beaming <T> (for rhythm: Rhythm<T>) -> Beaming {
         return .init(beamingVerticals(rhythm.metricalDurationTree.leaves))
@@ -38,11 +37,11 @@ extension Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
         guard prev > 0 else {
             guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }
-            return .init(start: next, beamlets: Swift.max(0, cur - next))
+            return .init(start: Swift.min(cur, next), beamlets: Swift.max(0, cur - next))
         }
         guard next > 0 else {
             guard prev > 0 else { return .init(beamlets: Swift.max(0, cur - next)) }
-            return .init(stop: cur, beamlets: Swift.max(0, cur - prev))
+            return .init(stop: Swift.min(cur, prev), beamlets: Swift.max(0, cur - prev))
         }
         let startCount = Swift.max(0, Swift.min(cur,next) - prev)
         let stopCount = Swift.max(0, Swift.min(cur,prev) - next)

@@ -202,6 +202,45 @@ class BeamingTests: XCTestCase {
         }
     }
 
+    func testFuzzingPrintOneHundredRandomBeamings() {
+        // Try one hundred random beamings
+        for _ in 0..<100 {
+            // Create a beaming with 1 to 14 events
+            let eventCount = Int.random(in: 0..<15)
+            // Each event will have 0 to 9 beams
+            let beamCounts = (0..<eventCount).map { _ in Int.random(in: 0..<10) }
+            // If this crashes, something is bad
+            let beaming = Beaming(beamingVerticals(beamCounts))
+            // Monitor ASCII representations for any untested errors
+            print(beaming)
+            print("\n")
+        }
+    }
+
+    // Error found in printed fuzzing
+    func testTwoSevenZero() {
+        let beamCounts = [2,7,0]
+        let beaming = Beaming(beamingVerticals(beamCounts))
+        let expected = Beaming([
+            .init(start: 2),
+            .init(stop: 2, beamlets: 5),
+            .init()
+        ])
+        XCTAssertEqual(beaming, expected)
+    }
+
+    // Error found in printed fuzzing
+    func testSevenTwoZero() {
+        let beamCounts = [7,2,0]
+        let beaming = Beaming(beamingVerticals(beamCounts))
+        let expected = Beaming([
+            .init(start: 2, beamlets: 5),
+            .init(stop: 2),
+            .init()
+        ])
+        XCTAssertEqual(beaming, expected)
+    }
+
     // MARK: - Cut
 
     /// :---:      :- -:

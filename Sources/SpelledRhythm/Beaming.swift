@@ -35,7 +35,7 @@ public struct Beaming: Equatable {
         guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
         let previous = try verticals[index - 1].cutAfter(amount: amount)
         let current = try verticals[index].cutAt(amount: amount)
-        var updated = (
+        let updated = (
             verticals.prefix(upTo: index - 1) +
             [previous,current] +
             verticals.suffix(from: index + 1)
@@ -85,7 +85,6 @@ extension Beaming {
 
     /// A single point of the beaming for a single beaming item (metrical context).
     public enum Point: Equatable {
-
         /// Maintain a beam on a given level.
         case maintain
         /// Start a beam on a given level.
@@ -385,6 +384,32 @@ extension Beaming.Point.Vertical: CustomStringConvertible {
     }
 }
 
+extension Beaming.Point: CustomStringConvertible {
+
+    // start:         :--
+    // stop:        --:
+    // maintain:    --:--
+    //
+
+    public var description: String {
+        switch self {
+        case .maintain:
+            return "maintain"
+        case .start:
+            return "start"
+        case .stop:
+            return "stop"
+        case .beamlet(let direction):
+            switch direction {
+            case .backward:
+                return "< beamlet"
+            case .forward:
+                return "beamlet >"
+            }
+        }
+    }
+}
+
 extension Beaming: CollectionWrapping {
     public var base: [Point.Vertical] {
         return verticals
@@ -392,9 +417,87 @@ extension Beaming: CollectionWrapping {
 }
 
 extension Beaming: CustomStringConvertible {
+
     public var description: String {
-        return verticals.enumerated()
-            .map { (index,vertical) in "\(index): \(vertical)" }
-            .joined(separator: "\n")
+
+        let stem = ":"
+        let beamSegment = "--"
+        let beamlet = "-"
+        let air = " "
+        let beamlessStem = air + air + stem + air + air
+
+        func toASCII(vertical: Beaming.Point.Vertical) -> [String] {
+            return vertical.map(toASCII)
+        }
+
+        func toASCII(point: Beaming.Point) -> String {
+            switch point {
+            case .maintain:
+                return beamSegment + stem + beamSegment
+            case .start:
+                return air + air + stem + beamSegment
+            case .stop:
+                return beamSegment + stem + air + air
+            case .beamlet(let direction):
+                switch direction {
+                case .backward:
+                    return air + beamlet + stem + air + air
+                case .forward:
+                    return air + air + stem + beamlet + air
+                }
+            }
+        }
+
+        func addingBeamCounts(index: Int, event: [String]) -> [String] {
+            let beamCountString = String(verticals[index].count)
+            let width = beamCountString.count
+            // This assumes knowledge of the ASCII representation of beaming events
+            let padding = 3 - width
+            let result = "  \(beamCountString)" + repeatElement(" ", count: padding)
+            return [result] + event
+        }
+
+        func addingBeamCounts(events: [[String]]) -> [[String]] {
+            return events.enumerated().map(addingBeamCounts)
+        }
+
+        func normalizing(_ event: [String]) -> (_ maxHeight: Int) -> [String] {
+            return { maxHeight in
+                event + repeatElement(beamlessStem, count: maxHeight - event.count)
+            }
+        }
+
+        func addingTrailingStem(event: [String]) -> [String] {
+            return event + [beamlessStem]
+        }
+
+        /// - Returns: Strings arranged by level from strings arranged by vertical.
+        func pivot(_ events: [[String]]) -> [[String]] {
+            var result: [[String]] = Array(repeating: [], count: events.first?.count ?? 0 + 1)
+            for event in events {
+                for (index,point) in event.enumerated() {
+                    result[index].append(point)
+                }
+            }
+            return result
+        }
+
+        func joining(_ levels: [[String]]) -> String {
+            return levels.map { level in level.joined() }.joined(separator: "\n")
+        }
+
+        let maxHeight = verticals.map { $0.count }.max() ?? 0
+
+        // Map each of the `Point` values to strings, along with their widths
+        return joining(
+            pivot(
+                verticals
+                    .map(toASCII)
+                    .map { normalizing($0)(maxHeight) }
+                    .map(addingTrailingStem)
+                    .enumerated()
+                    .map(addingBeamCounts)
+            )
+        )
     }
 }
