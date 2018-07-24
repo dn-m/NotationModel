@@ -34,9 +34,13 @@ extension Beaming.Point.Vertical {
 
 /// - Returns: a `Beaming.Point.Vertical` with the given context:
 ///
-/// - prev: Previous beaming count (if it exists)
+/// - prev: Previous beaming count (if it exists, or 0 if it doesn't)
 /// - cur: Current beaming count
-/// - next: Next beaming count (if it exists)
+/// - next: Next beaming count (if it exists, or 0 if it doesn't)
+///
+/// - Note: This is wrapped up in its own function to avoid having to disambiquate `min` and `max`
+/// for `Sequence` types and the free functions. Otherwise, `Swift.` must be prepended to each
+/// instance, which is pretty gross.
 private func vertical(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
     return .init(
         maintain: min(prev,cur,next),
