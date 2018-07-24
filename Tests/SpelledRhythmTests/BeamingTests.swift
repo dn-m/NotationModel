@@ -189,12 +189,10 @@ class BeamingTests: XCTestCase {
     func testFuzzingTenThousandRandomBeamings() {
         // Try 10_000 random beamings
         for _ in 0..<10_000 {
-            // Create a beaming with 0 to 99 events
             let eventCount = Int.random(in: 0..<100)
-            // Each event will have 0 to 9 beams
             let beamCounts = (0..<eventCount).map { _ in Int.random(in: 0..<10) }
-            // If this crashes, something is bad
-            let _ = Beaming(beamCounts: beamCounts)
+            let beaming = Beaming(beamCounts: beamCounts)
+            XCTAssertEqual(beamCounts, beaming.map { $0.count })
         }
     }
 
@@ -366,7 +364,6 @@ class BeamingTests: XCTestCase {
             let beamCounts = (0..<eventCount).map { _ in Int.random(in: 0..<10) }
             // If this crashes, something is bad
             let beaming = Beaming(beamCounts: beamCounts)
-
             // Cut potentially more beams than possible
             let cutAmount = Int.random(in: 0...20)
             // Cut potentially out of range
