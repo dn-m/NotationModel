@@ -29,14 +29,12 @@ extension Beaming.Point.Vertical {
 
     /// - Returns: The `Vertical` for the first context in a rhythm.
     static func first(_ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
-        guard cur > 0 else { return .init() }
         guard next > 0 else { return .init(beamlets: cur) }
         return .init(start: Swift.min(cur,next), beamlets: Swift.max(0, cur - next))
     }
 
     /// - Returns: The `Vertical` for the context in a rhythm.
     static func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
-        guard cur > 0 else { return .init() }
         guard prev > 0 else {
             guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }
             return .init(start: Swift.min(cur, next), beamlets: Swift.max(0, cur - next))
@@ -61,7 +59,6 @@ extension Beaming.Point.Vertical {
 
     /// - Returns: The `Vertical` for the last context in a rhythm.
     static func last(_ prev: Int, _ cur: Int) -> Beaming.Point.Vertical {
-        guard cur > 0 else { return .init() }
         guard prev > 0 else { return .init(beamlets: cur) }
         return .init(stop: Swift.min(cur,prev), beamlets: Swift.max(0, cur - prev))
     }
@@ -72,6 +69,7 @@ extension Beaming.Point.Vertical {
     /// - cur: Current beaming count
     /// - next: Next beaming count (if it exists)
     public init(_ prev: Int?, _ cur: Int, _ next: Int?) {
+        guard cur > 0 else { self.init(); return }
         switch (prev, cur, next) {
         case (nil, cur, nil):
             self = .singleton(cur)
