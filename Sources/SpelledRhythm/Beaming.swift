@@ -17,13 +17,8 @@ public struct Beaming: Equatable {
     // MARK: - Initializers
 
     /// Create a `Beaming` with the given `verticals`.
-    public init(_ verticals: [Point.Vertical]) {
-        self.verticals = verticals
-    }
-
-    /// Create a `Beaming` with the given `sequence`.
-    public init <S> (_ sequence: S) where S: Sequence, S.Element == Point.Vertical {
-        self.verticals = Array(sequence)
+    public init <C> (_ verticals: C) where C: Collection, C.Element == Point.Vertical {
+        self.verticals = Array(sanitizingBeamletDirections(for: verticals))
     }
 
     /// Subdivides beaming verticals by the given `amount` at the given `index`.
@@ -35,12 +30,11 @@ public struct Beaming: Equatable {
         guard index > 0 && index < verticals.count else { throw Error.indexOutOfBounds(index) }
         let previous = try verticals[index - 1].cutAfter(amount: amount)
         let current = try verticals[index].cutAt(amount: amount)
-        let updated = (
+        return Beaming(
             verticals.prefix(upTo: index - 1) +
             [previous,current] +
             verticals.suffix(from: index + 1)
         )
-        return Beaming(sanitizingBeamletDirections(for: updated))
     }
 }
 
