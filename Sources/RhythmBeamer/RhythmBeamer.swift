@@ -43,10 +43,6 @@ func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
 /// - prev: Previous beaming count (if it exists, or 0 if it doesn't)
 /// - cur: Current beaming count
 /// - next: Next beaming count (if it exists, or 0 if it doesn't)
-///
-/// - Note: This is wrapped up in its own function to avoid having to disambiquate `min` and `max`
-/// for `Sequence` types and the free functions. Otherwise, `Swift.` must be prepended to each
-/// instance, which is pretty gross.
 func vertical(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
     return .init(
         maintain: min(prev,cur,next),
