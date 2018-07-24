@@ -6,6 +6,7 @@
 //
 
 import DataStructures
+import Math
 import MetricalDuration
 import Rhythm
 
@@ -187,19 +188,14 @@ func makeDots(_ durations: [MetricalDuration]) -> [Int] {
 
 /// - Returns: The amount of dots required to render the given `duration`.
 func dotCount(_ duration: MetricalDuration) -> Int {
-
     let beats = duration.reduced.numerator
-
-    guard [1,3,7,15].contains(beats) else {
-        fatalError("Unsanitary duration for beamed representation: \(beats)")
+    guard beats > 1 else { return 0 }
+    let powers = PowerSequence(coefficient: 2, max: beats, doOvershoot: true)
+    let powersMinusOne = powers.map { $0 - 1 }
+    for (offset,divisor) in powersMinusOne.dropFirst().enumerated() {
+        if beats.isDivisible(by: divisor) { return offset + 1 }
     }
-
-    switch beats {
-    case 3: return 1
-    case 7: return 2
-    case 15: return 3
-    default: return 0
-    }
+    fatalError("\(duration) is not representable with beams")
 }
 
 /// - Returns: The ties necessary to represent the given `metricalContexts`.
