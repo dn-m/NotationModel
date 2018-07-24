@@ -64,12 +64,12 @@ public struct __Graph <Value: Hashable>: Hashable {
 
         // MARK: - Instance Properties
 
-        /// The `Graph.Edge` values contained herein.
+        /// The `__Graph.Edge` values contained herein.
         let edges: [Edge]
 
         // MARK: - Initializers
 
-        /// Create a `Graph.Path` with the given array of `Edge` values.
+        /// Create a `__Graph.Path` with the given array of `Edge` values.
         public init(_ edges: [Edge]) {
             self.edges = edges
         }
@@ -82,12 +82,12 @@ public struct __Graph <Value: Hashable>: Hashable {
 
     // MARK: - Instance Properties
 
-    /// - Returns: All of the `Edge` values in the `Graph`.
+    /// - Returns: All of the `Edge` values in the `__Graph`.
     public var edges: [Edge] {
         return adjacencyList.flatMap { _, values in values }
     }
 
-    /// - Returns: All of the `Node` values in the `Graph`.
+    /// - Returns: All of the `Node` values in the `__Graph`.
     public var nodes: [Node] {
         return adjacencyList.map { node, _ in node }
     }
@@ -112,19 +112,19 @@ public struct __Graph <Value: Hashable>: Hashable {
 
     // MARK: - Initializers
 
-    /// Create a `Graph` with the given `adjacencyList`.
+    /// Create a `__Graph` with the given `adjacencyList`.
     public init(_ adjacencyList: [Node: [Edge]] = [:]) {
         self.adjacencyList = adjacencyList
     }
 
-    /// Create a `Graph` with the given `edges`.
+    /// Create a `__Graph` with the given `edges`.
     public init <S> (_ edges: S) where S: Sequence, S.Element == Edge {
         for edge in edges {
             adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
         }
     }
 
-    /// Create a `Graph` with the given `nodes`.
+    /// Create a `__Graph` with the given `nodes`.
     public init <S> (_ nodes: S) where S: Sequence, S.Element == Node {
         for node in nodes {
             adjacencyList[node] = []
@@ -181,7 +181,7 @@ public struct __Graph <Value: Hashable>: Hashable {
         path.forEach { insertEdge($0) }
     }
 
-    /// - Returns: A `Graph` with each of the nodes updated by the given `transform`.
+    /// - Returns: A `__Graph` with each of the nodes updated by the given `transform`.
     public func mapNodes <U> (_ transform: (Value) -> U) -> __Graph<U> {
         return __Graph<U>(
             Dictionary(
@@ -192,7 +192,7 @@ public struct __Graph <Value: Hashable>: Hashable {
         )
     }
 
-    /// - Returns: A `Graph` with each of the edges contained herein updated by the given
+    /// - Returns: A `__Graph` with each of the edges contained herein updated by the given
     /// `transform`.
     public func mapEdges (_ transform: (Double) -> Double) -> __Graph<Value> {
         return __Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
@@ -333,7 +333,7 @@ extension __Graph.Edge: CustomStringConvertible {
 
 extension __Graph.Path: ExpressibleByArrayLiteral {
 
-    /// Create a `Graph.Path` with an array literal of `Graph.Edge` values.
+    /// Create a `__Graph.Path` with an array literal of `__Graph.Edge` values.
     public init(arrayLiteral elements: __Graph.Edge...) {
         self.edges = elements
     }
