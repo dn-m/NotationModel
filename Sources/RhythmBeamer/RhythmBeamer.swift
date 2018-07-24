@@ -111,21 +111,16 @@ func beamingVerticals (_ leaves: [MetricalDuration]) -> [Beaming.Point.Vertical]
 
 /// - Returns: Amount of beams needed to represent the given `duration`.
 func beamCount(_ duration: MetricalDuration) -> Int {
-
     let reduced = duration.reduced
-
-    #warning("Support longer multi-dot durations with a (2 to the n) - 1 sequence")
-    guard [1,3,7].contains(reduced.numerator) else {
-        fatalError("Unsanitary duration for beamed representation: \(reduced)")
-    }
-
     let subdivisionCount = countTrailingZeros(reduced.denominator) - 2
-
-    if reduced.numerator.isDivisible(by: 3) {
-        return subdivisionCount - 1
-    } else if reduced.numerator.isDivisible(by: 7) {
-        return subdivisionCount - 2
+    guard reduced.numerator > 1 else { return subdivisionCount }
+    let powers = PowerSequence(coefficient: 2, max: reduced.numerator, doOvershoot: true)
+    let powersMinusOne = powers.map { $0 - 1 }
+    for (offset,divisor) in powersMinusOne.dropFirst().enumerated() {
+        if reduced.numerator.isDivisible(by: divisor) {
+            let dotCount = offset + 1
+            return subdivisionCount - dotCount
+        }
     }
-
-    return subdivisionCount
+    fatalError("\(duration) is not representable with beams")
 }
