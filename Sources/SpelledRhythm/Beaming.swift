@@ -190,6 +190,7 @@ extension Beaming.Point {
 
         // MARK: - Initializers
 
+        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, startOrStop: StartOrStop = .none, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = startOrStop
@@ -197,6 +198,7 @@ extension Beaming.Point {
             self.beamletDirection = startOrStop.beamletDirection
         }
 
+        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, start: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(start: start)
@@ -204,6 +206,7 @@ extension Beaming.Point {
             self.beamletDirection = startOrStop.beamletDirection
         }
 
+        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, stop: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(stop: stop)
@@ -211,6 +214,7 @@ extension Beaming.Point {
             self.beamletDirection = startOrStop.beamletDirection
         }
 
+        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(
             maintainCount: Int,
             startOrStop: StartOrStop,
