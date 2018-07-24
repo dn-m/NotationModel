@@ -32,6 +32,11 @@ extension Beaming.Point.Vertical {
     }
 }
 
+/// - Returns: a `Beaming.Point.Vertical` with the given context:
+///
+/// - prev: Previous beaming count (if it exists)
+/// - cur: Current beaming count
+/// - next: Next beaming count (if it exists)
 private func vertical(_ prev: Int?, _ cur: Int, _ next: Int?) -> Beaming.Point.Vertical {
     guard cur > 0 else { return .init() }
     switch (prev, cur, next) {
@@ -42,22 +47,20 @@ private func vertical(_ prev: Int?, _ cur: Int, _ next: Int?) -> Beaming.Point.V
     case (let prev?, let cur, let next?):
         #warning("TODO: Refactor middle Vertical")
         guard prev > 0 else {
-            guard next > 0 else { return .init(beamlets: max(0, cur - prev)) }
-            return .init(start: min(cur,next), beamlets: max(0, cur - next))
+            return .init(start: min(cur,next), beamlets: max(0,cur-max(prev,next)))
         }
         guard next > 0 else {
-            guard prev > 0 else { return .init(beamlets: max(0, cur - next)) }
-            return .init(stop: min(cur,prev), beamlets: max(0, cur - prev))
+            return .init(stop: min(cur,prev), beamlets: max(0,cur-max(prev,next)))
         }
-        let start = max(0, min(cur,next) - prev)
-        let stop = max(0, min(cur,prev) - next)
+        let start = max(0,min(cur,next)-prev)
+        let stop = max(0,min(cur,prev)-next)
         return .init(
             maintain: min(prev,cur,next),
             startOrStop: start > 0 ? .start(count: start) : .stop(count: stop),
-            beamlets: max(0, cur - max(prev,next))
+            beamlets: max(0,cur-max(prev,next))
         )
     case (let prev?, let cur, nil):
-        return .init(stop: min(cur,prev), beamlets: max(0, cur - prev))
+        return .init(stop: min(cur,prev), beamlets: max(0,cur-prev))
     default:
         fatalError("Ill-formed context")
     }
