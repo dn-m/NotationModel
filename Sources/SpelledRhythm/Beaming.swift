@@ -118,14 +118,14 @@ extension Beaming.Point {
 
         /// Create a `StartOrStop.start` with the given `start` amount. If `start` is `0`, a
         /// `.none` value will be created.
-        init(start: Int) {
+        public init(start: Int) {
             precondition(start >= 0)
             self = start == 0 ? .none : .start(count: start)
         }
 
         /// Create a `StartOrStop.stop` with the given `stop` amount. If `stop` is `0`, a
         /// `.none` value will be created.
-        init(stop: Int) {
+        public init(stop: Int) {
             precondition(stop >= 0)
             self = stop == 0 ? .none : .stop(count: stop)
         }
