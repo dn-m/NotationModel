@@ -45,7 +45,6 @@ extension Beaming.Point.StartOrStop {
 /// - cur: Current beaming count
 /// - next: Next beaming count (if it exists)
 private func vertical(_ prev: Int?, _ cur: Int, _ next: Int?) -> Beaming.Point.Vertical {
-    guard cur > 0 else { return .init() }
     switch (prev, cur, next) {
     case (nil, cur, nil):
         return .init(beamlets: cur)
