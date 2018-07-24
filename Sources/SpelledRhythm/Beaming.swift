@@ -379,11 +379,6 @@ extension Beaming.Point.Vertical: CustomStringConvertible {
 
 extension Beaming.Point: CustomStringConvertible {
 
-    // start:         :--
-    // stop:        --:
-    // maintain:    --:--
-    //
-
     public var description: String {
         switch self {
         case .maintain:
