@@ -24,18 +24,11 @@ extension Beaming.Point.Vertical {
 
     /// Create a `Vertical` with the given context:
     ///
-    /// - prev: Previous beaming count (if it exists)
+    /// - prev: Previous beaming count (if it exists, or 0 if it doesn't)
     /// - cur: Current beaming count
-    /// - next: Next beaming count (if it exists)
-    public init(_ prev: Int?, _ cur: Int, _ next: Int?) {
+    /// - next: Next beaming count (if it exists, or 0 if it doesn't)
+    public init(_ prev: Int, _ cur: Int, _ next: Int) {
         self = vertical(prev,cur,next)
-    }
-}
-
-extension Beaming.Point.StartOrStop {
-    /// Create a `StartOrStop` with the given amounts.
-    init(start: Int, stop: Int) {
-        self = start > 0 ? .start(count: start) : stop > 0 ? .stop(count: stop) : .none
     }
 }
 
@@ -44,22 +37,19 @@ extension Beaming.Point.StartOrStop {
 /// - prev: Previous beaming count (if it exists)
 /// - cur: Current beaming count
 /// - next: Next beaming count (if it exists)
-private func vertical(_ prev: Int?, _ cur: Int, _ next: Int?) -> Beaming.Point.Vertical {
-    switch (prev, cur, next) {
-    case (nil, cur, nil):
-        return .init(beamlets: cur)
-    case (nil, let cur, let next?):
-        return .init(start: min(cur,next), beamlets: max(0,cur-next))
-    case (let prev?, let cur, let next?):
-        return .init(
-            maintain: min(prev,cur,next),
-            startOrStop: .init(start: max(0,min(cur,next)-prev), stop: max(0,min(cur,prev)-next)),
-            beamlets: max(0,cur-max(prev,next))
-        )
-    case (let prev?, let cur, nil):
-        return .init(stop: min(cur,prev), beamlets: max(0,cur-prev))
-    default:
-        fatalError("Ill-formed context")
+private func vertical(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
+    return .init(
+        maintain: min(prev,cur,next),
+        startOrStop: .init(start: max(0,min(cur,next)-prev), stop: max(0,min(cur,prev)-next)),
+        beamlets: max(0,cur-max(prev,next))
+    )
+}
+
+extension Beaming.Point.StartOrStop {
+    /// Create a `StartOrStop` with the given amounts. You can't start and stop in the same
+    /// `vertical`, so don't.
+    init(start: Int, stop: Int) {
+        self = start > 0 ? .start(count: start) : stop > 0 ? .stop(count: stop) : .none
     }
 }
 
@@ -73,9 +63,9 @@ extension Beaming {
 /// - Returns: An array of `Point.Vertical` values for the given `counts` (amounts of beams).
 func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
     return counts.indices.map { index in
-        let prev = counts[safe: index - 1]
+        let prev = counts[safe: index - 1] ?? 0
         let cur = counts[index]
-        let next = counts[safe: index + 1]
+        let next = counts[safe: index + 1] ?? 0
         return Beaming.Point.Vertical(prev,cur,next)
     }
 }
