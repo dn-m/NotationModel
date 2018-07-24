@@ -38,7 +38,7 @@ public struct __Graph <Value: Hashable>: Hashable {
         }
 
         /// - Returns: Graph with nodes updated by the given `transform`.
-        public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U>.Edge {
+        public func mapNodes <U> (_ transform: (Value) -> U) -> __Graph<U>.Edge {
             return .init(from: transform(source), to: transform(destination), value: value)
         }
 
@@ -94,7 +94,7 @@ public struct __Graph <Value: Hashable>: Hashable {
 
     /// - Returns: An undirected graph from this directed graph by inserting reversed copies of each
     /// edge.
-    var undirected: Graph {
+    var undirected: __Graph {
         var copy = self
         for edge in edges {
             copy.insertEdge(edge.reversed)
@@ -103,9 +103,9 @@ public struct __Graph <Value: Hashable>: Hashable {
     }
 
     /// - Returns: A directed graph with each edge reversed.
-    var reversed: Graph {
+    var reversed: __Graph {
         let edges = self.edges.map { $0.reversed }
-        return Graph(edges)
+        return __Graph(edges)
     }
 
     private var adjacencyList: [Node: [Edge]] = [:]
@@ -182,8 +182,8 @@ public struct __Graph <Value: Hashable>: Hashable {
     }
 
     /// - Returns: A `Graph` with each of the nodes updated by the given `transform`.
-    public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U> {
-        return Graph<U>(
+    public func mapNodes <U> (_ transform: (Value) -> U) -> __Graph<U> {
+        return __Graph<U>(
             Dictionary(
                 adjacencyList.map { (node,edges) in
                     (transform(node), edges.map { $0.mapNodes(transform)})
@@ -194,8 +194,8 @@ public struct __Graph <Value: Hashable>: Hashable {
 
     /// - Returns: A `Graph` with each of the edges contained herein updated by the given
     /// `transform`.
-    public func mapEdges (_ transform: (Double) -> Double) -> Graph<Value> {
-        return Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
+    public func mapEdges (_ transform: (Double) -> Double) -> __Graph<Value> {
+        return __Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
     }
 
     /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given
@@ -307,13 +307,13 @@ public struct __Graph <Value: Hashable>: Hashable {
     }
 }
 
-extension Graph: CollectionWrapping {
+extension __Graph: CollectionWrapping {
     public var base: [Node: [Edge]] {
         return adjacencyList
     }
 }
 
-extension Graph: CustomStringConvertible {
+extension __Graph: CustomStringConvertible {
     public var description: String {
         var result = ""
         for (source, edges) in adjacencyList {
@@ -325,22 +325,22 @@ extension Graph: CustomStringConvertible {
     }
 }
 
-extension Graph.Edge: CustomStringConvertible {
+extension __Graph.Edge: CustomStringConvertible {
     public var description: String {
         return "\(source) - \(value) -> \(destination)"
     }
 }
 
-extension Graph.Path: ExpressibleByArrayLiteral {
+extension __Graph.Path: ExpressibleByArrayLiteral {
 
     /// Create a `Graph.Path` with an array literal of `Graph.Edge` values.
-    public init(arrayLiteral elements: Graph.Edge...) {
+    public init(arrayLiteral elements: __Graph.Edge...) {
         self.edges = elements
     }
 }
 
-extension Graph.Path: CollectionWrapping {
-    public var base: [Graph.Edge] {
+extension __Graph.Path: CollectionWrapping {
+    public var base: [__Graph.Edge] {
         return edges
     }
 }
