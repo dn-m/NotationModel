@@ -22,68 +22,38 @@ public enum DefaultBeamer {
 
 extension Beaming.Point.Vertical {
 
-    /// - Returns: Singleton `Vertical`.
-    static func singleton(_ cur: Int) -> Beaming.Point.Vertical {
-        return .init(beamlets: cur)
-    }
-
-    /// - Returns: The `Vertical` for the first context in a rhythm.
-    static func first(_ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
-        guard cur > 0 else { return .init() }
-        guard next > 0 else { return .init(beamlets: cur) }
-        return .init(start: Swift.min(cur,next), beamlets: Swift.max(0, cur - next))
-    }
-
-    /// - Returns: The `Vertical` for the context in a rhythm.
-    static func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
-        guard cur > 0 else { return .init() }
-        guard prev > 0 else {
-            guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }
-            return .init(start: Swift.min(cur, next), beamlets: Swift.max(0, cur - next))
-        }
-        guard next > 0 else {
-            guard prev > 0 else { return .init(beamlets: Swift.max(0, cur - next)) }
-            return .init(stop: Swift.min(cur, prev), beamlets: Swift.max(0, cur - prev))
-        }
-        let startCount = Swift.max(0, Swift.min(cur,next) - prev)
-        let stopCount = Swift.max(0, Swift.min(cur,prev) - next)
-        let startOrStop: Beaming.Point.StartOrStop = (
-            startCount > 0 ? .start(count: startCount)
-                : stopCount > 0 ? .stop(count: stopCount)
-                : .none
-        )
-        return .init(
-            maintain: Swift.min(prev,cur,next),
-            startOrStop: startOrStop,
-            beamlets: Swift.max(0, cur - Swift.max(prev,next))
-        )
-    }
-
-    /// - Returns: The `Vertical` for the last context in a rhythm.
-    static func last(_ prev: Int, _ cur: Int) -> Beaming.Point.Vertical {
-        guard cur > 0 else { return .init() }
-        guard prev > 0 else { return .init(beamlets: cur) }
-        return .init(stop: Swift.min(cur,prev), beamlets: Swift.max(0, cur - prev))
-    }
-
     /// Create a `Vertical` with the given context:
     ///
-    /// - prev: Previous beaming count (if it exists)
+    /// - prev: Previous beaming count (if it exists, or 0 if it doesn't)
     /// - cur: Current beaming count
-    /// - next: Next beaming count (if it exists)
-    public init(_ prev: Int?, _ cur: Int, _ next: Int?) {
-        switch (prev, cur, next) {
-        case (nil, cur, nil):
-            self = .singleton(cur)
-        case (nil, let cur, let next?):
-            self = .first(cur, next)
-        case (let prev?, let cur, let next?):
-            self = .middle(prev, cur, next)
-        case (let prev?, let cur, nil):
-            self = .last(prev, cur)
-        default:
-            fatalError("Ill-formed context")
-        }
+    /// - next: Next beaming count (if it exists, or 0 if it doesn't)
+    public init(_ prev: Int, _ cur: Int, _ next: Int) {
+        self = vertical(prev,cur,next)
+    }
+}
+
+/// - Returns: a `Beaming.Point.Vertical` with the given context:
+///
+/// - prev: Previous beaming count (if it exists, or 0 if it doesn't)
+/// - cur: Current beaming count
+/// - next: Next beaming count (if it exists, or 0 if it doesn't)
+///
+/// - Note: This is wrapped up in its own function to avoid having to disambiquate `min` and `max`
+/// for `Sequence` types and the free functions. Otherwise, `Swift.` must be prepended to each
+/// instance, which is pretty gross.
+private func vertical(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
+    return .init(
+        maintain: min(prev,cur,next),
+        startOrStop: .init(start: max(0,min(cur,next)-prev), stop: max(0,min(cur,prev)-next)),
+        beamlets: max(0,cur-max(prev,next))
+    )
+}
+
+extension Beaming.Point.StartOrStop {
+    /// Create a `StartOrStop` with the given amounts. You can't start and stop in the same
+    /// `vertical`, so don't.
+    init(start: Int, stop: Int) {
+        self = start > 0 ? .start(count: start) : stop > 0 ? .stop(count: stop) : .none
     }
 }
 
@@ -97,9 +67,9 @@ extension Beaming {
 /// - Returns: An array of `Point.Vertical` values for the given `counts` (amounts of beams).
 func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
     return counts.indices.map { index in
-        let prev = counts[safe: index - 1]
+        let prev = counts[safe: index - 1] ?? 0
         let cur = counts[index]
-        let next = counts[safe: index + 1]
+        let next = counts[safe: index + 1] ?? 0
         return Beaming.Point.Vertical(prev,cur,next)
     }
 }
