@@ -20,13 +20,18 @@ class RhythmBeamerTests: XCTestCase {
     }
 
     func testBeamsCountDurationCoefficient3() {
-        let duration = 12 /> 256 // 3/64
+        let duration = 12 /> 256 // 3/64 (.)
         XCTAssertEqual(beamCount(duration), 3)
     }
 
     func testBeamsCountDurationCoefficient7() {
-        let duration = 28 /> 32 // 7/8
+        let duration = 28 /> 32 // 7/8 (..)
         XCTAssertEqual(beamCount(duration), -1)
+    }
+
+    func testBeamsCountDurationCoefficient15() {
+        let duration = 15 /> 64 // (...)
+        XCTAssertEqual(beamCount(duration), 3)
     }
 
     func testSingletSetOfBeamlets() {

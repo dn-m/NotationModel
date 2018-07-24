@@ -17,13 +17,8 @@ public struct Beaming: Equatable {
     // MARK: - Initializers
 
     /// Create a `Beaming` with the given `verticals`.
-    public init(_ verticals: [Point.Vertical]) {
-        self.verticals = verticals
-    }
-
-    /// Create a `Beaming` with the given `sequence`.
-    public init <S> (_ sequence: S) where S: Sequence, S.Element == Point.Vertical {
-        self.verticals = Array(sequence)
+    public init <C> (_ verticals: C) where C: Collection, C.Element == Point.Vertical {
+        self.verticals = Array(sanitizingBeamletDirections(for: verticals))
     }
 
     /// Subdivides beaming verticals by the given `amount` at the given `index`.
@@ -40,6 +35,21 @@ public struct Beaming: Equatable {
             [previous,current] +
             verticals.suffix(from: index + 1)
         )
+    }
+}
+
+public func sanitizingBeamletDirections <C> (for verticals: C) -> [Beaming.Point.Vertical]
+    where C: Collection, C.Element == Beaming.Point.Vertical
+{
+    return verticals.enumerated().map { (index,vertical) in
+        if vertical.startOrStop == .none && vertical.beamletCount > 0 {
+            if index == 0 {
+                return vertical.with(beamletDirection: .forward)
+            } else if index == verticals.count - 1 {
+                return vertical.with(beamletDirection: .backward)
+            }
+        }
+        return vertical
     }
 }
 
@@ -69,7 +79,6 @@ extension Beaming {
 
     /// A single point of the beaming for a single beaming item (metrical context).
     public enum Point: Equatable {
-
         /// Maintain a beam on a given level.
         case maintain
         /// Start a beam on a given level.
@@ -135,22 +144,35 @@ extension Beaming.Point {
                 return (.init(stop: max(0, count - amount)), max(amount - count, 0))
             }
         }
+
+        var beamletDirection: Beaming.BeamletDirection? {
+            switch self {
+            case .none:
+                return nil
+            case .start:
+                return .forward
+            case .stop:
+                return .backward
+            }
+        }
+
     }
 }
 
 extension Beaming.Point {
 
     /// Rhythm.Beaming.Point.Vertical.
-    public struct Vertical: Equatable {
-
-        #warning("Implement beamlet direction if neither start nor stop")
+    public struct Vertical {
 
         /// - Returns: The `Point` values contained herein.
         public var points: [Beaming.Point] {
             return (
                 Array(repeating: .maintain, count: maintainCount) +
                 startOrStop.points +
-                Array(repeating: .beamlet(direction: .forward), count: beamletCount)
+                Array(
+                    repeating: .beamlet(direction: beamletDirection ?? .forward),
+                    count: beamletCount
+                )
             )
         }
 
@@ -163,27 +185,60 @@ extension Beaming.Point {
         /// The amount of `.beamlet` points.
         let beamletCount: Int
 
+        /// The direction of beamlets if they are present.
+        let beamletDirection: Beaming.BeamletDirection?
+
         // MARK: - Initializers
 
+        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, startOrStop: StartOrStop = .none, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = startOrStop
             self.beamletCount = beamlets
+            self.beamletDirection = startOrStop.beamletDirection
         }
 
+        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, start: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(start: start)
             self.beamletCount = beamlets
+            self.beamletDirection = startOrStop.beamletDirection
         }
 
+        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, stop: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(stop: stop)
             self.beamletCount = beamlets
+            self.beamletDirection = startOrStop.beamletDirection
+        }
+
+        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
+        public init(
+            maintainCount: Int,
+            startOrStop: StartOrStop,
+            beamletCount: Int,
+            beamletDirection: Beaming.BeamletDirection?
+        )
+        {
+            self.maintainCount = maintainCount
+            self.startOrStop = startOrStop
+            self.beamletCount = beamletCount
+            self.beamletDirection = beamletDirection
         }
 
         // MARK: - Instance Methods
+
+        /// - Returns: `Vertical` with the given `beamletDirection`.
+        func with(beamletDirection: Beaming.BeamletDirection) -> Vertical {
+            return .init(
+                maintainCount: maintainCount,
+                startOrStop: startOrStop,
+                beamletCount: beamletCount,
+                beamletDirection: beamletDirection
+            )
+        }
 
         /// - Returns: The `Vertical` updated by transforming its `.maintain` points into
         /// `.start` points, to the degree possible, along with the remaining amount which
@@ -305,6 +360,15 @@ extension Beaming.Point {
     }
 }
 
+extension Beaming.Point.Vertical: Equatable {
+
+    // MARK: - Equatable
+
+    public static func == (lhs: Beaming.Point.Vertical, rhs: Beaming.Point.Vertical) -> Bool {
+        return lhs.points == rhs.points
+    }
+}
+
 extension Beaming.Point.Vertical: CollectionWrapping {
     public var base: [Beaming.Point] {
         return points
@@ -317,16 +381,121 @@ extension Beaming.Point.Vertical: CustomStringConvertible {
     }
 }
 
-extension Beaming: CollectionWrapping {
+extension Beaming.Point: CustomStringConvertible {
+
+    public var description: String {
+        switch self {
+        case .maintain:
+            return "maintain"
+        case .start:
+            return "start"
+        case .stop:
+            return "stop"
+        case .beamlet(let direction):
+            switch direction {
+            case .backward:
+                return "< beamlet"
+            case .forward:
+                return "beamlet >"
+            }
+        }
+    }
+}
+
+extension Beaming: RandomAccessCollectionWrapping {
     public var base: [Point.Vertical] {
         return verticals
     }
 }
 
 extension Beaming: CustomStringConvertible {
+
+    /// - Returns: An `ASCII` representation which looks vaguely like real-world rhythms, for the
+    /// purposes of eye-balling beam(let) computation errors not caught in logic testing.
     public var description: String {
-        return verticals.enumerated()
-            .map { (index,vertical) in "\(index): \(vertical)" }
-            .joined(separator: "\n")
+
+        let stem = ":"
+        let beamSegment = "--"
+        let beamlet = "-"
+        let air = " "
+        let beamlessStem = air + air + stem + air + air
+
+        /// - Returns: An `ASCII` represenation of a `Beaming.Point.Vertical`.
+        func toASCII(vertical: Beaming.Point.Vertical) -> [String] {
+            return vertical.map(toASCII)
+        }
+
+        /// - Returns: An `ASCII` representation of a `Beaming.Point`.
+        func toASCII(point: Beaming.Point) -> String {
+            switch point {
+            case .maintain:
+                return beamSegment + stem + beamSegment
+            case .start:
+                return air + air + stem + beamSegment
+            case .stop:
+                return beamSegment + stem + air + air
+            case .beamlet(let direction):
+                switch direction {
+                case .backward:
+                    return air + beamlet + stem + air + air
+                case .forward:
+                    return air + air + stem + beamlet + air
+                }
+            }
+        }
+
+        /// - Returns: A `String` representation of a `Vertical` with the amount of beam counts
+        /// (which should be present) prepended.
+        func addingBeamCounts(index: Int, event: [String]) -> [String] {
+            let beamCountString = String(verticals[index].count)
+            let width = beamCountString.count
+            // This assumes knowledge of the ASCII representation of beaming events
+            let padding = 3 - width
+            let result = "  \(beamCountString)" + repeatElement(" ", count: padding)
+            return [result] + event
+        }
+
+        /// - Returns: A `String` representation of a `Vertical` with little stemlets appended
+        /// to match the maximum height.
+        func normalizing(_ event: [String]) -> (_ maxHeight: Int) -> [String] {
+            return { maxHeight in
+                event + repeatElement(beamlessStem, count: maxHeight - event.count)
+            }
+        }
+
+        /// - Returns: A `String` representation of a `Vertical` with a little stemlet appended.
+        func addingTrailingStem(event: [String]) -> [String] {
+            return event + [beamlessStem]
+        }
+
+        /// - Returns: Strings arranged by level from strings arranged by vertical.
+        func pivot(_ events: [[String]]) -> [[String]] {
+            var result: [[String]] = Array(repeating: [], count: events.first?.count ?? 0 + 1)
+            for event in events {
+                for (index,point) in event.enumerated() {
+                    result[index].append(point)
+                }
+            }
+            return result
+        }
+
+        /// - Returns: A single `String`representation of the nested array of `Beaming.Point` string
+        /// representations.
+        func joining(_ levels: [[String]]) -> String {
+            return levels.map { level in level.joined() }.joined(separator: "\n")
+        }
+
+        let maxHeight = verticals.map { $0.count }.max() ?? 0
+
+        return joining(
+            pivot(
+                verticals
+                    .map(toASCII)
+                    .map { normalizing($0)(maxHeight) }
+                    .map(addingTrailingStem)
+                    .enumerated()
+                    .map(addingBeamCounts)
+            )
+        )
     }
 }

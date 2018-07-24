@@ -6,7 +6,7 @@
 //
 
 import DataStructures
-import func Math.countTrailingZeros
+import Math
 import MetricalDuration
 import Rhythm
 import SpelledRhythm
@@ -14,7 +14,9 @@ import SpelledRhythm
 public enum DefaultBeamer {
     /// - Returns: A reasonable `Beaming` for the given `rhythm`.
     public static func beaming <T> (for rhythm: Rhythm<T>) -> Beaming {
-        return .init(beamingVerticals(rhythm.metricalDurationTree.leaves))
+        return Beaming(
+            sanitizingBeamletDirections(for: beamingVerticals(rhythm.metricalDurationTree.leaves))
+        )
     }
 }
 
@@ -37,11 +39,11 @@ extension Beaming.Point.Vertical {
         guard cur > 0 else { return .init() }
         guard prev > 0 else {
             guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }
-            return .init(start: next, beamlets: Swift.max(0, cur - next))
+            return .init(start: Swift.min(cur, next), beamlets: Swift.max(0, cur - next))
         }
         guard next > 0 else {
             guard prev > 0 else { return .init(beamlets: Swift.max(0, cur - next)) }
-            return .init(stop: cur, beamlets: Swift.max(0, cur - prev))
+            return .init(stop: Swift.min(cur, prev), beamlets: Swift.max(0, cur - prev))
         }
         let startCount = Swift.max(0, Swift.min(cur,next) - prev)
         let stopCount = Swift.max(0, Swift.min(cur,prev) - next)
@@ -85,8 +87,15 @@ extension Beaming.Point.Vertical {
     }
 }
 
+extension Beaming {
+    /// Create a `Beaming` with the given amount of beams per vertical.
+    init(beamCounts: [Int]) {
+        self.init(sanitizingBeamletDirections(for: beamingVerticals(beamCounts)))
+    }
+}
+
 /// - Returns: An array of `Point.Vertical` values for the given `counts` (amounts of beams).
-internal func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
+func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
     return counts.indices.map { index in
         let prev = counts[safe: index - 1]
         let cur = counts[index]
@@ -102,21 +111,16 @@ func beamingVerticals (_ leaves: [MetricalDuration]) -> [Beaming.Point.Vertical]
 
 /// - Returns: Amount of beams needed to represent the given `duration`.
 func beamCount(_ duration: MetricalDuration) -> Int {
-
     let reduced = duration.reduced
-
-    #warning("Support longer multi-dot durations with a (2 to the n) - 1 sequence")
-    guard [1,3,7].contains(reduced.numerator) else {
-        fatalError("Unsanitary duration for beamed representation: \(reduced)")
-    }
-
     let subdivisionCount = countTrailingZeros(reduced.denominator) - 2
-
-    if reduced.numerator.isDivisible(by: 3) {
-        return subdivisionCount - 1
-    } else if reduced.numerator.isDivisible(by: 7) {
-        return subdivisionCount - 2
+    guard reduced.numerator > 1 else { return subdivisionCount }
+    let powers = PowerSequence(coefficient: 2, max: reduced.numerator, doOvershoot: true)
+    let powersMinusOne = powers.map { $0 - 1 }
+    for (offset,divisor) in powersMinusOne.dropFirst().enumerated() {
+        if reduced.numerator.isDivisible(by: divisor) {
+            let dotCount = offset + 1
+            return subdivisionCount - dotCount
+        }
     }
-
-    return subdivisionCount
+    fatalError("\(duration) is not representable with beams")
 }
