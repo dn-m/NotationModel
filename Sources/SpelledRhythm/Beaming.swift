@@ -168,7 +168,7 @@ extension Beaming.Point {
 extension Beaming.Point {
 
     /// Rhythm.Beaming.Point.Vertical.
-    public struct Vertical {
+    public struct Vertical: Equatable {
 
         /// - Returns: The `Point` values contained herein.
         public var points: [Beaming.Point] {
@@ -363,15 +363,6 @@ extension Beaming.Point {
             guard remaining2 == 0 else { throw Beaming.Error.notEnoughPoints }
             return vertical2
         }
-    }
-}
-
-extension Beaming.Point.Vertical: Equatable {
-
-    // MARK: - Equatable
-
-    public static func == (lhs: Beaming.Point.Vertical, rhs: Beaming.Point.Vertical) -> Bool {
-        return lhs.points == rhs.points
     }
 }
 
