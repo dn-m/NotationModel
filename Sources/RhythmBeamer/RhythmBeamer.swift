@@ -6,7 +6,6 @@
 //
 
 import DataStructures
-import Algorithms
 import Math
 import MetricalDuration
 import Rhythm
