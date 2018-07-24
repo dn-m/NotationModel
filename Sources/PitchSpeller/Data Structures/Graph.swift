@@ -8,7 +8,7 @@
 import DataStructures
 
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
-public struct Graph <Value: Hashable>: Hashable {
+public struct __Graph <Value: Hashable>: Hashable {
 
     public typealias Node = Value
 
