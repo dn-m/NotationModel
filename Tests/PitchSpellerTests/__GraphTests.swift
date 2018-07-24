@@ -1,5 +1,5 @@
 //
-//  GraphTests.swift
+//  __GraphTests.swift
 //  PitchSpellerTests
 //
 //  Created by James Bean on 5/24/18.
@@ -8,10 +8,10 @@
 import XCTest
 @testable import PitchSpeller
 
-class GraphTests: XCTestCase {
+class __GraphTests: XCTestCase {
 
-    var simpleGraph: Graph<Int> {
-        var graph = Graph<Int>()
+    var simpleGraph: __Graph<Int> {
+        var graph = __Graph<Int>()
         var nodes: [Int] = []
         for value in 0..<10 {
             graph.insertNode(value)
@@ -41,7 +41,7 @@ class GraphTests: XCTestCase {
     }
 
     func testEdgeValue() {
-        var graph = Graph<Int>()
+        var graph = __Graph<Int>()
         graph.insertNode(0)
         graph.insertNode(1)
         graph.insertEdge(from: 0, to: 1, value: 0.5)
@@ -49,7 +49,7 @@ class GraphTests: XCTestCase {
     }
 
     func testRemoveEdge() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -60,7 +60,7 @@ class GraphTests: XCTestCase {
     }
 
     func testEdgesFromNode() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -74,7 +74,7 @@ class GraphTests: XCTestCase {
     }
 
     func testNodesAdjacentToNode() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -86,13 +86,13 @@ class GraphTests: XCTestCase {
     }
 
     func testShortestPathSingleNode() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         XCTAssertEqual(graph.shortestPath(from: "a", to: "a"), [])
     }
 
     func testShortestPathTwoUnconnectedNodes() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         XCTAssertEqual(graph.shortestPath(from: "a", to: "b"), nil)
@@ -100,7 +100,7 @@ class GraphTests: XCTestCase {
     }
 
     func testShortestPathTwoDirectionallyConnectedNodes() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertEdge(from: "a", to: "b", value: 1)
@@ -111,7 +111,7 @@ class GraphTests: XCTestCase {
     }
 
     func testShortestPathThreeNodes() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -123,7 +123,7 @@ class GraphTests: XCTestCase {
     }
 
     func testInsertEdgeReplacesEdges() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertEdge(from: "a", to: "b", value: 1)
@@ -133,7 +133,7 @@ class GraphTests: XCTestCase {
     }
 
     func testInsertPath() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -146,7 +146,7 @@ class GraphTests: XCTestCase {
     }
 
     func testInsertEdgeWithValueZeroRemoveEdge() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -158,7 +158,7 @@ class GraphTests: XCTestCase {
     }
 
     func testUpdateEdge() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -173,7 +173,7 @@ class GraphTests: XCTestCase {
     }
 
     func testBreadthFirstSearch() {
-        var graph = Graph<String>()
+        var graph = __Graph<String>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
