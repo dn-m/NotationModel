@@ -62,7 +62,7 @@ private func vertical(_ prev: Int?, _ cur: Int, _ next: Int?) -> Beaming.Point.V
             beamlets: max(0, cur - max(prev,next))
         )
     case (let prev?, let cur, nil):
-        return .init(stop: min(cur,prev), beamlets: max(0,cur-prev))
+        return .init(stop: min(cur,prev), beamlets: max(0, cur - prev))
     default:
         fatalError("Ill-formed context")
     }
