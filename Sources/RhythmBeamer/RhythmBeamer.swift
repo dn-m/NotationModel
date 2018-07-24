@@ -21,7 +21,6 @@ public enum DefaultBeamer {
 }
 
 extension Beaming.Point.Vertical {
-
     /// Create a `Vertical` with the given context:
     ///
     /// - prev: Previous beaming count (if it exists, or 0 if it doesn't)

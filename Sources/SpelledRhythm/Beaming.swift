@@ -38,6 +38,12 @@ public struct Beaming: Equatable {
     }
 }
 
+/// - Returns: An `Array` of `Beaming.Point.Vertical` values which have a reasonable initial default
+/// of beamlet directions. For now, it only does two things: ensures that the first (or single)
+/// vertical is `.forward`, and that the last vertical is `.backward`.
+///
+/// - Note: A much more thoughtful algorithm could and should be implemented (that is syncopation-,
+/// and hierarchically-aware).
 public func sanitizingBeamletDirections <C> (for verticals: C) -> [Beaming.Point.Vertical]
     where C: Collection, C.Element == Beaming.Point.Vertical
 {
