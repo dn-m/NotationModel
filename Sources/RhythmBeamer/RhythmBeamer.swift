@@ -90,7 +90,7 @@ extension Beaming.Point.Vertical {
 extension Beaming {
     /// Create a `Beaming` with the given amount of beams per vertical.
     init(beamCounts: [Int]) {
-        self.init(beamingVerticals(beamCounts))
+        self.init(sanitizingBeamletDirections(for: beamingVerticals(beamCounts)))
     }
 }
 

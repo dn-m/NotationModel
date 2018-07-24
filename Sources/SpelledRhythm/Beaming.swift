@@ -409,7 +409,7 @@ extension Beaming.Point: CustomStringConvertible {
     }
 }
 
-extension Beaming: CollectionWrapping {
+extension Beaming: RandomAccessCollectionWrapping {
     public var base: [Point.Vertical] {
         return verticals
     }
