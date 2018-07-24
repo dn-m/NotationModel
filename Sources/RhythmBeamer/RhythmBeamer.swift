@@ -22,65 +22,50 @@ public enum DefaultBeamer {
 
 extension Beaming.Point.Vertical {
 
-    /// - Returns: Singleton `Vertical`.
-    static func singleton(_ cur: Int) -> Beaming.Point.Vertical {
-        return .init(beamlets: cur)
-    }
-
-    /// - Returns: The `Vertical` for the first context in a rhythm.
-    static func first(_ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
-        return .init(start: Swift.min(cur,next), beamlets: Swift.max(0, cur-next))
-    }
-
-    /// - Returns: The `Vertical` for the context in a rhythm.
-    static func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
-        guard prev > 0 else {
-            let beamlets = Swift.max(0, cur - prev)
-            guard next > 0 else { return .init(beamlets: beamlets) }
-            return .init(start: Swift.min(cur,next), beamlets: Swift.max(0, cur - next))
-        }
-        guard next > 0 else {
-            guard prev > 0 else { return .init(beamlets: Swift.max(0, cur - next)) }
-            return .init(stop: Swift.min(cur, prev), beamlets: Swift.max(0, cur - prev))
-        }
-        let startCount = Swift.max(0, Swift.min(cur,next) - prev)
-        let stopCount = Swift.max(0, Swift.min(cur,prev) - next)
-        let startOrStop: Beaming.Point.StartOrStop = (
-            startCount > 0 ? .start(count: startCount)
-                : stopCount > 0 ? .stop(count: stopCount)
-                : .none
-        )
-        return .init(
-            maintain: Swift.min(prev,cur,next),
-            startOrStop: startOrStop,
-            beamlets: Swift.max(0, cur - Swift.max(prev,next))
-        )
-    }
-
-    /// - Returns: The `Vertical` for the last context in a rhythm.
-    static func last(_ prev: Int, _ cur: Int) -> Beaming.Point.Vertical {
-        return .init(stop: Swift.min(cur,prev), beamlets: Swift.max(0, cur - prev))
-    }
-
     /// Create a `Vertical` with the given context:
     ///
     /// - prev: Previous beaming count (if it exists)
     /// - cur: Current beaming count
     /// - next: Next beaming count (if it exists)
     public init(_ prev: Int?, _ cur: Int, _ next: Int?) {
-        guard cur > 0 else { self.init(); return }
-        switch (prev, cur, next) {
-        case (nil, cur, nil):
-            self = .singleton(cur)
-        case (nil, let cur, let next?):
-            self = .first(cur, next)
-        case (let prev?, let cur, let next?):
-            self = .middle(prev, cur, next)
-        case (let prev?, let cur, nil):
-            self = .last(prev, cur)
-        default:
-            fatalError("Ill-formed context")
+        self = vertical(prev,cur,next)
+    }
+}
+
+private func vertical(_ prev: Int?, _ cur: Int, _ next: Int?) -> Beaming.Point.Vertical {
+    guard cur > 0 else { return .init() }
+    switch (prev, cur, next) {
+    case (nil, cur, nil):
+        return .init(beamlets: cur)
+    case (nil, let cur, let next?):
+        return .init(start: min(cur,next), beamlets: max(0,cur-next))
+    case (let prev?, let cur, let next?):
+        #warning("TODO: Refactor middle Vertical")
+        guard prev > 0 else {
+            let beamlets = Swift.max(0, cur - prev)
+            guard next > 0 else { return .init(beamlets: beamlets) }
+            return .init(start: min(cur,next), beamlets: max(0, cur - next))
         }
+        guard next > 0 else {
+            guard prev > 0 else { return .init(beamlets: max(0, cur - next)) }
+            return .init(stop: min(cur, prev), beamlets: max(0, cur - prev))
+        }
+        let startCount = max(0, min(cur,next) - prev)
+        let stopCount = max(0, min(cur,prev) - next)
+        let startOrStop: Beaming.Point.StartOrStop = (
+            startCount > 0 ? .start(count: startCount)
+                : stopCount > 0 ? .stop(count: stopCount)
+                : .none
+        )
+        return .init(
+            maintain: min(prev,cur,next),
+            startOrStop: startOrStop,
+            beamlets: max(0, cur - max(prev,next))
+        )
+    case (let prev?, let cur, nil):
+        return .init(stop: min(cur,prev), beamlets: max(0,cur-prev))
+    default:
+        fatalError("Ill-formed context")
     }
 }
 
