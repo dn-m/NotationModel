@@ -29,14 +29,15 @@ extension Beaming.Point.Vertical {
 
     /// - Returns: The `Vertical` for the first context in a rhythm.
     static func first(_ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
-        return .init(start: next > 0 ? Swift.min(cur,next) : 0, beamlets: Swift.max(0, cur - next))
+        return .init(start: Swift.min(cur,next), beamlets: Swift.max(0, cur-next))
     }
 
     /// - Returns: The `Vertical` for the context in a rhythm.
     static func middle(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
         guard prev > 0 else {
-            guard next > 0 else { return .init(beamlets: Swift.max(0, cur - prev)) }
-            return .init(start: Swift.min(cur, next), beamlets: Swift.max(0, cur - next))
+            let beamlets = Swift.max(0, cur - prev)
+            guard next > 0 else { return .init(beamlets: beamlets) }
+            return .init(start: Swift.min(cur,next), beamlets: Swift.max(0, cur - next))
         }
         guard next > 0 else {
             guard prev > 0 else { return .init(beamlets: Swift.max(0, cur - next)) }
@@ -58,7 +59,7 @@ extension Beaming.Point.Vertical {
 
     /// - Returns: The `Vertical` for the last context in a rhythm.
     static func last(_ prev: Int, _ cur: Int) -> Beaming.Point.Vertical {
-        return .init(stop: prev > 0 ? Swift.min(cur,prev) : 0, beamlets: Swift.max(0, cur - prev))
+        return .init(stop: Swift.min(cur,prev), beamlets: Swift.max(0, cur - prev))
     }
 
     /// Create a `Vertical` with the given context:
