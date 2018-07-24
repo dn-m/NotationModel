@@ -51,13 +51,6 @@ private func vertical(_ prev: Int?, _ cur: Int, _ next: Int?) -> Beaming.Point.V
     case (nil, let cur, let next?):
         return .init(start: min(cur,next), beamlets: max(0,cur-next))
     case (let prev?, let cur, let next?):
-        #warning("TODO: Refactor middle Vertical")
-        guard prev > 0 else {
-            return .init(start: min(cur,next), beamlets: max(0,cur-max(prev,next)))
-        }
-        guard next > 0 else {
-            return .init(stop: min(cur,prev), beamlets: max(0,cur-max(prev,next)))
-        }
         return .init(
             maintain: min(prev,cur,next),
             startOrStop: .init(start: max(0,min(cur,next)-prev), stop: max(0,min(cur,prev)-next)),
