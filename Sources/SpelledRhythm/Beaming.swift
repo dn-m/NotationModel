@@ -406,6 +406,8 @@ extension Beaming: RandomAccessCollectionWrapping {
 
 extension Beaming: CustomStringConvertible {
 
+    /// - Returns: An `ASCII` representation which looks vaguely like real-world rhythms, for the
+    /// purposes of eye-balling beam(let) computation errors not caught in logic testing.
     public var description: String {
 
         let stem = ":"
