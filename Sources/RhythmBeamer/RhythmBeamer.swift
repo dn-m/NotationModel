@@ -36,7 +36,7 @@ func beamingVerticals (_ leaves: [MetricalDuration]) -> [Beaming.Point.Vertical]
 /// - Returns: An array of `Point.Vertical` values for the given `counts` (amounts of beams).
 func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
     guard !counts.isEmpty else { return [] }
-    return zipToLongest([0] + counts.dropLast(), counts, counts.dropFirst(), fill: 0).map(vertical)
+    return zip([0] + counts.dropLast(), counts, counts.dropFirst(), fill: 0).map(vertical)
 }
 
 /// - Returns: a `Beaming.Point.Vertical` with the given context:
@@ -73,91 +73,5 @@ extension Beaming.Point.StartOrStop {
     /// `vertical`, so don't.
     init(start: Int, stop: Int) {
         self = start > 0 ? .start(count: start) : stop > 0 ? .stop(count: stop) : .none
-    }
-}
-
-func zipToLongest <A,B> (_ a: A, _ b: B, firstFill: A.Element, secondFill: B.Element)
-    -> ZipToLongest2Sequence<A,B> where A: Sequence, B: Sequence
-{
-    return ZipToLongest2Sequence(a, b, firstFill: firstFill, secondFill: secondFill)
-}
-
-func zipToLongest <A,B,C> (_ a: A, _ b: B, _ c: C, fill: A.Element)
-    -> ZipToLongest3Sequence<A,B,C> where
-        A: Sequence, B: Sequence, C: Sequence, A.Element == B.Element, B.Element == C.Element
-{
-    return ZipToLongest3Sequence(a, b, c, firstFill: fill, secondFill: fill, thirdFill: fill)
-}
-
-func zipToLongest <A,B,C> (
-    _ a: A,
-    _ b: B,
-    _ c: C,
-    firstFill: A.Element,
-    secondFill: B.Element,
-    thirdFill: C.Element
-) -> ZipToLongest3Sequence<A,B,C> where A: Sequence, B: Sequence, C: Sequence
-{
-    return ZipToLongest3Sequence(
-        a,
-        b,
-        c,
-        firstFill: firstFill,
-        secondFill: secondFill,
-        thirdFill: thirdFill
-    )
-}
-
-public struct ZipToLongest2Sequence<A: Sequence, B: Sequence>: IteratorProtocol, Sequence {
-
-    private var firstIterator: A.Iterator
-    private var secondIterator: B.Iterator
-    private let firstFill: A.Element
-    private let secondFill: B.Element
-
-    init(_ a: A, _ b: B, firstFill: A.Element, secondFill: B.Element) {
-        self.firstIterator = a.makeIterator()
-        self.secondIterator = b.makeIterator()
-        self.firstFill = firstFill
-        self.secondFill = secondFill
-    }
-
-    public mutating func next() -> (A.Element, B.Element)? {
-        let firstValue = firstIterator.next()
-        let secondValue = secondIterator.next()
-        guard firstValue != nil || secondValue != nil else { return nil }
-        return (firstValue ?? firstFill, secondValue ?? secondFill)
-    }
-}
-
-public struct ZipToLongest3Sequence<
-    A: Sequence,
-    B: Sequence,
-    C: Sequence
->: IteratorProtocol, Sequence
-{
-
-    private var firstIterator: A.Iterator
-    private var secondIterator: B.Iterator
-    private var thirdIterator: C.Iterator
-    private let firstFill: A.Element
-    private let secondFill: B.Element
-    private let thirdFill: C.Element
-
-    init(_ a: A, _ b: B, _ c: C, firstFill: A.Element, secondFill: B.Element, thirdFill: C.Element) {
-        self.firstIterator = a.makeIterator()
-        self.secondIterator = b.makeIterator()
-        self.thirdIterator = c.makeIterator()
-        self.firstFill = firstFill
-        self.secondFill = secondFill
-        self.thirdFill = thirdFill
-    }
-
-    public mutating func next() -> (A.Element, B.Element, C.Element)? {
-        let firstValue = firstIterator.next()
-        let secondValue = secondIterator.next()
-        let thirdValue = thirdIterator.next()
-        guard firstValue != nil || secondValue != nil || thirdValue != nil else { return nil }
-        return (firstValue ?? firstFill, secondValue ?? secondFill, thirdValue ?? thirdFill)
     }
 }
