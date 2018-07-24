@@ -49,16 +49,11 @@ private func vertical(_ prev: Int?, _ cur: Int, _ next: Int?) -> Beaming.Point.V
             guard prev > 0 else { return .init(beamlets: max(0, cur - next)) }
             return .init(stop: min(cur,prev), beamlets: max(0, cur - prev))
         }
-        let startCount = max(0, min(cur,next) - prev)
-        let stopCount = max(0, min(cur,prev) - next)
-        let startOrStop: Beaming.Point.StartOrStop = (
-            startCount > 0 ? .start(count: startCount)
-                : stopCount > 0 ? .stop(count: stopCount)
-                : .none
-        )
+        let start = max(0, min(cur,next) - prev)
+        let stop = max(0, min(cur,prev) - next)
         return .init(
             maintain: min(prev,cur,next),
-            startOrStop: startOrStop,
+            startOrStop: start > 0 ? .start(count: start) : .stop(count: stop),
             beamlets: max(0, cur - max(prev,next))
         )
     case (let prev?, let cur, nil):
