@@ -20,17 +20,6 @@ public enum DefaultBeamer {
     }
 }
 
-extension Beaming.Point.Vertical {
-    /// Create a `Vertical` with the given context:
-    ///
-    /// - prev: Previous beaming count (if it exists, or 0 if it doesn't)
-    /// - cur: Current beaming count
-    /// - next: Next beaming count (if it exists, or 0 if it doesn't)
-    public init(_ prev: Int, _ cur: Int, _ next: Int) {
-        self = vertical(prev,cur,next)
-    }
-}
-
 /// - Returns: a `Beaming.Point.Vertical` with the given context:
 ///
 /// - prev: Previous beaming count (if it exists, or 0 if it doesn't)
@@ -69,7 +58,7 @@ func beamingVerticals (_ counts: [Int]) -> [Beaming.Point.Vertical] {
         let prev = counts[safe: index - 1] ?? 0
         let cur = counts[index]
         let next = counts[safe: index + 1] ?? 0
-        return Beaming.Point.Vertical(prev,cur,next)
+        return vertical(prev,cur,next)
     }
 }
 
