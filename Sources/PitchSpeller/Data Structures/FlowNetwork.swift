@@ -5,8 +5,9 @@
 //  Created by James Bean on 5/24/18.
 //
 
-// temporary typealias
+// temporary typealiases
 public typealias Graph = __Graph
+public typealias DirectedGraph = __Graph
 
 /// Directed Graph with several properties:
 /// - Each edge has a capacity for flow
