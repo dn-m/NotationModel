@@ -102,7 +102,7 @@ struct PitchSpeller {
     }
 }
 
-extension FlowNetwork where Value == Int {
+extension FlowNetwork where Node == Int {
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
     init(source: Int, sink: Int, internalNodes: [Int]) {
