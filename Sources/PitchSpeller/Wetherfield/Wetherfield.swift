@@ -42,7 +42,7 @@ struct PitchSpeller {
 
     /// - Returns: An array of nodes, each representing the index of the unassigned node in
     /// `pitchNodes`.
-    private static func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
+    private static func internalNodes(pitches: [Pitch]) -> [Int] {
         return pitches.indices.flatMap { offset in [0,1].map { index in node(offset, index) } }
     }
 
