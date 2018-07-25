@@ -8,9 +8,7 @@
 import DataStructures
 
 /// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
-public struct __Graph <Value: Hashable>: Hashable {
-
-    public typealias Node = Value
+public struct __Graph <Node: Hashable>: Hashable {
 
     /// Directed edge between two `Node` values.
     ///
@@ -38,7 +36,7 @@ public struct __Graph <Value: Hashable>: Hashable {
         }
 
         /// - Returns: Graph with nodes updated by the given `transform`.
-        public func mapNodes <U> (_ transform: (Value) -> U) -> __Graph<U>.Edge {
+        public func mapNodes <U> (_ transform: (Node) -> U) -> __Graph<U>.Edge {
             return .init(from: transform(source), to: transform(destination), value: value)
         }
 
@@ -182,7 +180,7 @@ public struct __Graph <Value: Hashable>: Hashable {
     }
 
     /// - Returns: A `__Graph` with each of the nodes updated by the given `transform`.
-    public func mapNodes <U> (_ transform: (Value) -> U) -> __Graph<U> {
+    public func mapNodes <U> (_ transform: (Node) -> U) -> __Graph<U> {
         return __Graph<U>(
             Dictionary(
                 adjacencyList.map { (node,edges) in
@@ -194,7 +192,7 @@ public struct __Graph <Value: Hashable>: Hashable {
 
     /// - Returns: A `__Graph` with each of the edges contained herein updated by the given
     /// `transform`.
-    public func mapEdges (_ transform: (Double) -> Double) -> __Graph<Value> {
+    public func mapEdges (_ transform: (Double) -> Double) -> __Graph<Node> {
         return __Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
     }
 
