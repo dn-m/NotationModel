@@ -5,6 +5,9 @@
 //  Created by James Bean on 5/24/18.
 //
 
+// temporary typealias
+public typealias Graph = __Graph
+
 /// Directed Graph with several properties:
 /// - Each edge has a capacity for flow
 /// - A "source" node, which is only emanates flow outward
