@@ -60,8 +60,14 @@ public struct FlowNetwork <Node: Hashable> {
                 })
             }
         }
-        #warning("Implement backflow")
-        
+        maxFlowNetwork.edges.map {
+            $0.nodes
+        }.filter {
+            let weight = maxFlowNetwork.weight($0)!
+            return weight < 0.001 && weight > -0.001
+        }.forEach {
+            maxFlowNetwork.flipEdge(at: $0)
+        }
         return UnweightedGraph()
     }
 
