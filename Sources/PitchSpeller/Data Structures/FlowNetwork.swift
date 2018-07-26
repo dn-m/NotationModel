@@ -13,7 +13,7 @@ typealias DirectedGraph<Node: Hashable> = _Graph<Double, DirectedOver<Node>>
 /// - Each edge has a capacity for flow
 /// - A "source" node, which is only emanates flow outward
 /// - A "sink" node, which only receives flow
-public struct FlowNetwork <Node: Hashable>: Hashable {
+public struct FlowNetwork <Node: Hashable> {
 
     public typealias Path = Graph<Node>.Path
     public typealias Edge = Graph<Node>.Edge
