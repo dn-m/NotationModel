@@ -46,6 +46,12 @@ public struct FlowNetwork <Node: Hashable> {
         }
         return residualNetwork
     }
+    
+    // Redundant extra residualNetwork variable for phasing out the other
+    var maxFlowNetwork: UnweightedGraph<Node> {
+        #warning("Implement")
+        return UnweightedGraph()
+    }
 
     /// - Returns: The two partitions on either side of the s-t cut.
     public var partitions: (source: Graph<Node>, sink: Graph<Node>) {
