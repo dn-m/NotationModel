@@ -17,6 +17,9 @@ public struct FlowNetwork <Node: Hashable> {
 
     public typealias Path = Graph<Node>.Path
     public typealias Edge = Graph<Node>.Edge
+    
+    typealias DirectedPath = DirectedGraph<Node>.Path
+    typealias DirectedEdge = DirectedGraph<Node>.Edge
 
     /// - Returns: All of the `Node` values contained herein which are neither the `source` nor
     /// the `sink`.
