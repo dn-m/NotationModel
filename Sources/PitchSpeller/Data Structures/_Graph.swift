@@ -204,6 +204,10 @@ extension _Graph.Edge where Pair: Directed {
 
 extension _Graph {
     
+    // MARK: = Typealiases
+    
+    typealias UnweightedPath = _Graph<WithoutWeights, DirectedOver<Node>>.Path
+    
     // MARK: - Instance Methods
     
     func shortestUnweightedPath (from source: Node, to destination: Node) -> [Node] {
