@@ -169,6 +169,15 @@ extension _Graph where Pair: SwappablePair {
     }
 }
 
+extension _Graph.Path where Weight == WithoutWeights {
+    
+    // MARK: - Initializers
+    
+    init (_ nodes: [_Graph.Node]) {
+        self.init(nodes, [:])
+    }
+}
+
 extension _Graph.Edge where Pair: Directed {
     
     // MARK: - Instance Properties
