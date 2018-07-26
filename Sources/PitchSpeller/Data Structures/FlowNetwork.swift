@@ -74,7 +74,7 @@ public struct FlowNetwork <Node: Hashable> {
     /// Create a `FlowNetwork` with the given `graph` and the given `source` and `sink` nodes.
     public init(_ graph: Graph<Node>, source: Node, sink: Node) {
         self.graph = graph
-        self.directedGraph = DirectedGraph<Node>()
+        self.directedGraph = DirectedGraph(graph)
         self.source = source
         self.sink = sink
     }
