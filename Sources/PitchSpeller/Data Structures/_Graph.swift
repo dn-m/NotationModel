@@ -160,6 +160,15 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         self.nodes = nodes
         self.adjacents = adjacents
     }
+
+    // Initializer from phased-out Graph type
+    init (_ graph: __Graph<Node>) {
+        nodes = Set(graph.nodes)
+        adjacents = [:]
+        for edge in graph.edges {
+            adjacents[Pair(edge.source, edge.destination)] = (edge.value as! Weight)
+        }
+    }
 }
 
 
