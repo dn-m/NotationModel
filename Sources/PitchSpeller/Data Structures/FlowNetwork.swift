@@ -51,10 +51,16 @@ public struct FlowNetwork <Node: Hashable> {
     var maxFlowNetwork: UnweightedGraph<Node> {
         var maxFlowNetwork = directedGraph
         while let path = maxFlowNetwork.shortestUnweightedPath(from: source, to: sink) {
-            for (edge, weight) in path.weights {
-//                maxFlowNetwork.insertEdge(edge, weight)
+            guard let minimumEdge = (path.adjacents.compactMap {
+                maxFlowNetwork.weight($0)
+            }.min()) else { break }
+            path.adjacents.forEach { maxFlowNetwork.updateEdge($0, with: {
+                minuend in
+                minuend - minimumEdge
+                })
             }
         }
+        #warning("Implement backflow")
         
         return UnweightedGraph()
     }
