@@ -151,14 +151,14 @@ class _GraphTests: XCTestCase {
     func testShortestUnweightedPathSingleNode() {
         var graph = _Graph<WithoutWeights, DirectedOver<String>>()
         graph.insertNode("a")
-        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "a").nodes, ["a"])
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "a")!.nodes, ["a"])
     }
 //
     func testShortestUnweightedPathTwoUnconnectedNodes() {
         var graph = _Graph<WithoutWeights, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
-        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "b").nodes, [])
+        XCTAssertNil(graph.shortestUnweightedPath(from: "a", to: "b"))
     }
 //
     func testShortestUnweightedPathTwoDirectionallyConnectedNodes() {
@@ -166,8 +166,8 @@ class _GraphTests: XCTestCase {
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertEdge(from: "a", to: "b")
-        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "b").nodes, ["a", "b"])
-        XCTAssertEqual(graph.shortestUnweightedPath(from: "b", to: "a").nodes, [])
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "b")!.nodes, ["a", "b"])
+        XCTAssertNil(graph.shortestUnweightedPath(from: "b", to: "a"))
     }
 //
     func testShortestPathThreeNodes() {
@@ -178,8 +178,8 @@ class _GraphTests: XCTestCase {
         graph.insertEdge(from: "a", to: "b")
         graph.insertEdge(from: "b", to: "c")
         graph.insertEdge(from: "c", to: "b")
-        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "c").nodes, ["a", "b", "c"])
-        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "b").nodes, ["a", "b"])
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "c")!.nodes, ["a", "b", "c"])
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "b")!.nodes, ["a", "b"])
     }
 //
 //    func testInsertEdgeReplacesEdges() {
