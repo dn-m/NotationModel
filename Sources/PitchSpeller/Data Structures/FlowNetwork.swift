@@ -7,7 +7,7 @@
 
 // temporary typealiases
 public typealias Graph = __Graph
-public typealias DirectedGraph<Node: Hashable> = _Graph<Double, DirectedOver<Node>>
+typealias DirectedGraph<Node: Hashable> = _Graph<Double, DirectedOver<Node>>
 
 /// Directed Graph with several properties:
 /// - Each edge has a capacity for flow
