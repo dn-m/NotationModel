@@ -96,7 +96,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     
     mutating func insertPath (_ path: Path) {
         path.nodes.forEach { insertNode($0) }
-        path.weights.forEach { insertEdge(from: $0.0.a, to: $0.0.b, withWeight: $0.1) }
+        path.weights.forEach { insertEdge($0) }
     }
     
     mutating func removeEdge (from source: Node, to destination: Node) {
