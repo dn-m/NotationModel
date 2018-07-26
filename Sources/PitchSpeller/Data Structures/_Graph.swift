@@ -193,6 +193,12 @@ extension _Graph where Pair: SwappablePair {
 
 extension _Graph.Path where Weight == WithoutWeights {
     
+    // MARK: - Instance properties
+    
+    var adjacents: Set<Pair> {
+        return Set(weights.keys)
+    }
+    
     // MARK: - Initializers
     
     init (_ nodes: [_Graph.Node]) {
