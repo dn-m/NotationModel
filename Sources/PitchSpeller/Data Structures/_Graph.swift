@@ -116,6 +116,10 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         return adjacents[Pair(source, destination)]
     }
     
+    func weight (_ pair: Pair) -> Weight? {
+        return weight(from: pair.a, to: pair.b)
+    }
+    
     /// - Returns: Array of nodes adjacent to `source`
     func neighbors (of source: Node) -> [Node] {
         return nodes.compactMap {
