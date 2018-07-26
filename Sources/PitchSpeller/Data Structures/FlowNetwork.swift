@@ -49,7 +49,13 @@ public struct FlowNetwork <Node: Hashable> {
     
     // Redundant extra residualNetwork variable for phasing out the other
     var maxFlowNetwork: UnweightedGraph<Node> {
-        #warning("Implement")
+        var maxFlowNetwork = directedGraph
+        while let path = maxFlowNetwork.shortestUnweightedPath(from: source, to: sink) {
+            for (edge, weight) in path.weights {
+//                maxFlowNetwork.insertEdge(edge, weight)
+            }
+        }
+        
         return UnweightedGraph()
     }
 
