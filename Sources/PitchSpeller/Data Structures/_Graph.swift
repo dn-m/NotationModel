@@ -56,6 +56,14 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         }
     }
     
+    struct Path {
+        
+        // MARK: - Instance Properties
+        
+        let nodes: [Node]
+        let weights: [Node: Weight]
+    }
+    
     // MARK: - Instance Properties
      
     var nodes: Set<Node>
