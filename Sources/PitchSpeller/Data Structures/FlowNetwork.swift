@@ -65,6 +65,7 @@ public struct FlowNetwork <Node: Hashable>: Hashable {
 
     // TODO: Consider more (space-)efficient storage of Nodes.
     internal var graph: Graph<Node>
+    internal var directedGraph: DirectedGraph<Node>
     internal var source: Node
     internal var sink: Node
 
