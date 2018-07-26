@@ -237,4 +237,19 @@ extension _Graph {
         }
         return []
     }
+    
+    internal func breadthFirstSearch(from source: Node) -> [Node] {
+        var visited: [Node] = []
+        var queue: Queue<Node> = []
+        queue.push(source)
+        visited.append(source)
+        while !queue.isEmpty {
+            let node = queue.pop()
+            for neighbor in neighbors(of: node) where !visited.contains(neighbor) {
+                queue.push(neighbor)
+                visited.append(neighbor)
+            }
+        }
+        return visited
+    }
 }
