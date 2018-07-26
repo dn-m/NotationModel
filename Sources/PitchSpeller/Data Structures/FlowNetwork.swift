@@ -21,7 +21,7 @@ public struct FlowNetwork <Node: Hashable> {
     /// - Returns: All of the `Node` values contained herein which are neither the `source` nor
     /// the `sink`.
     public var internalNodes: [Node] {
-        return graph.nodes.filter { $0 != source && $0 != sink }
+        return directedGraph.nodes.filter { $0 != source && $0 != sink }
     }
 
     /// - Returns: The edges whose values are equivalent to the maximum flow along the path from
