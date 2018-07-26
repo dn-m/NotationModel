@@ -154,7 +154,7 @@ extension _Graph where Weight == WithoutWeights {
     }
     
     mutating func insertPath (_ nodes: [_Graph.Node]) {
-        nodes.forEach { insertNode($0) }
+        insertPath(Path(nodes))
     }
 }
 
