@@ -210,7 +210,7 @@ extension _Graph {
     
     // MARK: - Instance Methods
     
-    func shortestUnweightedPath (from source: Node, to destination: Node) -> UnweightedPath {
+    func shortestUnweightedPath (from source: Node, to destination: Node) -> UnweightedPath? {
         
         var breadcrumbs: [Node: Node] = [:]
         
@@ -239,7 +239,7 @@ extension _Graph {
                 if neighbor == destination { return backtrace() }
             }
         }
-        return UnweightedPath([])
+        return nil
     }
     
     internal func breadthFirstSearch(from source: Node) -> [Node] {
