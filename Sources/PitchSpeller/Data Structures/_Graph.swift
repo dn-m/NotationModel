@@ -94,6 +94,14 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         insertEdge(from: keyValue.0.a, to: keyValue.0.b, withWeight: keyValue.1)
     }
     
+    mutating func insertEdge(_ pair: Pair, _ weight: Weight) {
+        insertEdge(from: pair.a, to: pair.b, withWeight: weight)
+    }
+
+    mutating func updateEdge(_ pair: Pair, with transform: (Weight) -> Weight) {
+        #warning("Implement")
+    }
+    
     mutating func insertPath (_ path: Path) {
         path.nodes.forEach { insertNode($0) }
         path.weights.forEach { insertEdge($0) }
