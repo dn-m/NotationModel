@@ -99,7 +99,8 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
 
     mutating func updateEdge(_ pair: Pair, with transform: (Weight) -> Weight) {
-        #warning("Implement")
+        guard let weight = weight(pair) else { return }
+        insertEdge(pair, transform(weight))
     }
     
     mutating func insertPath (_ path: Path) {
