@@ -128,6 +128,10 @@ extension _Graph where Weight == WithoutWeights {
     mutating func insertEdge (from source: Node, to destination: Node) {
         insertEdge(from: source, to: destination, withWeight: .unweighted)
     }
+    
+    mutating func insertPath (_ nodes: [_Graph.Node]) {
+        nodes.forEach { insertNode($0) }
+    }
 }
 
 extension _Graph.Edge where Weight == WithoutWeights {
