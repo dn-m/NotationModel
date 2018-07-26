@@ -9,6 +9,8 @@ import XCTest
 @testable import PitchSpeller
 
 class _GraphTests: XCTestCase {
+    
+    typealias UnweightedPath = _Graph<WithoutWeights, DirectedOver<String>>.Path
 
     var simpleGraph: _Graph<Double, DirectedOver<Int>> {
         var graph = _Graph<Double, DirectedOver<Int>>()
