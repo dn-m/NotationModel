@@ -190,7 +190,7 @@ extension _Graph.Path where Weight == WithoutWeights {
                 weights[Pair($0.1, nodes[$0.0])] = .unweighted
             }
         }
-        self.init(nodes, [:])
+        self.init(nodes, weights)
     }
 }
 
