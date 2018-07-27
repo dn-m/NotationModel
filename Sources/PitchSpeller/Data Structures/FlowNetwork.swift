@@ -100,6 +100,11 @@ public struct FlowNetwork <Node: Hashable> {
     private var sourceSideNodes: Set<Node> {
         return Set(solvedForMaxFlow.1.breadthFirstSearch(from: source))
     }
+    
+    /// - Returns: Nodes in residual network *not* reachable from the `source`
+    private var notSourceSideNodes: Set<Node> {
+        return solvedForMaxFlow.1.nodes.subtracting(sourceSideNodes)
+    }
 
     /// - Returns: Nodes in residual network reachable forwards from the `source`.
     private var sourceReachableNodes: [Node] {
