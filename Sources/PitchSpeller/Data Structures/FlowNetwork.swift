@@ -48,7 +48,7 @@ public struct FlowNetwork <Node: Hashable> {
     }
     
     // Redundant extra residualNetwork variable for phasing out the other
-    var solvedForMaxFlow: UnweightedGraph<Node> {
+    var solvedForMaxFlow: (Double, UnweightedGraph<Node>) {
         var residualNetwork = directedGraph
         var totalFlow = 0.0
             
@@ -86,7 +86,7 @@ public struct FlowNetwork <Node: Hashable> {
         
         while findAugmentingPath() { continue }
         addBackEdges()
-        return DirectedGraph<Node>.unWeightedVersion(of: residualNetwork)
+        return (totalFlow, DirectedGraph<Node>.unWeightedVersion(of: residualNetwork))
     }
 
     /// - Returns: The two partitions on either side of the s-t cut.
