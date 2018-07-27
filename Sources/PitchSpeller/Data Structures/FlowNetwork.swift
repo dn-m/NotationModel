@@ -96,6 +96,12 @@ public struct FlowNetwork <Node: Hashable> {
         return (graph(sourceReachableNodes), graph(sinkReachableNodes.reversed()))
     }
     
+    /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
+    /// tiebreak (in- and out- edges saturated).
+    public var minimumCut: (Set<Node>, Set<Node>) {
+        return (sourceSideNodes, notSourceSideNodes)
+    }
+    
     /// - Returns: Nodes in residual network reachable from the `source`
     private var sourceSideNodes: Set<Node> {
         return Set(solvedForMaxFlow.1.breadthFirstSearch(from: source))
