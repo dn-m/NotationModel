@@ -49,9 +49,9 @@ public struct FlowNetwork <Node: Hashable> {
     
     // Redundant extra residualNetwork variable for phasing out the other
     var solvedForMaxFlow: (Double, UnweightedGraph<Node>) {
-        var residualNetwork = directedGraph
         var totalFlow = 0.0
-            
+        var residualNetwork = directedGraph
+        
         func findAugmentingPath () -> Bool {
             guard let path = residualNetwork.shortestUnweightedPath(from: source, to: sink) else {
                 return false
