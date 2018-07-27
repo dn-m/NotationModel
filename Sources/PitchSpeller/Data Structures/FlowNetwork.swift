@@ -49,10 +49,10 @@ public struct FlowNetwork <Node: Hashable> {
     
     // Redundant extra residualNetwork variable for phasing out the other
     var maxFlowNetwork: UnweightedGraph<Node> {
-        var maxFlowNetwork = directedGraph
+        var residualNetwork = directedGraph
             
         func findAugmentingPath () -> Bool {
-            guard let path = maxFlowNetwork.shortestUnweightedPath(from: source, to: sink) else {
+            guard let path = residualNetwork.shortestUnweightedPath(from: source, to: sink) else {
                 return false
             }
             pushFlow(through: path)
@@ -61,9 +61,9 @@ public struct FlowNetwork <Node: Hashable> {
             
         func pushFlow (through path: UnweightedGraph<Node>.Path) {
             let minimumEdge = (path.adjacents.compactMap {
-                maxFlowNetwork.weight($0)
+                residualNetwork.weight($0)
                 }.min())!
-            path.adjacents.forEach { maxFlowNetwork.updateEdge($0, with: {
+            path.adjacents.forEach { residualNetwork.updateEdge($0, with: {
                 minuend in
                 minuend - minimumEdge
                 })
@@ -71,19 +71,19 @@ public struct FlowNetwork <Node: Hashable> {
         }
         
         func addBackEdges () {
-            maxFlowNetwork.edges.map {
+            residualNetwork.edges.map {
                 $0.nodes
                 }.filter {
-                    let weight = maxFlowNetwork.weight($0)!
+                    let weight = residualNetwork.weight($0)!
                     return weight < 0.001 && weight > -0.001
                 }.forEach {
-                    maxFlowNetwork.flipEdge(at: $0)
+                    residualNetwork.flipEdge(at: $0)
             }
         }
         
         while findAugmentingPath() { continue }
         addBackEdges()
-        return DirectedGraph<Node>.unWeightedVersion(of: maxFlowNetwork)
+        return DirectedGraph<Node>.unWeightedVersion(of: residualNetwork)
     }
 
     /// - Returns: The two partitions on either side of the s-t cut.
