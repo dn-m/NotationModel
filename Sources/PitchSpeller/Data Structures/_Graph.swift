@@ -176,6 +176,14 @@ extension _Graph where Weight == WithoutWeights {
     }
 }
 
+extension _Graph where Weight: AsWeight {
+    
+    static func unWeightedVersion (of weightedGraph: _Graph) -> _Graph<WithoutWeights, Pair> {
+        let adjacents: [Pair: WithoutWeights] = weightedGraph.adjacents.mapValues { _ in .unweighted }
+        return _Graph<WithoutWeights, Pair>(weightedGraph.nodes, adjacents)
+    }
+}
+
 extension _Graph.Edge where Weight == WithoutWeights {
     
     // MARK: - Initializers
