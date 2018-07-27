@@ -72,16 +72,7 @@ public struct FlowNetwork <Node: Hashable> {
                 }
             }
             
-            while let path = maxFlowNetwork.shortestUnweightedPath(from: source, to: sink) {
-                let minimumEdge = (path.adjacents.compactMap {
-                    maxFlowNetwork.weight($0)
-                    }.min())!
-                path.adjacents.forEach { maxFlowNetwork.updateEdge($0, with: {
-                    minuend in
-                    minuend - minimumEdge
-                    })
-                }
-            }
+            while findAugmentingPath() { continue }
         }
         
         func addBackEdges () {
