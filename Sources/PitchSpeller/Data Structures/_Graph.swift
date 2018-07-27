@@ -155,6 +155,11 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         nodes = []
         adjacents = [:]
     }
+    
+    init (_ nodes: Set<Node>, _ adjacents: [Pair: Weight]) {
+        self.nodes = nodes
+        self.adjacents = adjacents
+    }
 }
 
 
