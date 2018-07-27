@@ -76,10 +76,10 @@ struct PitchSpeller {
     func spell() -> [SpelledPitch] {
 
         var assignedNodes: [AssignedNode] {
-            let (sourcePartition, sinkPartition) = flowNetwork.partitions
-            let sourceNodes = sourcePartition.nodes.map { index in AssignedNode(index, .down) }
-            let sinkNodes = sinkPartition.nodes.map { index in AssignedNode(index, .up) }
-            return sourceNodes + sinkNodes
+            let (sourceSide, sinkSide) = flowNetwork.minimumCut
+            let downNodes = sourceSide.map { index in AssignedNode(index, .down) }
+            let upNodes = sinkSide.map { index in AssignedNode(index, .up) }
+            return downNodes + upNodes
         }
 
         return assignedNodes
