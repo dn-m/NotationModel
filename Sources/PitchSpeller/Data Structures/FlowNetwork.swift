@@ -68,7 +68,7 @@ public struct FlowNetwork <Node: Hashable> {
         }.forEach {
             maxFlowNetwork.flipEdge(at: $0)
         }
-        return UnweightedGraph()
+        return DirectedGraph<Node>.unWeightedVersion(of: maxFlowNetwork)
     }
 
     /// - Returns: The two partitions on either side of the s-t cut.
