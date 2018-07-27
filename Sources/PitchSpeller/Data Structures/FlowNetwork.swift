@@ -47,7 +47,9 @@ public struct FlowNetwork <Node: Hashable> {
         return residualNetwork
     }
     
-    // Redundant extra residualNetwork variable for phasing out the other
+    /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
+    /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
+    /// saturated edges flipped and all weights removed.
     var solvedForMaxFlow: (Double, UnweightedGraph<Node>) {
         var totalFlow = 0.0
         var residualNetwork = directedGraph
