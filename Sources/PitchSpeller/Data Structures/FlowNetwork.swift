@@ -50,29 +50,24 @@ public struct FlowNetwork <Node: Hashable> {
     // Redundant extra residualNetwork variable for phasing out the other
     var maxFlowNetwork: UnweightedGraph<Node> {
         var maxFlowNetwork = directedGraph
-        
-        func findAugmentingPaths () {
             
-            func findAugmentingPath () -> Bool {
-                guard let path = maxFlowNetwork.shortestUnweightedPath(from: source, to: sink) else {
-                    return false
-                }
-                pushFlow(through: path)
-                return true
+        func findAugmentingPath () -> Bool {
+            guard let path = maxFlowNetwork.shortestUnweightedPath(from: source, to: sink) else {
+                return false
             }
+            pushFlow(through: path)
+            return true
+        }
             
-            func pushFlow (through path: UnweightedGraph<Node>.Path) {
-                let minimumEdge = (path.adjacents.compactMap {
-                    maxFlowNetwork.weight($0)
-                    }.min())!
-                path.adjacents.forEach { maxFlowNetwork.updateEdge($0, with: {
-                    minuend in
-                    minuend - minimumEdge
-                    })
-                }
+        func pushFlow (through path: UnweightedGraph<Node>.Path) {
+            let minimumEdge = (path.adjacents.compactMap {
+                maxFlowNetwork.weight($0)
+                }.min())!
+            path.adjacents.forEach { maxFlowNetwork.updateEdge($0, with: {
+                minuend in
+                minuend - minimumEdge
+                })
             }
-            
-            while findAugmentingPath() { continue }
         }
         
         func addBackEdges () {
@@ -86,7 +81,7 @@ public struct FlowNetwork <Node: Hashable> {
             }
         }
         
-        findAugmentingPaths()
+        while findAugmentingPath() { continue }
         addBackEdges()
         return DirectedGraph<Node>.unWeightedVersion(of: maxFlowNetwork)
     }
