@@ -59,7 +59,7 @@ public struct FlowNetwork <Node: Hashable> {
                 path.adjacents.forEach { maxFlowNetwork.updateEdge($0, with: {
                     minuend in
                     minuend - minimumEdge
-                })
+                    })
                 }
             }
         }
