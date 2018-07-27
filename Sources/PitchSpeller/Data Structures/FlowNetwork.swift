@@ -64,23 +64,15 @@ public struct FlowNetwork <Node: Hashable> {
             }
         }
         
-        while let path = maxFlowNetwork.shortestUnweightedPath(from: source, to: sink) {
-            guard let minimumEdge = (path.adjacents.compactMap {
-                maxFlowNetwork.weight($0)
-            }.min()) else { break }
-            path.adjacents.forEach { maxFlowNetwork.updateEdge($0, with: {
-                minuend in
-                minuend - minimumEdge
-                })
+        func addBackEdges () {
+            maxFlowNetwork.edges.map {
+                $0.nodes
+                }.filter {
+                    let weight = maxFlowNetwork.weight($0)!
+                    return weight < 0.001 && weight > -0.001
+                }.forEach {
+                    maxFlowNetwork.flipEdge(at: $0)
             }
-        }
-        maxFlowNetwork.edges.map {
-            $0.nodes
-        }.filter {
-            let weight = maxFlowNetwork.weight($0)!
-            return weight < 0.001 && weight > -0.001
-        }.forEach {
-            maxFlowNetwork.flipEdge(at: $0)
         }
         return DirectedGraph<Node>.unWeightedVersion(of: maxFlowNetwork)
     }
