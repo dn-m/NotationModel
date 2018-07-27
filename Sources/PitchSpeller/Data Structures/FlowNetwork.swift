@@ -95,6 +95,11 @@ public struct FlowNetwork <Node: Hashable> {
     public var partitions: (source: Graph<Node>, sink: Graph<Node>) {
         return (graph(sourceReachableNodes), graph(sinkReachableNodes.reversed()))
     }
+    
+    /// - Returns: Nodes in residual network reachable from the `source`
+    private var sourceSideNodes: Set<Node> {
+        return Set(solvedForMaxFlow.1.breadthFirstSearch(from: source))
+    }
 
     /// - Returns: Nodes in residual network reachable forwards from the `source`.
     private var sourceReachableNodes: [Node] {
