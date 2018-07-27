@@ -74,6 +74,9 @@ public struct FlowNetwork <Node: Hashable> {
                     maxFlowNetwork.flipEdge(at: $0)
             }
         }
+        
+        findAugmentingPath()
+        addBackEdges()
         return DirectedGraph<Node>.unWeightedVersion(of: maxFlowNetwork)
     }
 
