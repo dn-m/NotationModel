@@ -51,7 +51,7 @@ public struct FlowNetwork <Node: Hashable> {
     var maxFlowNetwork: UnweightedGraph<Node> {
         var maxFlowNetwork = directedGraph
         
-        func findAugmentingPath () {
+        func findAugmentingPaths () {
             while let path = maxFlowNetwork.shortestUnweightedPath(from: source, to: sink) {
                 guard let minimumEdge = (path.adjacents.compactMap {
                     maxFlowNetwork.weight($0)
@@ -75,7 +75,7 @@ public struct FlowNetwork <Node: Hashable> {
             }
         }
         
-        findAugmentingPath()
+        findAugmentingPaths()
         addBackEdges()
         return DirectedGraph<Node>.unWeightedVersion(of: maxFlowNetwork)
     }
