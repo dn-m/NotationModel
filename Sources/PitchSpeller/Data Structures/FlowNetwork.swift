@@ -50,7 +50,7 @@ public struct FlowNetwork <Node: Hashable> {
     /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
     /// saturated edges flipped and all weights removed.
-    var solvedForMaxFlow: (Double, UnweightedGraph<Node>) {
+    var solvedForMaximumFlow: (Double, UnweightedGraph<Node>) {
         var totalFlow = 0.0
         var residualNetwork = directedGraph
         
@@ -104,12 +104,12 @@ public struct FlowNetwork <Node: Hashable> {
     
     /// - Returns: Nodes in residual network reachable from the `source`
     private var sourceSideNodes: Set<Node> {
-        return Set(solvedForMaxFlow.1.breadthFirstSearch(from: source))
+        return Set(solvedForMaximumFlow.1.breadthFirstSearch(from: source))
     }
     
     /// - Returns: Nodes in residual network *not* reachable from the `source`
     private var notSourceSideNodes: Set<Node> {
-        return solvedForMaxFlow.1.nodes.subtracting(sourceSideNodes)
+        return solvedForMaximumFlow.1.nodes.subtracting(sourceSideNodes)
     }
 
     /// - Returns: Nodes in residual network reachable forwards from the `source`.
