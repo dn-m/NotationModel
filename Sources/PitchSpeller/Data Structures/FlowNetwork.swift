@@ -45,11 +45,8 @@ public struct FlowNetwork <Node: Hashable> {
                 residualNetwork.weight($0)
                 }.min())!
             totalFlow += minimumEdge
-            path.adjacents.forEach {
-                residualNetwork.updateEdge($0, with: {
-                    minuend in
-                    minuend - minimumEdge
-                })
+            path.adjacents.forEach { edge in
+                residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
             }
         }
         
