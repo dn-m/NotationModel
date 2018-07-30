@@ -17,7 +17,6 @@ typealias UnweightedGraph<Node: Hashable> = _Graph<WithoutWeights, DirectedOver<
 public struct FlowNetwork <Node: Hashable> {
 
     public typealias Path = Graph<Node>.Path
-    public typealias Edge = Graph<Node>.Edge
     
     typealias DirectedPath = DirectedGraph<Node>.Path
     typealias DirectedEdge = DirectedGraph<Node>.Edge
