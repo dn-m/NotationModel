@@ -145,24 +145,6 @@ public struct FlowNetwork <Node: Hashable> {
         self.graph = Graph([:])
     }
 
-    /// - Returns: The set of edges which were saturated (and therefore removed from the residual
-    /// network).
-    private func saturatedEdges(
-        in flowNetwork: Graph<Node>,
-        comparingAgainst residualNetwork: Graph<Node>
-    ) -> Set<Edge>
-    {
-        return Set(
-            flowNetwork.edges.filter { originalEdge in
-                !residualNetwork.edges.contains(
-                    where: { residualEdge in
-                        originalEdge.nodesAreEqual(to: residualEdge)
-                    }
-                )
-            }
-        )
-    }
-
     internal func maximumFlow(of path: Path) -> Double {
         let capacity = path.edges.map { $0.value }.min()!
         return min(capacity, .greatestFiniteMagnitude)
