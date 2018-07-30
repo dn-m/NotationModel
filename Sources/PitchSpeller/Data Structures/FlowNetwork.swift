@@ -27,19 +27,6 @@ public struct FlowNetwork <Node: Hashable> {
     public var internalNodes: [Node] {
         return directedGraph.nodes.filter { $0 != source && $0 != sink }
     }
-
-    /// - Returns: The residual network produced after subtracting the maximum flow from each of the
-    /// edges. The saturated edges will be absent from the `residualNetwork`, as their values
-    /// reached zero in the flow-propagation process.
-    ///
-    /// - TODO: Add backflow to reversed edges.
-    public var residualNetwork: Graph<Node> {
-        var residualNetwork = graph
-        while let path = residualNetwork.shortestPath(from: source, to: sink) {
-            residualNetwork.insertPath(path.map { $0 - maximumFlow(of: path) })
-        }
-        return residualNetwork
-    }
     
     /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
