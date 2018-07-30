@@ -101,11 +101,6 @@ public struct FlowNetwork <Node: Hashable> {
         return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
     }
 
-    /// - Returns: Nodes in residual network reachable backwards from the `sink`.
-    private var sinkReachableNodes: [Node] {
-        return residualNetwork.reversed.breadthFirstSearch(from: sink)
-    }
-
     /// - Returns: A `Graph` composed of the given `nodes`, and corresponding edges in this graph.
     private func graph(_ nodes: [Node]) -> Graph<Node> {
         return Graph(graph.edges(nodes))
