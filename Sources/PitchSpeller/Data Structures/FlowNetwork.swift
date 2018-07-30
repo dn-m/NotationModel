@@ -66,7 +66,7 @@ public struct FlowNetwork <Node: Hashable> {
         
         while findAugmentingPath() { continue }
         addBackEdges()
-        return (totalFlow, DirectedGraph<Node>.unWeightedVersion(of: residualNetwork))
+        return (totalFlow, residualNetwork.unweighted)
     }
     
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
