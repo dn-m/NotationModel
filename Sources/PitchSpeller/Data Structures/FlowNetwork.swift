@@ -109,7 +109,7 @@ public struct FlowNetwork <Node: Hashable> {
     
     /// - Returns: Nodes in residual network *not* reachable from the `source`
     private var notSourceSideNodes: Set<Node> {
-        return solvedForMaximumFlow.1.nodes.subtracting(sourceSideNodes)
+        return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
     }
 
     /// - Returns: Nodes in residual network reachable forwards from the `source`.
