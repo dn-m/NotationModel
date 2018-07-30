@@ -101,11 +101,6 @@ public struct FlowNetwork <Node: Hashable> {
         return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
     }
 
-    /// - Returns: Nodes in residual network reachable forwards from the `source`.
-    private var sourceReachableNodes: [Node] {
-        return residualNetwork.breadthFirstSearch(from: source)
-    }
-
     /// - Returns: Nodes in residual network reachable backwards from the `sink`.
     private var sinkReachableNodes: [Node] {
         return residualNetwork.reversed.breadthFirstSearch(from: sink)
