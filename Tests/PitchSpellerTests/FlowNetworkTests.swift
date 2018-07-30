@@ -76,41 +76,41 @@ class FlowNetworkTests: XCTestCase {
 //        XCTAssertEqual(flowNetwork.saturatedEdges, [ad, cd, eg])
 //    }
 
-    func testPartitions() {
-
-        // Example taken from: https://www.geeksforgeeks.org/minimum-cut-in-a-directed-graph/
-        var graph = Graph<String>()
-
-        // source
-        graph.insertNode("a")
-
-        // internal nodes
-        graph.insertNode("b")
-        graph.insertNode("c")
-        graph.insertNode("d")
-        graph.insertNode("e")
-
-        // sink
-        graph.insertNode("f")
-
-        graph.insertEdge(from: "a", to: "b", value: 16)
-        graph.insertEdge(from: "a", to: "c", value: 13)
-        graph.insertEdge(from: "b", to: "c", value: 10)
-        graph.insertEdge(from: "c", to: "b", value: 4)
-        graph.insertEdge(from: "b", to: "d", value: 12)
-        graph.insertEdge(from: "d", to: "c", value: 9)
-        graph.insertEdge(from: "c", to: "e", value: 14)
-        graph.insertEdge(from: "e", to: "d", value: 7)
-        graph.insertEdge(from: "d", to: "f", value: 20)
-        graph.insertEdge(from: "e", to: "f", value: 4)
-        let flowNetwork = FlowNetwork(graph, source: "a", sink: "f")
-
-        // Expected partitions
-        let sourceEdges = graph.edges(["a","b","c","e"])
-        let sourcePartition = Graph<String>(sourceEdges)
-        let sinkEdges = graph.edges(["d","f"])
-        let sinkPartition = Graph<String>(sinkEdges)
-        XCTAssertEqual(flowNetwork.partitions.source, sourcePartition)
-        XCTAssertEqual(flowNetwork.partitions.sink, sinkPartition)
-    }
+//    func testPartitions() {
+//
+//        // Example taken from: https://www.geeksforgeeks.org/minimum-cut-in-a-directed-graph/
+//        var graph = Graph<String>()
+//
+//        // source
+//        graph.insertNode("a")
+//
+//        // internal nodes
+//        graph.insertNode("b")
+//        graph.insertNode("c")
+//        graph.insertNode("d")
+//        graph.insertNode("e")
+//
+//        // sink
+//        graph.insertNode("f")
+//
+//        graph.insertEdge(from: "a", to: "b", value: 16)
+//        graph.insertEdge(from: "a", to: "c", value: 13)
+//        graph.insertEdge(from: "b", to: "c", value: 10)
+//        graph.insertEdge(from: "c", to: "b", value: 4)
+//        graph.insertEdge(from: "b", to: "d", value: 12)
+//        graph.insertEdge(from: "d", to: "c", value: 9)
+//        graph.insertEdge(from: "c", to: "e", value: 14)
+//        graph.insertEdge(from: "e", to: "d", value: 7)
+//        graph.insertEdge(from: "d", to: "f", value: 20)
+//        graph.insertEdge(from: "e", to: "f", value: 4)
+//        let flowNetwork = FlowNetwork(graph, source: "a", sink: "f")
+//
+//        // Expected partitions
+//        let sourceEdges = graph.edges(["a","b","c","e"])
+//        let sourcePartition = Graph<String>(sourceEdges)
+//        let sinkEdges = graph.edges(["d","f"])
+//        let sinkPartition = Graph<String>(sinkEdges)
+//        XCTAssertEqual(flowNetwork.partitions.source, sourcePartition)
+//        XCTAssertEqual(flowNetwork.partitions.sink, sinkPartition)
+//    }
  }
