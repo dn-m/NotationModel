@@ -115,9 +115,4 @@ public struct FlowNetwork <Node: Hashable> {
         self.sink = sink
         self.graph = Graph([:])
     }
-
-    internal func maximumFlow(of path: Path) -> Double {
-        let capacity = path.edges.map { $0.value }.min()!
-        return min(capacity, .greatestFiniteMagnitude)
-    }
 }
