@@ -49,7 +49,7 @@ public struct FlowNetwork <Node: Hashable> {
         }
         
         func addBackEdges () {
-            residualNetwork.edges.map { $0.nodes}
+            residualNetwork.edges.lazy.map { $0.nodes}
             .filter {
                 let weight = residualNetwork.weight($0)!
                 return weight < .leastNormalMagnitude && weight > -.leastNormalMagnitude
