@@ -84,11 +84,6 @@ public struct FlowNetwork <Node: Hashable> {
         addBackEdges()
         return (totalFlow, DirectedGraph<Node>.unWeightedVersion(of: residualNetwork))
     }
-
-    /// - Returns: The two partitions on either side of the s-t cut.
-    public var partitions: (source: Graph<Node>, sink: Graph<Node>) {
-        return (graph(sourceReachableNodes), graph(sinkReachableNodes.reversed()))
-    }
     
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
     /// tiebreak (in- and out- edges saturated).
