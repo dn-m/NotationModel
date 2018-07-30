@@ -123,10 +123,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     
     /// - Returns: Array of nodes adjacent to `source`
     func neighbors (of source: Node) -> [Node] {
-        return nodes.compactMap {
-            guard let _ = adjacents[Pair(source, $0)] else { return nil }
-            return $0
-        }
+        return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
     }
     
     /// - Returns: Array of nodes adjacent to `source` out of the supplied set of `nodes`.
