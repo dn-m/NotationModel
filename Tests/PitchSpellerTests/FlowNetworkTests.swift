@@ -23,19 +23,19 @@ class FlowNetworkTests: XCTestCase {
         return FlowNetwork(graph, source: "s", sink: "t")
     }
 
-    func testMaximumPathFlow() {
-        var graph = Graph<String>()
-        graph.insertNode("s")
-        graph.insertNode("t")
-        graph.insertNode("a")
-        graph.insertNode("b")
-        graph.insertEdge(from: "s", to: "a", value: 1)
-        graph.insertEdge(from: "a", to: "b", value: 2)
-        graph.insertEdge(from: "b", to: "t", value: 3)
-        let flowNetwork = FlowNetwork(graph, source: "s", sink: "t")
-        let path = graph.shortestPath(from: "s", to: "t")!
-        XCTAssertEqual(flowNetwork.maximumFlow(of: path), 1)
-    }
+//    func testMaximumPathFlow() {
+//        var graph = Graph<String>()
+//        graph.insertNode("s")
+//        graph.insertNode("t")
+//        graph.insertNode("a")
+//        graph.insertNode("b")
+//        graph.insertEdge(from: "s", to: "a", value: 1)
+//        graph.insertEdge(from: "a", to: "b", value: 2)
+//        graph.insertEdge(from: "b", to: "t", value: 3)
+//        let flowNetwork = FlowNetwork(graph, source: "s", sink: "t")
+//        let path = graph.shortestPath(from: "s", to: "t")!
+//        XCTAssertEqual(flowNetwork.maximumFlow(of: path), 1)
+//    }
 
 //    func testSaturatedEdges() {
 //
