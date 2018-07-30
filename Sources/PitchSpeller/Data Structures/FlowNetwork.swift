@@ -86,7 +86,6 @@ public struct FlowNetwork <Node: Hashable> {
     }
 
     // TODO: Consider more (space-)efficient storage of Nodes.
-    internal var graph: Graph<Node>
     internal var directedGraph: DirectedGraph<Node>
     internal var source: Node
     internal var sink: Node
@@ -95,7 +94,6 @@ public struct FlowNetwork <Node: Hashable> {
 
     /// Create a `FlowNetwork` with the given `graph` and the given `source` and `sink` nodes.
     public init(_ graph: Graph<Node>, source: Node, sink: Node) {
-        self.graph = graph
         self.directedGraph = DirectedGraph(graph)
         self.source = source
         self.sink = sink
@@ -106,6 +104,5 @@ public struct FlowNetwork <Node: Hashable> {
         self.directedGraph = directedGraph
         self.source = source
         self.sink = sink
-        self.graph = Graph([:])
     }
 }
