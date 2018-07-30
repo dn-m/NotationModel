@@ -28,12 +28,6 @@ public struct FlowNetwork <Node: Hashable> {
         return directedGraph.nodes.filter { $0 != source && $0 != sink }
     }
 
-    /// - Returns: The edges whose values are equivalent to the maximum flow along the path from
-    /// the `source` to the `sink` within which the edge resides.
-    public var saturatedEdges: Set<Edge> {
-        return saturatedEdges(in: graph, comparingAgainst: residualNetwork)
-    }
-
     /// - Returns: The residual network produced after subtracting the maximum flow from each of the
     /// edges. The saturated edges will be absent from the `residualNetwork`, as their values
     /// reached zero in the flow-propagation process.
