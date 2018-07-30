@@ -50,11 +50,13 @@ public struct FlowNetwork <Node: Hashable> {
         
         func addBackEdges () {
             residualNetwork.edges.lazy.map { $0.nodes}
-            .filter {
-                let weight = residualNetwork.weight($0)!
+            .filter { nodes in
+                let weight = residualNetwork.weight(nodes)!
                 return weight < .leastNormalMagnitude && weight > -.leastNormalMagnitude
             }
-            .forEach { residualNetwork.flipEdge(containing: $0) }
+            .forEach { nodes in
+                residualNetwork.flipEdge(containing: nodes)
+            }
         }
         
         while findAugmentingPath() { continue }
