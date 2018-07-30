@@ -53,7 +53,7 @@ public struct FlowNetwork <Node: Hashable> {
                 $0.nodes
                 }.filter {
                     let weight = residualNetwork.weight($0)!
-                    return weight < 0.001 && weight > -0.001
+                    return weight < .leastNormalMagnitude && weight > -.leastNormalMagnitude
                 }.forEach {
                     residualNetwork.flipEdge(at: $0)
             }
