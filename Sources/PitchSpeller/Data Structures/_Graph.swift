@@ -127,14 +127,14 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
     }
     
-    /// - Returns: Array of nodes adjacent to `source` out of the supplied set of `nodes`.
-    func neighbors (of source: Node, from nodes: Set<Node>) -> [Node] {
-        return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
-    }
-    
     /// - Returns: Array of nodes adjacent to `source` out of the supplied array of `nodes`.
     func neighbors (of source: Node, from nodes: [Node]) -> [Node] {
         return neighbors(of: source, from: Set(nodes))
+    }
+    
+    /// - Returns: Array of nodes adjacent to `source` out of the supplied set of `nodes`.
+    func neighbors (of source: Node, from nodes: Set<Node>) -> [Node] {
+        return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
     }
     
     /// - Returns: Array of edges emanating from `source`
