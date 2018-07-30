@@ -77,7 +77,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     var adjacents: [Pair: Weight]
     
     var edges: [Edge] {
-        return adjacents.compactMap { Edge($0.key, withWeight: $0.value) }
+        return adjacents.map(Edge.init)
     }
     
     // MARK: - Instance Methods
@@ -112,33 +112,29 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         adjacents[Pair(source, destination)] = nil
     }
     
+    /// - Returns: Weight of the edge containing this `pair` of nodes if it exists, else nil
+    func weight (_ pair: Pair) -> Weight? {
+        return weight(from: pair.a, to: pair.b)
+    }
+    
     /// - Returns: Weight of the edge from `source` to `destination` if it exists, else nil
     func weight (from source: Node, to destination: Node) -> Weight? {
         return adjacents[Pair(source, destination)]
     }
     
-    func weight (_ pair: Pair) -> Weight? {
-        return weight(from: pair.a, to: pair.b)
-    }
-    
     /// - Returns: Array of nodes adjacent to `source`
     func neighbors (of source: Node) -> [Node] {
-        return nodes.compactMap {
-            guard let _ = adjacents[Pair(source, $0)] else { return nil }
-            return $0
-        }
+        return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
+    }
+    
+    /// - Returns: Array of nodes adjacent to `source` out of the supplied array of `nodes`.
+    func neighbors (of source: Node, from nodes: [Node]) -> [Node] {
+        return neighbors(of: source, from: Set(nodes))
     }
     
     /// - Returns: Array of nodes adjacent to `source` out of the supplied set of `nodes`.
     func neighbors (of source: Node, from nodes: Set<Node>) -> [Node] {
-        return nodes.compactMap {
-            guard let _ = adjacents[Pair(source, $0)] else { return nil }
-            return $0
-        }
-    }
-    
-    func neighbors (of source: Node, from nodes: [Node]) -> [Node] {
-        return neighbors(of: source, from: Set(nodes))
+        return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
     }
     
     /// - Returns: Array of edges emanating from `source`
@@ -192,6 +188,10 @@ extension _Graph where Weight: AsWeight {
     static func unWeightedVersion (of weightedGraph: _Graph) -> _Graph<WithoutWeights, Pair> {
         let adjacents: [Pair: WithoutWeights] = weightedGraph.adjacents.mapValues { _ in .unweighted }
         return _Graph<WithoutWeights, Pair>(weightedGraph.nodes, adjacents)
+    }
+    
+    var unweighted: _Graph<WithoutWeights,Pair> {
+        return .init(nodes, adjacents.mapValues { _ in .unweighted })
     }
 }
 
