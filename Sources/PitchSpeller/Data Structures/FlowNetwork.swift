@@ -85,11 +85,6 @@ public struct FlowNetwork <Node: Hashable> {
         return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
     }
 
-    /// - Returns: A `Graph` composed of the given `nodes`, and corresponding edges in this graph.
-    private func graph(_ nodes: [Node]) -> Graph<Node> {
-        return Graph(graph.edges(nodes))
-    }
-
     // TODO: Consider more (space-)efficient storage of Nodes.
     internal var graph: Graph<Node>
     internal var directedGraph: DirectedGraph<Node>
