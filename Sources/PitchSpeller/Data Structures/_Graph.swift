@@ -209,7 +209,7 @@ extension _Graph where Pair: SwappablePair {
     
     // MARK: - Instance Methods
     
-    mutating func flipEdge (at nodes: Pair) {
+    mutating func flipEdge (containing nodes: Pair) {
         adjacents[nodes.swapped] = adjacents[nodes]
         adjacents[nodes] = nil
     }
