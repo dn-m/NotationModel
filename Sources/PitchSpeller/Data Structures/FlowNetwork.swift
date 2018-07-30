@@ -54,7 +54,7 @@ public struct FlowNetwork <Node: Hashable> {
                 let weight = residualNetwork.weight($0)!
                 return weight < .leastNormalMagnitude && weight > -.leastNormalMagnitude
             }
-            .forEach { residualNetwork.flipEdge(at: $0) }
+            .forEach { residualNetwork.flipEdge(containing: $0) }
         }
         
         while findAugmentingPath() { continue }
