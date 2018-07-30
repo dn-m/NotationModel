@@ -142,6 +142,14 @@ public struct FlowNetwork <Node: Hashable> {
         self.source = source
         self.sink = sink
     }
+    
+    /// Create a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink` nodes.
+    init(_ directedGraph: DirectedGraph<Node>, source: Node, sink: Node) {
+        self.directedGraph = directedGraph
+        self.source = source
+        self.sink = sink
+        self.graph = Graph([:])
+    }
 
     /// - Returns: The set of edges which were saturated (and therefore removed from the residual
     /// network).
