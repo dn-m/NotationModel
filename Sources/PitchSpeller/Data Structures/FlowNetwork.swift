@@ -86,13 +86,6 @@ public struct FlowNetwork <Node: Hashable> {
     internal var sink: Node
 
     // MARK: - Initializers
-
-    /// Create a `FlowNetwork` with the given `graph` and the given `source` and `sink` nodes.
-    public init(_ graph: Graph<Node>, source: Node, sink: Node) {
-        self.directedGraph = DirectedGraph(graph)
-        self.source = source
-        self.sink = sink
-    }
     
     /// Create a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink` nodes.
     init(_ directedGraph: DirectedGraph<Node>, source: Node, sink: Node) {
