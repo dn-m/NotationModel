@@ -106,7 +106,7 @@ extension FlowNetwork where Node == Int {
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
     init(source: Int, sink: Int, internalNodes: [Int]) {
-        let graph = Graph(source: source, sink: sink, internalNodes: internalNodes)
+        let graph = DirectedGraph(source: source, sink: sink, internalNodes: internalNodes)
         self.init(graph, source: -2, sink: -1)
     }
 }
