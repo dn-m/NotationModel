@@ -125,6 +125,16 @@ extension Graph where Node == Int {
     }
 }
 
-extension DirectedGraph where Pair.A == Int {
-    
+extension DirectedGraph where Pair.A == Int, Weight == Double {
+    /// Create a `DirectedGraph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
+    init (source: Int, sink: Int, internalNodes: [Int]) {
+        self.init(Set([source, sink] + internalNodes), [:])
+        for node in internalNodes {
+            insertEdge(from: source, to: node, withWeight: 1)
+            insertEdge(from: node, to: sink, withWeight: 1)
+            for other in internalNodes.lazy.filter({ $0 != node }) {
+                insertEdge(from: node, to: other, withWeight: 1)
+            }
+        }
+    }
 }
