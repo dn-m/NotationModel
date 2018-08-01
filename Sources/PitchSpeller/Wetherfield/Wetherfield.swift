@@ -124,3 +124,7 @@ extension Graph where Node == Int {
         }
     }
 }
+
+extension DirectedGraph where Pair.A == Int {
+    
+}
