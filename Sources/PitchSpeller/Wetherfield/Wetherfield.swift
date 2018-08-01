@@ -111,20 +111,6 @@ extension FlowNetwork where Node == Int {
     }
 }
 
-extension Graph where Node == Int {
-    /// Create a `Graph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
-    init(source: Int, sink: Int, internalNodes: [Int]) {
-        self.init([source, sink] + internalNodes)
-        for node in internalNodes {
-            insertEdge(from: source, to: node, value: 1)
-            insertEdge(from: node, to: sink, value: 1)
-            for other in internalNodes.lazy.filter({ $0 != node }) {
-                insertEdge(from: node, to: other, value: 1)
-            }
-        }
-    }
-}
-
 extension DirectedGraph where Pair.A == Int, Weight == Double {
     /// Create a `DirectedGraph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
     init (source: Int, sink: Int, internalNodes: [Int]) {
