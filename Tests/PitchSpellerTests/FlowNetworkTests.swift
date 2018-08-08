@@ -23,7 +23,7 @@ class FlowNetworkTests: XCTestCase {
         return FlowNetwork(graph, source: "s", sink: "t")
     }
     
-    func assertDuality (_ flowNetwork: FlowNetwork<String>) {
+    func assertDuality<Node> (_ flowNetwork: FlowNetwork<Node>) {
         let minCut = flowNetwork.minimumCut
         let diGraph = flowNetwork.directedGraph
         let cutValue = minCut.0.lazy.map { source in
