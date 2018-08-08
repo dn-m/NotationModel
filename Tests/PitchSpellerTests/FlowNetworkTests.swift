@@ -34,7 +34,7 @@ class FlowNetworkTests: XCTestCase {
         XCTAssertEqual(cutValue, flowNetwork.solvedForMaximumFlow.flow)
     }
     
-    func assertDisconnectedness (_ flowNetwork: FlowNetwork<String>) {
+    func assertDisconnectedness<Node> (_ flowNetwork: FlowNetwork<Node>) {
         let minCut = flowNetwork.minimumCut
         let residualNetwork = flowNetwork.solvedForMaximumFlow.network
         minCut.0.lazy.forEach { source in
