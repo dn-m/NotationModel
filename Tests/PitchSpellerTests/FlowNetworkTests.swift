@@ -22,6 +22,18 @@ class FlowNetworkTests: XCTestCase {
         graph.insertEdge(from: "b", to: "t", withWeight: 4)
         return FlowNetwork(graph, source: "s", sink: "t")
     }
+    
+    func assertDuality (_ flowNetwork: FlowNetwork<String>) {
+        let minCut = flowNetwork.minimumCut
+        let diGraph = flowNetwork.directedGraph
+        let cutValue = minCut.0.lazy.map {
+            let source = $0
+            return diGraph.neighbors(of: source, from: minCut.1)
+                .reduce(0.0, { $0 + diGraph.weight(from: source, to: $1)! })
+        }
+        .reduce(0.0, { $0 + $1 })
+        XCTAssertEqual(cutValue, flowNetwork.solvedForMaximumFlow.flow)
+    }
 
 //    func testMaximumPathFlow() {
 //        var graph = Graph<String>()
