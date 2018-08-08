@@ -34,6 +34,14 @@ class FlowNetworkTests: XCTestCase {
         .reduce(0.0, { $0 + $1 })
         XCTAssertEqual(cutValue, flowNetwork.solvedForMaximumFlow.flow)
     }
+    
+    func assertDisconnectedness (_ flowNetwork: FlowNetwork<String>) {
+        let minCut = flowNetwork.minimumCut
+        let residualNetwork = flowNetwork.solvedForMaximumFlow.network
+        minCut.0.lazy.forEach {
+            XCTAssert(Set(residualNetwork.breadthFirstSearch(from: $0)).isDisjoint(with: minCut.1))
+        }
+    }
 
 //    func testMaximumPathFlow() {
 //        var graph = Graph<String>()
