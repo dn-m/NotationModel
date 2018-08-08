@@ -10,18 +10,18 @@ import XCTest
 
 class FlowNetworkTests: XCTestCase {
 
-//    var simpleFlowNetwork: FlowNetwork<String> {
-//        var graph = Graph<String>()
-//        graph.insertNode("s")
-//        graph.insertNode("t")
-//        graph.insertNode("a")
-//        graph.insertNode("b")
-//        graph.insertEdge(from: "s", to: "a", value: 1)
-//        graph.insertEdge(from: "s", to: "b", value: 2)
-//        graph.insertEdge(from: "a", to: "t", value: 3)
-//        graph.insertEdge(from: "b", to: "t", value: 4)
-//        return FlowNetwork(graph, source: "s", sink: "t")
-//    }
+    var simpleFlowNetwork: FlowNetwork<String> {
+        var graph = DirectedGraph<String>()
+        graph.insertNode("s")
+        graph.insertNode("t")
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertEdge(from: "s", to: "a", withWeight: 1)
+        graph.insertEdge(from: "s", to: "b", withWeight: 2)
+        graph.insertEdge(from: "a", to: "t", withWeight: 3)
+        graph.insertEdge(from: "b", to: "t", withWeight: 4)
+        return FlowNetwork(graph, source: "s", sink: "t")
+    }
 
 //    func testMaximumPathFlow() {
 //        var graph = Graph<String>()
