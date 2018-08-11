@@ -45,9 +45,9 @@ class FlowNetworkTests: XCTestCase {
         }
     }
     
-    func testMinimumCut() {
-        XCTAssertEqual(simpleFlowNetwork.minimumCut.0, Set(["s"]))
-    }
+//    func testMinimumCut() {
+//        XCTAssertEqual(simpleFlowNetwork.minimumCut.0, Set(["s"]))
+//    }
     
     func testRandomNetwork() {
         var randomNetwork = FlowNetwork<Int>(DirectedGraph<Int>([0,1], [:]), source: 0, sink: 1)
