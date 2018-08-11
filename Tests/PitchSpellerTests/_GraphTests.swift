@@ -194,6 +194,19 @@ class _GraphTests: XCTestCase {
         graph.insertEdge(from: "b", to: "t", withWeight: 4.0)
         XCTAssertEqual(graph.shortestUnweightedPath(from: "s", to: "t")!.nodes.count, 3)
     }
+    
+    func testPathAdjacents() {
+        var graph = _Graph<Double, DirectedOver<String>>()
+        graph.insertNode("s")
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertNode("t")
+        graph.insertEdge(from: "s", to: "a", withWeight: 2.0)
+        graph.insertEdge(from: "s", to: "b", withWeight: 1.0)
+        graph.insertEdge(from: "a", to: "t", withWeight: 3.0)
+        graph.insertEdge(from: "b", to: "t", withWeight: 4.0)
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "s", to: "t")!.adjacents.count, 2)
+    }
 //
 //    func testInsertEdgeReplacesEdges() {
 //        var graph = Graph<String>()
