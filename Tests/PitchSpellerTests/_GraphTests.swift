@@ -70,6 +70,14 @@ class _GraphTests: XCTestCase {
         graph.insertEdge(from: 0, to: 1, withWeight: 0.5)
         XCTAssertEqual(graph.weight(from: 0, to: 1), 0.5)
     }
+    
+    func testPairWeight() {
+        var graph = _Graph<Double, DirectedOver<String>>()
+        graph.insertNode("a")
+        graph.insertNode("b")
+        graph.insertEdge(from: "a", to: "b", withWeight: 0.5)
+        XCTAssertEqual(graph.weight(OrderedPair("a", "b")), 0.5)
+    }
 //
     func testRemoveEdge() {
         var graph = _Graph<Double, DirectedOver<String>>()
