@@ -55,8 +55,8 @@ class FlowNetworkTests: XCTestCase {
                 }
             }
         }
-        assertDuality(randomNetwork)
-        assertDisconnectedness(randomNetwork)
+        assertDuality(simpleFlowNetwork)
+        assertDisconnectedness(simpleFlowNetwork)
     }
 
 //    func testMaximumPathFlow() {
