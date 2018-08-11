@@ -40,10 +40,7 @@ public struct FlowNetwork <Node: Hashable> {
         }
             
         func pushFlow (through path: UnweightedGraph<Node>.Path) {
-//            let minimumEdge = (path.adjacents.compactMap(residualNetwork.weight).min())!
-            let adjacents = path.adjacents
-            let weights = adjacents.compactMap(residualNetwork.weight)
-            let minimumEdge = weights.min()!
+            let minimumEdge = (path.adjacents.compactMap(residualNetwork.weight).min())!
             totalFlow += minimumEdge
             path.adjacents.forEach { edge in
                 residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
