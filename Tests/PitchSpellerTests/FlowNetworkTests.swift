@@ -50,17 +50,19 @@ class FlowNetworkTests: XCTestCase {
     }
     
     func testRandomNetwork() {
-        var randomNetwork = FlowNetwork<Int>(DirectedGraph<Int>([0,1], [:]), source: 0, sink: 1)
-        (2..<10).forEach { randomNetwork.directedGraph.insertNode($0) }
-        (0..<10).forEach { source in
-            (0..<10).forEach { destination in
-                if Double.random(in: 0...1) < 0.3 {
-                    randomNetwork.directedGraph.insertEdge(from: source, to: destination, withWeight: Double.random(in: 0...1))
+        (0..<100).forEach { _ in
+            var randomNetwork = FlowNetwork<Int>(DirectedGraph<Int>([0,1], [:]), source: 0, sink: 1)
+            (2..<10).forEach { randomNetwork.directedGraph.insertNode($0) }
+            (0..<10).forEach { source in
+                (0..<10).forEach { destination in
+                    if Double.random(in: 0...1) < 0.3 {
+                        randomNetwork.directedGraph.insertEdge(from: source, to: destination, withWeight: Double.random(in: 0...1))
+                    }
                 }
             }
+            assertDuality(simpleFlowNetwork)
+            assertDisconnectedness(simpleFlowNetwork)
         }
-        assertDuality(simpleFlowNetwork)
-        assertDisconnectedness(simpleFlowNetwork)
     }
 
 //    func testMaximumPathFlow() {
