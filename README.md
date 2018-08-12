@@ -1,7 +1,7 @@
 # NotationModel
 
-[![Build Status](https://travis-ci.org/dn-m/NotationModel.svg?branch=master)](https://travis-ci.org/dn-m/NotationModel)
 ![Swift](https://img.shields.io/badge/Swift-4.2-brightgreen.svg)
+[![Build Status](https://travis-ci.org/dn-m/NotationModel.svg?branch=master)](https://travis-ci.org/dn-m/NotationModel)
 
 The `NotationModel` package defines structures for describing how musical information can be graphically represented, while being agnostic to the concrete method of graphical representation.
 
