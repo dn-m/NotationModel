@@ -97,6 +97,10 @@ public struct FlowNetwork <Node: Hashable> {
 }
 
 extension Sequence {
+    func filterComplement (_ predicate: (Element) -> Bool) -> [Element] {
+        return filter { !predicate($0) }
+    }
+    
     func partition (_ predicate: (Element) -> Bool) -> (whereFalse: [Element], whereTrue: [Element]) {
         return (filter{ !predicate($0) }, filter(predicate))
     }
