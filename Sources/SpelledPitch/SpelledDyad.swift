@@ -6,7 +6,7 @@
 //
 //
 
-import Math
+import Algorithms
 
 /// Dyad of `SpelledPitch` values.
 public struct SpelledDyad {
