@@ -95,3 +95,9 @@ public struct FlowNetwork <Node: Hashable> {
         self.sink = sink
     }
 }
+
+extension Sequence {
+    func partition (_ predicate: (Element) -> Bool) -> (whereFalse: [Element], whereTrue: [Element]) {
+        return (filter{ !predicate($0) }, filter(predicate))
+    }
+}
