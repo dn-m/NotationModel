@@ -6,7 +6,7 @@
 //
 
 import DataStructures
-import Rhythm
+import Duration
 
 /// The beaming information for an entire `Rhythm`.
 public struct Beaming: Equatable {

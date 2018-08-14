@@ -6,15 +6,15 @@
 //
 
 import DataStructures
-import Rhythm
+import Duration
 
 /// A `Rhythm` and its abstract representation.
 public struct SpelledRhythm <T> {
 
     public struct Item {
-        /// Offset proportion within `MetricalDurationTree`.
+        /// Offset proportion within `DurationTree`.
         let offset: Double
-        /// Metrical info (`MetricalDuration` and tie, rest, event context)
+        /// Metrical info (`Duration` and tie, rest, event context)
         let metricalContext: Rhythm<T>.Leaf
         /// Beaming, tie status, dot count info
         let spelling: Rhythm<T>.Spelling.Item
@@ -27,7 +27,7 @@ public struct SpelledRhythm <T> {
 extension SpelledRhythm {
 
     public var base: [Item] {
-        let offsets = rhythm.metricalDurationTree.offsets.map { $0.doubleValue }
+        let offsets = rhythm.durationTree.offsets.map { $0.doubleValue }
         let items = spelling.map { $0 }
         return zip(offsets, rhythm.leaves, items).map(Item.init)
     }

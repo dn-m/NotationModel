@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", from: "0.4.0"),
         .package(url: "https://github.com/dn-m/Math", from: "0.2.0"),
-        .package(url: "https://github.com/dn-m/Music", from: "0.1.0")
+        .package(url: "https://github.com/dn-m/Music", .branch("master"))
     ],
     targets: [
         // Sources
@@ -24,7 +24,7 @@ let package = Package(
         .target(name: "SpelledPitch", dependencies: ["Pitch", "DataStructures"]),
         .target(name: "PitchSpeller", dependencies: ["SpelledPitch"]),
         .target(name: "RhythmBeamer", dependencies: ["SpelledRhythm"]),
-        .target(name: "SpelledRhythm", dependencies: ["Rhythm"]),
+        .target(name: "SpelledRhythm", dependencies: ["Duration"]),
         .target(name: "StaffModel", dependencies: ["PlotModel", "SpelledPitch"]),
 
         // Tests

@@ -7,8 +7,7 @@
 
 import XCTest
 import DataStructures
-import MetricalDuration
-import Rhythm
+import Duration
 import SpelledRhythm
 @testable import RhythmBeamer
 
