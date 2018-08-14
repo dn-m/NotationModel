@@ -44,7 +44,7 @@ public struct FlowNetwork <Node: Hashable> {
             totalFlow += minimumEdge
             path.adjacents.forEach { edge in
                 residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
-                if residualNetwork.weight(edge)! < .leastNormalMagnitude {
+                if residualNetwork.weight(edge)! == 0.0 {
                     residualNetwork.removeEdge(from: edge.a, to: edge.b)
                 }
             }
