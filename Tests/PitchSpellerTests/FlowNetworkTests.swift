@@ -26,9 +26,9 @@ class FlowNetworkTests: XCTestCase {
     func assertDuality<Node> (_ flowNetwork: FlowNetwork<Node>) {
         let minCut = flowNetwork.minimumCut
         let diGraph = flowNetwork.directedGraph
-        let cutValue = minCut.0.lazy.map { source in
-            return diGraph.neighbors(of: source, from: minCut.1).lazy
-                .compactMap { diGraph.weight(from: source, to: $0) }
+        let cutValue = minCut.0.lazy.map { startNode in
+            return diGraph.neighbors(of: startNode, from: minCut.1).lazy
+                .compactMap { diGraph.weight(from: startNode, to: $0) }
                 .reduce(0.0, +)
         }
         .reduce(0.0, +)
