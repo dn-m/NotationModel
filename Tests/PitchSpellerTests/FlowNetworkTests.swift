@@ -34,7 +34,7 @@ class FlowNetworkTests: XCTestCase {
         }
         .reduce(0.0, +)
         XCTAssertLessThanOrEqual(cutValue, solvedFlow + solvedFlow.ulp)
-        XCTAssertGreaterThanOrEqual(cutValue + Double.leastNormalMagnitude, flowNetwork.solvedForMaximumFlow.flow)
+        XCTAssertGreaterThanOrEqual(cutValue + cutValue.ulp, solvedFlow)
     }
     
     func assertDisconnectedness<Node> (_ flowNetwork: FlowNetwork<Node>) {
