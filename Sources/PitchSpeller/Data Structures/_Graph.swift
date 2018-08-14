@@ -117,6 +117,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         return nodes.contains(node)
     }
     
+    /// - Returns: `true` if `edge.nodes` are adjacent in the graph, else `false`
     func contains (_ edge: Pair) -> Bool {
         return adjacents.keys.contains(edge)
     }
