@@ -42,6 +42,10 @@ public struct FlowNetwork <Node: Hashable> {
             let minimumEdge = (path.adjacents.compactMap(residualNetwork.weight).min())!
             path.adjacents.forEach { edge in
                 residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
+                if residualNetwork.adjacents.keys.contains(edge.swapped) {
+                    residualNetwork.updateEdge(edge.swapped, with: { capacity in capacity + minimumEdge })
+                }
+                else { residualNetwork.insertEdge(edge.swapped, minimumEdge) }
                 if residualNetwork.weight(edge)! == 0.0 {
                     residualNetwork.removeEdge(from: edge.a, to: edge.b)
                 }
@@ -70,7 +74,7 @@ public struct FlowNetwork <Node: Hashable> {
         }
         
         while findAugmentingPath() { continue }
-        addBackEdges()
+//        addBackEdges()
         return (computeFlow(), residualNetwork.unweighted)
     }
     
