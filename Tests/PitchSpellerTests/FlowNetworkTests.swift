@@ -26,13 +26,14 @@ class FlowNetworkTests: XCTestCase {
     func assertDuality<Node> (_ flowNetwork: FlowNetwork<Node>) {
         let minCut = flowNetwork.minimumCut
         let diGraph = flowNetwork.directedGraph
+        let solvedFlow = flowNetwork.solvedForMaximumFlow.flow
         let cutValue = minCut.0.lazy.map { startNode in
             return diGraph.neighbors(of: startNode, from: minCut.1).lazy
                 .compactMap { diGraph.weight(from: startNode, to: $0) }
                 .reduce(0.0, +)
         }
         .reduce(0.0, +)
-        XCTAssertLessThanOrEqual(cutValue - Double.leastNormalMagnitude, flowNetwork.solvedForMaximumFlow.flow)
+        XCTAssertLessThanOrEqual(cutValue, solvedFlow + solvedFlow.ulp)
         XCTAssertGreaterThanOrEqual(cutValue + Double.leastNormalMagnitude, flowNetwork.solvedForMaximumFlow.flow)
     }
     
