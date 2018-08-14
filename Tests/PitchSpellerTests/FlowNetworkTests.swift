@@ -27,7 +27,7 @@ class FlowNetworkTests: XCTestCase {
         let minCut = flowNetwork.minimumCut
         let diGraph = flowNetwork.directedGraph
         let cutValue = minCut.0.lazy.map { source in
-            return diGraph.neighbors(of: source, from: minCut.1)
+            return diGraph.neighbors(of: source, from: minCut.1).lazy
                 .reduce(0.0, { $0 + diGraph.weight(from: source, to: $1)! })
         }
         .reduce(0.0, { $0 + $1 })
