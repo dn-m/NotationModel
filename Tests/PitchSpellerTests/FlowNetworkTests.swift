@@ -29,9 +29,9 @@ class FlowNetworkTests: XCTestCase {
         let cutValue = minCut.0.lazy.map { source in
             return diGraph.neighbors(of: source, from: minCut.1).lazy
                 .compactMap { diGraph.weight(from: source, to: $0) }
-                .reduce(0.0, { $0 + $1 })
+                .reduce(0.0, +)
         }
-        .reduce(0.0, { $0 + $1 })
+        .reduce(0.0, +)
         XCTAssertEqual(cutValue, flowNetwork.solvedForMaximumFlow.flow)
     }
     
