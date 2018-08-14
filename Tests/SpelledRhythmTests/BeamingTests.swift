@@ -6,9 +6,7 @@
 //
 
 import XCTest
-import MetricalDuration
-import Rhythm
-@testable import RhythmBeamer
+import Duration
 @testable import SpelledRhythm
 
 class BeamingTests: XCTestCase {

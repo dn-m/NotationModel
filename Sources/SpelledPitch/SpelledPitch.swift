@@ -12,7 +12,6 @@
     import Darwin.C
 #endif
 
-
 import Pitch
 
 public struct SpelledPitch {

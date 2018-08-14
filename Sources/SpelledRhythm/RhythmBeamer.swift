@@ -7,15 +7,13 @@
 
 import DataStructures
 import Math
-import MetricalDuration
-import Rhythm
-import SpelledRhythm
+import Duration
 
 public enum DefaultBeamer {
     /// - Returns: A reasonable `Beaming` for the given `rhythm`.
     public static func beaming <T> (for rhythm: Rhythm<T>) -> Beaming {
         return Beaming(
-            sanitizingBeamletDirections(for: beamingVerticals(rhythm.metricalDurationTree.leaves))
+            sanitizingBeamletDirections(for: beamingVerticals(rhythm.durationTree.leaves))
         )
     }
 }
@@ -28,7 +26,7 @@ extension Beaming {
 }
 
 /// - Returns: An array of `BeamJunction` values for the given `leaves`.
-func beamingVerticals (_ leaves: [MetricalDuration]) -> [Beaming.Point.Vertical] {
+func beamingVerticals (_ leaves: [Duration]) -> [Beaming.Point.Vertical] {
     return beamingVerticals(leaves.map(beamCount))
 }
 
@@ -52,7 +50,7 @@ func vertical(_ prev: Int, _ cur: Int, _ next: Int) -> Beaming.Point.Vertical {
 }
 
 /// - Returns: Amount of beams needed to represent the given `duration`.
-func beamCount(_ duration: MetricalDuration) -> Int {
+func beamCount(_ duration: Duration) -> Int {
     let reduced = duration.reduced
     let subdivisionCount = countTrailingZeros(reduced.denominator) - 2
     guard reduced.numerator > 1 else { return subdivisionCount }
