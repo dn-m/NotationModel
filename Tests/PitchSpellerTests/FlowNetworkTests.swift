@@ -38,10 +38,10 @@ class FlowNetworkTests: XCTestCase {
     func assertDisconnectedness<Node> (_ flowNetwork: FlowNetwork<Node>) {
         let minCut = flowNetwork.minimumCut
         let residualNetwork = flowNetwork.solvedForMaximumFlow.network
-        minCut.0.lazy.forEach { source in
-            minCut.1.lazy.forEach { destination in
-                XCTAssertNil(residualNetwork.weight(from: source, to: destination))
-                XCTAssert(Set(residualNetwork.breadthFirstSearch(from: source)).isDisjoint(with: minCut.1))
+        minCut.0.lazy.forEach { startNode in
+            minCut.1.lazy.forEach { endNode in
+                XCTAssertNil(residualNetwork.weight(from: startNode, to: endNode))
+                XCTAssert(Set(residualNetwork.breadthFirstSearch(from: startNode)).isDisjoint(with: minCut.1))
             }
         }
     }
