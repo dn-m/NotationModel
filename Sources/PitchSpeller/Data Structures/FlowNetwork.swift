@@ -63,7 +63,7 @@ public struct FlowNetwork <Node: Hashable> {
         func computeFlow () -> Double {
             let sourceEdges = directedGraph.neighbors(of: source).lazy
                 .map { OrderedPair(self.source, $0) }
-                .partition(residualNetwork.adjacents.keys.contains)
+                .partition(residualNetwork.contains)
             let edgesPresent = sourceEdges.whereTrue.lazy
                 .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
                 .reduce(0.0, +)
