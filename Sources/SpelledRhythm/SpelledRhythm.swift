@@ -8,7 +8,7 @@
 import DataStructures
 import Duration
 
-/// A `Rhythm` and its abstract representation.
+/// A `Rhythm` and its abstract beaming representation.
 public struct SpelledRhythm <T> {
 
     public struct Item {
