@@ -61,8 +61,8 @@ class FlowNetworkTests: XCTestCase {
                     }
                 }
             }
-            assertDuality(simpleFlowNetwork)
-            assertDisconnectedness(simpleFlowNetwork)
+            assertDuality(randomNetwork)
+            assertDisconnectedness(randomNetwork)
         }
     }
 
