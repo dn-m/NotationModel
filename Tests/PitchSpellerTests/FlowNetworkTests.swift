@@ -41,8 +41,8 @@ class FlowNetworkTests: XCTestCase {
         minCut.0.lazy.forEach { source in
             minCut.1.lazy.forEach { destination in
                 XCTAssertNil(residualNetwork.weight(from: source, to: destination))
+                XCTAssert(Set(residualNetwork.breadthFirstSearch(from: source)).isDisjoint(with: minCut.1))
             }
-            XCTAssert(Set(residualNetwork.breadthFirstSearch(from: source)).isDisjoint(with: minCut.1))
         }
     }
     
