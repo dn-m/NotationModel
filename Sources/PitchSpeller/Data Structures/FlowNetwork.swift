@@ -45,7 +45,7 @@ public struct FlowNetwork <Node: Hashable> {
                 if residualNetwork.weight(edge)! == 0.0 {
                     residualNetwork.removeEdge(from: edge.a, to: edge.b)
                 }
-                if residualNetwork.adjacents.keys.contains(edge.swapped) {
+                if residualNetwork.contains(edge.swapped) {
                     residualNetwork.updateEdge(edge.swapped, with: { capacity in capacity + minimumEdge })
                 }
                 else { residualNetwork.insertEdge(edge.swapped, minimumEdge) }
