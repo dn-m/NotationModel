@@ -14,9 +14,9 @@
         "package": "Music",
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
-          "branch": "master",
+          "branch": null,
           "revision": "6ebb16979bf567708646243de8c490ee5ea44d27",
-          "version": null
+          "version": "0.3.0"
         }
       },
       {
