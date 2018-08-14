@@ -112,6 +112,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         adjacents[Pair(source, destination)] = nil
     }
     
+    /// - Returns: `true` if the graph contains this `node`, else `false`
     func contains (_ node: Node) -> Bool {
         return nodes.contains(node)
     }
