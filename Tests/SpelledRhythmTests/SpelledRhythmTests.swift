@@ -8,7 +8,6 @@
 import XCTest
 import DataStructures
 import Duration
-import RhythmBeamer
 @testable import SpelledRhythm
 
 class SpelledRhythmTests: XCTestCase {
