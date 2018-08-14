@@ -64,7 +64,7 @@ public struct FlowNetwork <Node: Hashable> {
                 .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
                 .reduce(0.0, +)
             let edgesAbsent = sourceEdges.whereFalse.lazy
-                .map(directedGraph.weight)
+                .compactMap(directedGraph.weight)
                 .reduce(0.0, { $0! + $1! })
             return edgesPresent + edgesAbsent
         }
