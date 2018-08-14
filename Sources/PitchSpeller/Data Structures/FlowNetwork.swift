@@ -28,7 +28,6 @@ public struct FlowNetwork <Node: Hashable> {
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
     /// saturated edges flipped and all weights removed.
     var solvedForMaximumFlow: (flow: Double, network: UnweightedGraph<Node>) {
-        var totalFlow = 0.0
         var residualNetwork = directedGraph
         
         func findAugmentingPath () -> Bool {
@@ -41,7 +40,6 @@ public struct FlowNetwork <Node: Hashable> {
             
         func pushFlow (through path: UnweightedGraph<Node>.Path) {
             let minimumEdge = (path.adjacents.compactMap(residualNetwork.weight).min())!
-            totalFlow += minimumEdge
             path.adjacents.forEach { edge in
                 residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
                 if residualNetwork.weight(edge)! < .leastNormalMagnitude {
@@ -75,7 +73,7 @@ public struct FlowNetwork <Node: Hashable> {
         
         while findAugmentingPath() { continue }
         addBackEdges()
-        return (totalFlow, residualNetwork.unweighted)
+        return (computeFlow(), residualNetwork.unweighted)
     }
     
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
