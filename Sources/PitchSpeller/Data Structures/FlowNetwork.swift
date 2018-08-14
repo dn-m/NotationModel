@@ -50,9 +50,7 @@ public struct FlowNetwork <Node: Hashable> {
         
         func addBackEdges () {
             directedGraph.edges.lazy.map { $0.nodes}
-            .filter { nodes in
-                return !residualNetwork.adjacents.keys.contains(nodes)
-            }
+            .filterComplement(residualNetwork.adjacents.keys.contains)
             .forEach { nodes in
                 residualNetwork.flipEdge(containing: nodes)
             }
