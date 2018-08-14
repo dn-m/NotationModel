@@ -8,7 +8,6 @@
 import DataStructures
 import Math
 import Duration
-import SpelledRhythm
 
 public enum DefaultBeamer {
     /// - Returns: A reasonable `Beaming` for the given `rhythm`.
