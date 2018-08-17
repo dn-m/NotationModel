@@ -167,11 +167,11 @@ extension UnorderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a imperfect ordinal. These
+    /// Create an augmented or diminished `OrderedSpelledInterval` with a imperfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleAugmentedUnison = NamedOrderedInterval(.double, .augmented, .second)
-    ///     let tripleDiminishedFourth = NamedOrderedInterval(.triple, .diminished, .third)
+    ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .second)
+    ///     let tripleDiminishedFourth = OrderedSpelledInterval(.triple, .diminished, .third)
     ///
     public init(
         _ degree: Quality.Extended.Degree,
@@ -183,11 +183,11 @@ extension UnorderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect ordinal. These
+    /// Create an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleAugmentedUnison = NamedOrderedInterval(.double, .augmented, .unison)
-    ///     let tripleDiminishedFourth = NamedOrderedInterval(.triple, .diminished, .fourth)
+    ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = OrderedSpelledInterval(.triple, .diminished, .fourth)
     ///
     public init(
         _ degree: Quality.Extended.Degree,

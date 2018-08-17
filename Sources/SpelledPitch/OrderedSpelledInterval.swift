@@ -1,5 +1,5 @@
 //
-//  NamedOrderedInterval.swift
+//  OrderedSpelledInterval.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 1/8/17.
@@ -10,7 +10,7 @@ import Algebra
 import DataStructures
 
 /// Named intervals between two `SpelledPitch` values that honors order between them.
-public struct NamedOrderedInterval {
+public struct OrderedSpelledInterval {
 
     // MARK: - Instance Properties
 
@@ -26,7 +26,7 @@ public struct NamedOrderedInterval {
     public let quality: Quality
 }
 
-extension NamedOrderedInterval {
+extension OrderedSpelledInterval {
 
     // MARK: - Associated Types
 
@@ -34,16 +34,16 @@ extension NamedOrderedInterval {
     public typealias Quality = NamedIntervalQuality
 }
 
-extension NamedOrderedInterval {
+extension OrderedSpelledInterval {
 
     // MARK: - Nested Types
 
-    /// Direction of a `NamedOrderedInterval`.
+    /// Direction of a `OrderedSpelledInterval`.
     public enum Direction: InvertibleEnum {
         case ascending, descending
     }
 
-    /// Ordinal for `NamedOrderedInterval`.
+    /// Ordinal for `OrderedSpelledInterval`.
     public enum Ordinal: NamedIntervalOrdinal {
 
         // MARK: - Cases
@@ -61,7 +61,7 @@ extension NamedOrderedInterval {
         ///     let fifth: Ordinal = .perfect(.fifth)
         ///     fifth.inverse // => .perfect(.fourth)
         ///
-        public var inverse: NamedOrderedInterval.Ordinal {
+        public var inverse: OrderedSpelledInterval.Ordinal {
             switch self {
             case .perfect(let ordinal):
                 return .perfect(ordinal.inverse)
@@ -72,7 +72,7 @@ extension NamedOrderedInterval {
     }
 }
 
-extension NamedOrderedInterval.Ordinal {
+extension OrderedSpelledInterval.Ordinal {
 
     // MARK: - Nested Types
 
@@ -110,21 +110,21 @@ extension NamedOrderedInterval.Ordinal {
     }
 }
 
-extension NamedOrderedInterval {
+extension OrderedSpelledInterval {
 
     // MARK: - Type Properties
 
     /// Unison named ordered interval.
-    public static var unison: NamedOrderedInterval {
+    public static var unison: OrderedSpelledInterval {
         return .init(.perfect, .unison)
     }
 }
 
-extension NamedOrderedInterval {
+extension OrderedSpelledInterval {
 
     // MARK: - Initializers
 
-    /// Create an `NamedOrderedInterval` with a given `quality` and `ordinal`.
+    /// Create an `OrderedSpelledInterval` with a given `quality` and `ordinal`.
     internal init(_ direction: Direction = .ascending, _ quality: Quality, _ ordinal: Ordinal) {
         self.direction = direction
         self.quality = quality
@@ -138,9 +138,9 @@ extension NamedOrderedInterval {
         fatalError()
     }
 
-    /// Create a perfect `NamedOrderedInterval`.
+    /// Create a perfect `OrderedSpelledInterval`.
     ///
-    ///     let perfectFifth = NamedOrderedInterval(.perfect, .fifth)
+    ///     let perfectFifth = OrderedSpelledInterval(.perfect, .fifth)
     ///
     public init(_ quality: Quality.Perfect, _ ordinal: Ordinal.Perfect) {
         self.direction = .ascending
@@ -148,9 +148,9 @@ extension NamedOrderedInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create a perfect `NamedOrderedInterval` with a given `direction`.
+    /// Create a perfect `OrderedSpelledInterval` with a given `direction`.
     ///
-    ///     let descendingPerfectFifth = NamedOrderedInterval(.descending, .perfect, .fifth)
+    ///     let descendingPerfectFifth = OrderedSpelledInterval(.descending, .perfect, .fifth)
     ///
     public init(_ direction: Direction, _ quality: Quality.Perfect, _ ordinal: Ordinal.Perfect) {
         self.direction = direction
@@ -158,12 +158,12 @@ extension NamedOrderedInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an imperfect `NamedOrderedInterval`.
+    /// Create an imperfect `OrderedSpelledInterval`.
     ///
-    ///     let majorSecond = NamedOrderedInterval(.major, .second)
-    ///     let minorThird = NamedOrderedInterval(.minor, .third)
-    ///     let majorSixth = NamedOrderedInterval(.major, .sixth)
-    ///     let minorSeventh = NamedOrderedInterval(.minor, .seventh)
+    ///     let majorSecond = OrderedSpelledInterval(.major, .second)
+    ///     let minorThird = OrderedSpelledInterval(.minor, .third)
+    ///     let majorSixth = OrderedSpelledInterval(.major, .sixth)
+    ///     let minorSeventh = OrderedSpelledInterval(.minor, .seventh)
     ///
     public init(_ quality: Quality.Imperfect, _ ordinal: Ordinal.Imperfect) {
         self.direction = .ascending
@@ -171,12 +171,12 @@ extension NamedOrderedInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an imperfect `NamedOrderedInterval`.
+    /// Create an imperfect `OrderedSpelledInterval`.
     ///
-    ///     let majorSecond = NamedOrderedInterval(.ascending, .major, .second)
-    ///     let minorThird = NamedOrderedInterval(.descending, .minor, .third)
-    ///     let majorSixth = NamedOrderedInterval(.ascending, .major, .sixth)
-    ///     let minorSeventh = NamedOrderedInterval(.descending, .minor, .seventh)
+    ///     let majorSecond = OrderedSpelledInterval(.ascending, .major, .second)
+    ///     let minorThird = OrderedSpelledInterval(.descending, .minor, .third)
+    ///     let majorSixth = OrderedSpelledInterval(.ascending, .major, .sixth)
+    ///     let minorSeventh = OrderedSpelledInterval(.descending, .minor, .seventh)
     ///
     public init(
         _ direction: Direction,
@@ -189,11 +189,11 @@ extension NamedOrderedInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with an imperfect ordinal. These
+    /// Create an augmented or diminished `OrderedSpelledInterval` with an imperfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleDiminishedSecond = NamedOrderedInterval(.double, .diminished, .second)
-    ///     let tripleAugmentedThird = NamedOrderedInterval(.triple, .augmented, .third)
+    ///     let doubleDiminishedSecond = OrderedSpelledInterval(.double, .diminished, .second)
+    ///     let tripleAugmentedThird = OrderedSpelledInterval(.triple, .augmented, .third)
     ///
     public init(
         _ degree: Quality.Extended.Degree,
@@ -206,11 +206,11 @@ extension NamedOrderedInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a given `direction` and an
+    /// Create an augmented or diminished `OrderedSpelledInterval` with a given `direction` and an
     /// imperfect ordinal. These intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleDiminishedSecond = NamedOrderedInterval(.descending, .double, .diminished, .second)
-    ///     let tripleAugmentedThird = NamedOrderedInterval(.ascending, .triple, .augmented, .third)
+    ///     let doubleDiminishedSecond = OrderedSpelledInterval(.descending, .double, .diminished, .second)
+    ///     let tripleAugmentedThird = OrderedSpelledInterval(.ascending, .triple, .augmented, .third)
     ///
     public init(
         _ direction: Direction,
@@ -224,11 +224,11 @@ extension NamedOrderedInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect ordinal. These
+    /// Create an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleAugmentedUnison = NamedOrderedInterval(.double, .augmented, .unison)
-    ///     let tripleDiminishedFourth = NamedOrderedInterval(.triple, .diminished, .fourth)
+    ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = OrderedSpelledInterval(.triple, .diminished, .fourth)
     ///
     public init(
         _ degree: Quality.Extended.Degree,
@@ -241,11 +241,11 @@ extension NamedOrderedInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a given `direction` and a
+    /// Create an augmented or diminished `OrderedSpelledInterval` with a given `direction` and a
     /// perfect ordinal. These intervals can be up to quintuple augmented or diminished.
     ///
-    ///     let doubleAugmentedUnison = NamedOrderedInterval(.descending, .double, .augmented, .unison)
-    ///     let tripleDiminishedFourth = NamedOrderedInterval(.ascending, .triple, .diminished, .fourth)
+    ///     let doubleAugmentedUnison = OrderedSpelledInterval(.descending, .double, .augmented, .unison)
+    ///     let tripleDiminishedFourth = OrderedSpelledInterval(.ascending, .triple, .diminished, .fourth)
     ///
     public init(
         _ direction: Direction,
@@ -259,10 +259,10 @@ extension NamedOrderedInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with an imperfect ordinal.
+    /// Create an augmented or diminished `OrderedSpelledInterval` with an imperfect ordinal.
     ///
-    ///     let diminishedSecond = NamedOrderedInterval(.diminished, .second)
-    ///     let augmentedSixth = NamedOrderedInterval(.augmented, .sixth)
+    ///     let diminishedSecond = OrderedSpelledInterval(.diminished, .second)
+    ///     let augmentedSixth = OrderedSpelledInterval(.augmented, .sixth)
     ///
     public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
         self.direction = .ascending
@@ -270,11 +270,11 @@ extension NamedOrderedInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a given `direction` and an
+    /// Create an augmented or diminished `OrderedSpelledInterval` with a given `direction` and an
     /// imperfect ordinal.
     ///
-    ///     let diminishedSecond = NamedOrderedInterval(.descending, .diminished, .second)
-    ///     let augmentedSixth = NamedOrderedInterval(.ascending, .augmented, .sixth)
+    ///     let diminishedSecond = OrderedSpelledInterval(.descending, .diminished, .second)
+    ///     let augmentedSixth = OrderedSpelledInterval(.ascending, .augmented, .sixth)
     ///
     public init(
         _ direction: Direction,
@@ -287,10 +287,10 @@ extension NamedOrderedInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a perfect ordinal.
+    /// Create an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal.
     ///
-    ///     let augmentedUnison = NamedOrderedInterval(.augmented, .unison)
-    ///     let diminishedFourth = NamedOrderedInterval(.diminished, .fourth)
+    ///     let augmentedUnison = OrderedSpelledInterval(.augmented, .unison)
+    ///     let diminishedFourth = OrderedSpelledInterval(.diminished, .fourth)
     ///
     public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
         self.direction = .ascending
@@ -298,11 +298,11 @@ extension NamedOrderedInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `NamedOrderedInterval` with a given `direction` and a
+    /// Create an augmented or diminished `OrderedSpelledInterval` with a given `direction` and a
     /// perfect ordinal.
     ///
-    ///     let augmentedUnison = NamedOrderedInterval(.ascending, .augmented, .unison)
-    ///     let diminishedFourth = NamedOrderedInterval(.descending, .diminished, .fourth)
+    ///     let augmentedUnison = OrderedSpelledInterval(.ascending, .augmented, .unison)
+    ///     let diminishedFourth = OrderedSpelledInterval(.descending, .diminished, .fourth)
     ///
     public init(
         _ direction: Direction,
@@ -316,13 +316,13 @@ extension NamedOrderedInterval {
     }
 }
 
-extension NamedOrderedInterval.Ordinal: Equatable, Hashable { }
-extension NamedOrderedInterval: Equatable, Hashable { }
+extension OrderedSpelledInterval.Ordinal: Equatable, Hashable { }
+extension OrderedSpelledInterval: Equatable, Hashable { }
 
-extension NamedOrderedInterval: Invertible {
+extension OrderedSpelledInterval: Invertible {
 
     /// - Returns: Inversion of `self`.
-    public var inverse: NamedOrderedInterval {
+    public var inverse: OrderedSpelledInterval {
         return .init(direction.inverse, quality.inverse, ordinal.inverse)
     }
 }

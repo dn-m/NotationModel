@@ -29,7 +29,7 @@ public struct SpelledDyad {
     /// contained herein.
     //
     // FIXME: Implement
-    public var orderedInterval: NamedOrderedInterval {
+    public var orderedInterval: OrderedSpelledInterval {
         fatalError()
     }
     
