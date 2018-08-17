@@ -6,6 +6,7 @@
 //
 //
 
+import Algebra
 import DataStructures
 
 /// Named intervals between two `SpelledPitch` values that honors order between them.
@@ -24,7 +25,7 @@ public struct NamedOrderedInterval {
     }
 
     /// Ordinal for `NamedOrderedInterval`.
-    public enum Ordinal: Invertible {
+    public enum Ordinal: NamedIntervalOrdinal {
 
         /// Perfect `Ordinal` cases.
         public enum Perfect: InvertibleEnum {

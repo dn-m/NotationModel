@@ -6,6 +6,7 @@
 //
 //
 
+import Algebra
 import DataStructures
 
 /// The quality of a `NamedInterval`.
