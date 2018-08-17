@@ -1,12 +1,12 @@
 //
-//  NamedCompoundInterval.swift
+//  CompoundSpelledInterval.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 5/20/18.
 //
 
 /// A `OrderedSpelledInterval` that can be more than an octave displaced.
-public struct NamedCompoundInterval {
+public struct CompoundSpelledInterval {
 
     // MARK: - Instance Properties
 
@@ -18,7 +18,7 @@ public struct NamedCompoundInterval {
 
     // MARK: - Initializers
 
-    /// Create a `NamedCompoundInterval` with the given `interval` and the amount of `octaves` of
+    /// Create a `CompoundSpelledInterval` with the given `interval` and the amount of `octaves` of
     /// displacement.
     public init(_ interval: OrderedSpelledInterval, displacedBy octaves: Int) {
         self.interval = interval
