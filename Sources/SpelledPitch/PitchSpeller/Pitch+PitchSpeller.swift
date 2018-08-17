@@ -6,7 +6,6 @@
 //
 
 import Pitch
-import SpelledPitch
 
 extension Pitch {
 

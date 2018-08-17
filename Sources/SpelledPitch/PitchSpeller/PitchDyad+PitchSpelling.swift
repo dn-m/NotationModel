@@ -7,7 +7,6 @@
 //
 
 import Pitch
-import SpelledPitch
 
 // FIXME: Move to PitchSpeller
 extension Dyad where Element == Pitch {

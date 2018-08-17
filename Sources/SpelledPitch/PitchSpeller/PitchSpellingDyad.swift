@@ -8,7 +8,6 @@
 
 import Math
 import Pitch
-import SpelledPitch
 
 // Pair of two `Pitch.Spelling` objects.
 //
