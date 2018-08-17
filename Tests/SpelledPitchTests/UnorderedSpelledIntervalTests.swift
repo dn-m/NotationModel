@@ -22,6 +22,38 @@ class UnorderedSpelledIntervalTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
 
+    func testInitAugmentedUnison() {
+        let a = Pitch.Spelling(.c)
+        let b = Pitch.Spelling(.c, .sharp)
+        let result = UnorderedSpelledInterval(a,b)
+        let expected = UnorderedSpelledInterval(.augmented, .unison)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testInitDoubleAugmentedUnison() {
+        let a = Pitch.Spelling(.c)
+        let b = Pitch.Spelling(.c, .doubleSharp)
+        let result = UnorderedSpelledInterval(a,b)
+        let expected = UnorderedSpelledInterval(.double, .augmented, .unison)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testInitTripleAugmentedUnison() {
+        let a = Pitch.Spelling(.c, .flat)
+        let b = Pitch.Spelling(.c, .doubleSharp)
+        let result = UnorderedSpelledInterval(a,b)
+        let expected = UnorderedSpelledInterval(.triple, .augmented, .unison)
+        XCTAssertEqual(result, expected)
+    }
+
+    func testInitMinorSecond() {
+        let a = Pitch.Spelling(.c)
+        let b = Pitch.Spelling(.d, .flat)
+        let result = UnorderedSpelledInterval(a,b)
+        let expected = UnorderedSpelledInterval(.minor, .second)
+        XCTAssertEqual(result, expected)
+    }
+
     func testCASharpAugmentedSixthDiminishedThird() {
         let a = Pitch.Spelling(.c)
         let b = Pitch.Spelling(.a, .sharp)

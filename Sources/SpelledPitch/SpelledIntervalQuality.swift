@@ -122,21 +122,68 @@ extension SpelledIntervalQuality {
         func diminishedAndAugmentedThresholds(ordinal: UnorderedSpelledInterval.Ordinal)
             -> (Double, Double)
         {
-            var result: Double {
+            var magnitude: Double {
                 switch ordinal {
-                case .perfect(let perfect):
-                    switch perfect {
-                    case .unison:
-                        return 0.5
-                    case .fourth:
-                        return 1
-                    }
+                case .perfect:
+                    return 1
                 case .imperfect:
                     return 1.5
                 }
             }
+            return (-magnitude, magnitude)
+        }
 
-            return (-result, result)
+        /// The thresholds that need to be crossed in order to manage diminished and augmented
+        /// intervals.
+        let (diminished, augmented) = diminishedAndAugmentedThresholds(ordinal: ordinal)
+
+        switch sanitizedIntervalClass {
+        case diminished - 4:
+            self = .extended(.init(.quintuple, .diminished))
+        case diminished - 3:
+            self = .extended(.init(.quadruple, .diminished))
+        case diminished - 2:
+            self = .extended(.init(.triple, .diminished))
+        case diminished - 1:
+            self = .extended(.init(.double, .diminished))
+        case diminished:
+            self = .extended(.init(.single, .diminished))
+        case augmented:
+            self = .extended(.init(.single, .augmented))
+        case augmented + 1:
+            self = .extended(.init(.double, .augmented))
+        case augmented + 2:
+            self = .extended(.init(.triple, .augmented))
+        case augmented + 3:
+            self = .extended(.init(.quadruple, .augmented))
+        case augmented + 4:
+            self = .extended(.init(.quintuple, .augmented))
+        case -0.5:
+            self = .imperfect(.minor)
+        case +0.0:
+            self = .perfect(.perfect)
+        case +0.5:
+            self = .imperfect(.major)
+        default:
+            fatalError("Not possible to create a NamedIntervalQuality with sanitized interval class \(sanitizedIntervalClass) and \(ordinal)")
+        }
+    }
+
+    /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
+    public init (sanitizedIntervalClass: Double, ordinal: OrderedSpelledInterval.Ordinal) {
+
+        func diminishedAndAugmentedThresholds(ordinal: OrderedSpelledInterval.Ordinal)
+            -> (Double, Double)
+        {
+            var magnitude: Double {
+                switch ordinal {
+                case .perfect:
+                    return 1
+                case .imperfect:
+                    return 1.5
+                }
+            }
+            return (-magnitude, magnitude)
         }
 
         /// The thresholds that need to be crossed in order to manage diminished and augmented

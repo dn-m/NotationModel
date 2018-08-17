@@ -69,18 +69,45 @@ extension UnorderedSpelledInterval.Ordinal {
     // MARK: - Initializers
     
     /// Creates a `UnorderedSpelledInterval` with the given amount of `steps`.
+    #warning("Put Ordinal.Steps into a protocol inheriting from SpelledIntervalOrdinal")
     public init?(steps: Int) {
         switch steps {
-        case 0:
-            self = .perfect(.unison)
-        case 1:
-            self = .imperfect(.second)
-        case 2:
-            self = .imperfect(.third)
-        case 3:
-            self = .perfect(.fourth)
-        default:
-            return nil
+        case 0: self = .perfect(.unison)
+        case 1: self = .imperfect(.second)
+        case 2: self = .imperfect(.third)
+        case 3: self = .perfect(.fourth)
+        default: return nil
+        }
+    }
+
+    /// Create an `UnorderedSpelledInterval` with the given `ordered` spelled interval.
+    ///
+    /// In the case that the `ordered` interval is out of range (e.g., `.fifth`, `.sixth`,
+    /// `.seventh`), the `.inverse` is converted in an unordered interval (e.g., a `.seventh`
+    /// becomes a `.second`).
+    ///
+    public init(_ ordered: OrderedSpelledInterval.Ordinal) {
+        switch ordered {
+        case .perfect(let perfect):
+            switch perfect {
+            case .unison:
+                self = .perfect(.unison)
+            case .fourth:
+                self = .perfect(.fourth)
+            case .fifth:
+                self.init(ordered.inverse)
+            }
+        case .imperfect(let imperfect):
+            switch imperfect {
+            case .second:
+                self = .imperfect(.second)
+            case .third:
+                self = .imperfect(.third)
+            case .sixth:
+                self.init(ordered.inverse)
+            case .seventh:
+                self.init(ordered.inverse)
+            }
         }
     }
 }
@@ -238,18 +265,18 @@ extension UnorderedSpelledInterval: Equatable, Hashable { }
 
 /// - Returns: The two `Pitch.Spelling` values such that the difference between `b` and `a` is less
 /// that the difference between `a` and `b`.
-private func ordered (_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Pitch.Spelling, Pitch.Spelling) {
+func ordered (_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Pitch.Spelling, Pitch.Spelling) {
     let (a,b,_) = swapped(a, b) { mod(steps(a,b), 7) > mod(steps(b,a), 7) }
     return (a,b)
 }
 
 /// - Returns: The steps and interval between the two given `Pitch.Spelling` values.
-private func stepsAndInterval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Int, Double) {
+func stepsAndInterval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Int, Double) {
     return (steps(a,b), interval(a,b))
 }
 
 /// - Returns: Sanitizes the interval class with the given `steps`.
-private func sanitizeIntervalClass(_ intervalClass: Double, steps: Int) -> Double {
+func sanitizeIntervalClass(_ intervalClass: Double, steps: Int) -> Double {
 
     // 1. Retrieve the platonic ideal interval class (neutral second, neutral third)
     let neutral = neutralIntervalClass(steps: steps)
@@ -264,33 +291,27 @@ private func sanitizeIntervalClass(_ intervalClass: Double, steps: Int) -> Doubl
     return steps == 0 ? abs(normalizedDifference) : normalizedDifference
 }
 
-private func neutralIntervalClass(steps: Int) -> Double {
-    
-    assert(steps < 4)
-
-    var neutral: Double {
-        switch steps {
-        case 0: // unison
-            return 0
-        case 1: // second
-            return 1.5
-        case 2: // third
-            return 3.5
-        case 3: // fourth
-            return 5
-        default: // impossible
-            fatalError()
-        }
+func neutralIntervalClass(steps: Int) -> Double {
+    assert((0..<4).contains(steps))
+    switch steps {
+    case 0: // unison
+        return 0
+    case 1: // second
+        return 1.5
+    case 2: // third
+        return 3.5
+    case 3: // fourth
+        return 5
+    default: // impossible
+        fatalError("Impossible")
     }
-    
-    return neutral
 }
 
-private func interval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Double {
+func interval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Double {
     return (b.pitchClass - a.pitchClass).noteNumber.value
 }
 
 /// Modulo 7
-private func steps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Int {
+func steps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Int {
     return mod(b.letterName.steps - a.letterName.steps, 7)
 }

@@ -37,13 +37,15 @@ extension SpelledDyad {
     // MARK: - Computed Properties
 
     /// - Returns: `UnorderedSpelledInterval`, which does not retain the objective order of this
-    /// `SpelledDyad`.
+    /// `SpelledDyad` nor its octave displacement.
     public var unorderedInterval: UnorderedSpelledInterval {
         return UnorderedSpelledInterval(lower.spelling, higher.spelling)
     }
 
     /// - Returns: `OrderedSpelledInterval`, which retains the objective order of this
-    /// `SpelledDyad`.
+    /// `SpelledDyad`, though not its octave displacement.
+    //
+    // FIXME: Return `CompoundSpelledInterval`.
     public var orderedInterval: OrderedSpelledInterval {
         fatalError()
     }

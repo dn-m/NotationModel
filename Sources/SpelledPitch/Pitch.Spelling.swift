@@ -307,7 +307,6 @@ extension Pitch.Spelling {
         self.eighthStep = eighthStep
     }
 
-
     /// Create a `Pitch.Spelling` (without argument labels).
     ///
     /// **Example Usage**

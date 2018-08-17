@@ -40,7 +40,7 @@ extension SpelledPitch {
     // MARK: - Initializers
 
     /// Create a `SpelledPitch` with a given `spelling` in displaced by the given `octave`.
-    public init(_ spelling: Pitch.Spelling, _ octave: Int) {
+    public init(_ spelling: Pitch.Spelling, _ octave: Int = 4) {
         self.spelling = spelling
         self.octave = octave
     }

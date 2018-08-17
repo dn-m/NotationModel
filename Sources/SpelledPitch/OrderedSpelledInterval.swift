@@ -44,7 +44,7 @@ extension OrderedSpelledInterval {
     }
 
     /// Ordinal for `OrderedSpelledInterval`.
-    public enum Ordinal: NamedIntervalOrdinal {
+    public enum Ordinal: SpelledIntervalOrdinal {
 
         // MARK: - Cases
 
@@ -110,6 +110,49 @@ extension OrderedSpelledInterval.Ordinal {
     }
 }
 
+extension OrderedSpelledInterval.Ordinal {
+
+    // MARK: - Initializers
+
+    /// Create a `OrderedSpelledInterval` with the given amount of `steps`.
+    #warning("Put Ordinal.Steps into a protocol inheriting from SpelledIntervalOrdinal")
+    public init?(steps: Int) {
+        switch steps {
+        case 0: self = .perfect(.unison)
+        case 1: self = .imperfect(.second)
+        case 2: self = .imperfect(.third)
+        case 3: self = .perfect(.fourth)
+        case 4: self = .perfect(.fifth)
+        case 5: self = .imperfect(.sixth)
+        case 6: self = .imperfect(.seventh)
+        default: return nil
+        }
+    }
+
+    /// Create an `OrderedSpelledInterval` with the given `unordered` spelled interval.
+    ///
+    /// > This is a lossless conversion.
+    ///
+    public init(_ unordered: UnorderedSpelledInterval.Ordinal) {
+        switch unordered {
+        case .perfect(let perfect):
+            switch perfect {
+            case .unison:
+                self = .perfect(.unison)
+            case .fourth:
+                self = .perfect(.fourth)
+            }
+        case .imperfect(let imperfect):
+            switch imperfect {
+            case .second:
+                self = .imperfect(.second)
+            case .third:
+                self = .imperfect(.third)
+            }
+        }
+    }
+}
+
 extension OrderedSpelledInterval {
 
     // MARK: - Type Properties
@@ -125,8 +168,15 @@ extension OrderedSpelledInterval {
     // MARK: - Initializers
 
     /// Create an `OrderedSpelledInterval` with a given `quality` and `ordinal`.
-    internal init(_ direction: Direction = .ascending, _ quality: Quality, _ ordinal: Ordinal) {
+    internal init(_ direction: Direction, _ quality: Quality, _ ordinal: Ordinal) {
         self.direction = direction
+        self.quality = quality
+        self.ordinal = ordinal
+    }
+
+    /// Create an `OrderedSpelledInterval` with a given `quality` and `ordinal`.
+    internal init(_ quality: Quality, _ ordinal: Ordinal) {
+        self.direction = .ascending
         self.quality = quality
         self.ordinal = ordinal
     }
