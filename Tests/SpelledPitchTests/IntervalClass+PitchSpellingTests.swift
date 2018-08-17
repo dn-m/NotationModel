@@ -8,7 +8,6 @@
 
 import XCTest
 import Pitch
-import SpelledPitch
 
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
