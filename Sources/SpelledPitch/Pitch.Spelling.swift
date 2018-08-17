@@ -370,13 +370,3 @@ extension Pitch.Spelling: CustomStringConvertible {
     }
 }
 
-// FIXME: Move to own file
-// FIXME: Move to PitchSpeller
-extension Pitch.Spelling {
-
-    // MARK: - Spelling Distance
-
-    public var spellingDistance: LineOfFifths.Distance {
-        return LineOfFifths.distance(ofPitchSpelling: self)
-    }
-}

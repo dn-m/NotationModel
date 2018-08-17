@@ -1,6 +1,6 @@
 //
 //  LineOfFifths.swift
-//  SpelledPitch
+//  PitchSpeller
 //
 //  Created by James Bean on 5/19/16.
 //
@@ -8,7 +8,6 @@
 
 import Pitch
 
-// FIXME: Move to PitchSpeller
 public struct LineOfFifths {
     
     public typealias Position = Int
@@ -60,3 +59,11 @@ public struct LineOfFifths {
     }
 }
 
+extension Pitch.Spelling {
+
+    // MARK: - Spelling Distance
+
+    public var spellingDistance: LineOfFifths.Distance {
+        return LineOfFifths.distance(ofPitchSpelling: self)
+    }
+}
