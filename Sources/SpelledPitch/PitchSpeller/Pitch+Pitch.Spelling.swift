@@ -32,7 +32,6 @@ extension Pitch {
     /// - throws: `Pitch.Spelling.Error.InvalidPitchSpellingForPitch` if the given `spelling` is
     /// not appropriate for this `Pitch`.
     ///
-    #warning("Octave adjust: 1")
     public func spelled(with spelling: Pitch.Spelling) throws -> SpelledPitch {
 
         var octave: Int {
