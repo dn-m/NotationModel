@@ -13,21 +13,13 @@ extension Pitch {
     /// Spelled representation of a `Pitch`.
     public struct Spelling {
 
-        // MARK: - Errors
-
-        /// Errors possible when attempting to spell a `Pitch`.
-        //
-        // FIXME: Move to `PitchSpeller`
-        public enum Error: Swift.Error {
-
-            /// If the given `Pitch.Spelling` is not applicable to the given `Pitch`.
-            case invalidSpelling(Pitch, Pitch.Spelling)
-
-            /// If there is no `Pitch.Spelling` found for the given `Pitch`.
-            case noSpellingForPitch(Pitch)
-        }
-
         // MARK: - Instance Properties
+
+        /// `Pitch.Class` represented by this `Pitch.Spelling` value.
+        public var pitchClass: Pitch.Class {
+            let nn = NoteNumber(letterName.pitchClass + quarterStep.rawValue + eighthStep.rawValue)
+            return Pitch.Class(noteNumber: nn)
+        }
 
         /// LetterName of a `Pitch.Spelling`.
         public let letterName: LetterName
@@ -37,81 +29,27 @@ extension Pitch {
 
         /// Coarse resolution of a `Pitch.Spelling`.
         public let quarterStep: QuarterStepModifier
-
-        /// `Pitch.Class` represented by this `Pitch.Spelling` value.
-        public var pitchClass: Pitch.Class {
-            let nn = NoteNumber(letterName.pitchClass + quarterStep.rawValue + eighthStep.rawValue)
-            return Pitch.Class(noteNumber: nn)
-        }
-
-        // MARK: - Initializers
-
-        /**
-         Create a `Pitch.Spelling` (with argument labels).
-
-         **Example:**
-
-         ```
-         let cNatural = Pitch.Spelling(letterName: .c)
-         let aFlat = Pitch.Spelling(letterName: .a, quarterStep: .flat)
-         let gQuarterSharp = Pitch.Spelling(letterName: .g, quarterStep: .quarterSharp)
-         let dQuarterFlatDown = Pitch.Spelling(letterName: .d, quarterStep: .quarterFlat, eighthStep: .down)
-         let bDoubleSharp = Pitch.Spelling(letterName: .b, quarterStep: .doubleSharp)
-         ```
-         */
-        public init(
-            letterName: LetterName,
-            quarterStep: QuarterStepModifier = .natural,
-            eighthStep: EighthStepModifier = .none
-        )
-        {
-            self.letterName = letterName
-            self.quarterStep = quarterStep
-            self.eighthStep = eighthStep
-        }
-
-        /**
-         Create a `Pitch.Spelling` (without argument labels).
-
-         **Example:**
-
-         ```
-         let cNatural = Pitch.Spelling(.c)
-         let aFlat = Pitch.Spelling(.a, .flat)
-         let gQuarterSharp = Pitch.Spelling(.g, .quarterSharp)
-         let dQuarterFlatDown = Pitch.Spelling(.d, .quarterFlat, .down)
-         let bDoubleSharp = Pitch.Spelling(.b, .doubleSharp)
-         ```
-         */
-        public init(
-            _ letterName: LetterName,
-            _ quarterStep: QuarterStepModifier = .natural,
-            _ eighthStep: EighthStepModifier = .none
-        )
-        {
-            self.letterName = letterName
-            self.quarterStep = quarterStep
-            self.eighthStep = eighthStep
-        }
-
-        // MARK: - Instance Methods
-
-        /// - Returns: `true` if this `Pitch.Spelling` can be applied to the given `Pitch`.
-        /// Otherwise, `false`.
-        public func isValid(for pitch: Pitch) -> Bool {
-            return pitch.spellings.contains(self)
-        }
     }
 }
 
-// FIXME: Move to own file
 extension Pitch.Spelling {
 
-    // MARK: - LetterName
+    // MARK: - Errors
 
-    /**
-     Letter name component of a `Pitch.Spelling`
-     */
+    /// Errors possible when attempting to spell a `Pitch`.
+    public enum Error: Swift.Error {
+
+        /// If the given `Pitch.Spelling` is not applicable to the given `Pitch`.
+        case invalidSpelling(Pitch, Pitch.Spelling)
+
+        /// If there is no `Pitch.Spelling` found for the given `Pitch`.
+        case noSpellingForPitch(Pitch)
+    }
+}
+
+extension Pitch.Spelling {
+
+    /// Letter name component of a `Pitch.Spelling`
     public enum LetterName: String {
 
         // MARK: - Cases
@@ -136,55 +74,59 @@ extension Pitch.Spelling {
 
         /// G, sol.
         case g
+    }
+}
 
-        // MARK: - Initializers
+extension Pitch.Spelling.LetterName {
 
-        /**
-         Create a `LetterName` with a given `string` value. Uppercase and lowercase values are
-         accepted here.
-         */
-        public init?(string: String) {
-            switch string {
-            case "a", "A": self = .a
-            case "b", "B": self = .b
-            case "c", "C": self = .c
-            case "d", "D": self = .d
-            case "e", "E": self = .e
-            case "f", "F": self = .f
-            case "g", "G": self = .g
-            default: return nil
-            }
+    // MARK: - Instance Properties
+
+    /// Amount of steps from c
+    public var steps: Int {
+        switch self {
+        case .c: return 0
+        case .d: return 1
+        case .e: return 2
+        case .f: return 3
+        case .g: return 4
+        case .a: return 5
+        case .b: return 6
         }
+    }
 
-        /// Amount of steps from c
-        public var steps: Int {
-            switch self {
-            case .c: return 0
-            case .d: return 1
-            case .e: return 2
-            case .f: return 3
-            case .g: return 4
-            case .a: return 5
-            case .b: return 6
-            }
-        }
-
-        /// Default pitch class for a given `LetterName`.
-        public var pitchClass: Double {
-            switch self {
-            case .c: return 0
-            case .d: return 2
-            case .e: return 4
-            case .f: return 5
-            case .g: return 7
-            case .a: return 9
-            case .b: return 11
-            }
+    /// Default pitch class for a given `LetterName`.
+    public var pitchClass: Double {
+        switch self {
+        case .c: return 0
+        case .d: return 2
+        case .e: return 4
+        case .f: return 5
+        case .g: return 7
+        case .a: return 9
+        case .b: return 11
         }
     }
 }
 
+extension Pitch.Spelling.LetterName {
 
+    // MARK: - Initializers
+
+    /// Create a `LetterName` with a given `string` value. Uppercase and lowercase values are
+    /// accepted here.
+    public init?(string: String) {
+        switch string {
+        case "a", "A": self = .a
+        case "b", "B": self = .b
+        case "c", "C": self = .c
+        case "d", "D": self = .d
+        case "e", "E": self = .e
+        case "f", "F": self = .f
+        case "g", "G": self = .g
+        default: return nil
+        }
+    }
+}
 
 // FIXME: Move to own file
 extension Pitch.Spelling {
@@ -340,6 +282,65 @@ extension Pitch.Spelling {
     }
 }
 
+extension Pitch.Spelling {
+
+    // MARK: - Initializers
+
+    /// Create a `Pitch.Spelling` (with argument labels).
+    ///
+    /// **Example Usage**
+    ///
+    ///     let cNatural = Pitch.Spelling(letterName: .c)
+    ///     let aFlat = Pitch.Spelling(letterName: .a, quarterStep: .flat)
+    ///     let gQuarterSharp = Pitch.Spelling(letterName: .g, quarterStep: .quarterSharp)
+    ///     let dQuarterFlatDown = Pitch.Spelling(letterName: .d, quarterStep: .quarterFlat, eighthStep: .down)
+    ///     let bDoubleSharp = Pitch.Spelling(letterName: .b, quarterStep: .doubleSharp)
+    ///
+    public init(
+        letterName: LetterName,
+        quarterStep: QuarterStepModifier = .natural,
+        eighthStep: EighthStepModifier = .none
+    )
+    {
+        self.letterName = letterName
+        self.quarterStep = quarterStep
+        self.eighthStep = eighthStep
+    }
+
+
+    /// Create a `Pitch.Spelling` (without argument labels).
+    ///
+    /// **Example Usage**
+    ///
+    ///     let cNatural = Pitch.Spelling(.c)
+    ///     let aFlat = Pitch.Spelling(.a, .flat)
+    ///     let gQuarterSharp = Pitch.Spelling(.g, .quarterSharp)
+    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .quarterFlat, .down)
+    ///     let bDoubleSharp = Pitch.Spelling(.b, .doubleSharp)
+    ///
+    public init(
+        _ letterName: LetterName,
+        _ quarterStep: QuarterStepModifier = .natural,
+        _ eighthStep: EighthStepModifier = .none
+    )
+    {
+        self.letterName = letterName
+        self.quarterStep = quarterStep
+        self.eighthStep = eighthStep
+    }
+}
+
+extension Pitch.Spelling {
+
+    // MARK: - Instance Methods
+
+    /// - Returns: `true` if this `Pitch.Spelling` can be applied to the given `Pitch`.
+    /// Otherwise, `false`.
+    public func isValid(for pitch: Pitch) -> Bool {
+        return pitch.spellings.contains(self)
+    }
+}
+
 extension Pitch.Spelling: Equatable, Hashable { }
 
 extension Pitch.Spelling: Comparable {
@@ -369,4 +370,3 @@ extension Pitch.Spelling: CustomStringConvertible {
         return result
     }
 }
-
