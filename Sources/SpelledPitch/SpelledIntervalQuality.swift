@@ -114,7 +114,7 @@ extension SpelledIntervalQuality.Extended {
 
 extension SpelledIntervalQuality {
 
-    // MARK: - Initiaizlers
+    // MARK: - Initializers
 
     /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
     public init (sanitizedIntervalClass: Double, ordinal: UnorderedSpelledInterval.Ordinal) {
