@@ -157,13 +157,13 @@ public struct NamedUnorderedInterval {
     }
     
     /// Create a `NamedUnorderedInterval` with two `SpelledPitch` values.
-    public init(_ a: SpelledPitchClass, _ b: SpelledPitchClass) {
+    public init(_ a: Pitch.Spelling, _ b: Pitch.Spelling) {
         
-        // Ensure that the two `SpelledPitchClass` values are in the correct order to create
+        // Ensure that the two `Pitch.Speller` values are in the correct order to create
         // a relative interval.
         let (a,b) = ordered(a,b)
 
-        // Given the ordered `SpelledPitchClass` values, retrieve the difference in steps of
+        // Given the ordered `Pitch.Speller` values, retrieve the difference in steps of
         // the `Pitch.Spelling.letterName` properties, and the difference between the
         // `noteNumber` properties.
         let (steps, interval) = stepsAndInterval(a,b)
@@ -183,14 +183,14 @@ public struct NamedUnorderedInterval {
 extension NamedUnorderedInterval.Ordinal: Equatable, Hashable { }
 extension NamedUnorderedInterval: Equatable, Hashable { }
 
-private func ordered (_ a: SpelledPitchClass, _ b: SpelledPitchClass)
-    -> (SpelledPitchClass, SpelledPitchClass)
+private func ordered (_ a: Pitch.Spelling, _ b: Pitch.Spelling)
+    -> (Pitch.Spelling, Pitch.Spelling)
 {
     let (a,b,_) = swapped(a, b) { mod(steps(a,b), 7) > mod(steps(b,a), 7) }
     return (a,b)
 }
 
-private func stepsAndInterval(_ a: SpelledPitchClass, _ b: SpelledPitchClass)
+private func stepsAndInterval(_ a: Pitch.Spelling, _ b: Pitch.Spelling)
     -> (Int, Double)
 {
     return (steps(a,b), interval(a,b))
@@ -233,11 +233,11 @@ private func neutralIntervalClass(steps: Int) -> Double {
     return neutral
 }
 
-private func interval(_ a: SpelledPitchClass, _ b: SpelledPitchClass) -> Double {
+private func interval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Double {
     return (b.pitchClass - a.pitchClass).noteNumber.value
 }
 
 /// Modulo 7
-private func steps(_ a: SpelledPitchClass, _ b: SpelledPitchClass) -> Int {
-    return mod(b.spelling.letterName.steps - a.spelling.letterName.steps, 7)
+private func steps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Int {
+    return mod(b.letterName.steps - a.letterName.steps, 7)
 }

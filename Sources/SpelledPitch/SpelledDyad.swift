@@ -22,12 +22,7 @@ public struct SpelledDyad {
     /// - returns: Relative named interval, which does not ordering of `SpelledPitch` values
     /// contained herein.
     public var relativeInterval: NamedUnorderedInterval {
-        
-        // TODO: Make convenience init
-        let lowerSPC = SpelledPitchClass(lower.pitch.class, lower.spelling)
-        let higherSPC = SpelledPitchClass(higher.pitch.class, higher.spelling)
-        
-        return NamedUnorderedInterval(lowerSPC, higherSPC)
+        return NamedUnorderedInterval(lower.spelling, higher.spelling)
     }
     
     /// - returns: Absolute named interval, which honors ordering of `SpelledPitch` values

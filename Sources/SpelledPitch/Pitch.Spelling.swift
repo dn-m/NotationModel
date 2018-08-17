@@ -38,9 +38,7 @@ extension Pitch {
         /// Coarse resolution of a `Pitch.Spelling`.
         public let quarterStep: QuarterStepModifier
 
-        /// `PitchClass` represented by this `Pitch.Spelling` value.
-        ///
-        /// - TODO: Refactor to `PitchClass`.
+        /// `Pitch.Class` represented by this `Pitch.Spelling` value.
         public var pitchClass: Pitch.Class {
             let nn = NoteNumber(letterName.pitchClass + quarterStep.rawValue + eighthStep.rawValue)
             return Pitch.Class(noteNumber: nn)
