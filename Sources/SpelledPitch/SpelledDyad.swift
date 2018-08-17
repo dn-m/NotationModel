@@ -21,7 +21,7 @@ public struct SpelledDyad {
     
     /// - returns: Relative named interval, which does not ordering of `SpelledPitch` values
     /// contained herein.
-    public var relativeInterval: NamedUnorderedInterval {
+    public var unorderedInterval: NamedUnorderedInterval {
         return NamedUnorderedInterval(lower.spelling, higher.spelling)
     }
     
@@ -29,7 +29,7 @@ public struct SpelledDyad {
     /// contained herein.
     //
     // FIXME: Implement
-    public var absoluteInterval: NamedOrderedInterval {
+    public var orderedInterval: NamedOrderedInterval {
         fatalError()
     }
     

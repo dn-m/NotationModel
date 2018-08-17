@@ -12,7 +12,8 @@ public struct LineOfFifths {
     
     public typealias Position = Int
     public typealias Distance = Int
-    
+
+    // FIXME: Implement with an `OrderedSet`.
     private static let positionByPitchSpelling: [Pitch.Spelling: Position] = [
         Pitch.Spelling(.f, .doubleFlat): -14,
         Pitch.Spelling(.c, .doubleFlat): -13,
