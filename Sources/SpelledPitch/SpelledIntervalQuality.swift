@@ -1,5 +1,5 @@
 //
-//  NamedIntervalQuality.swift
+//  SpelledIntervalQuality.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 1/8/17.
@@ -10,7 +10,7 @@ import Algebra
 import DataStructures
 
 /// The quality of a `NamedInterval`.
-public enum NamedIntervalQuality: Invertible {
+public enum SpelledIntervalQuality: Invertible {
 
     // MARK: - Cases
 
@@ -24,7 +24,7 @@ public enum NamedIntervalQuality: Invertible {
     case extended(Extended)
 }
 
-extension NamedIntervalQuality {
+extension SpelledIntervalQuality {
 
     // MARK: - Nested Types
 
@@ -76,7 +76,7 @@ extension NamedIntervalQuality {
     }
 }
 
-extension NamedIntervalQuality.Extended {
+extension SpelledIntervalQuality.Extended {
 
     // MARK: - Nested Types
 
@@ -112,7 +112,7 @@ extension NamedIntervalQuality.Extended {
     }
 }
 
-extension NamedIntervalQuality {
+extension SpelledIntervalQuality {
 
     // MARK: - Initiaizlers
 
@@ -176,12 +176,12 @@ extension NamedIntervalQuality {
     }
 }
 
-extension NamedIntervalQuality {
+extension SpelledIntervalQuality {
 
     // MARK: - Instance Properties
 
     /// - Returns: Inversion of `self`
-    public var inverse: NamedIntervalQuality {
+    public var inverse: SpelledIntervalQuality {
         switch self {
         case .perfect:
             return .perfect(.perfect)
@@ -193,5 +193,5 @@ extension NamedIntervalQuality {
     }
 }
 
-extension NamedIntervalQuality.Extended: Equatable, Hashable { }
-extension NamedIntervalQuality: Equatable, Hashable { }
+extension SpelledIntervalQuality.Extended: Equatable, Hashable { }
+extension SpelledIntervalQuality: Equatable, Hashable { }

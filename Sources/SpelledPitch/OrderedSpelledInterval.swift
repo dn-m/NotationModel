@@ -31,7 +31,7 @@ extension OrderedSpelledInterval {
     // MARK: - Associated Types
 
     /// Type describing the quality of a `NamedInterval`-conforming type.
-    public typealias Quality = NamedIntervalQuality
+    public typealias Quality = SpelledIntervalQuality
 }
 
 extension OrderedSpelledInterval {

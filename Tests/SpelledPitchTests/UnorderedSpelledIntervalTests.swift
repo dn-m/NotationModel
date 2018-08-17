@@ -1,5 +1,5 @@
 //
-//  RelativeNamedIntervalTests.swift
+//  UnorderedSpelledIntervalTests.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 1/8/17.
@@ -10,7 +10,7 @@ import XCTest
 import Pitch
 import SpelledPitch
 
-class RelativeNamedIntervalTests: XCTestCase {
+class UnorderedSpelledIntervalTests: XCTestCase {
 
     typealias Ordinal = UnorderedSpelledInterval.Ordinal
 

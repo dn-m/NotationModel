@@ -15,6 +15,9 @@ public struct CompoundSpelledInterval {
 
     /// The amount of octaves displaced.
     public let octaveDisplacement: Int
+}
+
+extension CompoundSpelledInterval {
 
     // MARK: - Initializers
 

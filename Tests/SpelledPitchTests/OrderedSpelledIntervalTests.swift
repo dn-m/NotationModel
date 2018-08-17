@@ -1,5 +1,5 @@
 //
-//  AbsoluteNamedIntervalTests.swift
+//  OrderedSpelledIntervalTests.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 1/8/17.
@@ -9,7 +9,7 @@
 import XCTest
 import SpelledPitch
 
-class AbsoluteNamedIntervalTests: XCTestCase {
+class OrderedSpelledIntervalTests: XCTestCase {
 
     typealias Ordinal = OrderedSpelledInterval.Ordinal
 

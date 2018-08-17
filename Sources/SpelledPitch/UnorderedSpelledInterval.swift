@@ -44,7 +44,7 @@ extension UnorderedSpelledInterval {
     public typealias PitchType = Pitch.Class
 
     /// Type describing the quality of a `NamedInterval`-conforming type.
-    public typealias Quality = NamedIntervalQuality
+    public typealias Quality = SpelledIntervalQuality
 }
 
 extension UnorderedSpelledInterval {
