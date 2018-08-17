@@ -117,9 +117,9 @@ extension NamedIntervalQuality {
     // MARK: - Initiaizlers
 
     /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
-    public init (sanitizedIntervalClass: Double, ordinal: NamedUnorderedInterval.Ordinal) {
+    public init (sanitizedIntervalClass: Double, ordinal: UnorderedSpelledInterval.Ordinal) {
 
-        func diminishedAndAugmentedThresholds(ordinal: NamedUnorderedInterval.Ordinal)
+        func diminishedAndAugmentedThresholds(ordinal: UnorderedSpelledInterval.Ordinal)
             -> (Double, Double)
         {
             var result: Double {

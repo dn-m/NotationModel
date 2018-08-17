@@ -21,8 +21,8 @@ public struct SpelledDyad {
     
     /// - returns: Relative named interval, which does not ordering of `SpelledPitch` values
     /// contained herein.
-    public var unorderedInterval: NamedUnorderedInterval {
-        return NamedUnorderedInterval(lower.spelling, higher.spelling)
+    public var unorderedInterval: UnorderedSpelledInterval {
+        return UnorderedSpelledInterval(lower.spelling, higher.spelling)
     }
     
     /// - returns: Absolute named interval, which honors ordering of `SpelledPitch` values
