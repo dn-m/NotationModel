@@ -82,16 +82,32 @@ extension NamedIntervalQuality.Extended {
 
     /// Either augmented or diminished
     public enum AugmentedOrDiminished: InvertibleEnum {
+
+        // MARK: - Cases
+
+        /// Augmented extended named interval quality.
         case augmented
+
+        /// Diminished extended named interval quality.
         case diminished
     }
 
     /// The degree to which an `Extended` quality is augmented or diminished.
     public enum Degree {
+
+        /// Single extended named interval quality degree.
         case single
+
+        /// Double extended named interval quality degree.
         case double
+
+        /// Triple extended named interval quality degree.
         case triple
+
+        /// Quadruple extended named interval quality degree.
         case quadruple
+
+        /// Quintuple extended named interval quality degree.
         case quintuple
     }
 }
