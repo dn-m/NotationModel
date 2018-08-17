@@ -24,7 +24,7 @@ class SpelledDyadTests: XCTestCase {
         equals interval: NamedUnorderedInterval?
     )
     {
-        XCTAssertEqual(dyad.relativeInterval, interval)
+        XCTAssertEqual(dyad.unorderedInterval, interval)
     }
 
     func assertNamedOrderedInterval(
@@ -32,7 +32,7 @@ class SpelledDyadTests: XCTestCase {
         equals interval: NamedOrderedInterval?
     )
     {
-        XCTAssertEqual(dyad.absoluteInterval, interval)
+        XCTAssertEqual(dyad.orderedInterval, interval)
     }
 
     let cflat = SpelledPitch(Pitch.Spelling(.c, .flat), 4)
