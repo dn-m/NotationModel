@@ -345,6 +345,10 @@ extension Pitch.Spelling: Equatable, Hashable { }
 
 extension Pitch.Spelling: Comparable {
 
+    // MARK: - Comparable
+
+    /// - Returns: `true` if the left hand `Pitch.Spelling` value is less than the right hand
+    /// `Pitch.Spelling` value.
     public static func < (lhs: Pitch.Spelling, rhs: Pitch.Spelling) -> Bool {
         if lhs.letterName.steps < rhs.letterName.steps { return true }
         if lhs.letterName.steps == rhs.letterName.steps {
