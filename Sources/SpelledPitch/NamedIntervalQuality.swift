@@ -12,23 +12,45 @@ import DataStructures
 /// The quality of a `NamedInterval`.
 public enum NamedIntervalQuality: Invertible {
 
+    // MARK: - Cases
+
+    /// Perfect named interval qualities (perfect).
+    case perfect(Perfect)
+
+    /// Imperfect named interval qualities (major or minor).
+    case imperfect(Imperfect)
+
+    /// Extended named interval qualities (augmented or diminished).
+    case extended(Extended)
+}
+
+extension NamedIntervalQuality {
+
+    // MARK: - Nested Types
+
+    /// A perfect interval quality.
+    public enum Perfect {
+
+        // MARK: - Cases
+
+        /// Perfect named interval quality.
+        case perfect
+    }
+
+    /// An imperfect interval quality.
+    public enum Imperfect: InvertibleEnum {
+
+        // MARK: - Cases
+
+        /// Major named interval quality.
+        case major
+
+        /// Minor named interval quality.
+        case minor
+    }
+
     /// An augmented or diminished named interval quality
     public struct Extended: Invertible {
-
-        /// Either augmented or diminished
-        public enum AugmentedOrDiminished: InvertibleEnum {
-            case augmented
-            case diminished
-        }
-
-        /// The degree to which an `Extended` quality is augmented or diminished.
-        public enum Degree {
-            case single
-            case double
-            case triple
-            case quadruple
-            case quintuple
-        }
 
         // MARK: Instance Properties
 
@@ -52,33 +74,31 @@ public enum NamedIntervalQuality: Invertible {
             self.quality = quality
         }
     }
+}
 
-    /// An imperfect interval quality.
-    public enum Imperfect: InvertibleEnum {
-        case major
-        case minor
+extension NamedIntervalQuality.Extended {
+
+    // MARK: - Nested Types
+
+    /// Either augmented or diminished
+    public enum AugmentedOrDiminished: InvertibleEnum {
+        case augmented
+        case diminished
     }
 
-    /// A perfect interval quality.
-    public enum Perfect {
-        case perfect
+    /// The degree to which an `Extended` quality is augmented or diminished.
+    public enum Degree {
+        case single
+        case double
+        case triple
+        case quadruple
+        case quintuple
     }
+}
 
-    /// - Returns: Inversion of `self`
-    public var inverse: NamedIntervalQuality {
-        switch self {
-        case .perfect:
-            return .perfect(.perfect)
-        case .imperfect(let quality):
-            return .imperfect(quality.inverse)
-        case .extended(let quality):
-            return .extended(quality.inverse)
-        }
-    }
+extension NamedIntervalQuality {
 
-    case perfect(Perfect)
-    case imperfect(Imperfect)
-    case extended(Extended)
+    // MARK: - Initiaizlers
 
     /// Creates a `NamedIntervalQuality` with a "sanitized interval class` and the given `ordinal`.
     public init (sanitizedIntervalClass: Double, ordinal: NamedUnorderedInterval.Ordinal) {
@@ -136,6 +156,23 @@ public enum NamedIntervalQuality: Invertible {
             self = .imperfect(.major)
         default:
             fatalError("Not possible to create a NamedIntervalQuality with sanitized interval class \(sanitizedIntervalClass) and \(ordinal)")
+        }
+    }
+}
+
+extension NamedIntervalQuality {
+
+    // MARK: - Instance Properties
+
+    /// - Returns: Inversion of `self`
+    public var inverse: NamedIntervalQuality {
+        switch self {
+        case .perfect:
+            return .perfect(.perfect)
+        case .imperfect(let quality):
+            return .imperfect(quality.inverse)
+        case .extended(let quality):
+            return .extended(quality.inverse)
         }
     }
 }

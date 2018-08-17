@@ -11,7 +11,7 @@ extension Pitch {
 
     // MARK: - Instance Properties
 
-    /// `true` for `n    atural` spellable `Pitches`. Otherwise `false`.
+    /// `true` for `natural` spellable `Pitches`. Otherwise `false`.
     ///
     ///     Pitch(noteNumber: 60) // => true (.c, .natural)
     ///     Pitch(noteNumber: 68) // => false (.a, .flat) / (.g, .sharp)
@@ -19,7 +19,6 @@ extension Pitch {
     public var canBeSpelledObjectively: Bool {
         return spellings.contains { $0.quarterStep == .natural && $0.eighthStep == .none }
     }
-
 
     /// - TODO: Encapsulate this logic within `PitchSpellings` `struct`.
     // FIXME: Move to PitchSpeller

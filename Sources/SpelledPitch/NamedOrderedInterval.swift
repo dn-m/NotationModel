@@ -12,10 +12,29 @@ import DataStructures
 /// Named intervals between two `SpelledPitch` values that honors order between them.
 public struct NamedOrderedInterval {
 
+    // MARK: - Instance Properties
+
+    /// The direction of a `NamedOrderedInterval`.
+    public let direction: Direction
+
+    /// Ordinal value of a `NamedOrderedInterval`
+    /// (`unison`, `second`, `third`, `fourth`, `fifth`, `sixth`, `seventh`).
+    public let ordinal: Ordinal
+
+    /// /// Quality value of a `NamedUnorderedInterval`
+    /// (`diminished`, `minor`, `perfect`, `major`, `augmented`).
+    public let quality: Quality
+}
+
+extension NamedOrderedInterval {
+
     // MARK: - Associated Types
 
     /// Type describing the quality of a `NamedInterval`-conforming type.
     public typealias Quality = NamedIntervalQuality
+}
+
+extension NamedOrderedInterval {
 
     // MARK: - Nested Types
 
@@ -27,17 +46,12 @@ public struct NamedOrderedInterval {
     /// Ordinal for `NamedOrderedInterval`.
     public enum Ordinal: NamedIntervalOrdinal {
 
-        /// Perfect `Ordinal` cases.
-        public enum Perfect: InvertibleEnum {
-            case fourth, unison, fifth
-        }
+        // MARK: - Cases
 
-        /// Imperfect `Ordinal` cases
-        public enum Imperfect: InvertibleEnum {
-            case second, third, sixth, seventh
-        }
-
+        /// Perfect named ordered interval ordinal (unison, fourth, or fifth).
         case perfect(Perfect)
+
+        /// Imperfect named ordered interval ordinal (second, third, sixth, or seventh).
         case imperfect(Imperfect)
 
         /// - Returns: Inversion of `self`.
@@ -56,26 +70,57 @@ public struct NamedOrderedInterval {
             }
         }
     }
+}
+
+extension NamedOrderedInterval.Ordinal {
+
+    // MARK: - Nested Types
+
+    /// Perfect `Ordinal` cases.
+    public enum Perfect: InvertibleEnum {
+
+        // MARK: - Cases
+
+        /// Fourth perfect named ordered interval ordinal.
+        case fourth
+
+        /// Unison perfect named ordered interval ordinal.
+        case unison
+
+        /// Fifth perfect named ordered interval ordinal.
+        case fifth
+    }
+
+    /// Imperfect `Ordinal` cases
+    public enum Imperfect: InvertibleEnum {
+
+        // MARK: - Cases
+
+        /// Second imperfect named ordered interval ordinal.
+        case second
+
+        /// Third imperfect named ordered interval ordinal.
+        case third
+
+        /// Sixth imperfect named ordered interval ordinal.
+        case sixth
+
+        /// Seventh imperfect named ordered interval ordinal.
+        case seventh
+    }
+}
+
+extension NamedOrderedInterval {
 
     // MARK: - Type Properties
 
-    /// Unison interval.
+    /// Unison named ordered interval.
     public static var unison: NamedOrderedInterval {
         return .init(.perfect, .unison)
     }
+}
 
-    // MARK: - Instance Properties
-
-    /// The direction of a `NamedOrderedInterval`.
-    public let direction: Direction
-
-    /// Ordinal value of a `NamedOrderedInterval`
-    /// (`unison`, `second`, `third`, `fourth`, `fifth`, `sixth`, `seventh`).
-    public let ordinal: Ordinal
-
-    /// /// Quality value of a `NamedUnorderedInterval`
-    /// (`diminished`, `minor`, `perfect`, `major`, `augmented`).
-    public let quality: Quality
+extension NamedOrderedInterval {
 
     // MARK: - Initializers
 
@@ -219,11 +264,7 @@ public struct NamedOrderedInterval {
     ///     let diminishedSecond = NamedOrderedInterval(.diminished, .second)
     ///     let augmentedSixth = NamedOrderedInterval(.augmented, .sixth)
     ///
-    public init(
-        _ quality: Quality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Imperfect
-    )
-    {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Imperfect) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .imperfect(ordinal)
@@ -251,11 +292,7 @@ public struct NamedOrderedInterval {
     ///     let augmentedUnison = NamedOrderedInterval(.augmented, .unison)
     ///     let diminishedFourth = NamedOrderedInterval(.diminished, .fourth)
     ///
-    public init(
-        _ quality: Quality.Extended.AugmentedOrDiminished,
-        _ ordinal: Ordinal.Perfect
-    )
-    {
+    public init(_ quality: Quality.Extended.AugmentedOrDiminished, _ ordinal: Ordinal.Perfect) {
         self.direction = .ascending
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
