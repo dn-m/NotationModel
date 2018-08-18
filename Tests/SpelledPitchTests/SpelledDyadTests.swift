@@ -21,18 +21,18 @@ class SpelledDyadTests: XCTestCase {
 
     func assertNamedUnorderedInterval(
         for dyad: SpelledDyad,
-        equals interval: NamedUnorderedInterval?
+        equals interval: UnorderedSpelledInterval?
     )
     {
-        XCTAssertEqual(dyad.relativeInterval, interval)
+        XCTAssertEqual(dyad.unorderedInterval, interval)
     }
 
     func assertNamedOrderedInterval(
         for dyad: SpelledDyad,
-        equals interval: NamedOrderedInterval?
+        equals interval: OrderedSpelledInterval?
     )
     {
-        XCTAssertEqual(dyad.absoluteInterval, interval)
+        XCTAssertEqual(dyad.orderedInterval, interval)
     }
 
     let cflat = SpelledPitch(Pitch.Spelling(.c, .flat), 4)
@@ -52,24 +52,24 @@ class SpelledDyadTests: XCTestCase {
 
     func testRelativeNamedIntervalPerfectUnison() {
         let spelledDyad = SpelledDyad(c,c)
-        assertNamedUnorderedInterval(for: spelledDyad, equals: NamedUnorderedInterval(.perfect, .unison))
+        assertNamedUnorderedInterval(for: spelledDyad, equals: UnorderedSpelledInterval(.perfect, .unison))
     }
 
     func testRelativeNamedIntervalMinorSecond() {
-        assertNamedUnorderedInterval(for: SpelledDyad(c, dflat), equals: NamedUnorderedInterval(.minor, .second))
+        assertNamedUnorderedInterval(for: SpelledDyad(c, dflat), equals: UnorderedSpelledInterval(.minor, .second))
     }
 
     func testRelativeNamedIntervalAugmentedFourth() {
         assertNamedUnorderedInterval(
             for: SpelledDyad(c, fsharp),
-            equals: NamedUnorderedInterval(.single, .augmented, .fourth)
+            equals: UnorderedSpelledInterval(.single, .augmented, .fourth)
         )
     }
 
     func testRelativeNamedIntervalDiminishedFourth() {
         assertNamedUnorderedInterval(
             for: SpelledDyad(fsharp, bflat),
-            equals: NamedUnorderedInterval(.single, .diminished, .fourth)
+            equals: UnorderedSpelledInterval(.single, .diminished, .fourth)
         )
     }
 
@@ -109,20 +109,20 @@ class SpelledDyadTests: XCTestCase {
     }
 
     func testRelativeNamedIntervalPerfectFourth() {
-        assertNamedUnorderedInterval(for: SpelledDyad(c, g), equals: NamedUnorderedInterval(.perfect, .fourth))
+        assertNamedUnorderedInterval(for: SpelledDyad(c, g), equals: UnorderedSpelledInterval(.perfect, .fourth))
     }
 
     func testDoubleAugmentedSixth() {
         assertNamedUnorderedInterval(
             for: SpelledDyad(bflat, gdoublesharp),
-            equals: NamedUnorderedInterval(.double, .diminished, .third)
+            equals: UnorderedSpelledInterval(.double, .diminished, .third)
         )
     }
 
     func testTripleAugmentedUnison() {
         assertNamedUnorderedInterval(
             for: SpelledDyad(cdoublesharp, cflat),
-            equals: NamedUnorderedInterval(.triple, .augmented, .unison)
+            equals: UnorderedSpelledInterval(.triple, .augmented, .unison)
         )
     }
 }

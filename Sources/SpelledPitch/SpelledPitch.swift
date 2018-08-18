@@ -16,10 +16,41 @@ import Pitch
 
 public struct SpelledPitch {
 
+    // MARK: - Instance Properties
+
+    /// The `Pitch.Spelling` defining a `SpelledPitch`.
+    public let spelling: Pitch.Spelling
+
+    /// The `octave` defining a `SpelledPitch`
+    public let octave: Int
+}
+
+extension SpelledPitch {
+
+    // MARK: - Type Properties
+
+    /// The `.c` `.natural` nearest to the middle of an 88-key piano.
     public static var middleC: SpelledPitch {
         return .init(Pitch.Spelling(.c), 4)
     }
+}
 
+extension SpelledPitch {
+
+    // MARK: - Initializers
+
+    /// Create a `SpelledPitch` with a given `spelling` in displaced by the given `octave`.
+    public init(_ spelling: Pitch.Spelling, _ octave: Int = 4) {
+        self.spelling = spelling
+        self.octave = octave
+    }
+}
+
+extension SpelledPitch {
+
+    // MARK: - Computed Properties
+
+    /// The `Pitch` value of this `SpelledPitch`.
     public var pitch: Pitch {
 
         let pitchClass = spelling.pitchClass
@@ -47,14 +78,6 @@ public struct SpelledPitch {
 
         return .init(noteNumber: NoteNumber(pitchClass.noteNumber.value + octaveDisplacement))
     }
-
-    public let spelling: Pitch.Spelling
-    public let octave: Int
-
-    public init(_ spelling: Pitch.Spelling, _ octave: Int) {
-        self.spelling = spelling
-        self.octave = octave
-    }
 }
 
 extension SpelledPitch: Equatable, Hashable { }
@@ -64,7 +87,7 @@ extension SpelledPitch: Comparable {
     /// - Returns: `true` if the `pitch` value of the `SpelledPitch` value on the left is less than
     /// that of the `SpelledPitch` value on the right. Otherwise, `false`.
     ///
-    /// - note: In the case that both values are in the same octave, `true` is returned if the
+    /// - Note: In the case that both values are in the same octave, `true` is returned if the
     /// spelling of the `SpelledPitch` value on the left is less than that of the `SpelledPitch` on
     /// the right. This manages extreme scenarios such as (c#, dbb), which should have a named
     /// interval of a double diminished second, not a double augmented seventh.

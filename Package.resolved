@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/dn-m/Math",
         "state": {
           "branch": null,
-          "revision": "7617c38637cb8d5f2af3875ca7e5bc463b080d43",
-          "version": "0.3.0"
+          "revision": "044605330704860849ecebbe63d7c8854bc0c42e",
+          "version": "0.4.0"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
           "branch": null,
-          "revision": "6ebb16979bf567708646243de8c490ee5ea44d27",
-          "version": "0.3.0"
+          "revision": "55545a309ed635899c4204b869dde1b7fe7c1ae9",
+          "version": "0.4.0"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
           "branch": null,
-          "revision": "2ac564721eb0aee2e886cec6d69e107ebb556113",
-          "version": "0.8.0"
+          "revision": "ec0c57807165e1d66a7dc74fb1c768b22ccfd209",
+          "version": "0.9.0"
         }
       }
     ]

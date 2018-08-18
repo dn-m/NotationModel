@@ -18,33 +18,36 @@ public struct SpelledDyad {
     
     /// Higher of the two `SpelledPitch` values.
     public let higher: SpelledPitch
-    
-    /// - returns: Relative named interval, which does not ordering of `SpelledPitch` values
-    /// contained herein.
-    public var relativeInterval: NamedUnorderedInterval {
-        
-        // TODO: Make convenience init
-        let lowerSPC = SpelledPitchClass(lower.pitch.class, lower.spelling)
-        let higherSPC = SpelledPitchClass(higher.pitch.class, higher.spelling)
-        
-        return NamedUnorderedInterval(lowerSPC, higherSPC)
-    }
-    
-    /// - returns: Absolute named interval, which honors ordering of `SpelledPitch` values
-    /// contained herein.
-    //
-    // FIXME: Implement
-    public var absoluteInterval: NamedOrderedInterval {
-        fatalError()
-    }
-    
+}
+
+extension SpelledDyad {
+
     // MARK: - Initializers
-    
+
     /// Create a `SpelledDyad` with two `SpelledPitch` values.
     public init(_ lower: SpelledPitch, _ higher: SpelledPitch) {
         let (lower, higher) = ordered(lower, higher)
         self.lower = lower
         self.higher = higher
+    }
+}
+
+extension SpelledDyad {
+
+    // MARK: - Computed Properties
+
+    /// - Returns: `UnorderedSpelledInterval`, which does not retain the objective order of this
+    /// `SpelledDyad` nor its octave displacement.
+    public var unorderedInterval: UnorderedSpelledInterval {
+        return UnorderedSpelledInterval(lower.spelling, higher.spelling)
+    }
+
+    /// - Returns: `OrderedSpelledInterval`, which retains the objective order of this
+    /// `SpelledDyad`, though not its octave displacement.
+    //
+    // FIXME: Return `CompoundSpelledInterval`.
+    public var orderedInterval: OrderedSpelledInterval {
+        fatalError()
     }
 }
 
