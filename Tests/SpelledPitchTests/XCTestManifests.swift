@@ -1,5 +1,30 @@
 import XCTest
 
+extension CompoundSpelledIntervalTests {
+    static let __allTests = [
+        ("testInitTwoSpelledPitchesAscendingMajorTenth", testInitTwoSpelledPitchesAscendingMajorTenth),
+        ("testInitTwoSpelledPitchesAscendingMinorSecond", testInitTwoSpelledPitchesAscendingMinorSecond),
+        ("testInitTwoSpelledPitchesAscendingMinorSixth", testInitTwoSpelledPitchesAscendingMinorSixth),
+        ("testInitTwoSpelledPitchesDescendingMajorSecond", testInitTwoSpelledPitchesDescendingMajorSecond),
+        ("testInitTwoSpelledPitchesDescendingPerfectEleventh", testInitTwoSpelledPitchesDescendingPerfectEleventh),
+        ("testInitTwoSpelledPitchesUnison", testInitTwoSpelledPitchesUnison),
+    ]
+}
+
+extension DyadTests {
+    static let __allTests = [
+        ("testFinestResolutionEighthTone", testFinestResolutionEighthTone),
+        ("testFinestResolutionQuarterTone", testFinestResolutionQuarterTone),
+    ]
+}
+
+extension IntervalClass_PitchSpellingTests {
+    static let __allTests = [
+        ("testOctaveLessComplexThanPerfectFifth", testOctaveLessComplexThanPerfectFifth),
+        ("testPerfectFifthLessComplexThanMajorThird", testPerfectFifthLessComplexThanMajorThird),
+    ]
+}
+
 extension OrderedSpelledIntervalTests {
     static let __allTests = [
         ("testAbsoluteNamedIntervalOrdinalInversion", testAbsoluteNamedIntervalOrdinalInversion),
@@ -12,21 +37,6 @@ extension OrderedSpelledIntervalTests {
         ("testPerfectOrdinalFourthFifthInverse", testPerfectOrdinalFourthFifthInverse),
         ("testPerfectOrdinalUnisonInverse", testPerfectOrdinalUnisonInverse),
         ("testSecondOrdinalInverseSeventh", testSecondOrdinalInverseSeventh),
-    ]
-}
-
-extension IntervalClass_PitchSpellingTests {
-    static let __allTests = [
-        ("testOctaveLessComplexThanPerfectFifth", testOctaveLessComplexThanPerfectFifth),
-        ("testPerfectFifthLessComplexThanMajorThird", testPerfectFifthLessComplexThanMajorThird),
-    ]
-}
-
-extension SpelledIntervalQualityTests {
-    static let __allTests = [
-        ("testInverseDimAug", testInverseDimAug),
-        ("testInverseMinorMajor", testInverseMinorMajor),
-        ("testInversePerfect", testInversePerfect),
     ]
 }
 
@@ -66,15 +76,6 @@ extension Pitch_PitchSpellingTests {
     ]
 }
 
-extension UnorderedSpelledIntervalTests {
-    static let __allTests = [
-        ("testBFlatDSharpAugmentedThird", testBFlatDSharpAugmentedThird),
-        ("testCASharpAugmentedSixthDiminishedThird", testCASharpAugmentedSixthDiminishedThird),
-        ("testDFSharpMajorThird", testDFSharpMajorThird),
-        ("testInitUnisonSamePitchClass", testInitUnisonSamePitchClass),
-    ]
-}
-
 extension SpelledDyadTests {
     static let __allTests = [
         ("testDiminishedThird", testDiminishedThird),
@@ -90,6 +91,14 @@ extension SpelledDyadTests {
         ("testRelativeNamedIntervalPerfectFourth", testRelativeNamedIntervalPerfectFourth),
         ("testRelativeNamedIntervalPerfectUnison", testRelativeNamedIntervalPerfectUnison),
         ("testTripleAugmentedUnison", testTripleAugmentedUnison),
+    ]
+}
+
+extension SpelledIntervalQualityTests {
+    static let __allTests = [
+        ("testInverseDimAug", testInverseDimAug),
+        ("testInverseMinorMajor", testInverseMinorMajor),
+        ("testInversePerfect", testInversePerfect),
     ]
 }
 
@@ -111,19 +120,34 @@ extension SpelledPitchTests {
     ]
 }
 
+extension UnorderedSpelledIntervalTests {
+    static let __allTests = [
+        ("testBFlatDSharpAugmentedThird", testBFlatDSharpAugmentedThird),
+        ("testCASharpAugmentedSixthDiminishedThird", testCASharpAugmentedSixthDiminishedThird),
+        ("testDFSharpMajorThird", testDFSharpMajorThird),
+        ("testInitAugmentedUnison", testInitAugmentedUnison),
+        ("testInitDoubleAugmentedUnison", testInitDoubleAugmentedUnison),
+        ("testInitMinorSecond", testInitMinorSecond),
+        ("testInitTripleAugmentedUnison", testInitTripleAugmentedUnison),
+        ("testInitUnisonSamePitchClass", testInitUnisonSamePitchClass),
+    ]
+}
+
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
-        testCase(OrderedSpelledIntervalTests.__allTests),
+        testCase(CompoundSpelledIntervalTests.__allTests),
+        testCase(DyadTests.__allTests),
         testCase(IntervalClass_PitchSpellingTests.__allTests),
-        testCase(SpelledIntervalQualityTests.__allTests),
+        testCase(OrderedSpelledIntervalTests.__allTests),
         testCase(PitchSet_PitchSpellingTests.__allTests),
         testCase(PitchSpellingTests.__allTests),
         testCase(PitchSpellingsTests.__allTests),
         testCase(Pitch_PitchSpellingTests.__allTests),
-        testCase(UnorderedSpelledIntervalTests.__allTests),
         testCase(SpelledDyadTests.__allTests),
+        testCase(SpelledIntervalQualityTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
+        testCase(UnorderedSpelledIntervalTests.__allTests),
     ]
 }
 #endif
