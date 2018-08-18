@@ -93,22 +93,22 @@ extension SpelledIntervalQuality.Extended {
     }
 
     /// The degree to which an `Extended` quality is augmented or diminished.
-    public enum Degree {
+    public enum Degree: Int {
 
         /// Single extended named interval quality degree.
-        case single
+        case single = 1
 
         /// Double extended named interval quality degree.
-        case double
+        case double = 2
 
         /// Triple extended named interval quality degree.
-        case triple
+        case triple = 3
 
         /// Quadruple extended named interval quality degree.
-        case quadruple
+        case quadruple = 4
 
         /// Quintuple extended named interval quality degree.
-        case quintuple
+        case quintuple = 5
     }
 }
 
