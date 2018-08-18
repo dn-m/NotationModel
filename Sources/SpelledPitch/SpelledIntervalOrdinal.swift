@@ -34,8 +34,9 @@ extension SpelledIntervalOrdinal {
 
     // MARK: - Type Methods
 
-    /// - Returns: 
-    static func sanitize(_ interval: Double, steps: Int) -> Double {
+    /// - Returns: The distance of the given `interval` to the `platonicInterval` from the given
+    /// `steps`.
+    static func platonicDistance(from interval: Double, to steps: Int) -> Double {
         let ideal = Self.platonicInterval(steps: steps)
         let difference = interval - ideal
         let normalized = mod(difference + 6, 12) - 6
