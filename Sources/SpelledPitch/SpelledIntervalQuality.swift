@@ -129,5 +129,7 @@ extension SpelledIntervalQuality {
     }
 }
 
-extension SpelledIntervalQuality.Extended: Equatable, Hashable { }
-extension SpelledIntervalQuality: Equatable, Hashable { }
+extension SpelledIntervalQuality.Extended: Equatable { }
+extension SpelledIntervalQuality.Extended: Hashable { }
+extension SpelledIntervalQuality: Equatable { }
+extension SpelledIntervalQuality: Hashable { }
