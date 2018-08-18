@@ -13,36 +13,36 @@ import SpelledPitch
 class PitchSpellingTests: XCTestCase {
 
     func testInitJustLetterName() {
-        let ps = Pitch.Spelling(letterName: .f)
-        XCTAssert(ps.quarterStep == .natural)
-        XCTAssert(ps.eighthStep == .none)
+        let ps = Pitch.Spelling<EDO12>(.f)
+        XCTAssertEqual(ps.modifier.adjustment, 0)
     }
 
     func testPitchClassCZero() {
-        XCTAssertEqual(Pitch.Spelling(.c).pitchClass, 0)
+        XCTAssertEqual(Pitch.Spelling<EDO24>(.c).pitchClass, 0)
     }
 
     func testPitchClassCSharpOne() {
-        XCTAssertEqual(Pitch.Spelling(.c, .sharp).pitchClass, 1)
+        XCTAssertEqual(Pitch.Spelling<EDO48>(.c, .sharp(1)).pitchClass, 1)
+
     }
 
     func testPitchClassDDoubleFlatZero() {
-        XCTAssertEqual(Pitch.Spelling(.d, .doubleFlat).pitchClass, 0)
+        XCTAssertEqual(Pitch.Spelling<EDO24>(.d, .flat(2)).pitchClass, 0)
     }
 
     func testPitchClassCQuarterSharpZeroPointFive() {
-        XCTAssertEqual(Pitch.Spelling(.c, .quarterSharp).pitchClass, 0.5)
+        XCTAssertEqual(Pitch.Spelling<EDO24>(.c, .quarter, .sharp(1)).pitchClass, 0.5)
     }
 
     func testPitchClassCQuarterSharpDownZeroPointTwoFive() {
-        XCTAssertEqual(Pitch.Spelling(.c, .quarterSharp, .down).pitchClass, 0.25)
+        XCTAssertEqual(Pitch.Spelling(.c, .quarter, .sharp(1), .down).pitchClass, 0.25)
     }
 
     func testPitchClassCQuarterSharpUpZeroPointSevenFive() {
-        XCTAssertEqual(Pitch.Spelling(.c, .quarterSharp, .up).pitchClass, 0.75)
+        XCTAssertEqual(Pitch.Spelling(.c, .quarter, .sharp(1), .up).pitchClass, 0.75)
     }
 
     func testGThreeQuarterFlatUpFivePointSeventyFive() {
-        XCTAssertEqual(Pitch.Spelling(.g, .threeQuarterFlat, .up).pitchClass, 5.75)
+        XCTAssertEqual(Pitch.Spelling(.g, .threeQuarter, .flat(1), .up).pitchClass, 5.75)
     }
 }

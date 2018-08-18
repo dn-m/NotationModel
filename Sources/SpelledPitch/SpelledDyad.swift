@@ -9,15 +9,15 @@
 import Algorithms
 
 /// Dyad of `SpelledPitch` values.
-public struct SpelledDyad {
+public struct SpelledDyad <Temperament: PitchTemperament> {
     
     // MARK: - Instance Properties
     
     /// Lower of the two `SpelledPitch` values.
-    public let lower: SpelledPitch
+    public let lower: SpelledPitch<Temperament>
     
     /// Higher of the two `SpelledPitch` values.
-    public let higher: SpelledPitch
+    public let higher: SpelledPitch<Temperament>
 }
 
 extension SpelledDyad {
@@ -25,14 +25,14 @@ extension SpelledDyad {
     // MARK: - Initializers
 
     /// Create a `SpelledDyad` with two `SpelledPitch` values.
-    public init(_ lower: SpelledPitch, _ higher: SpelledPitch) {
+    public init(_ lower: SpelledPitch<Temperament>, _ higher: SpelledPitch<Temperament>) {
         let (lower, higher) = ordered(lower, higher)
         self.lower = lower
         self.higher = higher
     }
 }
 
-extension SpelledDyad {
+extension SpelledDyad where Temperament == EDO12 {
 
     // MARK: - Computed Properties
 
@@ -51,4 +51,5 @@ extension SpelledDyad {
     }
 }
 
-extension SpelledDyad: Equatable, Hashable { }
+extension SpelledDyad: Equatable where Temperament.Modifier: Equatable { }
+extension SpelledDyad: Hashable where Temperament.Modifier: Hashable { }

@@ -394,24 +394,27 @@ extension OrderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create a `NamedInterval` with two `SpelledPitch` values.
-    internal init(_ a: SpelledPitch, _ b: SpelledPitch) {
+    /// Create a `OrderedSpelledInterval` with two `SpelledPitch` values.
+    internal init(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) {
+        print("before: \(a,b)")
         let (a,b,didSwap) = swapped(a,b) { a > b }
+        print("after: \(a,b)")
+        print("didSwap: \(didSwap)")
         let (interval,steps) = intervalAndSteps(a,b)
         let (quality,ordinal) = OrderedSpelledInterval.qualityAndOrdinal(interval: interval, steps: steps)
         self.init(didSwap ? .descending : .ascending, quality, ordinal)
     }
 }
 
-func intervalAndSteps(_ a: SpelledPitch,  _ b: SpelledPitch) -> (Double,Int) {
+func intervalAndSteps(_ a: SpelledPitch<EDO12>,  _ b: SpelledPitch<EDO12>) -> (Double,Int) {
     return ((interval(a,b), steps(a,b)))
 }
 
-private func interval(_ a: SpelledPitch, _ b: SpelledPitch) -> Double {
+private func interval(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) -> Double {
     return (b.pitch - a.pitch).noteNumber.value
 }
 
-private func steps(_ a: SpelledPitch, _ b: SpelledPitch) -> Int {
+private func steps(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) -> Int {
     return mod(b.spelling.letterName.steps - a.spelling.letterName.steps, 7)
 }
 

@@ -9,12 +9,12 @@
 import Pitch
 
 extension Pitch.Class {
-    
+
     /// All `Pitch.Spelling` structures available for this `PitchClass`.
-    public var spellings: [Pitch.Spelling] {
+    public var spellings: [Pitch.Spelling<EDO48>] {
         return PitchSpellings.spellings(forPitchClass: self) ?? []
     }
-    
+
     /// Spelling priority of a `PitchClass`. Lower values indicate higher priority.
     public var spellingPriority: Int? {
         return UnorderedInterval<Pitch.Class>(noteNumber: noteNumber).spellingPriority

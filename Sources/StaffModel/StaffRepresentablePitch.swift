@@ -10,19 +10,20 @@ import SpelledPitch
 
 public struct StaffRepresentablePitch {
     
-    public let spelledPitch: SpelledPitch
+    public let spelledPitch: SpelledPitch<EDO48>
     public let notehead: Notehead
     public let accidental: Accidental
     
     /// Create a `StaffRepresentablePitch` with a `SpelledPitch` and `Notehead`.
-    public init(_ spelledPitch: SpelledPitch, _ notehead: Notehead = .ord) {
+    public init(_ spelledPitch: SpelledPitch<EDO48>, _ notehead: Notehead = .ord) {
         self.spelledPitch = spelledPitch
         self.notehead = notehead
         self.accidental = Accidental(spelling: spelledPitch.spelling)!
     }
 }
 
-extension StaffRepresentablePitch: Equatable, Hashable { }
+extension StaffRepresentablePitch: Equatable { }
+extension StaffRepresentablePitch: Hashable { }
 
 extension StaffRepresentablePitch: Comparable {
     

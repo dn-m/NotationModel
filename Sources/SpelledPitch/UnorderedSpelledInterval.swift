@@ -236,7 +236,7 @@ extension UnorderedSpelledInterval {
     }
 
     /// Create a `UnorderedSpelledInterval` with two `SpelledPitch` values.
-    public init(_ a: Pitch.Spelling, _ b: Pitch.Spelling) {
+    public init(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) {
         let (a,b) = ordered(a,b)
         let (interval, steps) = intervalAndSteps(a,b)
         self.init(interval: interval, steps: steps)
@@ -248,22 +248,24 @@ extension UnorderedSpelledInterval: Equatable, Hashable { }
 
 /// - Returns: The two `Pitch.Spelling` values such that the difference between `b` and `a` is less
 /// that the difference between `a` and `b`.
-func ordered (_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Pitch.Spelling,Pitch.Spelling) {
+func ordered (_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>)
+    -> (Pitch.Spelling<EDO12>,Pitch.Spelling<EDO12>)
+{
     let (a,b,_) = swapped(a, b) { mod(steps(a,b), 7) > mod(steps(b,a), 7) }
     return (a,b)
 }
 
 /// - Returns: The steps and interval between the two given `Pitch.Spelling` values.
-private func intervalAndSteps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Double,Int) {
+private func intervalAndSteps(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> (Double,Int) {
     return (interval(a,b), steps(a,b))
 }
 
-private func interval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Double {
+private func interval(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> Double {
     return (b.pitchClass - a.pitchClass).noteNumber.value
 }
 
 /// Modulo 7
-private func steps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Int {
+private func steps(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> Int {
     return mod(b.letterName.steps - a.letterName.steps, 7)
 }
 

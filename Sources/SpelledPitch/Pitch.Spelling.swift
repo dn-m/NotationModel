@@ -11,73 +11,52 @@ import Pitch
 extension Pitch {
 
     /// Spelled representation of a `Pitch`.
-    public struct Spelling {
+    public struct Spelling <Temperament: PitchTemperament> {
 
         // MARK: - Instance Properties
 
         /// `Pitch.Class` represented by this `Pitch.Spelling` value.
         public var pitchClass: Pitch.Class {
-            let nn = NoteNumber(letterName.pitchClass + quarterStep.rawValue + eighthStep.rawValue)
-            return Pitch.Class(noteNumber: nn)
+            let noteNumber = NoteNumber(letterName.pitchClass + modifier.adjustment)
+            return Pitch.Class(noteNumber: noteNumber)
         }
 
-        /// LetterName of a `Pitch.Spelling`.
+        /// `LetterName` of a `Pitch.Spelling`.
         public let letterName: LetterName
 
-        /// Fine resolution of a `Pitch.Spelling`.
-        public let eighthStep: EighthStepModifier
-
-        /// Coarse resolution of a `Pitch.Spelling`.
-        public let quarterStep: QuarterStepModifier
+        /// `Modifier` of a `Pitch.Spelling`.
+        public let modifier: Temperament.Modifier
     }
 }
 
-extension Pitch.Spelling {
+/// Letter name component of a `Pitch.Spelling`
+public enum LetterName: String {
 
-    // MARK: - Errors
+    // MARK: - Cases
 
-    /// Errors possible when attempting to spell a `Pitch`.
-    public enum Error: Swift.Error {
+    /// A, la.
+    case a
 
-        /// If the given `Pitch.Spelling` is not applicable to the given `Pitch`.
-        case invalidSpelling(Pitch, Pitch.Spelling)
+    /// B, si.
+    case b
 
-        /// If there is no `Pitch.Spelling` found for the given `Pitch`.
-        case noSpellingForPitch(Pitch)
-    }
+    /// C, do.
+    case c
+
+    /// D, re.
+    case d
+
+    /// E, mi.
+    case e
+
+    /// F, fa.
+    case f
+
+    /// G, sol.
+    case g
 }
 
-extension Pitch.Spelling {
-
-    /// Letter name component of a `Pitch.Spelling`
-    public enum LetterName: String {
-
-        // MARK: - Cases
-
-        /// A, la.
-        case a
-
-        /// B, si.
-        case b
-
-        /// C, do.
-        case c
-
-        /// D, re.
-        case d
-
-        /// E, mi.
-        case e
-
-        /// F, fa.
-        case f
-
-        /// G, sol.
-        case g
-    }
-}
-
-extension Pitch.Spelling.LetterName {
+extension LetterName {
 
     // MARK: - Instance Properties
 
@@ -108,7 +87,7 @@ extension Pitch.Spelling.LetterName {
     }
 }
 
-extension Pitch.Spelling.LetterName {
+extension LetterName {
 
     // MARK: - Initializers
 
@@ -128,235 +107,194 @@ extension Pitch.Spelling.LetterName {
     }
 }
 
-// FIXME: Move to own file
-extension Pitch.Spelling {
+extension Pitch.Spelling where Temperament == EDO12 {
 
-    // MARK: - Coarse Adjustment
-
-    /**
-     Coarse resolution component of a `Pitch.Spelling`.
-     Analogous to the body of an accidental.
-     */
-    public enum QuarterStepModifier: Double, Comparable {
-
-        public enum Direction: Double, Comparable {
-            case none = 0
-            case up = 1
-            case down = -1
-        }
-
-        public enum Resolution: Double, Comparable {
-            case halfStep = 0
-            case quarterStep = 0.5
-        }
-
-        public var direction: Direction {
-            return self == .natural ? .none : rawValue > 0 ? .up : .down
-        }
-
-        public var distance: Double {
-            return abs(rawValue)
-        }
-
-        public var resolution: Resolution {
-            return rawValue.truncatingRemainder(dividingBy: 1) == 0 ? .halfStep : .quarterStep
-        }
-
-        public var quantizedToHalfStep: QuarterStepModifier {
-            switch direction {
-            case .none: return .natural
-            case .up: return .sharp
-            case .down: return .flat
-            }
-        }
-
-        /// Natural.
-        case natural = 0
-
-        /// QuarterSharp.
-        case quarterSharp = 0.5
-
-        /// Sharp.
-        case sharp = 1
-
-        /// ThreeQuarterSharp.
-        case threeQuarterSharp = 1.5
-
-        /// DoubleSharp.
-        case doubleSharp = 2.0
-
-        /// QuarterFlat.
-        case quarterFlat = -0.5
-
-        /// Flat.
-        case flat = -1
-
-        /// ThreeQuarterFlat.
-        case threeQuarterFlat = -1.5
-
-        /// DoubleFlat.
-        case doubleFlat = -2.0
-    }
-
-    // FIXME: Move to PitchSpeller
-    internal func isCompatible(withCoarseDirection direction: QuarterStepModifier.Direction)
-        -> Bool
-    {
-        switch direction {
-        case .none: return true
-        case .up:
-            return isFineAdjustedNatural ? false : (direction == .none || direction == .up)
-        case .down:
-            return isFineAdjustedNatural ? false : (direction == .none || direction == .down)
-        }
-    }
-
-    internal var isFineAdjustedNatural: Bool {
-        return quarterStep == .natural && eighthStep != .none
-    }
-}
-
-// FIXME: Move to own file.
-extension Pitch.Spelling {
-
-    // MARK: - Fine Adjustment
-
-    /**
-     Fine resolution component of a `Pitch.Spelling`.
-     Analogous to an up or down (or lack of) arrow of an accidental.
-
-     - note: In 48-EDO, represents 1/8th-tone adjustment.
-     May be useful for other cases (e.g., -14c adjustment for 5th partial, etc.).
-     */
-    public enum EighthStepModifier: Double {
-
-        /// None.
-        case none = 0
-
-        /// Up.
-        case up = 0.25
-
-        /// Down.
-        case down = -0.25
-    }
-}
-
-// FIXME: Move to own file.
-extension Pitch.Spelling {
-
-    /**
-     Resolution of a `Pitch.Spelling`.
-     */
-    public enum Resolution: Float {
-
-        // chromatic
-        case halfStep = 0
-
-        // quartertone
-        case quarterStep = 0.5
-
-        // eighth-tone
-        case eighthStep = 0.25
-    }
-
-    /// `Resolution` (e.g., halfstep (chromatic), quarter-step, or eighth-step)
-    public var resolution: Resolution {
-        return eighthStep != .none
-            ? .eighthStep
-            : quarterStep.resolution == .quarterStep ? .quarterStep
-            : .halfStep
-    }
-
-    /**
-     - returns: A `Pitch.Spelling` object that is quantized to the given `resolution`.
-     */
-    public func quantized(to resolution: Resolution) -> Pitch.Spelling {
-        switch resolution {
-        case .quarterStep:
-            return Pitch.Spelling(letterName, quarterStep, .none)
-        case .halfStep where quarterStep.resolution == .quarterStep:
-            return Pitch.Spelling(letterName, quarterStep.quantizedToHalfStep, .none)
-        default:
-            return self
-        }
-    }
-}
-
-extension Pitch.Spelling {
-
-    // MARK: - Initializers
-
-    /// Create a `Pitch.Spelling` (with argument labels).
-    ///
-    /// **Example Usage**
-    ///
-    ///     let cNatural = Pitch.Spelling(letterName: .c)
-    ///     let aFlat = Pitch.Spelling(letterName: .a, quarterStep: .flat)
-    ///     let gQuarterSharp = Pitch.Spelling(letterName: .g, quarterStep: .quarterSharp)
-    ///     let dQuarterFlatDown = Pitch.Spelling(letterName: .d, quarterStep: .quarterFlat, eighthStep: .down)
-    ///     let bDoubleSharp = Pitch.Spelling(letterName: .b, quarterStep: .doubleSharp)
-    ///
-    public init(
-        letterName: LetterName,
-        quarterStep: QuarterStepModifier = .natural,
-        eighthStep: EighthStepModifier = .none
-    )
-    {
-        self.letterName = letterName
-        self.quarterStep = quarterStep
-        self.eighthStep = eighthStep
-    }
-
-    /// Create a `Pitch.Spelling` (without argument labels).
+    /// Create a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
     ///     let cNatural = Pitch.Spelling(.c)
     ///     let aFlat = Pitch.Spelling(.a, .flat)
+    ///
+    public init(_ letterName: LetterName) {
+        self.init(letterName: letterName, modifier: .natural)
+    }
+
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let cNatural = Pitch.Spelling(.c)
+    ///     let aFlat = Pitch.Spelling(.a, .flat)
+    ///
+    public init(_ letterName: LetterName, _ modifier: EDO12.Modifier = .natural) {
+        self.init(letterName: letterName, modifier: modifier)
+    }
+}
+
+extension Pitch.Spelling where Temperament == EDO24 {
+
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
     ///     let gQuarterSharp = Pitch.Spelling(.g, .quarterSharp)
-    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .quarterFlat, .down)
+    ///     let bDoubleSharp = Pitch.Spelling(.b, .doubleSharp)
+    ///
+    public init(_ letterName: LetterName) {
+        let edo24 = EDO24.Modifier(edo12: .natural, modifier: .none)
+        self.init(letterName: letterName, modifier: edo24)
+    }
+
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let gQuarterSharp = Pitch.Spelling(.g, .quarterSharp)
+    ///     let bDoubleSharp = Pitch.Spelling(.b, .doubleSharp)
+    ///
+    public init(_ letterName: LetterName, _ halfStep: EDO12.Modifier) {
+        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: .none)
+        self.init(letterName: letterName, modifier: edo24)
+    }
+
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let gQuarterSharp = Pitch.Spelling(.g, .quarterSharp)
     ///     let bDoubleSharp = Pitch.Spelling(.b, .doubleSharp)
     ///
     public init(
         _ letterName: LetterName,
-        _ quarterStep: QuarterStepModifier = .natural,
-        _ eighthStep: EighthStepModifier = .none
+        _ quarterStep: EDO24.Modifier.Modifier,
+        _ halfStep: EDO12.Modifier
     )
     {
-        self.letterName = letterName
-        self.quarterStep = quarterStep
-        self.eighthStep = eighthStep
+        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: quarterStep)
+        self.init(letterName: letterName, modifier: edo24)
     }
 }
 
-extension Pitch.Spelling {
+extension Pitch.Spelling where Temperament == EDO48 {
 
-    // MARK: - Instance Methods
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .flat(1))
+    ///
+    public init(_ letterName: LetterName) {
+        let edo24 = EDO24.Modifier(edo12: .natural, modifier: .none)
+        let edo48 = EDO48.Modifier(edo24: edo24, modifier: .none)
+        self.init(letterName: letterName, modifier: edo48)
+    }
 
-    /// - Returns: `true` if this `Pitch.Spelling` can be applied to the given `Pitch`.
-    /// Otherwise, `false`.
-    public func isValid(for pitch: Pitch) -> Bool {
-        return pitch.spellings.contains(self)
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .flat(1))
+    ///
+    public init(_ letterName: LetterName, _ halfStep: EDO12.Modifier = .natural) {
+        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: .none)
+        let edo48 = EDO48.Modifier(edo24: edo24, modifier: .none)
+        self.init(letterName: letterName, modifier: edo48)
+    }
+
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .quarterFlat, .down)
+    ///
+    public init(
+        _ letterName: LetterName,
+        _ quarterStep: EDO24.Modifier.Modifier = .none,
+        _ halfStep: EDO12.Modifier = .natural
+    )
+    {
+        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: quarterStep)
+        let edo48 = EDO48.Modifier(edo24: edo24, modifier: .none)
+        self.init(letterName: letterName, modifier: edo48)
+    }
+
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .quarterFlat, .down)
+    ///
+    public init(
+        _ letterName: LetterName,
+        _ halfStep: EDO12.Modifier = .natural,
+        _ eighthStep: EDO48.Modifier.Modifier
+    )
+    {
+        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: .none)
+        let edo48 = EDO48.Modifier(edo24: edo24, modifier: eighthStep)
+        self.init(letterName: letterName, modifier: edo48)
+    }
+
+    /// Create a `Pitch.Spelling`.
+    ///
+    /// **Example Usage**
+    ///
+    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .quarterFlat, .down)
+    ///
+    public init(
+        _ letterName: LetterName,
+        _ quarterStep: EDO24.Modifier.Modifier = .none,
+        _ halfStep: EDO12.Modifier = .natural,
+        _ eighthStep: EDO48.Modifier.Modifier
+    )
+    {
+        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: quarterStep)
+        let edo48 = EDO48.Modifier(edo24: edo24, modifier: eighthStep)
+        self.init(letterName: letterName, modifier: edo48)
     }
 }
 
-extension Pitch.Spelling: Equatable, Hashable { }
+extension Pitch.Spelling where Temperament == EDO48 {
+    public init(_ edo24: Pitch.Spelling<EDO24>) {
+        let modifier = EDO48.Modifier(edo24: edo24.modifier, modifier: .none)
+        self.init(letterName: edo24.letterName, modifier: modifier)
+    }
 
-extension Pitch.Spelling: Comparable {
+    public init(_ edo12: Pitch.Spelling<EDO12>) {
+        let edo24 = EDO24.Modifier(edo12: edo12.modifier, modifier: .none)
+        let modifier = EDO48.Modifier(edo24: edo24, modifier: .none)
+        self.init(letterName: edo12.letterName, modifier: modifier)
+    }
+}
+
+extension Pitch.Spelling where Temperament == EDO24 {
+    public init(_ edo12: Pitch.Spelling<EDO12>) {
+        let edo24 = EDO24.Modifier(edo12: edo12.modifier, modifier: .none)
+        self.init(letterName: edo12.letterName, modifier: edo24)
+    }
+}
+
+//extension Pitch.Spelling {
+//
+//    // MARK: - Instance Methods
+//
+//    /// - Returns: `true` if this `Pitch.Spelling` can be applied to the given `Pitch`.
+//    /// Otherwise, `false`.
+//    public func isValid(for pitch: Pitch) -> Bool {
+//        return pitch.spellings.contains(self)
+//    }
+//}
+
+extension Pitch.Spelling: Comparable where Temperament.Modifier: Comparable {
 
     // MARK: - Comparable
 
     /// - Returns: `true` if the left hand `Pitch.Spelling` value is less than the right hand
     /// `Pitch.Spelling` value.
-    public static func < (lhs: Pitch.Spelling, rhs: Pitch.Spelling) -> Bool {
-        if lhs.letterName.steps < rhs.letterName.steps { return true }
-        if lhs.letterName.steps == rhs.letterName.steps {
-            if lhs.quarterStep.rawValue < rhs.quarterStep.rawValue { return true }
-            if lhs.quarterStep.rawValue == rhs.quarterStep.rawValue {
-                if lhs.eighthStep.rawValue < rhs.eighthStep.rawValue { return true }
-            }
-        }
-        return false
+    public static func < (lhs: Pitch.Spelling<Temperament>, rhs: Pitch.Spelling<Temperament>) -> Bool {
+        if lhs.letterName.steps == rhs.letterName.steps { return lhs.modifier < rhs.modifier }
+        return lhs.letterName.steps < rhs.letterName.steps
     }
 }
 
@@ -368,8 +306,124 @@ extension Pitch.Spelling: CustomStringConvertible {
     public var description: String {
         var result = ""
         result += "\(letterName)"
-        if quarterStep != .natural { result += " \(quarterStep)" }
-        if eighthStep != .none { result += " \(eighthStep)" }
+
+//        if quarterStep != .natural { result += " \(quarterStep)" }
+//        if eighthStep != .none { result += " \(eighthStep)" }
         return result
+    }
+}
+
+extension Pitch.Spelling: Equatable where Temperament.Modifier: Equatable { }
+extension Pitch.Spelling: Hashable where Temperament.Modifier: Hashable { }
+
+public protocol PitchTemperament {
+    associatedtype Modifier: PitchSpellingModifier
+}
+
+public protocol PitchSpellingModifier: Comparable, Hashable, CustomStringConvertible {
+    var adjustment: Double { get }
+}
+
+extension PitchSpellingModifier {
+    public var hashValue: Int {
+        return adjustment.hashValue
+    }
+}
+
+extension PitchSpellingModifier {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.adjustment == rhs.adjustment
+    }
+}
+
+extension PitchSpellingModifier {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        return lhs.adjustment < rhs.adjustment
+    }
+}
+
+public enum EDO12: PitchTemperament {
+
+    public enum Modifier: PitchSpellingModifier {
+
+        case natural
+        case sharp(Int)
+        case flat(Int)
+
+        public var adjustment: Double {
+            switch self {
+            case .natural: return 0
+            case .sharp(let count): return Double(count)
+            case .flat(let count): return -Double(count)
+            }
+        }
+    }
+}
+
+extension EDO12.Modifier: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .natural: return "natural"
+        case .sharp(let count): return "sharp \(count)"
+        case .flat(let count): return "flat: \(count)"
+        }
+    }
+}
+
+public struct EDO24: PitchTemperament {
+
+    public struct Modifier: PitchSpellingModifier {
+        public enum Modifier: Double {
+            case quarter = 0.5
+            case none = 1
+            case threeQuarter = 1.5
+        }
+
+        public let edo12: EDO12.Modifier
+        public let modifier: Modifier
+        public var adjustment: Double { return edo12.adjustment * modifier.rawValue }
+    }
+}
+
+extension EDO24.Modifier: CustomStringConvertible {
+    public var description: String {
+        var string: String? {
+            switch self.modifier {
+            case .quarter: return "quarter"
+            case .none: return nil
+            case .threeQuarter: return "three quarter"
+            }
+        }
+        return [string, edo12.description].compactMap { $0 }.joined(separator: " ")
+    }
+}
+
+public struct EDO48: PitchTemperament {
+
+    public struct Modifier: PitchSpellingModifier {
+
+        public enum Modifier: Double {
+            case up = 0.25
+            case none = 0
+            case down = -0.25
+
+        }
+
+        public let edo24: EDO24.Modifier
+        public let modifier: Modifier
+        public var adjustment: Double { return edo24.adjustment + modifier.rawValue }
+    }
+}
+
+extension EDO48.Modifier: CustomStringConvertible {
+    public var description: String {
+        var string: String? {
+            switch self.modifier {
+            case .down: return "down"
+            case .none: return nil
+            case .up: return "up"
+            }
+        }
+        return [string, edo24.description].compactMap { $0 }.joined(separator: " ")
     }
 }

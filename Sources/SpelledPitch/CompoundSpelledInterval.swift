@@ -50,7 +50,7 @@ extension CompoundSpelledInterval {
     }
 
     /// Create a `CompoundSpelledInterval` with the two given `SpelledPitch` values.
-    public init(_ a: SpelledPitch, _ b: SpelledPitch) {
+    public init(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) {
         self.init(OrderedSpelledInterval(a,b), displacedBy: abs(b.octave - a.octave))
     }
 }
