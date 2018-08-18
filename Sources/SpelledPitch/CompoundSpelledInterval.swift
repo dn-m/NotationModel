@@ -10,15 +10,26 @@ import Algorithms
 import Pitch
 
 /// A `OrderedSpelledInterval` that can be more than an octave displaced.
-public struct CompoundSpelledInterval {
+public struct CompoundSpelledInterval: SpelledInterval {
 
     // MARK: - Instance Properties
 
     /// The base interval.
-    public let interval: OrderedSpelledInterval
+    public let interval: Interval
 
     /// The amount of octaves displaced.
     public let octaveDisplacement: Int
+}
+
+extension CompoundSpelledInterval {
+
+    // MARK: - Associated Types
+
+    /// `OrderedSpelledInterval`.
+    public typealias Interval = OrderedSpelledInterval
+
+    /// `OrderedSpelledInterval.Ordinal`.
+    public typealias Ordinal = Interval.Ordinal
 }
 
 extension CompoundSpelledInterval {
@@ -32,47 +43,17 @@ extension CompoundSpelledInterval {
         self.octaveDisplacement = octaves
     }
 
+    /// Create a `CompoundSpelledInterval` with the given `quality` and the given `ordinal`, with
+    /// no octave displacement.
+    public init(_ quality: SpelledIntervalQuality, _ ordinal: Ordinal) {
+        self.init(OrderedSpelledInterval(quality,ordinal))
+    }
+
     /// Create a `CompoundSpelledInterval` with the two given `SpelledPitch` values.
     public init(_ a: SpelledPitch, _ b: SpelledPitch) {
-        let (a,b,didSwap) = swapped(a,b) { a > b }
-        let steps = mod(b.spelling.letterName.steps - a.spelling.letterName.steps, 7)
-        let interval = (b.pitch - a.pitch).noteNumber.value
-        let neutral = neutralInterval(steps: steps)
-        let difference = interval - neutral
-        let normalizedDifference = mod(difference + 6, 12) - 6
-        let sanitizedInterval = steps == 0 ? abs(normalizedDifference) : normalizedDifference
-        let ordinal = OrderedSpelledInterval.Ordinal(steps: steps)!
-        let quality = OrderedSpelledInterval.Quality(
-            sanitizedIntervalClass: sanitizedInterval,
-            ordinal: ordinal
-        )
-        let direction: OrderedSpelledInterval.Direction = didSwap ? .descending : .ascending
-        let orderedInterval = OrderedSpelledInterval(direction, quality, ordinal)
-        self.init(orderedInterval, displacedBy: b.octave - a.octave)
+        self.init(OrderedSpelledInterval(a,b), displacedBy: abs(b.octave - a.octave))
     }
 }
 
 extension CompoundSpelledInterval: Equatable { }
 extension CompoundSpelledInterval: Hashable { }
-
-func neutralInterval(steps: Int) -> Double {
-    assert((0..<7).contains(steps))
-    switch steps {
-    case 0:
-        return 0
-    case 1:
-        return 1.5
-    case 2:
-        return 3.5
-    case 3:
-        return 5
-    case 4:
-        return 7
-    case 5:
-        return 8.5
-    case 6:
-        return 10.5
-    default:
-        fatalError("Impossible")
-    }
-}

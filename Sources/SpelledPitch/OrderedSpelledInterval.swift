@@ -7,10 +7,13 @@
 //
 
 import Algebra
+import Math
 import DataStructures
+import Algorithms
+import Pitch
 
 /// Named intervals between two `SpelledPitch` values that honors order between them.
-public struct OrderedSpelledInterval {
+public struct OrderedSpelledInterval: SpelledInterval {
 
     // MARK: - Instance Properties
 
@@ -115,7 +118,6 @@ extension OrderedSpelledInterval.Ordinal {
     // MARK: - Initializers
 
     /// Create a `OrderedSpelledInterval` with the given amount of `steps`.
-    #warning("Put Ordinal.Steps into a protocol inheriting from SpelledIntervalOrdinal")
     public init?(steps: Int) {
         switch steps {
         case 0: self = .perfect(.unison)
@@ -153,6 +155,40 @@ extension OrderedSpelledInterval.Ordinal {
     }
 }
 
+extension OrderedSpelledInterval.Ordinal {
+    var platonicThreshold: Double {
+        switch self {
+        case .perfect:
+            return 1
+        case .imperfect:
+            return 1.5
+        }
+    }
+
+    static func platonicInterval(steps: Int) -> Double {
+        assert((0..<7).contains(steps))
+        switch steps {
+        case 0:
+            return 0
+        case 1:
+            return 1.5
+        case 2:
+            return 3.5
+        case 3:
+            return 5
+        case 4:
+            return 7
+        case 5:
+            return 8.5
+        case 6:
+            return 10.5
+        default:
+            fatalError("Impossible")
+        }
+    }
+}
+
+
 extension OrderedSpelledInterval {
 
     // MARK: - Type Properties
@@ -179,13 +215,6 @@ extension OrderedSpelledInterval {
         self.direction = .ascending
         self.quality = quality
         self.ordinal = ordinal
-    }
-
-    /// Create a `NamedInterval` with two `SpelledPitch` values.
-    ///
-    /// - TODO: Implement!
-    internal init(_ a: SpelledPitch, _ b: SpelledPitch) {
-        fatalError()
     }
 
     /// Create a perfect `OrderedSpelledInterval`.
@@ -364,6 +393,26 @@ extension OrderedSpelledInterval {
         self.quality = .extended(.init(.single, quality))
         self.ordinal = .perfect(ordinal)
     }
+
+    /// Create a `NamedInterval` with two `SpelledPitch` values.
+    internal init(_ a: SpelledPitch, _ b: SpelledPitch) {
+        let (a,b,didSwap) = swapped(a,b) { a > b }
+        let (interval,steps) = intervalAndSteps(a,b)
+        let (quality,ordinal) = OrderedSpelledInterval.qualityAndOrdinal(interval: interval, steps: steps)
+        self.init(didSwap ? .descending : .ascending, quality, ordinal)
+    }
+}
+
+func intervalAndSteps(_ a: SpelledPitch,  _ b: SpelledPitch) -> (Double,Int) {
+    return ((interval(a,b), steps(a,b)))
+}
+
+private func interval(_ a: SpelledPitch, _ b: SpelledPitch) -> Double {
+    return (b.pitch - a.pitch).noteNumber.value
+}
+
+private func steps(_ a: SpelledPitch, _ b: SpelledPitch) -> Int {
+    return mod(b.spelling.letterName.steps - a.spelling.letterName.steps, 7)
 }
 
 extension OrderedSpelledInterval.Ordinal: Equatable, Hashable { }

@@ -12,7 +12,7 @@ import Pitch
 
 /// Named intervals between two `SpelledPitch` values that does not honor order between
 /// `SpelledPitch` values.
-public struct UnorderedSpelledInterval {
+public struct UnorderedSpelledInterval: SpelledInterval {
 
     // MARK: - Instance Properties
 
@@ -52,7 +52,7 @@ extension UnorderedSpelledInterval {
     // MARK: - Nested Types
 
     /// The ordinal of a `UnorderedSpelledInterval`.
-    public enum Ordinal {
+    public enum Ordinal: SpelledIntervalOrdinal {
 
         // MARK: - Cases
 
@@ -69,7 +69,6 @@ extension UnorderedSpelledInterval.Ordinal {
     // MARK: - Initializers
     
     /// Creates a `UnorderedSpelledInterval` with the given amount of `steps`.
-    #warning("Put Ordinal.Steps into a protocol inheriting from SpelledIntervalOrdinal")
     public init?(steps: Int) {
         switch steps {
         case 0: self = .perfect(.unison)
@@ -238,25 +237,9 @@ extension UnorderedSpelledInterval {
 
     /// Create a `UnorderedSpelledInterval` with two `SpelledPitch` values.
     public init(_ a: Pitch.Spelling, _ b: Pitch.Spelling) {
-
-        // Ensure that the two `Pitch.Speller` values are in the correct order to create
-        // a relative interval.
         let (a,b) = ordered(a,b)
-
-        // Given the ordered `Pitch.Speller` values, retrieve the difference in steps of
-        // the `Pitch.Spelling.letterName` properties, and the difference between the
-        // `noteNumber` properties.
-        let (steps, interval) = stepsAndInterval(a,b)
-
-        // Sanitize interval in order to calulate the `Quality`.
-        let sanitizedInterval = sanitizeIntervalClass(interval, steps: steps)
-
-        // Create the necessary structures
-        let ordinal = Ordinal(steps: steps)!
-        let quality = Quality(sanitizedIntervalClass: sanitizedInterval, ordinal: ordinal)
-
-        // Init
-        self.init(quality, ordinal)
+        let (interval, steps) = intervalAndSteps(a,b)
+        self.init(interval: interval, steps: steps)
     }
 }
 
@@ -265,53 +248,49 @@ extension UnorderedSpelledInterval: Equatable, Hashable { }
 
 /// - Returns: The two `Pitch.Spelling` values such that the difference between `b` and `a` is less
 /// that the difference between `a` and `b`.
-func ordered (_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Pitch.Spelling, Pitch.Spelling) {
+func ordered (_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Pitch.Spelling,Pitch.Spelling) {
     let (a,b,_) = swapped(a, b) { mod(steps(a,b), 7) > mod(steps(b,a), 7) }
     return (a,b)
 }
 
 /// - Returns: The steps and interval between the two given `Pitch.Spelling` values.
-func stepsAndInterval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Int, Double) {
-    return (steps(a,b), interval(a,b))
+private func intervalAndSteps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Double,Int) {
+    return (interval(a,b), steps(a,b))
 }
 
-/// - Returns: Sanitizes the interval class with the given `steps`.
-func sanitizeIntervalClass(_ intervalClass: Double, steps: Int) -> Double {
-
-    // 1. Retrieve the platonic ideal interval class (neutral second, neutral third)
-    let neutral = neutralIntervalClass(steps: steps)
-
-    // 2. Calculate the difference between the actual and ideal
-    let difference = intervalClass - neutral
-
-    // 3. Normalize the difference
-    let normalizedDifference = mod(difference + 6, 12) - 6
-    
-    // 4. Enforce positive values if unison
-    return steps == 0 ? abs(normalizedDifference) : normalizedDifference
-}
-
-func neutralIntervalClass(steps: Int) -> Double {
-    assert((0..<4).contains(steps))
-    switch steps {
-    case 0: // unison
-        return 0
-    case 1: // second
-        return 1.5
-    case 2: // third
-        return 3.5
-    case 3: // fourth
-        return 5
-    default: // impossible
-        fatalError("Impossible")
-    }
-}
-
-func interval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Double {
+private func interval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Double {
     return (b.pitchClass - a.pitchClass).noteNumber.value
 }
 
 /// Modulo 7
-func steps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Int {
+private func steps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Int {
     return mod(b.letterName.steps - a.letterName.steps, 7)
+}
+
+extension UnorderedSpelledInterval.Ordinal {
+
+    public var platonicThreshold: Double {
+        switch self {
+        case .perfect:
+            return 1
+        case .imperfect:
+            return 1.5
+        }
+    }
+
+    static func platonicInterval(steps: Int) -> Double {
+        assert((0..<4).contains(steps))
+        switch steps {
+        case 0: // unison
+            return 0
+        case 1: // second
+            return 1.5
+        case 2: // third
+            return 3.5
+        case 3: // fourth
+            return 5
+        default: // impossible
+            fatalError("Impossible")
+        }
+    }
 }
