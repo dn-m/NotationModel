@@ -57,6 +57,12 @@ private func quality(distance: Double, with platonicThreshold: Double) -> Spelle
         return .extended(.init(.double, .diminished))
     case diminished:
         return .extended(.init(.single, .diminished))
+    case -0.5:
+        return .imperfect(.minor)
+    case +0.0:
+        return .perfect(.perfect)
+    case +0.5:
+        return .imperfect(.major)
     case augmented:
         return .extended(.init(.single, .augmented))
     case augmented + 1:
@@ -67,12 +73,6 @@ private func quality(distance: Double, with platonicThreshold: Double) -> Spelle
         return .extended(.init(.quadruple, .augmented))
     case augmented + 4:
         return .extended(.init(.quintuple, .augmented))
-    case -0.5:
-        return .imperfect(.minor)
-    case +0.0:
-        return .perfect(.perfect)
-    case +0.5:
-        return.imperfect(.major)
     default:
         fatalError("Not possible to create a NamedIntervalQuality with interval \(distance)")
     }
