@@ -99,7 +99,7 @@ extension Pitch.Spelling where Tuning == EDO24 {
     ///
     public init(
         _ letterName: LetterName,
-        _ quarterStep: EDO24.Modifier.Modifier,
+        _ quarterStep: EDO24.Modifier.QuarterTone,
         _ halfStep: EDO12.Modifier
     )
     {
@@ -142,7 +142,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
     ///
     public init(
         _ letterName: LetterName,
-        _ quarterStep: EDO24.Modifier.Modifier = .none,
+        _ quarterStep: EDO24.Modifier.QuarterTone = .none,
         _ halfStep: EDO12.Modifier = .natural
     )
     {
@@ -176,7 +176,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
     ///
     public init(
         _ letterName: LetterName,
-        _ quarterStep: EDO24.Modifier.Modifier = .none,
+        _ quarterStep: EDO24.Modifier.QuarterTone = .none,
         _ halfStep: EDO12.Modifier = .natural,
         _ eighthStep: EDO48.Modifier.Modifier
     )

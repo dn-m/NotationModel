@@ -16,7 +16,7 @@ public struct EDO24: EDO {
 
         /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
         /// `EDO24` `TuningSystem`.
-        public enum Modifier: Double, PitchSpellingModifier {
+        public enum QuarterTone: Double, PitchSpellingModifier {
 
             // MARK: - Cases
 
@@ -32,7 +32,7 @@ public struct EDO24: EDO {
             // MARK: - Static Properties
 
             /// A `Modifier` which does not apply any modification.
-            public static var identity: EDO24.Modifier.Modifier {
+            public static var identity: EDO24.Modifier.QuarterTone {
                 return .none
             }
 
@@ -49,7 +49,7 @@ public struct EDO24: EDO {
 
         /// A `Modifier` which does not apply any modification.
         public static var identity: EDO24.Modifier {
-            return .init(edo12: .identity, modifier: Modifier.identity)
+            return .init(edo12: .identity, modifier: QuarterTone.identity)
         }
 
         // MARK: - Instance Properties
@@ -58,7 +58,7 @@ public struct EDO24: EDO {
         public let edo12: EDO12.Modifier
 
         /// The `Modifier` which modifies the `adjustment` value `edo12` modifier.
-        public let modifier: Modifier
+        public let modifier: QuarterTone
 
         /// The amount that a `EDO24.Modifier` modifies the base `Pitch.Class` of a
         /// `LetterName` (in percentage of a `NoteNumber`).
@@ -78,7 +78,7 @@ extension EDO24.Modifier: CustomStringConvertible {
     }
 }
 
-extension EDO24.Modifier.Modifier: CustomStringConvertible {
+extension EDO24.Modifier.QuarterTone: CustomStringConvertible {
 
     /// Printable description of `EDO24.Modifier.Modifier`.
     public var description: String {
