@@ -311,11 +311,7 @@ extension Pitch.Spelling: CustomStringConvertible {
 extension Pitch.Spelling: Equatable where Tuning.Modifier: Equatable { }
 extension Pitch.Spelling: Hashable where Tuning.Modifier: Hashable { }
 
-public protocol EDO: TuningSystem {
-    
-}
-
-public enum EDO12: EDO {
+public enum EDO12: TuningSystem {
 
     public enum Modifier: PitchSpellingModifier {
 
@@ -343,7 +339,7 @@ extension EDO12.Modifier: CustomStringConvertible {
     }
 }
 
-public struct EDO24: EDO {
+public struct EDO24: TuningSystem {
 
     public struct Modifier: PitchSpellingModifier {
         public enum Modifier: Double {
@@ -371,7 +367,7 @@ extension EDO24.Modifier: CustomStringConvertible {
     }
 }
 
-public enum EDO48: EDO {
+public enum EDO48: TuningSystem {
 
     public struct Modifier: PitchSpellingModifier {
 
