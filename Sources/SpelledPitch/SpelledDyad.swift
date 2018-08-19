@@ -42,12 +42,10 @@ extension SpelledDyad where Tuning == EDO12 {
         return UnorderedSpelledInterval(lower.spelling, higher.spelling)
     }
 
-    /// - Returns: `OrderedSpelledInterval`, which retains the objective order of this
+    /// - Returns: `CompoundSpelledInterval`, which retains the objective order of this
     /// `SpelledDyad`, though not its octave displacement.
-    //
-    // FIXME: Return `CompoundSpelledInterval`.
-    public var orderedInterval: OrderedSpelledInterval {
-        fatalError()
+    public var orderedInterval: CompoundSpelledInterval {
+        return CompoundSpelledInterval(lower, higher)
     }
 }
 
