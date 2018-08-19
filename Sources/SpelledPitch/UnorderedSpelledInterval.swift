@@ -40,9 +40,6 @@ extension UnorderedSpelledInterval {
 
     // MARK: - Associated Types
 
-    /// `PitchType` with level of ordering necessary to construct a `UnorderedSpelledInterval`.
-    public typealias PitchType = Pitch.Class
-
     /// Type describing the quality of a `NamedInterval`-conforming type.
     public typealias Quality = SpelledIntervalQuality
 }
