@@ -251,3 +251,13 @@ extension Pitch.Spelling: CustomStringConvertible {
 extension Pitch.Spelling: Equatable where Tuning.Modifier: Equatable { }
 extension Pitch.Spelling: Hashable where Tuning.Modifier: Hashable { }
 
+
+// FIXME: Move to EDO12.swift when compiler bug is fixed
+extension Pitch.Spelling where Tuning == EDO12 {
+
+    // MARK: - Spelling Distance
+
+    public var spellingDistance: LineOfFifths.Distance {
+        return LineOfFifths.distance(ofPitchSpelling: self)
+    }
+}

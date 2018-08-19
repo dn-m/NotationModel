@@ -396,10 +396,7 @@ extension OrderedSpelledInterval {
 
     /// Creates a `OrderedSpelledInterval` with two `SpelledPitch` values.
     internal init(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) {
-        print("before: \(a,b)")
         let (a,b,didSwap) = swapped(a,b) { a > b }
-        print("after: \(a,b)")
-        print("didSwap: \(didSwap)")
         let (interval,steps) = intervalAndSteps(a,b)
         let (quality,ordinal) = OrderedSpelledInterval.qualityAndOrdinal(interval: interval, steps: steps)
         self.init(didSwap ? .descending : .ascending, quality, ordinal)
