@@ -45,17 +45,15 @@ public struct LineOfFifths {
         Pitch.Spelling(.b, .sharp(2)): 14
     ]
 
-    public static func position(ofPitchSpelling spelling: Pitch.Spelling<EDO12>) -> Position {
+    static func position(ofPitchSpelling spelling: Pitch.Spelling<EDO12>) -> Position {
         return positionByPitchSpelling[spelling] ?? 0
     }
 
-    public static func distance(ofPitchSpelling pitchSpelling: Pitch.Spelling<EDO12>)
-        -> Position
-    {
+    static func distance(ofPitchSpelling pitchSpelling: Pitch.Spelling<EDO12>) -> Position {
         return abs(position(ofPitchSpelling: pitchSpelling))
     }
 
-    public static func distance(between a: Pitch.Spelling<EDO12>, and b: Pitch.Spelling<EDO12>) -> Distance {
+    static func distance(between a: Pitch.Spelling<EDO12>, and b: Pitch.Spelling<EDO12>) -> Distance {
         return position(ofPitchSpelling: a) - position(ofPitchSpelling: b)
     }
 }

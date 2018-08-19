@@ -16,6 +16,7 @@ import Pitch
 
 extension Pitch {
 
+    /// Things that can go wrong while applying a `Pitch.Spelling` to a `Pitch`.
     public enum Error: Swift.Error {
         case incompatibleSpelling(Pitch.Spelling<EDO48>,Pitch)
     }
@@ -44,7 +45,7 @@ extension Pitch {
         return SpelledPitch(spelling, octave)
     }
 
-    /// - returns: `SpelledPitch` with the default spelling for this `Pitch`.
+    /// - Returns: `SpelledPitch` with the default spelling for this `Pitch`.
     public var spelledWithDefaultSpelling: SpelledPitch<EDO48> {
         return try! spelled(with: defaultSpelling)
     }
