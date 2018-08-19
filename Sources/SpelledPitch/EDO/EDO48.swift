@@ -52,7 +52,7 @@ public enum EDO48: EDO {
 
         /// A `Modifier` which does not apply any modification.
         public static var identity: EDO48.Modifier {
-            return .init(edo24: .identity, modifier: EighthTone.identity)
+            return .init(edo24: .identity, eighthTone: EighthTone.identity)
         }
 
         // MARK: - Instance Properties
@@ -61,13 +61,13 @@ public enum EDO48: EDO {
         public let edo24: EDO24.Modifier
 
         /// The `Modifier` which modifies the `adjustment` value `edo24` modifier.
-        public let modifier: EighthTone
+        public let eighthTone: EighthTone
 
         // MARK: - Computed Properties
 
         /// The amount that a `EDO48.Modifier` modifies the base `Pitch.Class` of a
         /// `LetterName` (in percentage of a `NoteNumber`).
-        public var adjustment: Double { return edo24.adjustment + modifier.rawValue }
+        public var adjustment: Double { return edo24.adjustment + eighthTone.rawValue }
     }
 }
 
@@ -77,7 +77,7 @@ extension EDO48.Modifier: CustomStringConvertible {
 
     /// Printable description of `EDO48.Modifier`.
     public var description: String {
-        return [modifier.description, edo24.description]
+        return [eighthTone.description, edo24.description]
             .filter { !$0.isEmpty }
             .joined(separator: " ")
     }

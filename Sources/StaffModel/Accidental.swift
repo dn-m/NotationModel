@@ -29,7 +29,7 @@ public enum Accidental {
 
     public init?(spelling: Pitch.Spelling<EDO48>) {
         let coarse = spelling.modifier.edo24.edo12.adjustment
-        let fine = spelling.modifier.modifier.rawValue
+        let fine = spelling.modifier.eighthTone.rawValue
         self.init(coarse: coarse, fine: fine)
     }
 
