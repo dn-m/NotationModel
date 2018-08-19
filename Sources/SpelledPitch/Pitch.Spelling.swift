@@ -11,7 +11,7 @@ import Pitch
 extension Pitch {
 
     /// Spelled representation of a `Pitch`.
-    public struct Spelling <Temperament: PitchTemperament> {
+    public struct Spelling <Tuning: TuningSystem> {
 
         // MARK: - Instance Properties
 
@@ -25,7 +25,7 @@ extension Pitch {
         public let letterName: LetterName
 
         /// `Modifier` of a `Pitch.Spelling`.
-        public let modifier: Temperament.Modifier
+        public let modifier: Tuning.Modifier
     }
 }
 
@@ -107,7 +107,7 @@ extension LetterName {
     }
 }
 
-extension Pitch.Spelling where Temperament == EDO12 {
+extension Pitch.Spelling where Tuning == EDO12 {
 
     /// Create a `Pitch.Spelling`.
     ///
@@ -132,7 +132,7 @@ extension Pitch.Spelling where Temperament == EDO12 {
     }
 }
 
-extension Pitch.Spelling where Temperament == EDO24 {
+extension Pitch.Spelling where Tuning == EDO24 {
 
     /// Create a `Pitch.Spelling`.
     ///
@@ -176,7 +176,7 @@ extension Pitch.Spelling where Temperament == EDO24 {
     }
 }
 
-extension Pitch.Spelling where Temperament == EDO48 {
+extension Pitch.Spelling where Tuning == EDO48 {
 
     /// Create a `Pitch.Spelling`.
     ///
@@ -255,7 +255,7 @@ extension Pitch.Spelling where Temperament == EDO48 {
     }
 }
 
-extension Pitch.Spelling where Temperament == EDO48 {
+extension Pitch.Spelling where Tuning == EDO48 {
     public init(_ edo24: Pitch.Spelling<EDO24>) {
         let modifier = EDO48.Modifier(edo24: edo24.modifier, modifier: .none)
         self.init(letterName: edo24.letterName, modifier: modifier)
@@ -268,7 +268,7 @@ extension Pitch.Spelling where Temperament == EDO48 {
     }
 }
 
-extension Pitch.Spelling where Temperament == EDO24 {
+extension Pitch.Spelling where Tuning == EDO24 {
     public init(_ edo12: Pitch.Spelling<EDO12>) {
         let edo24 = EDO24.Modifier(edo12: edo12.modifier, modifier: .none)
         self.init(letterName: edo12.letterName, modifier: edo24)
@@ -286,13 +286,13 @@ extension Pitch.Spelling where Temperament == EDO24 {
 //    }
 //}
 
-extension Pitch.Spelling: Comparable where Temperament.Modifier: Comparable {
+extension Pitch.Spelling: Comparable where Tuning.Modifier: Comparable {
 
     // MARK: - Comparable
 
     /// - Returns: `true` if the left hand `Pitch.Spelling` value is less than the right hand
     /// `Pitch.Spelling` value.
-    public static func < (lhs: Pitch.Spelling<Temperament>, rhs: Pitch.Spelling<Temperament>) -> Bool {
+    public static func < (lhs: Pitch.Spelling<Tuning>, rhs: Pitch.Spelling<Tuning>) -> Bool {
         if lhs.letterName.steps == rhs.letterName.steps { return lhs.modifier < rhs.modifier }
         return lhs.letterName.steps < rhs.letterName.steps
     }
@@ -308,36 +308,10 @@ extension Pitch.Spelling: CustomStringConvertible {
     }
 }
 
-extension Pitch.Spelling: Equatable where Temperament.Modifier: Equatable { }
-extension Pitch.Spelling: Hashable where Temperament.Modifier: Hashable { }
+extension Pitch.Spelling: Equatable where Tuning.Modifier: Equatable { }
+extension Pitch.Spelling: Hashable where Tuning.Modifier: Hashable { }
 
-public protocol PitchTemperament {
-    associatedtype Modifier: PitchSpellingModifier
-}
-
-public protocol PitchSpellingModifier: Comparable, Hashable, CustomStringConvertible {
-    var adjustment: Double { get }
-}
-
-extension PitchSpellingModifier {
-    public var hashValue: Int {
-        return adjustment.hashValue
-    }
-}
-
-extension PitchSpellingModifier {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.adjustment == rhs.adjustment
-    }
-}
-
-extension PitchSpellingModifier {
-    public static func < (lhs: Self, rhs: Self) -> Bool {
-        return lhs.adjustment < rhs.adjustment
-    }
-}
-
-public enum EDO12: PitchTemperament {
+public enum EDO12: TuningSystem {
 
     public enum Modifier: PitchSpellingModifier {
 
@@ -365,7 +339,7 @@ extension EDO12.Modifier: CustomStringConvertible {
     }
 }
 
-public struct EDO24: PitchTemperament {
+public struct EDO24: TuningSystem {
 
     public struct Modifier: PitchSpellingModifier {
         public enum Modifier: Double {
@@ -393,7 +367,7 @@ extension EDO24.Modifier: CustomStringConvertible {
     }
 }
 
-public enum EDO48: PitchTemperament {
+public enum EDO48: TuningSystem {
 
     public struct Modifier: PitchSpellingModifier {
 

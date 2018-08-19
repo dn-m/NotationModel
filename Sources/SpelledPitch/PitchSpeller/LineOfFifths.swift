@@ -60,7 +60,7 @@ public struct LineOfFifths {
     }
 }
 
-extension Pitch.Spelling where Temperament == EDO12 {
+extension Pitch.Spelling where Tuning == EDO12 {
 
     // MARK: - Spelling Distance
 
