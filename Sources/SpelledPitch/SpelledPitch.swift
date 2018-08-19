@@ -14,6 +14,7 @@
 
 import Pitch
 
+/// A `Pitch.Spelling` in a specific octave.
 public struct SpelledPitch <Tuning: TuningSystem> {
 
     // MARK: - Instance Properties

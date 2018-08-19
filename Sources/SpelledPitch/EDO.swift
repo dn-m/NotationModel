@@ -5,8 +5,12 @@
 //  Created by James Bean on 8/18/18.
 //
 
+public protocol EDO: TuningSystem {
+
+}
+
 /// Namespace for the `EDO12` (12 equal divisions of the octave) `TuningSystem`.
-public enum EDO12: TuningSystem {
+public enum EDO12: EDO {
 
     // MARK: - Nested Types
 
@@ -52,7 +56,7 @@ extension EDO12.Modifier: CustomStringConvertible {
 }
 
 /// Namespace for the `EDO24` (24 equal divisions of the octave) `TuningSystem`.
-public struct EDO24: TuningSystem {
+public struct EDO24: EDO {
 
     /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
     /// `EDO24` `TuningSystem`.
@@ -108,7 +112,7 @@ extension EDO24.Modifier: CustomStringConvertible {
 }
 
 /// Namespace for the `EDO48` (48 equal divisions of the octave) `TuningSystem`.
-public enum EDO48: TuningSystem {
+public enum EDO48: EDO {
 
     // MARK: - Nested Types
 

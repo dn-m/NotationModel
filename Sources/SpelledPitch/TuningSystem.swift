@@ -16,7 +16,8 @@ public protocol TuningSystem {
     associatedtype Modifier: PitchSpellingModifier
 }
 
-/// Interface for types which modify a `LetterName` value.
+/// Interface for types which modify a `LetterName` value. Graphically repesented as components of
+/// an `Accidental`.
 public protocol PitchSpellingModifier: Comparable, Hashable, CustomStringConvertible {
 
     // MARK: - Instance Properties
