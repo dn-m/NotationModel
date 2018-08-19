@@ -8,12 +8,25 @@
 /// Namespace for the `EDO12` (12 equal divisions of the octave) `TuningSystem`.
 public enum EDO12: TuningSystem {
 
+    // MARK: - Nested Types
+
+    /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
+    /// `EDO12` `TuningSystem`.
     public enum Modifier: PitchSpellingModifier {
 
+        // MARK: - Cases
+
+        /// Natural modifier.
         case natural
+
+        /// Sharp modifier with degree of sharpness (e.g., double sharp)
         case sharp(Int)
+
+        /// Flat modifier with degree of sharpness (e.g., triple flat)
         case flat(Int)
 
+        /// The amount that a `EDO12.Modifier` modifies the base `Pitch.Class` of a
+        /// `LetterName` (in percentage of a `NoteNumber`).
         public var adjustment: Double {
             switch self {
             case .natural: return 0
@@ -25,6 +38,10 @@ public enum EDO12: TuningSystem {
 }
 
 extension EDO12.Modifier: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `EDO12.Modifier`.
     public var description: String {
         switch self {
         case .natural: return "natural"
@@ -37,6 +54,8 @@ extension EDO12.Modifier: CustomStringConvertible {
 /// Namespace for the `EDO24` (24 equal divisions of the octave) `TuningSystem`.
 public struct EDO24: TuningSystem {
 
+    /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
+    /// `EDO24` `TuningSystem`.
     public struct Modifier: PitchSpellingModifier {
         public enum Modifier: Double {
             case quarter = 0.5
@@ -46,11 +65,19 @@ public struct EDO24: TuningSystem {
 
         public let edo12: EDO12.Modifier
         public let modifier: Modifier
+
+
+        /// The amount that a `EDO24.Modifier` modifies the base `Pitch.Class` of a
+        /// `LetterName` (in percentage of a `NoteNumber`).
         public var adjustment: Double { return edo12.adjustment * modifier.rawValue }
     }
 }
 
 extension EDO24.Modifier: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `EDO24.Modifier`.
     public var description: String {
         var string: String? {
             switch self.modifier {
@@ -66,7 +93,13 @@ extension EDO24.Modifier: CustomStringConvertible {
 /// Namespace for the `EDO48` (48 equal divisions of the octave) `TuningSystem`.
 public enum EDO48: TuningSystem {
 
+    // MARK: - Nested Types
+
+    /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
+    /// `EDO48` `TuningSystem`.
     public struct Modifier: PitchSpellingModifier {
+
+        // MARK: - Nested Types
 
         public enum Modifier: Double {
             case up = 0.25
@@ -75,13 +108,24 @@ public enum EDO48: TuningSystem {
 
         }
 
+        // MARK: - Instance Properties
+
         public let edo24: EDO24.Modifier
         public let modifier: Modifier
+
+        // MARK: - Computed Properties
+
+        /// The amount that a `EDO48.Modifier` modifies the base `Pitch.Class` of a
+        /// `LetterName` (in percentage of a `NoteNumber`).
         public var adjustment: Double { return edo24.adjustment + modifier.rawValue }
     }
 }
 
 extension EDO48.Modifier: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `EDO48.Modifier`.
     public var description: String {
         var string: String? {
             switch self.modifier {
