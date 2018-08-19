@@ -26,4 +26,3 @@ extension UnorderedInterval where Element == Pitch {
         return intervalClass.spellingPriority
     }
 }
-
