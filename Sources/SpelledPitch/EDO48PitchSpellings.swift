@@ -1,5 +1,5 @@
 //
-//  PitchSpellings.swift
+//  EDO48PitchSpellings.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 5/1/16.
@@ -8,9 +8,9 @@
 
 import Pitch
 
-/// Collection of `Pitch.Spelling` values stored by `Pitch.Class`.
-public enum PitchSpellings {
+extension EDO48 {
 
+    /// Collection of `Pitch.Spelling` values stored by `Pitch.Class`.
     private static let spellingsByPitchClass: [Pitch.Class: [Pitch.Spelling<EDO48>]] = [
 
         00.00: [
@@ -296,11 +296,10 @@ public enum PitchSpellings {
     ]
 
     public static func spellings(forPitchClass pitchClass: Pitch.Class) -> [Pitch.Spelling<EDO48>]? {
-        return PitchSpellings.spellingsByPitchClass[pitchClass]
+        return EDO48.spellingsByPitchClass[pitchClass]
     }
 
     public static func defaultSpelling(forPitchClass pitchClass: Pitch.Class) -> Pitch.Spelling<EDO48>? {
         return spellings(forPitchClass: pitchClass)?.first
     }
 }
-

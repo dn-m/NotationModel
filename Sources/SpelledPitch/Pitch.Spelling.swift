@@ -398,7 +398,7 @@ extension EDO24.Modifier: CustomStringConvertible {
     }
 }
 
-public struct EDO48: PitchTemperament {
+public enum EDO48: PitchTemperament {
 
     public struct Modifier: PitchSpellingModifier {
 

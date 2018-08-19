@@ -27,7 +27,7 @@ extension Pitch {
 
     /// The first available `Pitch.Spelling` for this `Pitch`, if present. Otherwise `nil`.
     public var defaultSpelling: Pitch.Spelling<EDO48> {
-        return PitchSpellings.defaultSpelling(forPitchClass: self.class)!
+        return EDO48.defaultSpelling(forPitchClass: self.class)!
     }
 
     /// - Returns: `SpelledPitch` with the given `Pitch.Spelling`,
