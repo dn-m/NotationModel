@@ -18,7 +18,7 @@ public enum EDO48: EDO {
 
         /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
         /// `EDO48` `TuningSystem`.
-        public enum Modifier: Double, PitchSpellingModifier {
+        public enum EighthTone: Double, PitchSpellingModifier {
 
             // MARK: - Cases
 
@@ -35,7 +35,7 @@ public enum EDO48: EDO {
             // MARK: - Static Properties
 
             /// A `Modifier` which does not apply any modification.
-            public static var identity: Modifier {
+            public static var identity: EighthTone {
                 return .none
             }
 
@@ -52,7 +52,7 @@ public enum EDO48: EDO {
 
         /// A `Modifier` which does not apply any modification.
         public static var identity: EDO48.Modifier {
-            return .init(edo24: .identity, modifier: Modifier.identity)
+            return .init(edo24: .identity, modifier: EighthTone.identity)
         }
 
         // MARK: - Instance Properties
@@ -61,7 +61,7 @@ public enum EDO48: EDO {
         public let edo24: EDO24.Modifier
 
         /// The `Modifier` which modifies the `adjustment` value `edo24` modifier.
-        public let modifier: Modifier
+        public let modifier: EighthTone
 
         // MARK: - Computed Properties
 
@@ -83,7 +83,7 @@ extension EDO48.Modifier: CustomStringConvertible {
     }
 }
 
-extension EDO48.Modifier.Modifier: CustomStringConvertible {
+extension EDO48.Modifier.EighthTone: CustomStringConvertible {
 
     /// Printable description of `EDO48.Modifier.Modifier`.
     public var description: String {

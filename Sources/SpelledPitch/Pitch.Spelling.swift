@@ -160,7 +160,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
     public init(
         _ letterName: LetterName,
         _ halfStep: EDO12.Modifier = .natural,
-        _ eighthStep: EDO48.Modifier.Modifier
+        _ eighthStep: EDO48.Modifier.EighthTone
     )
     {
         let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: .none)
@@ -178,7 +178,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
         _ letterName: LetterName,
         _ quarterStep: EDO24.Modifier.QuarterTone = .none,
         _ halfStep: EDO12.Modifier = .natural,
-        _ eighthStep: EDO48.Modifier.Modifier
+        _ eighthStep: EDO48.Modifier.EighthTone
     )
     {
         let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: quarterStep)
