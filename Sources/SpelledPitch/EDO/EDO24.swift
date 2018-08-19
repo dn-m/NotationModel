@@ -49,7 +49,7 @@ public struct EDO24: EDO {
 
         /// A `Modifier` which does not apply any modification.
         public static var identity: EDO24.Modifier {
-            return .init(edo12: .identity, modifier: QuarterTone.identity)
+            return .init(edo12: .identity, quarterTone: QuarterTone.identity)
         }
 
         // MARK: - Instance Properties
@@ -58,11 +58,11 @@ public struct EDO24: EDO {
         public let edo12: EDO12.Modifier
 
         /// The `Modifier` which modifies the `adjustment` value `edo12` modifier.
-        public let modifier: QuarterTone
+        public let quarterTone: QuarterTone
 
         /// The amount that a `EDO24.Modifier` modifies the base `Pitch.Class` of a
         /// `LetterName` (in percentage of a `NoteNumber`).
-        public var adjustment: Double { return edo12.adjustment * modifier.rawValue }
+        public var adjustment: Double { return edo12.adjustment * quarterTone.rawValue }
     }
 }
 
@@ -72,7 +72,7 @@ extension EDO24.Modifier: CustomStringConvertible {
 
     /// Printable description of `EDO24.Modifier`.
     public var description: String {
-        return [modifier.description, edo12.description]
+        return [quarterTone.description, edo12.description]
             .filter { !$0.isEmpty }
             .joined(separator: " ")
     }

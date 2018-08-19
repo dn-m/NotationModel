@@ -74,7 +74,7 @@ extension Pitch.Spelling where Tuning == EDO24 {
     ///     let bDoubleSharp = Pitch.Spelling(.b, .doubleSharp)
     ///
     public init(_ letterName: LetterName) {
-        let edo24 = EDO24.Modifier(edo12: .natural, modifier: .none)
+        let edo24 = EDO24.Modifier(edo12: .natural, quarterTone: .none)
         self.init(letterName: letterName, modifier: edo24)
     }
 
@@ -86,7 +86,7 @@ extension Pitch.Spelling where Tuning == EDO24 {
     ///     let bDoubleSharp = Pitch.Spelling(.b, .doubleSharp)
     ///
     public init(_ letterName: LetterName, _ halfStep: EDO12.Modifier) {
-        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: .none)
+        let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: .none)
         self.init(letterName: letterName, modifier: edo24)
     }
 
@@ -103,7 +103,7 @@ extension Pitch.Spelling where Tuning == EDO24 {
         _ halfStep: EDO12.Modifier
     )
     {
-        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: quarterStep)
+        let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: quarterStep)
         self.init(letterName: letterName, modifier: edo24)
     }
 }
@@ -117,7 +117,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
     ///     let dQuarterFlatDown = Pitch.Spelling(.d, .flat(1))
     ///
     public init(_ letterName: LetterName) {
-        let edo24 = EDO24.Modifier(edo12: .natural, modifier: .none)
+        let edo24 = EDO24.Modifier(edo12: .natural, quarterTone: .none)
         let edo48 = EDO48.Modifier(edo24: edo24, modifier: .none)
         self.init(letterName: letterName, modifier: edo48)
     }
@@ -129,7 +129,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
     ///     let dQuarterFlatDown = Pitch.Spelling(.d, .flat(1))
     ///
     public init(_ letterName: LetterName, _ halfStep: EDO12.Modifier = .natural) {
-        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: .none)
+        let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: .none)
         let edo48 = EDO48.Modifier(edo24: edo24, modifier: .none)
         self.init(letterName: letterName, modifier: edo48)
     }
@@ -146,7 +146,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
         _ halfStep: EDO12.Modifier = .natural
     )
     {
-        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: quarterStep)
+        let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: quarterStep)
         let edo48 = EDO48.Modifier(edo24: edo24, modifier: .none)
         self.init(letterName: letterName, modifier: edo48)
     }
@@ -163,7 +163,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
         _ eighthStep: EDO48.Modifier.Modifier
     )
     {
-        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: .none)
+        let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: .none)
         let edo48 = EDO48.Modifier(edo24: edo24, modifier: eighthStep)
         self.init(letterName: letterName, modifier: edo48)
     }
@@ -181,7 +181,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
         _ eighthStep: EDO48.Modifier.Modifier
     )
     {
-        let edo24 = EDO24.Modifier(edo12: halfStep, modifier: quarterStep)
+        let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: quarterStep)
         let edo48 = EDO48.Modifier(edo24: edo24, modifier: eighthStep)
         self.init(letterName: letterName, modifier: edo48)
     }
@@ -199,7 +199,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
     /// Creates a `Pitch.Spelling` in the `EDO48` `TuningSystem` from a `Pitch.Spelling` in the
     /// `EDO12` domain.
     public init(_ edo12: Pitch.Spelling<EDO12>) {
-        let edo24 = EDO24.Modifier(edo12: edo12.modifier, modifier: .none)
+        let edo24 = EDO24.Modifier(edo12: edo12.modifier, quarterTone: .none)
         let modifier = EDO48.Modifier(edo24: edo24, modifier: .none)
         self.init(letterName: edo12.letterName, modifier: modifier)
     }
@@ -210,7 +210,7 @@ extension Pitch.Spelling where Tuning == EDO24 {
     /// Creates a `Pitch.Spelling` in the `EDO24` `TuningSystem` from a `Pitch.Spelling` in the
     /// `EDO12` domain.
     public init(_ edo12: Pitch.Spelling<EDO12>) {
-        let edo24 = EDO24.Modifier(edo12: edo12.modifier, modifier: .none)
+        let edo24 = EDO24.Modifier(edo12: edo12.modifier, quarterTone: .none)
         self.init(letterName: edo12.letterName, modifier: edo24)
     }
 }
