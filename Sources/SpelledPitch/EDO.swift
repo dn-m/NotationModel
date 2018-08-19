@@ -5,8 +5,16 @@
 //  Created by James Bean on 8/18/18.
 //
 
-public protocol EDO: TuningSystem {
+/// Interface for the `EDO` (equal divisions of the octave) `TuningSystem` types.
+public protocol EDO: TuningSystem { }
 
+/// Interface for `Modifier` types within an `EDO` `TuningSystem`.
+protocol EDOModifier {
+
+    // MARK: - Static Properties
+
+    /// A `Modifier` which does not apply any modification.
+    static var identity: Self { get }
 }
 
 /// Namespace for the `EDO12` (12 equal divisions of the octave) `TuningSystem`.
@@ -28,6 +36,13 @@ public enum EDO12: EDO {
 
         /// Flat modifier with degree of sharpness (e.g., triple flat)
         case flat(Int)
+
+        // MARK: - Static Properties
+
+        /// A `Modifier` which does not apply any modification.
+        public static var identity: Modifier {
+            return .natural
+        }
 
         /// The amount that a `EDO12.Modifier` modifies the base `Pitch.Class` of a
         /// `LetterName` (in percentage of a `NoteNumber`).
@@ -66,7 +81,7 @@ public struct EDO24: EDO {
 
         /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
         /// `EDO24` `TuningSystem`.
-        public enum Modifier: Double {
+        public enum Modifier: Double, PitchSpellingModifier {
 
             // MARK: - Cases
 
@@ -78,6 +93,28 @@ public struct EDO24: EDO {
 
             /// Three-quarter modifier.
             case threeQuarter = 1.5
+
+            // MARK: - Static Properties
+
+            /// A `Modifier` which does not apply any modification.
+            public static var identity: EDO24.Modifier.Modifier {
+                return .none
+            }
+
+            // MARK: - Computed Properties
+
+            /// The amount that a `EDO24.Modifier.Modifier` modifies the base `Pitch.Class` of a
+            /// `LetterName` (in percentage of a `NoteNumber`).
+            public var adjustment: Double {
+                return rawValue
+            }
+        }
+
+        // MARK: - Static Properties
+
+        /// A `Modifier` which does not apply any modification.
+        public static var identity: EDO24.Modifier {
+            return .init(edo12: .identity, modifier: Modifier.identity)
         }
 
         // MARK: - Instance Properties
@@ -100,16 +137,24 @@ extension EDO24.Modifier: CustomStringConvertible {
 
     /// Printable description of `EDO24.Modifier`.
     public var description: String {
-        var string: String? {
-            switch self.modifier {
-            case .quarter: return "quarter"
-            case .none: return nil
-            case .threeQuarter: return "three quarter"
-            }
-        }
-        return [string, edo12.description].compactMap { $0 }.joined(separator: " ")
+        return [modifier.description, edo12.description]
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
     }
 }
+
+extension EDO24.Modifier.Modifier: CustomStringConvertible {
+
+    /// Printable description of `EDO24.Modifier.Modifier`.
+    public var description: String {
+        switch self {
+        case .quarter: return "quarter"
+        case .none: return ""
+        case .threeQuarter: return "three quarter"
+        }
+    }
+}
+
 
 /// Namespace for the `EDO48` (48 equal divisions of the octave) `TuningSystem`.
 public enum EDO48: EDO {
@@ -124,7 +169,7 @@ public enum EDO48: EDO {
 
         /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
         /// `EDO48` `TuningSystem`.
-        public enum Modifier: Double {
+        public enum Modifier: Double, PitchSpellingModifier {
 
             // MARK: - Cases
 
@@ -138,6 +183,27 @@ public enum EDO48: EDO {
             /// Eighth-step down.
             case down = -0.25
 
+            // MARK: - Static Properties
+
+            /// A `Modifier` which does not apply any modification.
+            public static var identity: Modifier {
+                return .none
+            }
+
+            // MARK: - Computed Properties
+
+            /// The amount that a `EDO48.Modifier.Modifier` modifies the base `Pitch.Class` of a
+            /// `LetterName` (in percentage of a `NoteNumber`).
+            public var adjustment: Double {
+                return rawValue
+            }
+        }
+
+        // MARK: - Static Properties
+
+        /// A `Modifier` which does not apply any modification.
+        public static var identity: EDO48.Modifier {
+            return .init(edo24: .identity, modifier: Modifier.identity)
         }
 
         // MARK: - Instance Properties
@@ -162,13 +228,20 @@ extension EDO48.Modifier: CustomStringConvertible {
 
     /// Printable description of `EDO48.Modifier`.
     public var description: String {
-        var string: String? {
-            switch self.modifier {
-            case .down: return "down"
-            case .none: return nil
-            case .up: return "up"
-            }
+        return [modifier.description, edo24.description]
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+    }
+}
+
+extension EDO48.Modifier.Modifier: CustomStringConvertible {
+
+    /// Printable description of `EDO48.Modifier.Modifier`.
+    public var description: String {
+        switch self {
+        case .down: return "down"
+        case .none: return ""
+        case .up: return "up"
         }
-        return [string, edo24.description].compactMap { $0 }.joined(separator: " ")
     }
 }

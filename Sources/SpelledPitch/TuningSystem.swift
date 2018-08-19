@@ -22,6 +22,9 @@ public protocol PitchSpellingModifier: Comparable, Hashable, CustomStringConvert
 
     // MARK: - Instance Properties
 
+    /// A `PitchSpellingModifier` which does not apply any modification.
+    static var identity: Self { get }
+
     /// The amount that a `PitchSpellingModifier` modifies the base `Pitch.Class` of a `LetterName`
     /// (in percentage of a `NoteNumber`).
     var adjustment: Double { get }
