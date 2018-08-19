@@ -20,9 +20,4 @@ extension UnorderedInterval where Element == Pitch {
             noteNumber: NoteNumber(noteNumber.value.truncatingRemainder(dividingBy: 12))
         )
     }
-    
-    /// Priority for this `Interval` to be spelled. Lower value is higher priority.
-    public var spellingPriority: UnorderedInterval<Pitch.Class>.SpellingPriority? {
-        return intervalClass.spellingPriority
-    }
 }

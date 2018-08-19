@@ -11,13 +11,6 @@ extension CompoundSpelledIntervalTests {
     ]
 }
 
-extension IntervalClass_PitchSpellingTests {
-    static let __allTests = [
-        ("testOctaveLessComplexThanPerfectFifth", testOctaveLessComplexThanPerfectFifth),
-        ("testPerfectFifthLessComplexThanMajorThird", testPerfectFifthLessComplexThanMajorThird),
-    ]
-}
-
 extension OrderedSpelledIntervalTests {
     static let __allTests = [
         ("testAbsoluteNamedIntervalOrdinalInversion", testAbsoluteNamedIntervalOrdinalInversion),
@@ -84,6 +77,7 @@ extension SpelledPitchTests {
         ("testBQuarterSharp", testBQuarterSharp),
         ("testBSharpDown", testBSharpDown),
         ("testComparableDifferentOctave", testComparableDifferentOctave),
+        ("testComparableMinorSixth", testComparableMinorSixth),
         ("testComparableSameLetter", testComparableSameLetter),
         ("testComparableSameOctave", testComparableSameOctave),
         ("testExtrema", testExtrema),
@@ -114,7 +108,6 @@ extension UnorderedSpelledIntervalTests {
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(CompoundSpelledIntervalTests.__allTests),
-        testCase(IntervalClass_PitchSpellingTests.__allTests),
         testCase(OrderedSpelledIntervalTests.__allTests),
         testCase(PitchSpellingTests.__allTests),
         testCase(PitchSpellingsTests.__allTests),

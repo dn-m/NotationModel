@@ -303,3 +303,12 @@ extension EDO48 {
         return spellings(forPitchClass: pitchClass)?.first
     }
 }
+
+
+extension Pitch.Class {
+
+    /// All `Pitch.Spelling` structures available for this `PitchClass`.
+    public var spellings: [Pitch.Spelling<EDO48>] {
+        return EDO48.spellings(forPitchClass: self) ?? []
+    }
+}
