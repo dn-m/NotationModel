@@ -29,7 +29,7 @@ class SpelledDyadTests: XCTestCase {
 
     func assertNamedOrderedInterval(
         for dyad: SpelledDyad<EDO12>,
-        equals interval: OrderedSpelledInterval?
+        equals interval: CompoundSpelledInterval?
     )
     {
         XCTAssertEqual(dyad.orderedInterval, interval)
