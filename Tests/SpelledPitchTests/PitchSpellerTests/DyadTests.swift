@@ -2,7 +2,7 @@
 //  DyadTests.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 5/5/16.
+//  Createsd by James Bean on 5/5/16.
 //
 //
 

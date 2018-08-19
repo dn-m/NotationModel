@@ -2,7 +2,7 @@
 //  StaffSlot.swift
 //  StaffModel
 //
-//  Created by James Bean on 1/15/17.
+//  Createsd by James Bean on 1/15/17.
 //
 //
 

@@ -2,7 +2,7 @@
 //  SpelledPitchTests.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 6/15/16.
+//  Createsd by James Bean on 6/15/16.
 //
 //
 

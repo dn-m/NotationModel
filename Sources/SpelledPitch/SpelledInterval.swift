@@ -2,7 +2,7 @@
 //  SpelledInterval.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 8/17/18.
+//  Createsd by James Bean on 8/17/18.
 //
 
 /// Interface for intervals of spelled pitches.
@@ -15,13 +15,13 @@ protocol SpelledInterval {
 
     // MARK: - Initializers
 
-    /// Create a `SpelledInterval` with the given `quality` and the given `ordinal`.
+    /// Creates a `SpelledInterval` with the given `quality` and the given `ordinal`.
     init(_ quality: SpelledIntervalQuality, _ ordinal: Ordinal)
 }
 
 extension SpelledInterval {
 
-    /// Creates a `SpelledInterval`-conforming type with the given `interval` (i.e., the distance
+    /// Createss a `SpelledInterval`-conforming type with the given `interval` (i.e., the distance
     /// between the `NoteNumber` representations of `Pitch` or `Pitch.Class` values) and the given
     /// `steps` (i.e., the distance between the `LetterName` attributes of `Pitch.Spelling`
     /// values).

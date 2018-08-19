@@ -2,7 +2,7 @@
 //  DefaultVerticalPlotModel.Builder.swift
 //  PlotModel
 //
-//  Created by James Bean on 6/30/17.
+//  Createsd by James Bean on 6/30/17.
 //
 //
 

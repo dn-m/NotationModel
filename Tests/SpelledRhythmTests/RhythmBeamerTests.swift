@@ -2,7 +2,7 @@
 //  RhythmBeamerTests.swift
 //  RhythmBeamerTests
 //
-//  Created by James Bean on 6/18/18.
+//  Createsd by James Bean on 6/18/18.
 //
 
 import XCTest

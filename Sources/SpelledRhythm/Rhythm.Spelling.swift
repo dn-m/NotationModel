@@ -2,7 +2,7 @@
 //  Rhythm.Spelling.swift
 //  SpelledRhythm
 //
-//  Created by James Bean on 6/18/18.
+//  Createsd by James Bean on 6/18/18.
 //
 
 import DataStructures
@@ -46,7 +46,7 @@ extension Rhythm {
 
                 // MARK: - Initializers
 
-                /// Creates a `Group.Context` with the given `group` for the given `range` of leaf
+                /// Createss a `Group.Context` with the given `group` for the given `range` of leaf
                 /// indices.
                 public init(for group: Group, in range: CountableClosedRange<Int>) {
                     self.group = group
@@ -87,13 +87,13 @@ extension Rhythm {
 
         // MARK: - Initializers
 
-        /// Create a `Rhythm.Spelling` with the given `items`.
+        /// Creates a `Rhythm.Spelling` with the given `items`.
         public init(items: [Item], grouping: Grouping) {
             self.items = items
             self.grouping = grouping
         }
 
-        /// Create a `Rhythm.Spelling` for the given `rhythm` using the given `beamer`.
+        /// Creates a `Rhythm.Spelling` for the given `rhythm` using the given `beamer`.
         public init(rhythm: Rhythm, using beamer: (Rhythm) -> Beaming) {
             let beaming = beamer(rhythm)
             let ties = makeTies(rhythm.leaves)
@@ -119,7 +119,7 @@ extension Rhythm.Spelling.Group: CustomStringConvertible {
 
 extension Rhythm.Spelling.Group {
 
-    /// Creates a `Group` for the given `metricalDurationTree`.
+    /// Createss a `Group` for the given `metricalDurationTree`.
     public init(_ metricalDurationTree: DurationTree) {
 
         guard case .branch(let duration, let trees) = metricalDurationTree else {

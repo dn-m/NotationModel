@@ -2,7 +2,7 @@
 //  StaffModel.Builder.swift
 //  StaffModel
 //
-//  Created by James Bean on 6/25/17.
+//  Createsd by James Bean on 6/25/17.
 //
 //
 

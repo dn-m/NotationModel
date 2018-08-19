@@ -2,7 +2,7 @@
 //  TuningSystem.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 8/18/18.
+//  Createsd by James Bean on 8/18/18.
 //
 
 /// Interface for types which implement a tuning system.

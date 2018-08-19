@@ -2,7 +2,7 @@
 //  CompoundSpelledIntervalTests.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 8/17/18.
+//  Createsd by James Bean on 8/17/18.
 //
 
 import XCTest

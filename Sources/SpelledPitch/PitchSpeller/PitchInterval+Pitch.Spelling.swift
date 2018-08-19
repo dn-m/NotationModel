@@ -2,7 +2,7 @@
 //  PitchInterval+Pitch.Spelling.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 5/19/16.
+//  Createsd by James Bean on 5/19/16.
 //
 //
 

@@ -2,7 +2,7 @@
 //  RhythmBeamer.swift
 //  RhythmBeamer
 //
-//  Created by James Bean on 6/18/18.
+//  Createsd by James Bean on 6/18/18.
 //
 
 import DataStructures
@@ -19,7 +19,7 @@ public enum DefaultBeamer {
 }
 
 extension Beaming {
-    /// Create a `Beaming` with the given amount of beams per vertical.
+    /// Creates a `Beaming` with the given amount of beams per vertical.
     init(beamCounts: [Int]) {
         self.init(sanitizingBeamletDirections(for: beamingVerticals(beamCounts)))
     }
@@ -66,7 +66,7 @@ func beamCount(_ duration: Duration) -> Int {
 }
 
 extension Beaming.Point.StartOrStop {
-    /// Create a `StartOrStop` with the given amounts. You can't start and stop in the same
+    /// Creates a `StartOrStop` with the given amounts. You can't start and stop in the same
     /// `vertical`, so don't.
     init(start: Int, stop: Int) {
         self = start > 0 ? .start(count: start) : stop > 0 ? .stop(count: stop) : .none

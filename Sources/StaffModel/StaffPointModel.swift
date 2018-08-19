@@ -2,7 +2,7 @@
 //  StaffPointModel.swift
 //  StaffModel
 //
-//  Created by James Bean on 1/15/17.
+//  Createsd by James Bean on 1/15/17.
 //
 //
 
@@ -38,7 +38,7 @@ public struct StaffPointModel: PointModel {
 
     // MARK: - Initializers
     
-    /// Create a `StaffPointModel` with any type of `Sequence` containing 
+    /// Creates a `StaffPointModel` with any type of `Sequence` containing 
     /// `StaffRepresentablePitch` values.
     public init <S: Sequence> (_ sequence: S) where S.Element == StaffRepresentablePitch {
         self.elements = Set(sequence)

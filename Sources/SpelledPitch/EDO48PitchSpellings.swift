@@ -2,7 +2,7 @@
 //  EDO48PitchSpellings.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 5/1/16.
+//  Createsd by James Bean on 5/1/16.
 //
 //
 

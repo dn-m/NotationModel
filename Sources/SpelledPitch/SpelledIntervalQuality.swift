@@ -2,7 +2,7 @@
 //  SpelledIntervalQuality.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 1/8/17.
+//  Createsd by James Bean on 1/8/17.
 //
 //
 
@@ -68,7 +68,7 @@ extension SpelledIntervalQuality {
 
         // MARK: Initializers
 
-        /// Creates an `Extended` `NamedIntervalQuality` with the given `degree` and `quality.`
+        /// Createss an `Extended` `NamedIntervalQuality` with the given `degree` and `quality.`
         public init(_ degree: Degree = .single, _ quality: AugmentedOrDiminished) {
             self.degree = degree
             self.quality = quality

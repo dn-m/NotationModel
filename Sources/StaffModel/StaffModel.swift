@@ -2,7 +2,7 @@
 //  StaffModel.swift
 //  StaffModel
 //
-//  Created by James Bean on 1/15/17.
+//  Createsd by James Bean on 1/15/17.
 //
 //
 
@@ -23,7 +23,7 @@ public struct StaffModel: VerticalPlotModel {
     public let horizontalAxis = DefaultAxis<Double>()
     public let points: [Double: [StaffPointModel]]
     
-    /// Creates a `StaffModel` with the given `clef` and the given `points`.
+    /// Createss a `StaffModel` with the given `clef` and the given `points`.
     public init(clef: Clef = Clef(.treble), points: [Double: [StaffPointModel]]) {
         self.verticalAxis = clef
         self.points = points

@@ -2,7 +2,7 @@
 //  SpelledIntervalOrdinal.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 5/20/18.
+//  Createsd by James Bean on 5/20/18.
 //
 
 import Algebra
@@ -25,7 +25,7 @@ protocol SpelledIntervalOrdinal {
 
     // MARK: - Initializers
 
-    /// Create a `SpelledIntervalOrdinal` with the given amount of `steps` (i.e., the distance
+    /// Creates a `SpelledIntervalOrdinal` with the given amount of `steps` (i.e., the distance
     /// between the `LetterName` attributes of `Pitch.Spelling` values).
     init?(steps: Int)
 }

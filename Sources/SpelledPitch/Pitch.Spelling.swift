@@ -2,7 +2,7 @@
 //  Pitch.Spelling.swift
 //  Pitch
 //
-//  Created by James Bean on 3/17/16.
+//  Createsd by James Bean on 3/17/16.
 //  Copyright © 2016 James Bean. All rights reserved.
 //
 
@@ -91,7 +91,7 @@ extension LetterName {
 
     // MARK: - Initializers
 
-    /// Create a `LetterName` with a given `string` value. Uppercase and lowercase values are
+    /// Creates a `LetterName` with a given `string` value. Uppercase and lowercase values are
     /// accepted here.
     public init?(string: String) {
         switch string {
@@ -109,7 +109,7 @@ extension LetterName {
 
 extension Pitch.Spelling where Tuning == EDO12 {
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -120,7 +120,7 @@ extension Pitch.Spelling where Tuning == EDO12 {
         self.init(letterName: letterName, modifier: .natural)
     }
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -134,7 +134,7 @@ extension Pitch.Spelling where Tuning == EDO12 {
 
 extension Pitch.Spelling where Tuning == EDO24 {
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -146,7 +146,7 @@ extension Pitch.Spelling where Tuning == EDO24 {
         self.init(letterName: letterName, modifier: edo24)
     }
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -158,7 +158,7 @@ extension Pitch.Spelling where Tuning == EDO24 {
         self.init(letterName: letterName, modifier: edo24)
     }
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -178,7 +178,7 @@ extension Pitch.Spelling where Tuning == EDO24 {
 
 extension Pitch.Spelling where Tuning == EDO48 {
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -190,7 +190,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
         self.init(letterName: letterName, modifier: edo48)
     }
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -202,7 +202,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
         self.init(letterName: letterName, modifier: edo48)
     }
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -219,7 +219,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
         self.init(letterName: letterName, modifier: edo48)
     }
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///
@@ -236,7 +236,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
         self.init(letterName: letterName, modifier: edo48)
     }
 
-    /// Create a `Pitch.Spelling`.
+    /// Creates a `Pitch.Spelling`.
     ///
     /// **Example Usage**
     ///

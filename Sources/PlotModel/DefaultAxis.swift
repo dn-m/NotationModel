@@ -2,7 +2,7 @@
 //  DefaultAxis.swift
 //  PlotModel
 //
-//  Created by James Bean on 6/30/17.
+//  Createsd by James Bean on 6/30/17.
 //
 //
 
@@ -12,6 +12,6 @@ public struct DefaultAxis <T>: Axis {
     /// - Returns: Element as coordinate.
     public var coordinate: (T) -> T = { t in t }
     
-    /// Create a `DefaultAxis`.
+    /// Creates a `DefaultAxis`.
     public init() { }
 }

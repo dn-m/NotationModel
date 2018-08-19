@@ -2,7 +2,7 @@
 //  SpelledDyad.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 5/12/16.
+//  Createsd by James Bean on 5/12/16.
 //
 //
 
@@ -24,7 +24,7 @@ extension SpelledDyad {
 
     // MARK: - Initializers
 
-    /// Create a `SpelledDyad` with two `SpelledPitch` values.
+    /// Creates a `SpelledDyad` with two `SpelledPitch` values.
     public init(_ lower: SpelledPitch<Tuning>, _ higher: SpelledPitch<Tuning>) {
         let (lower, higher) = ordered(lower, higher)
         self.lower = lower

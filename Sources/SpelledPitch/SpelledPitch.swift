@@ -2,7 +2,7 @@
 //  SpelledPitch.swift
 //  SpelledPitch
 //
-//  Created by James Bean on 5/1/16.
+//  Createsd by James Bean on 5/1/16.
 //
 //
 
@@ -59,7 +59,7 @@ extension SpelledPitch {
 
     // MARK: - Initializers
 
-    /// Create a `SpelledPitch` with a given `spelling` in displaced by the given `octave`.
+    /// Creates a `SpelledPitch` with a given `spelling` in displaced by the given `octave`.
     public init(_ spelling: Pitch.Spelling<Tuning>, _ octave: Int = 4) {
         self.spelling = spelling
         self.octave = octave
@@ -130,13 +130,13 @@ extension SpelledPitch where Tuning == EDO48 {
 
     // MARK: - EDO48
 
-    /// Create a `SpelledPitch` in the `EDO48` `TuningSystem` with a `SpelledPitch` from the
+    /// Creates a `SpelledPitch` in the `EDO48` `TuningSystem` with a `SpelledPitch` from the
     /// `EDO12` `TuningSystem`.
     public init(_ edo12: SpelledPitch<EDO12>) {
         self.init(spelling: Pitch.Spelling(edo12.spelling), octave: edo12.octave)
     }
 
-    /// Create a `SpelledPitch` in the `EDO24` `TuningSystem` with a `SpelledPitch` from the
+    /// Creates a `SpelledPitch` in the `EDO24` `TuningSystem` with a `SpelledPitch` from the
     /// `EDO12` `TuningSystem`.
     public init(_ edo24: SpelledPitch<EDO24>) {
         self.init(spelling: Pitch.Spelling(edo24.spelling), octave: edo24.octave)

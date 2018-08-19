@@ -2,7 +2,7 @@
 //  BeamletDirectionTests.swift
 //  NotationModel
 //
-//  Created by James Bean on 7/22/18.
+//  Createsd by James Bean on 7/22/18.
 //
 
 import XCTest
@@ -28,7 +28,7 @@ class BeamletDirectionTests: XCTestCase {
     }
 
     func testFirstBeamletsForward() {
-        // Create one thousand beamings where the first vertical has beamlets
+        // Creates one thousand beamings where the first vertical has beamlets
         for _ in 1..<1_000 {
             let verticalsCount = Int.random(in: 2..<20)
             let firstBeamCount = Int.random(in: 1...10)
@@ -39,7 +39,7 @@ class BeamletDirectionTests: XCTestCase {
     }
 
     func testLastBeamletsBackward() {
-        // Create one thousand beamings where the first vertical has beamlets
+        // Creates one thousand beamings where the first vertical has beamlets
         for _ in 1..<1_000 {
             let verticalsCount = Int.random(in: 2..<20)
             let lastBeamCount = Int.random(in: 1...10)

@@ -2,7 +2,7 @@
 //  ClefTests.swift
 //  StaffModel
 //
-//  Created by James Bean on 1/16/17.
+//  Createsd by James Bean on 1/16/17.
 //
 //
 
