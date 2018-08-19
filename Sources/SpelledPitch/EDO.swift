@@ -57,15 +57,32 @@ public struct EDO24: TuningSystem {
     /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
     /// `EDO24` `TuningSystem`.
     public struct Modifier: PitchSpellingModifier {
+
+        // MARK: - Nested Types
+
+        /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
+        /// `EDO24` `TuningSystem`.
         public enum Modifier: Double {
+
+            // MARK: - Cases
+
+            /// Quarter modifier.
             case quarter = 0.5
+
+            /// None modifier (`EDO12` `sharp`, `flat`, `natural` remain unchanged).
             case none = 1
+
+            /// Three-quarter modifier.
             case threeQuarter = 1.5
         }
 
-        public let edo12: EDO12.Modifier
-        public let modifier: Modifier
+        // MARK: - Instance Properties
 
+        /// The `EDO12` subsystem modifier.
+        public let edo12: EDO12.Modifier
+
+        /// The `Modifier` which modifies the `adjustment` value `edo12` modifier.
+        public let modifier: Modifier
 
         /// The amount that a `EDO24.Modifier` modifies the base `Pitch.Class` of a
         /// `LetterName` (in percentage of a `NoteNumber`).
@@ -101,16 +118,30 @@ public enum EDO48: TuningSystem {
 
         // MARK: - Nested Types
 
+        /// The modifer (represented graphically as an `Accidental`) for a `SpelledPitch` in the
+        /// `EDO48` `TuningSystem`.
         public enum Modifier: Double {
+
+            // MARK: - Cases
+
+            /// Eighth-step up.
             case up = 0.25
+
+            /// None modifier (`EDO24` `quarter sharp`, `three quarter flat`, `natural`, etc. remain
+            /// unchanged).
             case none = 0
+
+            /// Eighth-step down.
             case down = -0.25
 
         }
 
         // MARK: - Instance Properties
 
+        /// The `EDO24` subsystem modifier.
         public let edo24: EDO24.Modifier
+
+        /// The `Modifier` which modifies the `adjustment` value `edo24` modifier.
         public let modifier: Modifier
 
         // MARK: - Computed Properties
@@ -137,4 +168,3 @@ extension EDO48.Modifier: CustomStringConvertible {
         return [string, edo24.description].compactMap { $0 }.joined(separator: " ")
     }
 }
-

@@ -6,6 +6,8 @@
 //
 
 /// Interface for types which implement a tuning system.
+///
+/// - Note: Consider pushing into `Music/Pitch` module.
 public protocol TuningSystem {
 
     // MARK: - Associated Types
@@ -44,7 +46,6 @@ extension PitchSpellingModifier {
         return adjustment.hashValue
     }
 }
-
 
 extension PitchSpellingModifier {
 
