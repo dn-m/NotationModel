@@ -30,11 +30,11 @@ extension Pitch {
         return PitchSpellings.defaultSpelling(forPitchClass: self.class)!
     }
 
-    /// - returns: `SpelledPitch` with the given `Pitch.Spelling`,
+    /// - Returns: `SpelledPitch` with the given `Pitch.Spelling`,
     /// if the given `Pitch.Spelling` is valid for the `PitchClass` of the given `pitch`.
     ///
-    /// - throws: `Pitch.Spelling.Error.InvalidPitchSpellingForPitch` if the given `spelling` is
-    /// not appropriate for this `Pitch`.
+    /// - Throws: `Pitch.Spelling.Error.incompatibleSpelling` if the given `spelling` is not
+    /// appropriate for this `Pitch`.
     ///
     public func spelled(with spelling: Pitch.Spelling<EDO48>) throws -> SpelledPitch<EDO48> {
         guard spelling.pitchClass == self.class else {
