@@ -15,8 +15,8 @@ extension EDO48 {
 
         00.00: [
             Pitch.Spelling(.c),
-            Pitch.Spelling<EDO48>(.b, .sharp(1)),
-            Pitch.Spelling<EDO48>(.d, .flat(2))
+            Pitch.Spelling(.b, .sharp(1)),
+            Pitch.Spelling(.d, .flat(2))
         ],
 
         00.25: [
