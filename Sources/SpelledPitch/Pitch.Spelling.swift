@@ -304,12 +304,7 @@ extension Pitch.Spelling: CustomStringConvertible {
 
     /// Printed description.
     public var description: String {
-        var result = ""
-        result += "\(letterName)"
-
-//        if quarterStep != .natural { result += " \(quarterStep)" }
-//        if eighthStep != .none { result += " \(eighthStep)" }
-        return result
+        return "\(letterName) \(modifier)"
     }
 }
 
