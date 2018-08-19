@@ -26,33 +26,11 @@ public struct SpelledPitch <Tuning: TuningSystem> {
     public let octave: Int
 }
 
-extension SpelledPitch where Tuning == EDO12 {
+extension SpelledPitch where Tuning: EDO {
 
-    // MARK: - Type Properties
-
-    /// The `.c` `.natural` nearest to the middle of an 88-key piano.
-    public static var middleC: SpelledPitch<EDO12> {
-        return .init(Pitch.Spelling(.c), 4)
-    }
-}
-
-extension SpelledPitch where Tuning == EDO24 {
-
-    // MARK: - Type Properties
-
-    /// The `.c` `.natural` nearest to the middle of an 88-key piano.
-    public static var middleC: SpelledPitch<EDO24> {
-        return .init(Pitch.Spelling(.c), 4)
-    }
-}
-
-extension SpelledPitch where Tuning == EDO48 {
-
-    // MARK: - Type Properties
-
-    /// The `.c` `.natural` nearest to the middle of an 88-key piano.
-    public static var middleC: SpelledPitch<EDO48> {
-        return .init(Pitch.Spelling(.c), 4)
+    /// The `c natural` nearest to the middle of an 88-key piano.
+    public static var middleC: SpelledPitch<Tuning> {
+        return .init(Pitch.Spelling.middleC, 4)
     }
 }
 
