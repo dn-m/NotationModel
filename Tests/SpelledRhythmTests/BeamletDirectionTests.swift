@@ -2,7 +2,7 @@
 //  BeamletDirectionTests.swift
 //  NotationModel
 //
-//  Createsd by James Bean on 7/22/18.
+//  Created by James Bean on 7/22/18.
 //
 
 import XCTest

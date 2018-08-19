@@ -2,7 +2,7 @@
 //  PlotModel.swift
 //  PlotModel
 //
-//  Createsd by James Bean on 1/14/17.
+//  Created by James Bean on 1/14/17.
 //
 //
 

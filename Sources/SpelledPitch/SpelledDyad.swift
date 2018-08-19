@@ -2,7 +2,7 @@
 //  SpelledDyad.swift
 //  SpelledPitch
 //
-//  Createsd by James Bean on 5/12/16.
+//  Created by James Bean on 5/12/16.
 //
 //
 

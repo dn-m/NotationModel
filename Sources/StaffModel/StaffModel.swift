@@ -2,7 +2,7 @@
 //  StaffModel.swift
 //  StaffModel
 //
-//  Createsd by James Bean on 1/15/17.
+//  Created by James Bean on 1/15/17.
 //
 //
 

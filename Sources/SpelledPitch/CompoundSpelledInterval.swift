@@ -2,7 +2,7 @@
 //  CompoundSpelledInterval.swift
 //  SpelledPitch
 //
-//  Createsd by James Bean on 5/20/18.
+//  Created by James Bean on 5/20/18.
 //
 
 import Math

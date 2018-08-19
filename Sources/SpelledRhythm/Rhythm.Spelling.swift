@@ -2,7 +2,7 @@
 //  Rhythm.Spelling.swift
 //  SpelledRhythm
 //
-//  Createsd by James Bean on 6/18/18.
+//  Created by James Bean on 6/18/18.
 //
 
 import DataStructures

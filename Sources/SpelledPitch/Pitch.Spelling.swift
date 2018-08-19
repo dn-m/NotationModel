@@ -2,7 +2,7 @@
 //  Pitch.Spelling.swift
 //  Pitch
 //
-//  Createsd by James Bean on 3/17/16.
+//  Created by James Bean on 3/17/16.
 //  Copyright © 2016 James Bean. All rights reserved.
 //
 

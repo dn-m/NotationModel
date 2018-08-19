@@ -2,7 +2,7 @@
 //  SpelledDyadTests.swift
 //  SpelledPitch
 //
-//  Createsd by James Bean on 8/11/16.
+//  Created by James Bean on 8/11/16.
 //
 
 import XCTest

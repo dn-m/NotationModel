@@ -2,7 +2,7 @@
 //  OrderedSpelledIntervalTests.swift
 //  SpelledPitch
 //
-//  Createsd by James Bean on 1/8/17.
+//  Created by James Bean on 1/8/17.
 //
 //
 

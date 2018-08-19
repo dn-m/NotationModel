@@ -2,7 +2,7 @@
 //  BeamingTests.swift
 //  SpelledRhythmTests
 //
-//  Createsd by James Bean on 6/20/18.
+//  Created by James Bean on 6/20/18.
 //
 
 import XCTest

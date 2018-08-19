@@ -2,7 +2,7 @@
 //  Pitch+PitchSpellingTests.swift
 //  SpelledPitch
 //
-//  Createsd by James Bean on 5/9/16.
+//  Created by James Bean on 5/9/16.
 //
 //
 
