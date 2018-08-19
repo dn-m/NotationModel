@@ -14,24 +14,23 @@
 
 import Pitch
 
-public struct SpelledPitch {
+/// A `Pitch.Spelling` in a specific octave.
+public struct SpelledPitch <Tuning: TuningSystem> {
 
     // MARK: - Instance Properties
 
     /// The `Pitch.Spelling` defining a `SpelledPitch`.
-    public let spelling: Pitch.Spelling
+    public let spelling: Pitch.Spelling<Tuning>
 
     /// The `octave` defining a `SpelledPitch`
     public let octave: Int
 }
 
-extension SpelledPitch {
+extension SpelledPitch where Tuning: EDO {
 
-    // MARK: - Type Properties
-
-    /// The `.c` `.natural` nearest to the middle of an 88-key piano.
-    public static var middleC: SpelledPitch {
-        return .init(Pitch.Spelling(.c), 4)
+    /// The `c natural` nearest to the middle of an 88-key piano.
+    public static var middleC: SpelledPitch<Tuning> {
+        return .init(Pitch.Spelling.middleC, 4)
     }
 }
 
@@ -39,50 +38,50 @@ extension SpelledPitch {
 
     // MARK: - Initializers
 
-    /// Create a `SpelledPitch` with a given `spelling` in displaced by the given `octave`.
-    public init(_ spelling: Pitch.Spelling, _ octave: Int = 4) {
+    /// Creates a `SpelledPitch` with a given `spelling` in displaced by the given `octave`.
+    public init(_ spelling: Pitch.Spelling<Tuning>, _ octave: Int = 4) {
         self.spelling = spelling
         self.octave = octave
     }
 }
 
-extension SpelledPitch {
+extension SpelledPitch where Tuning == EDO12 {
 
-    // MARK: - Computed Properties
-
-    /// The `Pitch` value of this `SpelledPitch`.
+    /// - Returns: The `Pitch` value represented by this `SpelledPitch`.
     public var pitch: Pitch {
+        let noteNumber = NoteNumber(spelling.pitchClass.noteNumber.value + Double(octave + 1) * 12)
+        return .init(noteNumber: noteNumber)
+    }
+}
 
+extension SpelledPitch where Tuning == EDO24 {
+
+    /// - Returns: The `Pitch` value represented by this `SpelledPitch`.
+    public var pitch: Pitch {
         let pitchClass = spelling.pitchClass
-
-        // TODO: Break out function
-        var octave: Int {
-
-            let unadjusted = self.octave
-
-            var mustAdjustForC: Bool {
-                guard spelling.letterName == .c else { return false }
-                if spelling.quarterStep.direction == .down { return true }
-                return spelling.quarterStep == .natural && spelling.eighthStep == .down
-            }
-
-            var mustAdjustForB: Bool {
-                guard spelling.letterName == .b else { return false }
-                return spelling.quarterStep == .sharp && spelling.eighthStep.rawValue >= 0
-            }
-
-            return mustAdjustForC ? unadjusted - 1 : mustAdjustForB ? unadjusted + 1 : unadjusted
-        }
-
+        let octave = self.octave + reachAroundAdjustment(for: spelling)
         let octaveDisplacement = Double(octave + 1) * 12
-
         return .init(noteNumber: NoteNumber(pitchClass.noteNumber.value + octaveDisplacement))
     }
 }
 
-extension SpelledPitch: Equatable, Hashable { }
+extension SpelledPitch where Tuning == EDO48 {
 
-extension SpelledPitch: Comparable {
+    // MARK: - Computed Properties
+
+    /// - Returns: The `Pitch` value represented by this `SpelledPitch`.
+    public var pitch: Pitch {
+        let pitchClass = spelling.pitchClass
+        let octave = self.octave + reachAroundAdjustment(for: spelling)
+        let octaveDisplacement = Double(octave + 1) * 12
+        return .init(noteNumber: NoteNumber(pitchClass.noteNumber.value + octaveDisplacement))
+    }
+}
+
+extension SpelledPitch: Equatable where Tuning.Modifier: Equatable { }
+extension SpelledPitch: Hashable where Tuning.Modifier: Hashable { }
+
+extension SpelledPitch: Comparable where Tuning.Modifier: Comparable {
 
     /// - Returns: `true` if the `pitch` value of the `SpelledPitch` value on the left is less than
     /// that of the `SpelledPitch` value on the right. Otherwise, `false`.
@@ -93,8 +92,32 @@ extension SpelledPitch: Comparable {
     /// interval of a double diminished second, not a double augmented seventh.
     ///
     public static func < (lhs: SpelledPitch, rhs: SpelledPitch) -> Bool {
-        if lhs.octave < rhs.octave { return true }
-        if lhs.octave > rhs.octave { return false }
-        return lhs.spelling < rhs.spelling
+        if lhs.octave == rhs.octave { return lhs.spelling < rhs.spelling }
+        return lhs.octave < rhs.octave
+    }
+}
+
+/// - Returns: The amount to update the octave when calculating the `pitch` value of a
+/// `SpelledPitch`, in the case that a `b sharp up` or `c quarter flat down`.
+func reachAroundAdjustment <T: TuningSystem> (for spelling: Pitch.Spelling<T>) -> Int {
+    if spelling.letterName == .c && spelling.modifier.adjustment < 0 { return -1 }
+    if spelling.letterName == .b && spelling.modifier.adjustment >= 1 { return 1 }
+    return 0
+}
+
+extension SpelledPitch where Tuning == EDO48 {
+
+    // MARK: - EDO48
+
+    /// Creates a `SpelledPitch` in the `EDO48` `TuningSystem` with a `SpelledPitch` from the
+    /// `EDO12` `TuningSystem`.
+    public init(_ edo12: SpelledPitch<EDO12>) {
+        self.init(spelling: Pitch.Spelling(edo12.spelling), octave: edo12.octave)
+    }
+
+    /// Creates a `SpelledPitch` in the `EDO24` `TuningSystem` with a `SpelledPitch` from the
+    /// `EDO12` `TuningSystem`.
+    public init(_ edo24: SpelledPitch<EDO24>) {
+        self.init(spelling: Pitch.Spelling(edo24.spelling), octave: edo24.octave)
     }
 }

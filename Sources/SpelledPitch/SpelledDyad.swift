@@ -9,30 +9,30 @@
 import Algorithms
 
 /// Dyad of `SpelledPitch` values.
-public struct SpelledDyad {
+public struct SpelledDyad <Tuning: TuningSystem> {
     
     // MARK: - Instance Properties
     
     /// Lower of the two `SpelledPitch` values.
-    public let lower: SpelledPitch
+    public let lower: SpelledPitch<Tuning>
     
     /// Higher of the two `SpelledPitch` values.
-    public let higher: SpelledPitch
+    public let higher: SpelledPitch<Tuning>
 }
 
 extension SpelledDyad {
 
     // MARK: - Initializers
 
-    /// Create a `SpelledDyad` with two `SpelledPitch` values.
-    public init(_ lower: SpelledPitch, _ higher: SpelledPitch) {
+    /// Creates a `SpelledDyad` with two `SpelledPitch` values.
+    public init(_ lower: SpelledPitch<Tuning>, _ higher: SpelledPitch<Tuning>) {
         let (lower, higher) = ordered(lower, higher)
         self.lower = lower
         self.higher = higher
     }
 }
 
-extension SpelledDyad {
+extension SpelledDyad where Tuning == EDO12 {
 
     // MARK: - Computed Properties
 
@@ -42,13 +42,12 @@ extension SpelledDyad {
         return UnorderedSpelledInterval(lower.spelling, higher.spelling)
     }
 
-    /// - Returns: `OrderedSpelledInterval`, which retains the objective order of this
+    /// - Returns: `CompoundSpelledInterval`, which retains the objective order of this
     /// `SpelledDyad`, though not its octave displacement.
-    //
-    // FIXME: Return `CompoundSpelledInterval`.
-    public var orderedInterval: OrderedSpelledInterval {
-        fatalError()
+    public var orderedInterval: CompoundSpelledInterval {
+        return CompoundSpelledInterval(lower, higher)
     }
 }
 
-extension SpelledDyad: Equatable, Hashable { }
+extension SpelledDyad: Equatable where Tuning.Modifier: Equatable { }
+extension SpelledDyad: Hashable where Tuning.Modifier: Hashable { }

@@ -16,7 +16,7 @@ public struct Beaming: Equatable {
 
     // MARK: - Initializers
 
-    /// Create a `Beaming` with the given `verticals`.
+    /// Creates a `Beaming` with the given `verticals`.
     public init <C> (_ verticals: C) where C: Collection, C.Element == Point.Vertical {
         self.verticals = Array(sanitizingBeamletDirections(for: verticals))
     }
@@ -122,14 +122,14 @@ extension Beaming.Point {
 
         // MARK: - Initializers
 
-        /// Create a `StartOrStop.start` with the given `start` amount. If `start` is `0`, a
+        /// Creates a `StartOrStop.start` with the given `start` amount. If `start` is `0`, a
         /// `.none` value will be created.
         public init(start: Int) {
             precondition(start >= 0)
             self = start == 0 ? .none : .start(count: start)
         }
 
-        /// Create a `StartOrStop.stop` with the given `stop` amount. If `stop` is `0`, a
+        /// Creates a `StartOrStop.stop` with the given `stop` amount. If `stop` is `0`, a
         /// `.none` value will be created.
         public init(stop: Int) {
             precondition(stop >= 0)
@@ -196,7 +196,7 @@ extension Beaming.Point {
 
         // MARK: - Initializers
 
-        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
+        /// Creates a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, startOrStop: StartOrStop = .none, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = startOrStop
@@ -204,7 +204,7 @@ extension Beaming.Point {
             self.beamletDirection = startOrStop.beamletDirection
         }
 
-        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
+        /// Creates a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, start: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(start: start)
@@ -212,7 +212,7 @@ extension Beaming.Point {
             self.beamletDirection = startOrStop.beamletDirection
         }
 
-        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
+        /// Creates a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(maintain: Int = 0, stop: Int, beamlets: Int = 0) {
             self.maintainCount = maintain
             self.startOrStop = .init(stop: stop)
@@ -220,7 +220,7 @@ extension Beaming.Point {
             self.beamletDirection = startOrStop.beamletDirection
         }
 
-        /// Create a `Beaming.Point.Vertical` with the given beaming attributes.
+        /// Creates a `Beaming.Point.Vertical` with the given beaming attributes.
         public init(
             maintainCount: Int,
             startOrStop: StartOrStop,

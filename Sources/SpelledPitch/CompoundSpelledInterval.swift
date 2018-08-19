@@ -36,21 +36,21 @@ extension CompoundSpelledInterval {
 
     // MARK: - Initializers
 
-    /// Create a `CompoundSpelledInterval` with the given `interval` and the amount of `octaves` of
+    /// Creates a `CompoundSpelledInterval` with the given `interval` and the amount of `octaves` of
     /// displacement.
     public init(_ interval: OrderedSpelledInterval, displacedBy octaves: Int = 0) {
         self.interval = interval
         self.octaveDisplacement = octaves
     }
 
-    /// Create a `CompoundSpelledInterval` with the given `quality` and the given `ordinal`, with
+    /// Creates a `CompoundSpelledInterval` with the given `quality` and the given `ordinal`, with
     /// no octave displacement.
     public init(_ quality: SpelledIntervalQuality, _ ordinal: Ordinal) {
         self.init(OrderedSpelledInterval(quality,ordinal))
     }
 
-    /// Create a `CompoundSpelledInterval` with the two given `SpelledPitch` values.
-    public init(_ a: SpelledPitch, _ b: SpelledPitch) {
+    /// Creates a `CompoundSpelledInterval` with the two given `SpelledPitch` values.
+    public init(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) {
         self.init(OrderedSpelledInterval(a,b), displacedBy: abs(b.octave - a.octave))
     }
 }

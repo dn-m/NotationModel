@@ -117,7 +117,7 @@ extension OrderedSpelledInterval.Ordinal {
 
     // MARK: - Initializers
 
-    /// Create a `OrderedSpelledInterval` with the given amount of `steps`.
+    /// Creates a `OrderedSpelledInterval` with the given amount of `steps`.
     public init?(steps: Int) {
         switch steps {
         case 0: self = .perfect(.unison)
@@ -131,7 +131,7 @@ extension OrderedSpelledInterval.Ordinal {
         }
     }
 
-    /// Create an `OrderedSpelledInterval` with the given `unordered` spelled interval.
+    /// Creates an `OrderedSpelledInterval` with the given `unordered` spelled interval.
     ///
     /// > This is a lossless conversion.
     ///
@@ -203,21 +203,21 @@ extension OrderedSpelledInterval {
 
     // MARK: - Initializers
 
-    /// Create an `OrderedSpelledInterval` with a given `quality` and `ordinal`.
+    /// Creates an `OrderedSpelledInterval` with a given `quality` and `ordinal`.
     internal init(_ direction: Direction, _ quality: Quality, _ ordinal: Ordinal) {
         self.direction = direction
         self.quality = quality
         self.ordinal = ordinal
     }
 
-    /// Create an `OrderedSpelledInterval` with a given `quality` and `ordinal`.
+    /// Creates an `OrderedSpelledInterval` with a given `quality` and `ordinal`.
     internal init(_ quality: Quality, _ ordinal: Ordinal) {
         self.direction = .ascending
         self.quality = quality
         self.ordinal = ordinal
     }
 
-    /// Create a perfect `OrderedSpelledInterval`.
+    /// Creates a perfect `OrderedSpelledInterval`.
     ///
     ///     let perfectFifth = OrderedSpelledInterval(.perfect, .fifth)
     ///
@@ -227,7 +227,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create a perfect `OrderedSpelledInterval` with a given `direction`.
+    /// Creates a perfect `OrderedSpelledInterval` with a given `direction`.
     ///
     ///     let descendingPerfectFifth = OrderedSpelledInterval(.descending, .perfect, .fifth)
     ///
@@ -237,7 +237,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an imperfect `OrderedSpelledInterval`.
+    /// Creates an imperfect `OrderedSpelledInterval`.
     ///
     ///     let majorSecond = OrderedSpelledInterval(.major, .second)
     ///     let minorThird = OrderedSpelledInterval(.minor, .third)
@@ -250,7 +250,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an imperfect `OrderedSpelledInterval`.
+    /// Creates an imperfect `OrderedSpelledInterval`.
     ///
     ///     let majorSecond = OrderedSpelledInterval(.ascending, .major, .second)
     ///     let minorThird = OrderedSpelledInterval(.descending, .minor, .third)
@@ -268,7 +268,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with an imperfect ordinal. These
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with an imperfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleDiminishedSecond = OrderedSpelledInterval(.double, .diminished, .second)
@@ -285,7 +285,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with a given `direction` and an
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a given `direction` and an
     /// imperfect ordinal. These intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleDiminishedSecond = OrderedSpelledInterval(.descending, .double, .diminished, .second)
@@ -303,7 +303,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal. These
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .unison)
@@ -320,7 +320,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with a given `direction` and a
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a given `direction` and a
     /// perfect ordinal. These intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = OrderedSpelledInterval(.descending, .double, .augmented, .unison)
@@ -338,7 +338,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with an imperfect ordinal.
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with an imperfect ordinal.
     ///
     ///     let diminishedSecond = OrderedSpelledInterval(.diminished, .second)
     ///     let augmentedSixth = OrderedSpelledInterval(.augmented, .sixth)
@@ -349,7 +349,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with a given `direction` and an
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a given `direction` and an
     /// imperfect ordinal.
     ///
     ///     let diminishedSecond = OrderedSpelledInterval(.descending, .diminished, .second)
@@ -366,7 +366,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal.
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal.
     ///
     ///     let augmentedUnison = OrderedSpelledInterval(.augmented, .unison)
     ///     let diminishedFourth = OrderedSpelledInterval(.diminished, .fourth)
@@ -377,7 +377,7 @@ extension OrderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with a given `direction` and a
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a given `direction` and a
     /// perfect ordinal.
     ///
     ///     let augmentedUnison = OrderedSpelledInterval(.ascending, .augmented, .unison)
@@ -394,8 +394,8 @@ extension OrderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create a `NamedInterval` with two `SpelledPitch` values.
-    internal init(_ a: SpelledPitch, _ b: SpelledPitch) {
+    /// Creates a `OrderedSpelledInterval` with two `SpelledPitch` values.
+    internal init(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) {
         let (a,b,didSwap) = swapped(a,b) { a > b }
         let (interval,steps) = intervalAndSteps(a,b)
         let (quality,ordinal) = OrderedSpelledInterval.qualityAndOrdinal(interval: interval, steps: steps)
@@ -403,15 +403,15 @@ extension OrderedSpelledInterval {
     }
 }
 
-func intervalAndSteps(_ a: SpelledPitch,  _ b: SpelledPitch) -> (Double,Int) {
+func intervalAndSteps(_ a: SpelledPitch<EDO12>,  _ b: SpelledPitch<EDO12>) -> (Double,Int) {
     return ((interval(a,b), steps(a,b)))
 }
 
-private func interval(_ a: SpelledPitch, _ b: SpelledPitch) -> Double {
+private func interval(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) -> Double {
     return (b.pitch - a.pitch).noteNumber.value
 }
 
-private func steps(_ a: SpelledPitch, _ b: SpelledPitch) -> Int {
+private func steps(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) -> Int {
     return mod(b.spelling.letterName.steps - a.spelling.letterName.steps, 7)
 }
 

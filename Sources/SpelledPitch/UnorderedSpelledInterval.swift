@@ -68,7 +68,7 @@ extension UnorderedSpelledInterval.Ordinal {
 
     // MARK: - Initializers
     
-    /// Creates a `UnorderedSpelledInterval` with the given amount of `steps`.
+    /// Createss a `UnorderedSpelledInterval` with the given amount of `steps`.
     public init?(steps: Int) {
         switch steps {
         case 0: self = .perfect(.unison)
@@ -79,7 +79,7 @@ extension UnorderedSpelledInterval.Ordinal {
         }
     }
 
-    /// Create an `UnorderedSpelledInterval` with the given `ordered` spelled interval.
+    /// Creates an `UnorderedSpelledInterval` with the given `ordered` spelled interval.
     ///
     /// In the case that the `ordered` interval is out of range (e.g., `.fifth`, `.sixth`,
     /// `.seventh`), the `.inverse` is converted in an unordered interval (e.g., a `.seventh`
@@ -154,7 +154,7 @@ extension UnorderedSpelledInterval {
 
     // MARK: - Initializers
 
-    /// Create a perfect `UnorderedSpelledInterval`.
+    /// Creates a perfect `UnorderedSpelledInterval`.
     ///
     ///     let perfectFifth = UnorderedSpelledInterval(.perfect, .fourth)
     ///
@@ -163,7 +163,7 @@ extension UnorderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an imperfect `UnorderedSpelledInterval`.
+    /// Creates an imperfect `UnorderedSpelledInterval`.
     ///
     ///     let majorSecond = UnorderedSpelledInterval(.major, .second)
     ///     let minorThird = UnorderedSpelledInterval(.minor, .third)
@@ -173,7 +173,7 @@ extension UnorderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `UnorderedSpelledInterval` with an imperfect ordinal.
+    /// Creates an augmented or diminished `UnorderedSpelledInterval` with an imperfect ordinal.
     ///
     ///     let doubleDiminishedSecond = UnorderedSpelledInterval(.diminished, .second)
     ///     let tripleAugmentedThird = UnorderedSpelledInterval(.augmented, .third)
@@ -183,7 +183,7 @@ extension UnorderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `UnorderedSpelledInterval` with a perfect ordinal.
+    /// Creates an augmented or diminished `UnorderedSpelledInterval` with a perfect ordinal.
     ///
     ///     let doubleAugmentedUnison = UnorderedSpelledInterval(.augmented, .unison)
     ///     let tripleDiminishedFourth = UnorderedSpelledInterval(.diminished, .fourth)
@@ -193,7 +193,7 @@ extension UnorderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with a imperfect ordinal. These
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a imperfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .second)
@@ -209,7 +209,7 @@ extension UnorderedSpelledInterval {
         self.ordinal = .imperfect(ordinal)
     }
 
-    /// Create an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal. These
+    /// Creates an augmented or diminished `OrderedSpelledInterval` with a perfect ordinal. These
     /// intervals can be up to quintuple augmented or diminished.
     ///
     ///     let doubleAugmentedUnison = OrderedSpelledInterval(.double, .augmented, .unison)
@@ -225,7 +225,7 @@ extension UnorderedSpelledInterval {
         self.ordinal = .perfect(ordinal)
     }
 
-    /// Create a `UnorderedSpelledInterval` with a given `quality` and `ordinal`.
+    /// Creates a `UnorderedSpelledInterval` with a given `quality` and `ordinal`.
     ///
     ///     let minorSecond = UnorderedSpelledInterval(.minor, .second)
     ///     let augmentedSixth = UnorderedSpelledInterval(.augmented, .sixth)
@@ -235,8 +235,8 @@ extension UnorderedSpelledInterval {
         self.ordinal = ordinal
     }
 
-    /// Create a `UnorderedSpelledInterval` with two `SpelledPitch` values.
-    public init(_ a: Pitch.Spelling, _ b: Pitch.Spelling) {
+    /// Creates a `UnorderedSpelledInterval` with two `SpelledPitch` values.
+    public init(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) {
         let (a,b) = ordered(a,b)
         let (interval, steps) = intervalAndSteps(a,b)
         self.init(interval: interval, steps: steps)
@@ -248,22 +248,24 @@ extension UnorderedSpelledInterval: Equatable, Hashable { }
 
 /// - Returns: The two `Pitch.Spelling` values such that the difference between `b` and `a` is less
 /// that the difference between `a` and `b`.
-func ordered (_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Pitch.Spelling,Pitch.Spelling) {
+func ordered (_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>)
+    -> (Pitch.Spelling<EDO12>,Pitch.Spelling<EDO12>)
+{
     let (a,b,_) = swapped(a, b) { mod(steps(a,b), 7) > mod(steps(b,a), 7) }
     return (a,b)
 }
 
 /// - Returns: The steps and interval between the two given `Pitch.Spelling` values.
-private func intervalAndSteps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Double,Int) {
+private func intervalAndSteps(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> (Double,Int) {
     return (interval(a,b), steps(a,b))
 }
 
-private func interval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Double {
+private func interval(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> Double {
     return (b.pitchClass - a.pitchClass).noteNumber.value
 }
 
 /// Modulo 7
-private func steps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Int {
+private func steps(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> Int {
     return mod(b.letterName.steps - a.letterName.steps, 7)
 }
 

@@ -11,20 +11,6 @@ extension CompoundSpelledIntervalTests {
     ]
 }
 
-extension DyadTests {
-    static let __allTests = [
-        ("testFinestResolutionEighthTone", testFinestResolutionEighthTone),
-        ("testFinestResolutionQuarterTone", testFinestResolutionQuarterTone),
-    ]
-}
-
-extension IntervalClass_PitchSpellingTests {
-    static let __allTests = [
-        ("testOctaveLessComplexThanPerfectFifth", testOctaveLessComplexThanPerfectFifth),
-        ("testPerfectFifthLessComplexThanMajorThird", testPerfectFifthLessComplexThanMajorThird),
-    ]
-}
-
 extension OrderedSpelledIntervalTests {
     static let __allTests = [
         ("testAbsoluteNamedIntervalOrdinalInversion", testAbsoluteNamedIntervalOrdinalInversion),
@@ -37,14 +23,6 @@ extension OrderedSpelledIntervalTests {
         ("testPerfectOrdinalFourthFifthInverse", testPerfectOrdinalFourthFifthInverse),
         ("testPerfectOrdinalUnisonInverse", testPerfectOrdinalUnisonInverse),
         ("testSecondOrdinalInverseSeventh", testSecondOrdinalInverseSeventh),
-    ]
-}
-
-extension PitchSet_PitchSpellingTests {
-    static let __allTests = [
-        ("testEmptyEmpty", testEmptyEmpty),
-        ("testMiddleC", testMiddleC),
-        ("testPitchSet", testPitchSet),
     ]
 }
 
@@ -65,14 +43,6 @@ extension PitchSpellingsTests {
     static let __allTests = [
         ("testDefaultPitchSpellingsForEighthToneResolution", testDefaultPitchSpellingsForEighthToneResolution),
         ("testMiddleCPitchSpelling", testMiddleCPitchSpelling),
-    ]
-}
-
-extension Pitch_PitchSpellingTests {
-    static let __allTests = [
-        ("test60DefaultSpellingC", test60DefaultSpellingC),
-        ("test61DefaultSpellingD", test61DefaultSpellingD),
-        ("test61PitchSpellingsCSharpDFlat", test61PitchSpellingsCSharpDFlat),
     ]
 }
 
@@ -107,6 +77,7 @@ extension SpelledPitchTests {
         ("testBQuarterSharp", testBQuarterSharp),
         ("testBSharpDown", testBSharpDown),
         ("testComparableDifferentOctave", testComparableDifferentOctave),
+        ("testComparableMinorSixth", testComparableMinorSixth),
         ("testComparableSameLetter", testComparableSameLetter),
         ("testComparableSameOctave", testComparableSameOctave),
         ("testExtrema", testExtrema),
@@ -137,13 +108,9 @@ extension UnorderedSpelledIntervalTests {
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(CompoundSpelledIntervalTests.__allTests),
-        testCase(DyadTests.__allTests),
-        testCase(IntervalClass_PitchSpellingTests.__allTests),
         testCase(OrderedSpelledIntervalTests.__allTests),
-        testCase(PitchSet_PitchSpellingTests.__allTests),
         testCase(PitchSpellingTests.__allTests),
         testCase(PitchSpellingsTests.__allTests),
-        testCase(Pitch_PitchSpellingTests.__allTests),
         testCase(SpelledDyadTests.__allTests),
         testCase(SpelledIntervalQualityTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
