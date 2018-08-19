@@ -256,11 +256,16 @@ extension Pitch.Spelling where Tuning == EDO48 {
 }
 
 extension Pitch.Spelling where Tuning == EDO48 {
+
+    /// Creates a `Pitch.Spelling` in the `EDO48` `TuningSystem` from a `Pitch.Spelling` in the
+    /// `EDO24` domain.
     public init(_ edo24: Pitch.Spelling<EDO24>) {
         let modifier = EDO48.Modifier(edo24: edo24.modifier, modifier: .none)
         self.init(letterName: edo24.letterName, modifier: modifier)
     }
 
+    /// Creates a `Pitch.Spelling` in the `EDO48` `TuningSystem` from a `Pitch.Spelling` in the
+    /// `EDO12` domain.
     public init(_ edo12: Pitch.Spelling<EDO12>) {
         let edo24 = EDO24.Modifier(edo12: edo12.modifier, modifier: .none)
         let modifier = EDO48.Modifier(edo24: edo24, modifier: .none)
@@ -269,6 +274,9 @@ extension Pitch.Spelling where Tuning == EDO48 {
 }
 
 extension Pitch.Spelling where Tuning == EDO24 {
+
+    /// Creates a `Pitch.Spelling` in the `EDO24` `TuningSystem` from a `Pitch.Spelling` in the
+    /// `EDO12` domain.
     public init(_ edo12: Pitch.Spelling<EDO12>) {
         let edo24 = EDO24.Modifier(edo12: edo12.modifier, modifier: .none)
         self.init(letterName: edo12.letterName, modifier: edo24)
