@@ -8,7 +8,6 @@ The `NotationModel` package defines structures for describing how musical inform
 The `NotationModel` package contains several modules:
 
 - [`SpelledPitch`](https://github.com/dn-m/NotationModel/tree/master/Sources/SpelledPitch)
-- [`PitchSpeller`](https://github.com/dn-m/NotationModel/tree/master/Sources/PitchSpeller)
 - [`SpelledRhythm`](https://github.com/dn-m/NotationModel/tree/master/Sources/SpelledRhythm)
 - [`PlotModel`](https://github.com/dn-m/NotationModel/tree/master/Sources/PlotModel)
 - [`StaffModel`](https://github.com/dn-m/NotationModel/tree/master/Sources/StaffModel)
