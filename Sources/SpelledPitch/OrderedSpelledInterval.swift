@@ -408,7 +408,7 @@ func intervalAndSteps(_ a: SpelledPitch<EDO12>,  _ b: SpelledPitch<EDO12>) -> (D
 }
 
 private func interval(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) -> Double {
-    return (b.pitch - a.pitch).noteNumber.value
+    return (b.pitch - a.pitch).value.value
 }
 
 private func steps(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) -> Int {
