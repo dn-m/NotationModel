@@ -13,7 +13,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", from: "0.4.0"),
         .package(url: "https://github.com/dn-m/Math", from: "0.2.0"),
-        .package(url: "https://github.com/dn-m/Music", from: "0.3.0")
+        .package(url: "https://github.com/dn-m/Music", .branch("master"))
     ],
     targets: [
         // Sources

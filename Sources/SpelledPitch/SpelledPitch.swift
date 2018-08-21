@@ -49,8 +49,8 @@ extension SpelledPitch where Tuning == EDO12 {
 
     /// - Returns: The `Pitch` value represented by this `SpelledPitch`.
     public var pitch: Pitch {
-        let noteNumber = NoteNumber(spelling.pitchClass.noteNumber.value + Double(octave + 1) * 12)
-        return .init(noteNumber: noteNumber)
+        let octaves = Pitch(NoteNumber(value: Double((octave + 1) * 12)))
+        return Pitch(spelling.pitchClass) + octaves
     }
 }
 
@@ -61,7 +61,7 @@ extension SpelledPitch where Tuning == EDO24 {
         let pitchClass = spelling.pitchClass
         let octave = self.octave + reachAroundAdjustment(for: spelling)
         let octaveDisplacement = Double(octave + 1) * 12
-        return .init(noteNumber: NoteNumber(pitchClass.noteNumber.value + octaveDisplacement))
+        return Pitch(NoteNumber(value: pitchClass.value.value + octaveDisplacement))
     }
 }
 
@@ -71,10 +71,9 @@ extension SpelledPitch where Tuning == EDO48 {
 
     /// - Returns: The `Pitch` value represented by this `SpelledPitch`.
     public var pitch: Pitch {
-        let pitchClass = spelling.pitchClass
         let octave = self.octave + reachAroundAdjustment(for: spelling)
         let octaveDisplacement = Double(octave + 1) * 12
-        return .init(noteNumber: NoteNumber(pitchClass.noteNumber.value + octaveDisplacement))
+        return Pitch(spelling.pitchClass) + Pitch(octaveDisplacement)
     }
 }
 

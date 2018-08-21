@@ -258,7 +258,7 @@ private func intervalAndSteps(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<ED
 }
 
 private func interval(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> Double {
-    return (b.pitchClass - a.pitchClass).noteNumber.value
+    return OrderedInterval(a.pitchClass,b.pitchClass).value.value
 }
 
 /// Modulo 7

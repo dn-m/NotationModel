@@ -41,7 +41,8 @@ extension Pitch {
         guard spelling.pitchClass == self.class else {
             throw Error.incompatibleSpelling(spelling, self)
         }
-        let octave = Int(floor(noteNumber.value / 12.0)) - 1 - reachAroundAdjustment(for: spelling)
+        let currentOctave = Int(floor(value.value / 12.0)) - 1
+        let octave = currentOctave - reachAroundAdjustment(for: spelling)
         return SpelledPitch(spelling, octave)
     }
 
