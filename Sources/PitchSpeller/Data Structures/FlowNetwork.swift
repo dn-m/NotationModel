@@ -6,8 +6,8 @@
 //
 
 // MARK: typealiases
-typealias DirectedGraph<Node: Hashable> = _Graph<Double, DirectedOver<Node>>
-typealias UnweightedGraph<Node: Hashable> = _Graph<WithoutWeights, DirectedOver<Node>>
+typealias DirectedGraph<Node: Hashable> = Graph<Double, DirectedOver<Node>>
+typealias UnweightedGraph<Node: Hashable> = Graph<WithoutWeights, DirectedOver<Node>>
 
 /// Directed Graph with several properties:
 /// - Each edge has a capacity for flow

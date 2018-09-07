@@ -1,5 +1,5 @@
 //
-//  _Graph.swift
+//  Graph.swift
 //  PitchSpeller
 //
 //  Created by Benjamin Wetherfield on 7/14/18.
@@ -30,7 +30,7 @@ enum WithoutWeights: Unweighted {
 }
 
 // Weightable, directable implementation of a Graph structure
-struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
+struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
     
     // MARK: - Typealiases
     
@@ -45,7 +45,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
         
         // MARK: - Initializers
         
-        init (_ a: _Graph.Node, _ b: _Graph.Node, withWeight weight: Weight) {
+        init (_ a: Graph.Node, _ b: Graph.Node, withWeight weight: Weight) {
             self.nodes = Pair(a, b)
             self.weight = weight
         }
@@ -169,7 +169,7 @@ struct _Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
 }
 
 
-extension _Graph where Weight == WithoutWeights {
+extension Graph where Weight == WithoutWeights {
     
     // MARK: - Instance Methods
     
@@ -177,36 +177,36 @@ extension _Graph where Weight == WithoutWeights {
         insertEdge(from: source, to: destination, withWeight: .unweighted)
     }
     
-    mutating func insertPath (_ nodes: [_Graph.Node]) {
+    mutating func insertPath (_ nodes: [Graph.Node]) {
         insertPath(Path(nodes))
     }
 }
 
-extension _Graph where Weight: AsWeight {
+extension Graph where Weight: AsWeight {
     
     // MARK: - Instance Methods
     
-    static func unWeightedVersion (of weightedGraph: _Graph) -> _Graph<WithoutWeights, Pair> {
+    static func unWeightedVersion (of weightedGraph: Graph) -> Graph<WithoutWeights, Pair> {
         let adjacents: [Pair: WithoutWeights] = weightedGraph.adjacents.mapValues { _ in .unweighted }
-        return _Graph<WithoutWeights, Pair>(weightedGraph.nodes, adjacents)
+        return Graph<WithoutWeights, Pair>(weightedGraph.nodes, adjacents)
     }
     
-    var unweighted: _Graph<WithoutWeights,Pair> {
+    var unweighted: Graph<WithoutWeights,Pair> {
         return .init(nodes, adjacents.mapValues { _ in .unweighted })
     }
 }
 
-extension _Graph.Edge where Weight == WithoutWeights {
+extension Graph.Edge where Weight == WithoutWeights {
     
     // MARK: - Initializers
     
-    init (_ a: _Graph.Node, _ b: _Graph.Node) {
+    init (_ a: Graph.Node, _ b: Graph.Node) {
         self.nodes = Pair(a, b)
         self.weight = .unweighted
     }
 }
 
-extension _Graph where Pair: SwappablePair {
+extension Graph where Pair: SwappablePair {
     
     // MARK: - Instance Methods
     
@@ -216,7 +216,7 @@ extension _Graph where Pair: SwappablePair {
     }
 }
 
-extension _Graph.Path where Weight == WithoutWeights {
+extension Graph.Path where Weight == WithoutWeights {
     
     // MARK: - Instance properties
     
@@ -226,7 +226,7 @@ extension _Graph.Path where Weight == WithoutWeights {
     
     // MARK: - Initializers
     
-    init (_ nodes: [_Graph.Node]) {
+    init (_ nodes: [Graph.Node]) {
         let count = nodes.count
         var weights: [Pair: Weight] = [:]
         nodes.enumerated().forEach { index, currentNode in
@@ -239,19 +239,19 @@ extension _Graph.Path where Weight == WithoutWeights {
     }
 }
 
-extension _Graph.Edge where Pair: Directed {
+extension Graph.Edge where Pair: Directed {
     
     // MARK: - Instance Properties
     
-    var source: _Graph.Node { return nodes.a }
-    var destination: _Graph.Node { return nodes.b }
+    var source: Graph.Node { return nodes.a }
+    var destination: Graph.Node { return nodes.b }
 }
 
-extension _Graph {
+extension Graph {
     
     // MARK: = Typealiases
     
-    typealias UnweightedPath = _Graph<WithoutWeights, DirectedOver<Node>>.Path
+    typealias UnweightedPath = Graph<WithoutWeights, DirectedOver<Node>>.Path
     
     // MARK: - Instance Methods
     
