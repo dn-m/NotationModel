@@ -26,7 +26,7 @@ extension StaffModel {
         }
         
         public func add(_ point: Point, at position: Double) {
-            points.safelyAppend(point, toArrayWith: position)
+            points[position, default: []].append(point)
         }
         
         public func build() -> StaffModel {

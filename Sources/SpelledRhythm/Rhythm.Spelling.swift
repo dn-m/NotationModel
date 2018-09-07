@@ -96,7 +96,7 @@ extension Rhythm {
         /// Creates a `Rhythm.Spelling` for the given `rhythm` using the given `beamer`.
         public init(rhythm: Rhythm, using beamer: (Rhythm) -> Beaming) {
             let beaming = beamer(rhythm)
-            let ties = makeTies(rhythm.leaves)
+            let ties = makeTies(rhythm.leaves.map { $0.context })
             let dots = makeDots(rhythm.durationTree.leaves)
             let items = zip(beaming, ties, dots).map(Item.init)
             let grouping = Spelling.makeGroups(rhythm.durationTree)
@@ -189,7 +189,7 @@ func makeDots(_ durations: [Duration]) -> [Int] {
 func dotCount(_ duration: Duration) -> Int {
     let beats = duration.reduced.numerator
     guard beats > 1 else { return 0 }
-    let powers = PowerSequence(coefficient: 2, max: beats, doOvershoot: true)
+    let powers = powersOfTwo(upTo: beats, overshooting: true)
     let powersMinusOne = powers.map { $0 - 1 }
     for (offset,divisor) in powersMinusOne.dropFirst().enumerated() {
         if beats.isDivisible(by: divisor) { return offset + 1 }
@@ -198,7 +198,7 @@ func dotCount(_ duration: Duration) -> Int {
 }
 
 /// - Returns: The ties necessary to represent the given `metricalContexts`.
-func makeTies <T> (_ metricalContexts: [Rhythm<T>.Leaf]) -> [Rhythm<T>.Spelling.Tie] {
+func makeTies <T> (_ metricalContexts: [Rhythm<T>.Context]) -> [Rhythm<T>.Spelling.Tie] {
 
     return metricalContexts.indices.map { index in
 

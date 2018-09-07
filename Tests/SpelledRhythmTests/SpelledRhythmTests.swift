@@ -13,21 +13,21 @@ import Duration
 class SpelledRhythmTests: XCTestCase {
 
     func testTiesAllNones() {
-        let contexts: [Rhythm<Int>.Leaf] = [event((1)), event(1), event(1)]
+        let contexts: [Rhythm<Int>.Context] = [event((1)), event(1), event(1)]
         let ties = makeTies(contexts)
         let expected: [Rhythm<Int>.Spelling.Tie] = [.none, .none, .none]
         XCTAssertEqual(ties, expected)
     }
 
     func testTiesCombo() {
-        let contexts: [Rhythm<Int>.Leaf] = [event(1), tie(), rest()]
+        let contexts: [Rhythm<Int>.Context] = [event(1), tie(), rest()]
         let ties = makeTies(contexts)
         let expected: [Rhythm<Int>.Spelling.Tie] = [.start, .stop, .none]
         XCTAssertEqual(ties, expected)
     }
 
     func testTiesSequence() {
-        let contexts: [Rhythm<Int>.Leaf] = [
+        let contexts: [Rhythm<Int>.Context] = [
             event(1),
             event(1),
             tie(),

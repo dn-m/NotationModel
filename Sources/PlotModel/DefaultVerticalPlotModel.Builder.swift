@@ -23,7 +23,7 @@ extension DefaultVerticalPlotModel {
         }
         
         public func add(_ point: Point, at position: Position) {
-            points.safelyAppend(point, toArrayWith: position)
+            points[position, default: []].append(point)
         }
         
         public func build() -> DefaultVerticalPlotModel {

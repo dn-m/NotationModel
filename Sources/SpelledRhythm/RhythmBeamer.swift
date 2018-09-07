@@ -54,7 +54,7 @@ func beamCount(_ duration: Duration) -> Int {
     let reduced = duration.reduced
     let subdivisionCount = countTrailingZeros(reduced.denominator) - 2
     guard reduced.numerator > 1 else { return subdivisionCount }
-    let powers = PowerSequence(coefficient: 2, max: reduced.numerator, doOvershoot: true)
+    let powers = powersOfTwo(upTo: reduced.numerator, overshooting: true)
     let powersMinusOne = powers.map { $0 - 1 }
     for (offset,divisor) in powersMinusOne.dropFirst().enumerated() {
         if reduced.numerator.isDivisible(by: divisor) {
