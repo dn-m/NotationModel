@@ -53,7 +53,7 @@ class FlowNetworkTests: XCTestCase {
     }
     
     func testRandomNetwork() {
-        let iterations = 1
+        let iterations = 10
         (0..<iterations).forEach { _ in
             var randomNetwork = FlowNetwork<Int>(DirectedGraph<Int>([0,1], [:]), source: 0, sink: 1)
             (2..<100).forEach { randomNetwork.directedGraph.insertNode($0) }
