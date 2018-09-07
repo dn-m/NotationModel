@@ -229,9 +229,10 @@ extension _Graph.Path where Weight == WithoutWeights {
     init (_ nodes: [_Graph.Node]) {
         let count = nodes.count
         var weights: [Pair: Weight] = [:]
-        nodes.enumerated().forEach {
-            if $0.0 <= count - 2 {
-                weights[Pair($0.1, nodes[$0.0])] = .unweighted
+        nodes.enumerated().forEach { index, currentNode in
+            if index <= count - 2 {
+                let nextNode = nodes[index + 1]
+                weights[Pair(currentNode, nextNode)] = .unweighted
             }
         }
         self.init(nodes, weights)

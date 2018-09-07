@@ -28,7 +28,6 @@ public struct FlowNetwork <Node: Hashable> {
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
     /// saturated edges flipped and all weights removed.
     var solvedForMaximumFlow: (flow: Double, network: UnweightedGraph<Node>) {
-        var totalFlow = 0.0
         var residualNetwork = directedGraph
         
         func findAugmentingPath () -> Bool {
@@ -41,26 +40,42 @@ public struct FlowNetwork <Node: Hashable> {
             
         func pushFlow (through path: UnweightedGraph<Node>.Path) {
             let minimumEdge = (path.adjacents.compactMap(residualNetwork.weight).min())!
-            totalFlow += minimumEdge
             path.adjacents.forEach { edge in
                 residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
+                if residualNetwork.weight(edge)! == 0.0 {
+                    residualNetwork.removeEdge(from: edge.a, to: edge.b)
+                }
+                if residualNetwork.contains(edge.swapped) {
+                    residualNetwork.updateEdge(edge.swapped, with: { capacity in capacity + minimumEdge })
+                }
+                else { residualNetwork.insertEdge(edge.swapped, minimumEdge) }
             }
         }
         
         func addBackEdges () {
-            residualNetwork.edges.lazy.map { $0.nodes}
-            .filter { nodes in
-                let weight = residualNetwork.weight(nodes)!
-                return weight < .leastNormalMagnitude && weight > -.leastNormalMagnitude
-            }
+            directedGraph.adjacents.keys.lazy
+            .filterComplement(residualNetwork.contains)
             .forEach { nodes in
                 residualNetwork.flipEdge(containing: nodes)
             }
         }
         
+        func computeFlow () -> Double {
+            let sourceEdges = directedGraph.neighbors(of: source).lazy
+                .map { OrderedPair(self.source, $0) }
+                .partition(residualNetwork.contains)
+            let edgesPresent = sourceEdges.whereTrue.lazy
+                .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
+                .reduce(0.0, +)
+            let edgesAbsent = sourceEdges.whereFalse.lazy
+                .compactMap(directedGraph.weight)
+                .reduce(0.0, +)
+            return edgesPresent + edgesAbsent
+        }
+        
         while findAugmentingPath() { continue }
-        addBackEdges()
-        return (totalFlow, residualNetwork.unweighted)
+//        addBackEdges()
+        return (computeFlow(), residualNetwork.unweighted)
     }
     
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
@@ -91,5 +106,15 @@ public struct FlowNetwork <Node: Hashable> {
         self.directedGraph = directedGraph
         self.source = source
         self.sink = sink
+    }
+}
+
+extension Sequence {
+    func filterComplement (_ predicate: (Element) -> Bool) -> [Element] {
+        return filter { !predicate($0) }
+    }
+    
+    func partition (_ predicate: (Element) -> Bool) -> (whereFalse: [Element], whereTrue: [Element]) {
+        return (filterComplement(predicate), filter(predicate))
     }
 }
