@@ -124,7 +124,7 @@ struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable
     
     /// - Returns: Weight of the edge containing this `pair` of nodes if it exists, else nil
     func weight (_ pair: Pair) -> Weight? {
-        return weight(from: pair.a, to: pair.b)
+        return adjacents[pair]
     }
     
     /// - Returns: Weight of the edge from `source` to `destination` if it exists, else nil
