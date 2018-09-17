@@ -12,9 +12,9 @@ let package = Package(
         .library(name: "StaffModel", targets: ["StaffModel"])
     ],
     dependencies: [
-        .package(url: "https://github.com/dn-m/Structure", from: "0.1.3"),
-        .package(url: "https://github.com/dn-m/Math", from: "0.1.0"),
-        .package(url: "https://github.com/dn-m/Music", from: "0.1.0")
+        .package(url: "https://github.com/dn-m/Structure", .exact("0.3.1")),
+        .package(url: "https://github.com/dn-m/Math", .exact("0.1.3")),
+        .package(url: "https://github.com/dn-m/Music", .exact("0.1.0"))
     ],
     targets: [
         // Sources

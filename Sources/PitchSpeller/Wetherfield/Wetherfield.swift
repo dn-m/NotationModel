@@ -42,7 +42,7 @@ struct PitchSpeller {
 
     /// - Returns: An array of nodes, each representing the index of the unassigned node in
     /// `pitchNodes`.
-    private static func internalNodes(pitches: [Pitch]) -> [Graph<Int>.Node] {
+    private static func internalNodes(pitches: [Pitch]) -> [Int] {
         return pitches.indices.flatMap { offset in [0,1].map { index in node(offset, index) } }
     }
 
@@ -76,10 +76,10 @@ struct PitchSpeller {
     func spell() -> [SpelledPitch] {
 
         var assignedNodes: [AssignedNode] {
-            let (sourcePartition, sinkPartition) = flowNetwork.partitions
-            let sourceNodes = sourcePartition.nodes.map { index in AssignedNode(index, .down) }
-            let sinkNodes = sinkPartition.nodes.map { index in AssignedNode(index, .up) }
-            return sourceNodes + sinkNodes
+            let (sourceSide, sinkSide) = flowNetwork.minimumCut
+            let downNodes = sourceSide.map { index in AssignedNode(index, .down) }
+            let upNodes = sinkSide.map { index in AssignedNode(index, .up) }
+            return downNodes + upNodes
         }
 
         return assignedNodes
@@ -102,24 +102,24 @@ struct PitchSpeller {
     }
 }
 
-extension FlowNetwork where Value == Int {
+extension FlowNetwork where Node == Int {
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
     init(source: Int, sink: Int, internalNodes: [Int]) {
-        let graph = Graph(source: source, sink: sink, internalNodes: internalNodes)
+        let graph = DirectedGraph(source: source, sink: sink, internalNodes: internalNodes)
         self.init(graph, source: -2, sink: -1)
     }
 }
 
-extension Graph where Value == Int {
-    /// Create a `Graph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
-    init(source: Int, sink: Int, internalNodes: [Int]) {
-        self.init([source, sink] + internalNodes)
+extension DirectedGraph where Pair.A == Int, Weight == Double {
+    /// Create a `DirectedGraph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
+    init (source: Int, sink: Int, internalNodes: [Int]) {
+        self.init(Set([source, sink] + internalNodes), [:])
         for node in internalNodes {
-            insertEdge(from: source, to: node, value: 1)
-            insertEdge(from: node, to: sink, value: 1)
+            insertEdge(from: source, to: node, withWeight: 1)
+            insertEdge(from: node, to: sink, withWeight: 1)
             for other in internalNodes.lazy.filter({ $0 != node }) {
-                insertEdge(from: node, to: other, value: 1)
+                insertEdge(from: node, to: other, withWeight: 1)
             }
         }
     }

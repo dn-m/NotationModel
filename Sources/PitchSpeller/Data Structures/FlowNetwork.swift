@@ -5,95 +5,107 @@
 //  Created by James Bean on 5/24/18.
 //
 
+// MARK: typealiases
+typealias DirectedGraph<Node: Hashable> = Graph<Double, DirectedOver<Node>>
+typealias UnweightedGraph<Node: Hashable> = Graph<WithoutWeights, DirectedOver<Node>>
+
 /// Directed Graph with several properties:
 /// - Each edge has a capacity for flow
 /// - A "source" node, which is only emanates flow outward
 /// - A "sink" node, which only receives flow
-public struct FlowNetwork <Value: Hashable>: Hashable {
-
-    public typealias Path = Graph<Value>.Path
-    public typealias Edge = Graph<Value>.Edge
-    public typealias Node = Graph<Value>.Node
+public struct FlowNetwork <Node: Hashable> {
+    
+    typealias DirectedPath = DirectedGraph<Node>.Path
+    typealias DirectedEdge = DirectedGraph<Node>.Edge
 
     /// - Returns: All of the `Node` values contained herein which are neither the `source` nor
     /// the `sink`.
     public var internalNodes: [Node] {
-        return graph.nodes.filter { $0 != source && $0 != sink }
+        return directedGraph.nodes.filter { $0 != source && $0 != sink }
     }
-
-    /// - Returns: The edges whose values are equivalent to the maximum flow along the path from
-    /// the `source` to the `sink` within which the edge resides.
-    public var saturatedEdges: Set<Edge> {
-        return saturatedEdges(in: graph, comparingAgainst: residualNetwork)
-    }
-
-    /// - Returns: The residual network produced after subtracting the maximum flow from each of the
-    /// edges. The saturated edges will be absent from the `residualNetwork`, as their values
-    /// reached zero in the flow-propagation process.
-    ///
-    /// - TODO: Add backflow to reversed edges.
-    public var residualNetwork: Graph<Value> {
-        var residualNetwork = graph
-        while let path = residualNetwork.shortestPath(from: source, to: sink) {
-            residualNetwork.insertPath(path.map { $0 - maximumFlow(of: path) })
+    
+    /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
+    /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
+    /// saturated edges flipped and all weights removed.
+    var solvedForMaximumFlow: (flow: Double, network: UnweightedGraph<Node>) {
+        var residualNetwork = directedGraph
+        
+        func findAugmentingPath () -> Bool {
+            guard let path = residualNetwork.shortestUnweightedPath(from: source, to: sink) else {
+                return false
+            }
+            pushFlow(through: path)
+            return true
         }
-        return residualNetwork
+            
+        func pushFlow (through path: UnweightedGraph<Node>.Path) {
+            let minimumEdge = (path.adjacents.compactMap(residualNetwork.weight).min())!
+            path.adjacents.forEach { edge in
+                residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
+                if residualNetwork.weight(edge)! == 0.0 {
+                    residualNetwork.removeEdge(from: edge.a, to: edge.b)
+                }
+                if residualNetwork.contains(edge.swapped) {
+                    residualNetwork.updateEdge(edge.swapped, with: { capacity in capacity + minimumEdge })
+                }
+                else { residualNetwork.insertEdge(edge.swapped, minimumEdge) }
+            }
+        }
+        
+        func computeFlow () -> Double {
+            let sourceEdges = directedGraph.neighbors(of: source).lazy
+                .map { OrderedPair(self.source, $0) }
+                .partition(residualNetwork.contains)
+            let edgesPresent = sourceEdges.whereTrue.lazy
+                .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
+                .reduce(0.0, +)
+            let edgesAbsent = sourceEdges.whereFalse.lazy
+                .compactMap(directedGraph.weight)
+                .reduce(0.0, +)
+            return edgesPresent + edgesAbsent
+        }
+        
+        while findAugmentingPath() { continue }
+        return (computeFlow(), residualNetwork.unweighted)
     }
-
-    /// - Returns: The two partitions on either side of the s-t cut.
-    public var partitions: (source: Graph<Value>, sink: Graph<Value>) {
-        return (graph(sourceReachableNodes), graph(sinkReachableNodes.reversed()))
+    
+    /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
+    /// tiebreak (in- and out- edges saturated).
+    public var minimumCut: (Set<Node>, Set<Node>) {
+        return (sourceSideNodes, notSourceSideNodes)
     }
-
-    /// - Returns: Nodes in residual network reachable forwards from the `source`.
-    private var sourceReachableNodes: [Node] {
-        return residualNetwork.breadthFirstSearch(from: source)
+    
+    /// - Returns: Nodes in residual network reachable from the `source`
+    private var sourceSideNodes: Set<Node> {
+        return Set(solvedForMaximumFlow.network.breadthFirstSearch(from: source))
     }
-
-    /// - Returns: Nodes in residual network reachable backwards from the `sink`.
-    private var sinkReachableNodes: [Node] {
-        return residualNetwork.reversed.breadthFirstSearch(from: sink)
-    }
-
-    /// - Returns: A `Graph` composed of the given `nodes`, and corresponding edges in this graph.
-    private func graph(_ nodes: [Node]) -> Graph<Value> {
-        return Graph(graph.edges(nodes))
+    
+    /// - Returns: Nodes in residual network *not* reachable from the `source`
+    private var notSourceSideNodes: Set<Node> {
+        return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
     }
 
     // TODO: Consider more (space-)efficient storage of Nodes.
-    internal var graph: Graph<Value>
+    internal var directedGraph: DirectedGraph<Node>
     internal var source: Node
     internal var sink: Node
 
     // MARK: - Initializers
-
-    /// Create a `FlowNetwork` with the given `graph` and the given `source` and `sink` nodes.
-    public init(_ graph: Graph<Value>, source: Graph<Value>.Node, sink: Graph<Value>.Node) {
-        self.graph = graph
+    
+    /// Create a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink` nodes.
+    init(_ directedGraph: DirectedGraph<Node>, source: Node, sink: Node) {
+        self.directedGraph = directedGraph
         self.source = source
         self.sink = sink
     }
+}
 
-    /// - Returns: The set of edges which were saturated (and therefore removed from the residual
-    /// network).
-    private func saturatedEdges(
-        in flowNetwork: Graph<Value>,
-        comparingAgainst residualNetwork: Graph<Value>
-    ) -> Set<Edge>
-    {
-        return Set(
-            flowNetwork.edges.filter { originalEdge in
-                !residualNetwork.edges.contains(
-                    where: { residualEdge in
-                        originalEdge.nodesAreEqual(to: residualEdge)
-                    }
-                )
-            }
-        )
+extension Sequence {
+    func filterComplement (_ predicate: (Element) -> Bool) -> [Element] {
+        return filter { !predicate($0) }
     }
-
-    internal func maximumFlow(of path: Path) -> Double {
-        let capacity = path.edges.map { $0.value }.min()!
-        return min(capacity, .greatestFiniteMagnitude)
+    
+    func partition (_ predicate: (Element) -> Bool) -> (whereFalse: [Element], whereTrue: [Element]) {
+        return (filterComplement(predicate), filter(predicate))
     }
 }

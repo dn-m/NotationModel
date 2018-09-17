@@ -2,271 +2,291 @@
 //  Graph.swift
 //  PitchSpeller
 //
-//  Created by James Bean on 5/24/18.
+//  Created by Benjamin Wetherfield on 7/14/18.
 //
 
-import DataStructures
+// MARK: - Directedness Flags
 
-/// Minimal implementeation of a Directed Graph with Weighted (/ Capacious) Edges.
-public struct Graph <Value: Hashable>: Hashable {
+protocol Directedness { }
+protocol Directed: Directedness { }
+protocol Undirected: Directedness { }
 
-    public typealias Node = Value
+typealias DirectedOver = OrderedPair
+extension DirectedOver: Directed { }
 
-    /// Directed edge between two `Node` values.
-    ///
-    /// - TODO: Consider making `value` generic, rather than `Double`. This would make it possible
-    /// for a `Value` to be of any type (e.g., `Capacity`, `Weight`, etc.)
-    public struct Edge: Hashable {
+typealias UndirectedOver = UnorderedPair
+extension UndirectedOver: Undirected { }
 
+// MARK: - Weightedness Flags
+
+protocol Weightedness { }
+protocol Unweighted: Weightedness { }
+protocol AsWeight: Weightedness { }
+
+// Allows Double to be used as an edge weight
+extension Double: AsWeight { }
+enum WithoutWeights: Unweighted {
+    case unweighted
+}
+
+// Weightable, directable implementation of a Graph structure
+struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
+    
+    // MARK: - Typealiases
+    
+    typealias Node = Pair.A
+    
+    struct Edge {
+        
         // MARK: - Instance Properties
-
-        /// - Returns: An `Edge` whose direction is reversed.
-        public var reversed: Edge {
-            return Edge(from: destination, to: source, value: value)
-        }
-
-        public let source: Node
-        public let destination: Node
-        public var value: Double
-
+        
+        let nodes: Pair
+        let weight: Weight
+        
         // MARK: - Initializers
-
-        public init(from source: Node, to destination: Node, value: Double) {
-            self.source = source
-            self.destination = destination
-            self.value = value
+        
+        init (_ a: Graph.Node, _ b: Graph.Node, withWeight weight: Weight) {
+            self.nodes = Pair(a, b)
+            self.weight = weight
         }
-
-        /// - Returns: Graph with nodes updated by the given `transform`.
-        public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U>.Edge {
-            return .init(from: transform(source), to: transform(destination), value: value)
-        }
-
-        /// - Returns: An `Edge` with the value updated with by the given `transform`.
-        public func map(_ transform: (Double) -> Double) -> Edge {
-            return Edge(from: source, to: destination, value: transform(value))
-        }
-
-        /// Mutates the value of this `Edge`.
-        public mutating func update(value: Double) {
-            self.value = value
-        }
-
-        /// - Returns: `true` if the source and destination nodes of this `Edge` are equivalent to
-        /// those of the given `other`. Otherwise, `false`.
-        public func nodesAreEqual(to other: Edge) -> Bool {
-            return source == other.source && destination == other.destination
+        
+        init (_ nodes: Pair, withWeight weight: Weight) {
+            self.nodes = nodes
+            self.weight = weight
         }
     }
-
-    /// Path between nodes in a graph.
-    public struct Path: Hashable {
-
+    
+    struct Path {
+        
         // MARK: - Instance Properties
-
-        /// The `Graph.Edge` values contained herein.
-        let edges: [Edge]
-
+        
+        let nodes: [Node]
+        let weights: [Pair: Weight]
+        
         // MARK: - Initializers
-
-        /// Create a `Graph.Path` with the given array of `Edge` values.
-        public init(_ edges: [Edge]) {
-            self.edges = edges
-        }
-
-        /// - Returns: A `Path` with the values of each `Edge` updated by the given `transform`.
-        public func map(_ transform: (Double) -> Double) -> Path {
-            return Path(edges.map { $0.map(transform) })
+        
+        init (_ nodes: [Node], _ weights: [Pair: Weight]) {
+            self.nodes = nodes
+            self.weights = weights
         }
     }
-
+    
     // MARK: - Instance Properties
-
-    /// - Returns: All of the `Edge` values in the `Graph`.
-    public var edges: [Edge] {
-        return adjacencyList.flatMap { _, values in values }
+     
+    var nodes: Set<Node>
+    var adjacents: [Pair: Weight]
+    
+    var edges: [Edge] {
+        return adjacents.map(Edge.init)
+    }
+    
+    // MARK: - Instance Methods
+    
+    mutating func insertNode (_ node: Node) {
+        nodes.insert(node)
+    }
+    
+    mutating func insertEdge (from source: Node, to destination: Node, withWeight weight: Weight) {
+        adjacents[Pair(source, destination)] = weight
+    }
+    
+    mutating func insertEdge (_ keyValue: (Pair, Weight)) {
+        insertEdge(from: keyValue.0.a, to: keyValue.0.b, withWeight: keyValue.1)
+    }
+    
+    mutating func insertEdge(_ pair: Pair, _ weight: Weight) {
+        insertEdge(from: pair.a, to: pair.b, withWeight: weight)
     }
 
-    /// - Returns: All of the `Node` values in the `Graph`.
-    public var nodes: [Node] {
-        return adjacencyList.map { node, _ in node }
+    mutating func updateEdge(_ pair: Pair, with transform: (Weight) -> Weight) {
+        guard let weight = weight(pair) else { return }
+        insertEdge(pair, transform(weight))
     }
-
-    /// - Returns: An undirected graph from this directed graph by inserting reversed copies of each
-    /// edge.
-    var undirected: Graph {
-        var copy = self
-        for edge in edges {
-            copy.insertEdge(edge.reversed)
-        }
-        return copy
+    
+    mutating func insertPath (_ path: Path) {
+        path.nodes.forEach { insertNode($0) }
+        path.weights.forEach { insertEdge($0) }
     }
-
-    /// - Returns: A directed graph with each edge reversed.
-    var reversed: Graph {
-        let edges = self.edges.map { $0.reversed }
-        return Graph(edges)
+    
+    mutating func removeEdge (from source: Node, to destination: Node) {
+        adjacents[Pair(source, destination)] = nil
     }
-
-    private var adjacencyList: [Node: [Edge]] = [:]
-
-    // MARK: - Initializers
-
-    /// Create a `Graph` with the given `adjacencyList`.
-    public init(_ adjacencyList: [Node: [Edge]] = [:]) {
-        self.adjacencyList = adjacencyList
-    }
-
-    /// Create a `Graph` with the given `edges`.
-    public init <S> (_ edges: S) where S: Sequence, S.Element == Edge {
-        for edge in edges {
-            adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
-        }
-    }
-
-    /// Create a `Graph` with the given `nodes`.
-    public init <S> (_ nodes: S) where S: Sequence, S.Element == Node {
-        for node in nodes {
-            adjacencyList[node] = []
-        }
-    }
-
-    // MARK: - Insance Methods
-
-    /// Insert the given `node` into the graph.
-    public mutating func insertNode(_ node: Node) {
-        if adjacencyList[node] == nil {
-            adjacencyList[node] = []
-        }
-    }
-
-    /// Add an edge from the given `source` to the given `destination` nodes, with the given
-    /// `value` (i.e., weight, or capacity). If the `value` of the edge is 0, the edge is removed.
-    public mutating func insertEdge(from source: Node, to destination: Node, value: Double) {
-        let edge = Edge(from: source, to: destination, value: value)
-        insertEdge(edge)
-    }
-
-    /// Add the given `edge` if it does not currently exist. Otherwise, replaces the edge with the
-    /// equivalent `source` and `destination` nodes. If the `value` of the edge is 0, the edge is
-    /// removed.
-    public mutating func insertEdge(_ edge: Edge) {
-        removeEdge(from: edge.source, to: edge.destination)
-        if edge.value != 0 {
-            adjacencyList.safelyAppend(edge, toArrayWith: edge.source)
-        }
-    }
-
-    /// Removes the `Edge` which connects the given `source` and `destination` nodes, if present.
-    public mutating func removeEdge(from source: Node, to destination: Node) {
-        // FIXME: Consider more efficient and cleaner approach.
-        adjacencyList[source] = adjacencyList[source]?.filter { $0.destination != destination }
-    }
-
-    /// Updates the value of the edge from the given `source` to the given `destination` by the
-    /// given `transform`. If no edge currently exists between the given nodes, does nothing.
-    /// - TODO: Consider making `throw`.
-    public mutating func updateEdge(
-        from source: Node,
-        to destination: Node,
-        by transform: (Double) -> Double
-    )
-    {
-        guard let edge = self.edge(from: source, to: destination) else { return }
-        insertEdge(edge.map(transform))
-    }
-
-    /// Inserts the given `path`. Replaces nodes and edges if necessary.
-    public mutating func insertPath(_ path: Path) {
-        path.forEach { insertEdge($0) }
-    }
-
-    /// - Returns: A `Graph` with each of the nodes updated by the given `transform`.
-    public func mapNodes <U> (_ transform: (Value) -> U) -> Graph<U> {
-        return Graph<U>(
-            Dictionary(
-                adjacencyList.map { (node,edges) in
-                    (transform(node), edges.map { $0.mapNodes(transform)})
-                }
-            )
-        )
-    }
-
-    /// - Returns: A `Graph` with each of the edges contained herein updated by the given
-    /// `transform`.
-    public func mapEdges (_ transform: (Double) -> Double) -> Graph<Value> {
-        return Graph(adjacencyList.mapValues { $0.map { $0.map(transform) } })
-    }
-
-    /// - Returns: The value (i.e., weight, or capacity) of the `Edge` directed from the given
-    /// `source`, to the given `destination`, if the two given nodes are connected. Otherwise,
-    /// `nil`.
-    public func edgeValue(from source: Node, to destination: Node) -> Double? {
-        guard let edges = adjacencyList[source] else { return nil }
-        for edge in edges {
-            if edge.destination == destination {
-                return edge.value
-            }
-        }
-        return nil
-    }
-
-    /// - Returns: All of the `Edge` values directed out from the given `node`.
-    public func edges(from source: Node) -> [Edge] {
-        return adjacencyList[source] ?? []
-    }
-
-    /// - Returns: All of the `Node` values adjacent to the given `node`.
-    public func neighbors(of node: Node) -> [Node] {
-        return edges(from: node).map { $0.destination }
-    }
-
-    /// - Returns: `true` if ths graph contains the given `node`. Otherwise, `false`.
-    public func contains(_ node: Node) -> Bool {
+    
+    /// - Returns: `true` if the graph contains this `node`, else `false`
+    func contains (_ node: Node) -> Bool {
         return nodes.contains(node)
     }
-
-    /// - Returns: The path with the minimum number of edges between the given `source` and the
-    /// given `destination`, if it is reachable. Otherwise, `nil`.
-    public func shortestPath(from source: Node, to destination: Node) -> Path? {
-
-        /// In the process of breadth-first searching, each node is stored as a key in a dictionary
-        /// with its predecessor as its associated value. Follow this line back to the beginning in
-        /// order to reconstitute the path travelled.
-        func backtrace(from history: [Node: Node]) -> Path {
-            var result: [Node] = []
-            var current: Node = destination
-            while current != source {
-                result.append(current)
-                current = history[current]!
-            }
-            result.append(source)
-            return makePath(from: result.reversed())
-        }
-
-        // Maps each visited node to its predecessor, which is then backtraced to reconstitute
-        // the path travelled.
-        var history: [Node: Node] = [:]
-        var queue: Queue<Node> = []
-
-        queue.push(source)
-
-        while !queue.isEmpty {
-            let node = queue.pop()
-            if node == destination {
-                return backtrace(from: history)
-            }
-            for neighbor in neighbors(of: node) where !history.keys.contains(neighbor) {
-                queue.push(neighbor)
-                history[neighbor] = node
-            }
-        }
-
-        // `destination` is not reachable by `source`.
-        return nil
+    
+    /// - Returns: `true` if `edge.nodes` are adjacent in the graph, else `false`
+    func contains (_ edge: Pair) -> Bool {
+        return adjacents.keys.contains(edge)
     }
 
-    /// - Returns: Nodes in breadth-first order.
+    /// - Returns: Weight of the edge from `source` to `destination` if it exists, else nil
+    func weight (from source: Node, to destination: Node) -> Weight? {
+        return weight(Pair(source, destination))
+    }
+    
+    /// - Returns: Weight of the edge containing this `pair` of nodes if it exists, else nil
+    func weight (_ pair: Pair) -> Weight? {
+        return adjacents[pair]
+    }
+
+    /// - Returns: Array of nodes adjacent to `source`
+    func neighbors (of source: Node) -> [Node] {
+        return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
+    }
+    
+    /// - Returns: Array of nodes adjacent to `source` out of the supplied array of `nodes`.
+    func neighbors (of source: Node, from nodes: [Node]) -> [Node] {
+        return neighbors(of: source, from: Set(nodes))
+    }
+    
+    /// - Returns: Array of nodes adjacent to `source` out of the supplied set of `nodes`.
+    func neighbors (of source: Node, from nodes: Set<Node>) -> [Node] {
+        return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
+    }
+    
+    /// - Returns: Array of edges emanating from `source`
+    func edges (from source: Node) -> [Edge] {
+        return nodes.compactMap {
+            guard let weight = adjacents[Pair(source, $0)] else { return nil }
+            return Edge(source, $0, withWeight: weight)
+        }
+    }
+    
+    // MARK: - Initializers
+    
+    init () {
+        nodes = []
+        adjacents = [:]
+    }
+    
+    init (_ nodes: Set<Node>, _ adjacents: [Pair: Weight]) {
+        self.nodes = nodes
+        self.adjacents = adjacents
+    }
+}
+
+
+extension Graph where Weight == WithoutWeights {
+    
+    // MARK: - Instance Methods
+    
+    mutating func insertEdge (from source: Node, to destination: Node) {
+        insertEdge(from: source, to: destination, withWeight: .unweighted)
+    }
+    
+    mutating func insertPath (_ nodes: [Graph.Node]) {
+        insertPath(Path(nodes))
+    }
+}
+
+extension Graph where Weight: AsWeight {
+    
+    // MARK: - Instance Methods
+    
+    static func unWeightedVersion (of weightedGraph: Graph) -> Graph<WithoutWeights, Pair> {
+        let adjacents: [Pair: WithoutWeights] = weightedGraph.adjacents.mapValues { _ in .unweighted }
+        return Graph<WithoutWeights, Pair>(weightedGraph.nodes, adjacents)
+    }
+    
+    var unweighted: Graph<WithoutWeights,Pair> {
+        return .init(nodes, adjacents.mapValues { _ in .unweighted })
+    }
+}
+
+extension Graph.Edge where Weight == WithoutWeights {
+    
+    // MARK: - Initializers
+    
+    init (_ a: Graph.Node, _ b: Graph.Node) {
+        self.nodes = Pair(a, b)
+        self.weight = .unweighted
+    }
+}
+
+extension Graph where Pair: SwappablePair {
+    
+    // MARK: - Instance Methods
+    
+    mutating func flipEdge (containing nodes: Pair) {
+        adjacents[nodes.swapped] = adjacents[nodes]
+        adjacents[nodes] = nil
+    }
+}
+
+extension Graph.Path where Weight == WithoutWeights {
+    
+    // MARK: - Instance properties
+    
+    var adjacents: Set<Pair> {
+        return Set(weights.keys)
+    }
+    
+    // MARK: - Initializers
+    
+    init (_ nodes: [Graph.Node]) {
+        let count = nodes.count
+        var weights: [Pair: Weight] = [:]
+        nodes.enumerated().forEach { index, currentNode in
+            if index <= count - 2 {
+                let nextNode = nodes[index + 1]
+                weights[Pair(currentNode, nextNode)] = .unweighted
+            }
+        }
+        self.init(nodes, weights)
+    }
+}
+
+extension Graph.Edge where Pair: Directed {
+    
+    // MARK: - Instance Properties
+    
+    var source: Graph.Node { return nodes.a }
+    var destination: Graph.Node { return nodes.b }
+}
+
+extension Graph {
+    
+    // MARK: = Typealiases
+    
+    typealias UnweightedPath = Graph<WithoutWeights, DirectedOver<Node>>.Path
+    
+    // MARK: - Instance Methods
+    
+    func shortestUnweightedPath (from source: Node, to destination: Node) -> UnweightedPath? {
+        
+        var breadcrumbs: [Node: Node] = [:]
+        
+        func backtrace () -> UnweightedPath {
+            var path = [destination]
+            var cursor = destination
+            while cursor != source {
+                path.insert(breadcrumbs[cursor]!, at: 0)
+                cursor = breadcrumbs[cursor]!
+            }
+            return UnweightedPath(path)
+        }
+        
+        if source == destination { return UnweightedPath([destination]) }
+        
+        var unvisited = nodes
+        var queue: Queue<Node> = []
+        
+        queue.push(source)
+        while !queue.isEmpty {
+            let node = queue.pop()
+            for neighbor in neighbors(of: node, from: unvisited) {
+                queue.push(neighbor)
+                unvisited.remove(neighbor)
+                breadcrumbs[neighbor] = node
+                if neighbor == destination { return backtrace() }
+            }
+        }
+        return nil
+    }
+    
     internal func breadthFirstSearch(from source: Node) -> [Node] {
         var visited: [Node] = []
         var queue: Queue<Node> = []
@@ -280,67 +300,5 @@ public struct Graph <Value: Hashable>: Hashable {
             }
         }
         return visited
-    }
-
-    /// - Returns: The edge from the given `source` to the given `destination`, if it exists.
-    /// Otherwise, `nil`.
-    internal func edge(from source: Node, to destination: Node) -> Edge? {
-        guard let edges = adjacencyList[source] else { return nil }
-        for edge in edges where edge.destination == destination {
-            return edge
-        }
-        return nil
-    }
-
-    /// - Returns: An array of `Edge` values for the given sequence of `Node` values.
-    internal func edges <S> (_ nodes: S) -> [Edge] where S: Sequence, S.Element == Node {
-        return nodes.pairs.compactMap { source, destination in
-            return edgeValue(from: source, to: destination).map { value in
-                Edge(from: source, to: destination, value: value)
-            }
-        }
-    }
-
-    /// - Returns: A `Path` from a given sequence of `nodes`.
-    public func makePath <S> (from nodes: S) -> Path where S: Sequence, S.Element == Node {
-        return Path(edges(nodes))
-    }
-}
-
-extension Graph: CollectionWrapping {
-    public var base: [Node: [Edge]] {
-        return adjacencyList
-    }
-}
-
-extension Graph: CustomStringConvertible {
-    public var description: String {
-        var result = ""
-        for (source, edges) in adjacencyList {
-            let destinations = edges.map { "\($0.destination)" }
-            result += "\(source) -> [\(destinations.joined(separator: ","))]"
-            result += "\n"
-        }
-        return result
-    }
-}
-
-extension Graph.Edge: CustomStringConvertible {
-    public var description: String {
-        return "\(source) - \(value) -> \(destination)"
-    }
-}
-
-extension Graph.Path: ExpressibleByArrayLiteral {
-
-    /// Create a `Graph.Path` with an array literal of `Graph.Edge` values.
-    public init(arrayLiteral elements: Graph.Edge...) {
-        self.edges = elements
-    }
-}
-
-extension Graph.Path: CollectionWrapping {
-    public var base: [Graph.Edge] {
-        return edges
     }
 }
