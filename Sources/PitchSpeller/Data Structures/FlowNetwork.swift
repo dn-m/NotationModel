@@ -52,14 +52,6 @@ public struct FlowNetwork <Node: Hashable> {
             }
         }
         
-        func addBackEdges () {
-            directedGraph.adjacents.keys.lazy
-            .filterComplement(residualNetwork.contains)
-            .forEach { nodes in
-                residualNetwork.flipEdge(containing: nodes)
-            }
-        }
-        
         func computeFlow () -> Double {
             let sourceEdges = directedGraph.neighbors(of: source).lazy
                 .map { OrderedPair(self.source, $0) }
@@ -74,7 +66,6 @@ public struct FlowNetwork <Node: Hashable> {
         }
         
         while findAugmentingPath() { continue }
-//        addBackEdges()
         return (computeFlow(), residualNetwork.unweighted)
     }
     

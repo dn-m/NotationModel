@@ -121,17 +121,17 @@ struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable
     func contains (_ edge: Pair) -> Bool {
         return adjacents.keys.contains(edge)
     }
+
+    /// - Returns: Weight of the edge from `source` to `destination` if it exists, else nil
+    func weight (from source: Node, to destination: Node) -> Weight? {
+        return weight(Pair(source, destination))
+    }
     
     /// - Returns: Weight of the edge containing this `pair` of nodes if it exists, else nil
     func weight (_ pair: Pair) -> Weight? {
-        return weight(from: pair.a, to: pair.b)
+        return adjacents[pair]
     }
-    
-    /// - Returns: Weight of the edge from `source` to `destination` if it exists, else nil
-    func weight (from source: Node, to destination: Node) -> Weight? {
-        return adjacents[Pair(source, destination)]
-    }
-    
+
     /// - Returns: Array of nodes adjacent to `source`
     func neighbors (of source: Node) -> [Node] {
         return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
