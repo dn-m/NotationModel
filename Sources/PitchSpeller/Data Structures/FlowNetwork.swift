@@ -6,8 +6,8 @@
 //
 
 // MARK: typealiases
-typealias DirectedGraph<Node: Hashable> = _Graph<Double, DirectedOver<Node>>
-typealias UnweightedGraph<Node: Hashable> = _Graph<WithoutWeights, DirectedOver<Node>>
+typealias DirectedGraph<Node: Hashable> = Graph<Double, DirectedOver<Node>>
+typealias UnweightedGraph<Node: Hashable> = Graph<WithoutWeights, DirectedOver<Node>>
 
 /// Directed Graph with several properties:
 /// - Each edge has a capacity for flow
@@ -52,14 +52,6 @@ public struct FlowNetwork <Node: Hashable> {
             }
         }
         
-        func addBackEdges () {
-            directedGraph.adjacents.keys.lazy
-            .filterComplement(residualNetwork.contains)
-            .forEach { nodes in
-                residualNetwork.flipEdge(containing: nodes)
-            }
-        }
-        
         func computeFlow () -> Double {
             let sourceEdges = directedGraph.neighbors(of: source).lazy
                 .map { OrderedPair(self.source, $0) }
@@ -74,7 +66,6 @@ public struct FlowNetwork <Node: Hashable> {
         }
         
         while findAugmentingPath() { continue }
-//        addBackEdges()
         return (computeFlow(), residualNetwork.unweighted)
     }
     
