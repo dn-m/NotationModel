@@ -6,7 +6,6 @@
 //
 
 import Pitch
-import SpelledPitch
 
 /// Interface for `PitchSpellingCategoryProtocol` types which can convert a `TendencyPair` into a
 /// `ModifierDirection`.
