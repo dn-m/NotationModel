@@ -7,46 +7,36 @@
 
 import XCTest
 import DataStructures
-import MetricalDuration
-import Rhythm
-import RhythmBeamer
+import Duration
 @testable import SpelledRhythm
 
 class SpelledRhythmTests: XCTestCase {
 
     func testTiesAllNones() {
-        let contexts: [MetricalContext<Int>] = [
-            .instance(.event(1)),
-            .instance(.event(1)),
-            .instance(.event(1))
-        ]
+        let contexts: [Rhythm<Int>.Context] = [event((1)), event(1), event(1)]
         let ties = makeTies(contexts)
         let expected: [Rhythm<Int>.Spelling.Tie] = [.none, .none, .none]
         XCTAssertEqual(ties, expected)
     }
 
     func testTiesCombo() {
-        let contexts: [MetricalContext<Int>] = [
-            .instance(.event(1)),
-            .continuation,
-            .instance(.absence)
-        ]
+        let contexts: [Rhythm<Int>.Context] = [event(1), tie(), rest()]
         let ties = makeTies(contexts)
         let expected: [Rhythm<Int>.Spelling.Tie] = [.start, .stop, .none]
         XCTAssertEqual(ties, expected)
     }
 
     func testTiesSequence() {
-        let contexts: [MetricalContext<Int>] = [
-            .instance(.event(1)),
-            .instance(.event(1)),
-            .continuation,
-            .instance(.absence),
-            .instance(.event(1)),
-            .continuation,
-            .continuation,
-            .instance(.event(1)),
-            .instance(.absence)
+        let contexts: [Rhythm<Int>.Context] = [
+            event(1),
+            event(1),
+            tie(),
+            rest(),
+            event(1),
+            tie(),
+            tie(),
+            event(1),
+            rest()
         ]
         let ties = makeTies(contexts)
         let expected: [Rhythm<Int>.Spelling.Tie] = [
@@ -68,16 +58,15 @@ class SpelledRhythmTests: XCTestCase {
         let rhythm = Rhythm(4/>8, [event(1), tie(), tie(), rest()])
         let spelling = Rhythm.Spelling(rhythm: rhythm, using: DefaultBeamer.beaming)
 
-        let expectedBeamingPoints: [Stack<Rhythm<Int>.Beaming.Item.Point>] = [
-            [.start],
-            [.maintain],
-            [.maintain],
-            [.stop]
+        let expectedBeamingVerticals: [Beaming.Point.Vertical] = [
+            .init(startOrStop: .start(count: 1)),
+            .init(maintain: 1),
+            .init(maintain: 1),
+            .init(startOrStop: .stop(count: 1))
         ]
-        let expectedBeamingItems = expectedBeamingPoints.map(Rhythm<Int>.Beaming.Item.init)
         let expectedTies: [Rhythm<Int>.Spelling.Tie] = [.start, .maintain, .stop, .none]
         let expectedDots = [0,0,0,0]
-        let expectedItems = zip(expectedBeamingItems, expectedTies, expectedDots)
+        let expectedItems = zip(expectedBeamingVerticals, expectedTies, expectedDots)
             .map(Rhythm<Int>.Spelling.Item.init)
         XCTAssertEqual(spelling.items, expectedItems)
 

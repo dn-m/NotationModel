@@ -6,8 +6,8 @@
 //
 
 import DataStructures
-import MetricalDuration
-import Rhythm
+import Math
+import Duration
 
 extension Rhythm {
 
@@ -46,7 +46,7 @@ extension Rhythm {
 
                 // MARK: - Initializers
 
-                /// Creates a `Group.Context` with the given `group` for the given `range` of leaf
+                /// Createss a `Group.Context` with the given `group` for the given `range` of leaf
                 /// indices.
                 public init(for group: Group, in range: CountableClosedRange<Int>) {
                     self.group = group
@@ -56,8 +56,8 @@ extension Rhythm {
 
             // MARK: - Instance Properties
 
-            /// `MetricalDuration` of a `Group`.
-            public let duration: MetricalDuration
+            /// `Duration` of a `Group`.
+            public let duration: Duration
 
             /// The sum of the contents contained herein.
             public let contentsSum: Int
@@ -73,7 +73,7 @@ extension Rhythm {
 
         /// Information needed to abstractly represent a single metrical instance.
         public struct Item: Equatable {
-            let beamItem: Beaming.Item
+            let beamItem: Beaming.Point.Vertical
             let tie: Tie
             let dots: Int
         }
@@ -87,19 +87,19 @@ extension Rhythm {
 
         // MARK: - Initializers
 
-        /// Create a `Rhythm.Spelling` with the given `items`.
+        /// Creates a `Rhythm.Spelling` with the given `items`.
         public init(items: [Item], grouping: Grouping) {
             self.items = items
             self.grouping = grouping
         }
 
-        /// Create a `Rhythm.Spelling` for the given `rhythm` using the given `beamer`.
-        public init(rhythm: Rhythm, using beamer: (Rhythm) -> Rhythm.Beaming) {
+        /// Creates a `Rhythm.Spelling` for the given `rhythm` using the given `beamer`.
+        public init(rhythm: Rhythm, using beamer: (Rhythm) -> Beaming) {
             let beaming = beamer(rhythm)
             let ties = makeTies(rhythm.leaves.map { $0.context })
-            let dots = makeDots(rhythm.metricalDurationTree.leaves)
+            let dots = makeDots(rhythm.durationTree.leaves)
             let items = zip(beaming, ties, dots).map(Item.init)
-            let grouping = Spelling.makeGroups(rhythm.metricalDurationTree)
+            let grouping = Spelling.makeGroups(rhythm.durationTree)
             self.init(items: items, grouping: grouping)
         }
     }
@@ -119,11 +119,11 @@ extension Rhythm.Spelling.Group: CustomStringConvertible {
 
 extension Rhythm.Spelling.Group {
 
-    /// Creates a `Group` for the given `metricalDurationTree`.
-    public init(_ metricalDurationTree: MetricalDurationTree) {
+    /// Createss a `Group` for the given `metricalDurationTree`.
+    public init(_ metricalDurationTree: DurationTree) {
 
         guard case .branch(let duration, let trees) = metricalDurationTree else {
-            fatalError("Ill-formed MetricalDurationTree!")
+            fatalError("Ill-formed DurationTree!")
         }
 
         self.init(
@@ -136,13 +136,13 @@ extension Rhythm.Spelling.Group {
 extension Rhythm.Spelling {
 
     /// - Returns: The `Grouping` required to represent the tuplets in the given `tree`.
-    static func makeGroups(_ tree: MetricalDurationTree) -> Rhythm.Spelling.Grouping {
+    static func makeGroups(_ tree: DurationTree) -> Rhythm.Spelling.Grouping {
 
-        func traverse(_ tree: MetricalDurationTree, offset: Int) -> Rhythm.Spelling.Grouping {
+        func traverse(_ tree: DurationTree, offset: Int) -> Rhythm.Spelling.Grouping {
 
             switch tree {
             case .leaf:
-                fatalError("Ill-formed MetricalDurationTree")
+                fatalError("Ill-formed DurationTree")
 
             case .branch(_, let trees):
 
@@ -181,29 +181,24 @@ extension Rhythm.Spelling {
 }
 
 /// - Returns: The amount of dots for each of the given `durations`.
-func makeDots(_ durations: [MetricalDuration]) -> [Int] {
+func makeDots(_ durations: [Duration]) -> [Int] {
     return durations.map(dotCount)
 }
 
 /// - Returns: The amount of dots required to render the given `duration`.
-func dotCount(_ duration: MetricalDuration) -> Int {
-
+func dotCount(_ duration: Duration) -> Int {
     let beats = duration.reduced.numerator
-
-    guard [1,3,7,15].contains(beats) else {
-        fatalError("Unsanitary duration for beamed representation: \(beats)")
+    guard beats > 1 else { return 0 }
+    let powers = powersOfTwo(upTo: beats, overshooting: true)
+    let powersMinusOne = powers.map { $0 - 1 }
+    for (offset,divisor) in powersMinusOne.dropFirst().enumerated() {
+        if beats.isDivisible(by: divisor) { return offset + 1 }
     }
-
-    switch beats {
-    case 3: return 1
-    case 7: return 2
-    case 15: return 3
-    default: return 0
-    }
+    fatalError("\(duration) is not representable with beams")
 }
 
 /// - Returns: The ties necessary to represent the given `metricalContexts`.
-func makeTies <T> (_ metricalContexts: [MetricalContext<T>]) -> [Rhythm<T>.Spelling.Tie] {
+func makeTies <T> (_ metricalContexts: [Rhythm<T>.Context]) -> [Rhythm<T>.Spelling.Tie] {
 
     return metricalContexts.indices.map { index in
 

@@ -17,13 +17,13 @@ public struct StaffModel: VerticalPlotModel {
     public typealias Point = StaffPointModel
     public typealias VerticalCoordinate = StaffSlot
     public typealias HorizontalCoordinate = Double
-    public typealias Entity = SpelledPitch
+    public typealias Entity = SpelledPitch<EDO48>
     
     public let verticalAxis: Clef
     public let horizontalAxis = DefaultAxis<Double>()
     public let points: [Double: [StaffPointModel]]
     
-    /// Creates a `StaffModel` with the given `clef` and the given `points`.
+    /// Createss a `StaffModel` with the given `clef` and the given `points`.
     public init(clef: Clef = Clef(.treble), points: [Double: [StaffPointModel]]) {
         self.verticalAxis = clef
         self.points = points

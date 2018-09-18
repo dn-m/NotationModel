@@ -19,7 +19,7 @@ public struct Clef: Axis {
     }
     
     public let kind: Kind
-    public let coordinate: (SpelledPitch) -> StaffSlot
+    public let coordinate: (SpelledPitch<EDO48>) -> StaffSlot
     
     public init(_ kind: Kind) {
         self.kind = kind
@@ -27,7 +27,7 @@ public struct Clef: Axis {
     }
 }
 
-internal func slot(_ clef: Clef.Kind, _ spelledPitch: SpelledPitch) -> StaffSlot {
+internal func slot(_ clef: Clef.Kind, _ spelledPitch: SpelledPitch<EDO48>) -> StaffSlot {
     let slotsPerOctave = 7
     let normalizedOctave = 4 - spelledPitch.octave
     let octaveDisplacement = slotsPerOctave * normalizedOctave

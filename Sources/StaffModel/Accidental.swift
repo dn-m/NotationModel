@@ -27,10 +27,12 @@ public enum Accidental {
     case quarterFlatUp
     case quarterFlatDown
 
-    public init?(spelling: Pitch.Spelling) {
-        self.init(coarse: spelling.quarterStep.rawValue, fine: spelling.eighthStep.rawValue)
+    public init?(spelling: Pitch.Spelling<EDO48>) {
+        let coarse = spelling.modifier.edo24.edo12.adjustment
+        let fine = spelling.modifier.eighthTone.rawValue
+        self.init(coarse: coarse, fine: fine)
     }
-    
+
     public init?(coarse: Double, fine: Double) {
         switch (coarse, fine) {
         case (+0.0, +0.00): self = .natural

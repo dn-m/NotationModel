@@ -1,0 +1,23 @@
+theme: fullwidth
+custom_categories:
+  - name: "Basic Types"
+    children: 
+      - "LetterName"
+      - "Spelling"
+      - "SpelledPitch"
+      - "SpelledIntervalQuality"
+  - name: "Intervals"
+    children:
+      - "SpelledDyad"
+      - "UnorderedSpelledInterval"
+      - "OrderedSpelledInterval"
+      - "CompoundSpelledInterval"
+  - name: "Tuning"
+    children:
+      - "TuningSystem"
+      - "EDO"
+      - "EDO12"
+      - "EDO24"
+      - "EDO48"
+      - "PitchSpellingModifier"
+      - "LineOfFifths"
