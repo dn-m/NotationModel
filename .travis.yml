@@ -4,11 +4,7 @@ os:
 language: generic
 sudo: required
 dist: trusty
-osx_image: xcode9
-install:
-  - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
-env:
-  - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-05-30-a
+osx_image: xcode10
 script:
   - swift package update
   - swift test
