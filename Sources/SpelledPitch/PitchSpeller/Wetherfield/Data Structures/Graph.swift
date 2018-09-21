@@ -23,9 +23,8 @@ protocol Weightedness { }
 struct Unweighted: Weightedness { }
 
 // Weightable, directable implementation of a Graph structure.
-struct Graph <Weight, Pair: SymmetricPair & Directedness & Hashable>
-    where Pair.A: Hashable
-{
+struct Graph <Weight, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
+
     // MARK: - Instance Properties
      
     var nodes: Set<Node>
