@@ -119,12 +119,15 @@ struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
     
     // MARK: - Initializers
-    
+
+    /// Creates a `Graph` without nodes.
     init () {
         nodes = []
         adjacents = [:]
     }
-    
+
+    /// Creates a `Graph` with the given `nodes` and `adjacents`, describing how the given `nodes`
+    /// are connected.
     init (_ nodes: Set<Node>, _ adjacents: [Pair: Weight]) {
         self.nodes = nodes
         self.adjacents = adjacents
