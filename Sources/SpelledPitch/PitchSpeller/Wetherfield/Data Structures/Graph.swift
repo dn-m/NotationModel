@@ -117,7 +117,10 @@ struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
             return Edge(source, $0, withWeight: weight)
         }
     }
-    
+}
+
+extension Graph {
+
     // MARK: - Initializers
 
     /// Creates a `Graph` without nodes.
