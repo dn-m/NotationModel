@@ -5,7 +5,7 @@
 //  Created by James Bean on 5/24/18.
 //
 
-// MARK: typealiases
+// MARK: Type Aliases
 typealias DirectedGraph<Node: Hashable> = Graph<Double, DirectedOver<Node>>
 typealias UnweightedGraph<Node: Hashable> = Graph<WithoutWeights, DirectedOver<Node>>
 
