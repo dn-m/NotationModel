@@ -30,7 +30,7 @@ extension SpelledPitch where Tuning: EDO {
 
     /// The `c natural` nearest to the middle of an 88-key piano.
     public static var middleC: SpelledPitch<Tuning> {
-        return .init(Pitch.Spelling.middleC, 4)
+        return .init(Pitch.Spelling<Tuning>.middleC, 4)
     }
 }
 
@@ -102,6 +102,40 @@ func reachAroundAdjustment <T: TuningSystem> (for spelling: Pitch.Spelling<T>) -
     if spelling.letterName == .c && spelling.modifier.adjustment < 0 { return -1 }
     if spelling.letterName == .b && spelling.modifier.adjustment >= 1 { return 1 }
     return 0
+}
+
+extension SpelledPitch where Tuning == EDO12 {
+
+    // MARK: - EDO12
+
+    /// Creates a `SpelledPitch` in the `EDO12` `TuningSystem` with a `SpelledPitch` from the
+    /// `EDO24` `TuningSystem`.
+    public init(_ edo24: SpelledPitch<EDO24>) {
+        self.init(spelling: Pitch.Spelling(edo24.spelling), octave: edo24.octave)
+    }
+
+    /// Creates a `SpelledPitch` in the `EDO12` `TuningSystem` with a `SpelledPitch` from the
+    /// `EDO48` `TuningSystem`.
+    public init(_ edo48: SpelledPitch<EDO48>) {
+        self.init(spelling: Pitch.Spelling(edo48.spelling), octave: edo48.octave)
+    }
+}
+
+extension SpelledPitch where Tuning == EDO24 {
+
+    // MARK: - EDO24
+
+    /// Creates a `SpelledPitch` in the `EDO24` `TuningSystem` with a `SpelledPitch` from the
+    /// `EDO12` `TuningSystem`.
+    public init(_ edo12: SpelledPitch<EDO12>) {
+        self.init(spelling: Pitch.Spelling(edo12.spelling), octave: edo12.octave)
+    }
+
+    /// Creates a `SpelledPitch` in the `EDO24` `TuningSystem` with a `SpelledPitch` from the
+    /// `EDO48` `TuningSystem`.
+    public init(_ edo48: SpelledPitch<EDO48>) {
+        self.init(spelling: Pitch.Spelling(edo48.spelling), octave: edo48.octave)
+    }
 }
 
 extension SpelledPitch where Tuning == EDO48 {

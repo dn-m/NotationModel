@@ -109,5 +109,3 @@ public struct LineOfFifths {
         return position(ofPitchSpelling: a) - position(ofPitchSpelling: b)
     }
 }
-
-

@@ -6,7 +6,7 @@
 //
 
 /// Letter name component of a `Pitch.Spelling`
-public enum LetterName: String {
+public enum LetterName: String, CaseIterable {
 
     // MARK: - Cases
 

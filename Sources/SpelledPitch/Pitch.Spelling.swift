@@ -213,18 +213,29 @@ extension Pitch.Spelling where Tuning == EDO24 {
         let edo24 = EDO24.Modifier(edo12: edo12.modifier, quarterTone: .none)
         self.init(letterName: edo12.letterName, modifier: edo24)
     }
+
+    /// Creates a `Pitch.Spelling` in the `EDO24` `TuningSystem` from a `Pitch.Spelling` in the
+    /// `EDO24` domain.
+    public init(_ edo48: Pitch.Spelling<EDO48>) {
+        let edo24 = EDO24.Modifier(edo12: edo48.modifier.edo24.edo12, quarterTone: .none)
+        self.init(letterName: edo48.letterName, modifier: edo24)
+    }
 }
 
-//extension Pitch.Spelling {
-//
-//    // MARK: - Instance Methods
-//
-//    /// - Returns: `true` if this `Pitch.Spelling` can be applied to the given `Pitch`.
-//    /// Otherwise, `false`.
-//    public func isValid(for pitch: Pitch) -> Bool {
-//        return pitch.spellings.contains(self)
-//    }
-//}
+extension Pitch.Spelling where Tuning == EDO12 {
+
+    /// Creates a `Pitch.Spelling` in the `EDO12` `TuningSystem` from a `Pitch.Spelling` in the
+    /// `EDO24` domain.
+    public init(_ edo24: Pitch.Spelling<EDO24>) {
+        self.init(letterName: edo24.letterName, modifier: edo24.modifier.edo12)
+    }
+
+    /// Creates a `Pitch.Spelling` in the `EDO12` `TuningSystem` from a `Pitch.Spelling` in the
+    /// `EDO48` domain.
+    public init(_ edo48: Pitch.Spelling<EDO48>) {
+        self.init(letterName: edo48.letterName, modifier: edo48.modifier.edo24.edo12)
+    }
+}
 
 extension Pitch.Spelling: Comparable where Tuning.Modifier: Comparable {
 
