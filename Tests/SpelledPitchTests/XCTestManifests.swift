@@ -11,6 +11,51 @@ extension CompoundSpelledIntervalTests {
     ]
 }
 
+extension CrossTests {
+    static let __allTests = [
+        ("testEqualityFunction", testEqualityFunction),
+        ("testHashability", testHashability),
+    ]
+}
+
+extension FlowNetworkTests {
+    static let __allTests = [
+        ("testMinimumCut", testMinimumCut),
+        ("testRandomNetwork", testRandomNetwork),
+    ]
+}
+
+extension GraphTests {
+    static let __allTests = [
+        ("testEdgesCount", testEdgesCount),
+        ("testEdgesFromNodeDirected", testEdgesFromNodeDirected),
+        ("testEdgesFromNodeUndirected", testEdgesFromNodeUndirected),
+        ("testEdgeWeight", testEdgeWeight),
+        ("testNeighborsDirected", testNeighborsDirected),
+        ("testNeighborsFromArrayDirected", testNeighborsFromArrayDirected),
+        ("testNeighborsUndirected", testNeighborsUndirected),
+        ("testNodesCount", testNodesCount),
+        ("testPairWeight", testPairWeight),
+        ("testPathAdjacents", testPathAdjacents),
+        ("testRemoveEdge", testRemoveEdge),
+        ("testShortestPathThreeNodes", testShortestPathThreeNodes),
+        ("testShortestPathTwoOptions", testShortestPathTwoOptions),
+        ("testShortestUnweightedPathSingleNode", testShortestUnweightedPathSingleNode),
+        ("testShortestUnweightedPathTwoDirectionallyConnectedNodes", testShortestUnweightedPathTwoDirectionallyConnectedNodes),
+        ("testShortestUnweightedPathTwoUnconnectedNodes", testShortestUnweightedPathTwoUnconnectedNodes),
+        ("testUnweightedEdgesCount", testUnweightedEdgesCount),
+    ]
+}
+
+extension OrderedPairTests {
+    static let __allTests = [
+        ("testEqualityFunction", testEqualityFunction),
+        ("testHashability", testHashability),
+        ("testInitializers", testInitializers),
+        ("testSwapped", testSwapped),
+    ]
+}
+
 extension OrderedSpelledIntervalTests {
     static let __allTests = [
         ("testAbsoluteNamedIntervalOrdinalInversion", testAbsoluteNamedIntervalOrdinalInversion),
@@ -23,6 +68,43 @@ extension OrderedSpelledIntervalTests {
         ("testPerfectOrdinalFourthFifthInverse", testPerfectOrdinalFourthFifthInverse),
         ("testPerfectOrdinalUnisonInverse", testPerfectOrdinalUnisonInverse),
         ("testSecondOrdinalInverseSeventh", testSecondOrdinalInverseSeventh),
+    ]
+}
+
+extension PitchSpellingCategoryTests {
+    static let __allTests = [
+        ("testLetterNamePredecessor", testLetterNamePredecessor),
+        ("testLetterNameSuccessor", testLetterNameSuccessor),
+        ("testNeutralLetterName", testNeutralLetterName),
+        ("testPCEight_AFlat", testPCEight_AFlat),
+        ("testPCEightNeutral_Nil", testPCEightNeutral_Nil),
+        ("testPCEightUp_GSharp", testPCEightUp_GSharp),
+        ("testPCFourDown_FFlat", testPCFourDown_FFlat),
+        ("testPCFourNeutral_ENatural", testPCFourNeutral_ENatural),
+        ("testPCFourUp_DDoubleSharp", testPCFourUp_DDoubleSharp),
+        ("testPCOneDown_DFlat", testPCOneDown_DFlat),
+        ("testPCOneNeutral_CSharp", testPCOneNeutral_CSharp),
+        ("testPCOneUp_BDoubleSharp", testPCOneUp_BDoubleSharp),
+        ("testPCThreeDown_FDoubleFlat", testPCThreeDown_FDoubleFlat),
+        ("testPCThreeNeutral_EFlat", testPCThreeNeutral_EFlat),
+        ("testPCThreeUp_DSharp", testPCThreeUp_DSharp),
+        ("testPCTwoDown_EDoubleFlat", testPCTwoDown_EDoubleFlat),
+        ("testPCTwoNeutral_DNatural", testPCTwoNeutral_DNatural),
+        ("testPCTwoUp_CDoubleSharp", testPCTwoUp_CDoubleSharp),
+        ("testPCZeroDown_DDoubleFlat", testPCZeroDown_DDoubleFlat),
+        ("testPCZeroNeutral_CNatural", testPCZeroNeutral_CNatural),
+        ("testPCZeroUp_BSharp", testPCZeroUp_BSharp),
+    ]
+}
+
+extension PitchSpellingTendencyTests {
+    static let __allTests = [
+        ("testPCEightUpDown_GSharp", testPCEightUpDown_GSharp),
+        ("testPCElevenUpDown_BNatural", testPCElevenUpDown_BNatural),
+        ("testPCNineDownDown_BDoubleFlat", testPCNineDownDown_BDoubleFlat),
+        ("testPCSixUpUp_EDoubleSharp", testPCSixUpUp_EDoubleSharp),
+        ("testPCThreeUpDown_EFlat", testPCThreeUpDown_EFlat),
+        ("testPCZeroUpDown_CNatural", testPCZeroUpDown_CNatural),
     ]
 }
 
@@ -91,6 +173,15 @@ extension SpelledPitchTests {
     ]
 }
 
+extension UnorderedPairTests {
+    static let __allTests = [
+        ("testEqualityFunction", testEqualityFunction),
+        ("testHashability", testHashability),
+        ("testInitializers", testInitializers),
+        ("testUnEqual", testUnEqual),
+    ]
+}
+
 extension UnorderedSpelledIntervalTests {
     static let __allTests = [
         ("testBFlatDSharpAugmentedThird", testBFlatDSharpAugmentedThird),
@@ -104,17 +195,32 @@ extension UnorderedSpelledIntervalTests {
     ]
 }
 
+extension WetherfieldTests {
+    static let __allTests = [
+        ("testInitDyadNodeCount", testInitDyadNodeCount),
+        ("testInitMonadNodeCount", testInitMonadNodeCount),
+    ]
+}
+
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(CompoundSpelledIntervalTests.__allTests),
+        testCase(CrossTests.__allTests),
+        testCase(FlowNetworkTests.__allTests),
+        testCase(GraphTests.__allTests),
+        testCase(OrderedPairTests.__allTests),
         testCase(OrderedSpelledIntervalTests.__allTests),
+        testCase(PitchSpellingCategoryTests.__allTests),
+        testCase(PitchSpellingTendencyTests.__allTests),
         testCase(PitchSpellingTests.__allTests),
         testCase(PitchSpellingsTests.__allTests),
         testCase(SpelledDyadTests.__allTests),
         testCase(SpelledIntervalQualityTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
+        testCase(UnorderedPairTests.__allTests),
         testCase(UnorderedSpelledIntervalTests.__allTests),
+        testCase(WetherfieldTests.__allTests),
     ]
 }
 #endif
