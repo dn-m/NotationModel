@@ -33,46 +33,7 @@ enum WithoutWeights: Unweighted {
 struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable>
     where Pair.A: Hashable
 {
-    
-    // MARK: - Typealiases
-    
-    typealias Node = Pair.A
-    
-    struct Edge {
-        
-        // MARK: - Instance Properties
-        
-        let nodes: Pair
-        let weight: Weight
-        
-        // MARK: - Initializers
-        
-        init (_ a: Graph.Node, _ b: Graph.Node, withWeight weight: Weight) {
-            self.nodes = Pair(a, b)
-            self.weight = weight
-        }
-        
-        init (_ nodes: Pair, withWeight weight: Weight) {
-            self.nodes = nodes
-            self.weight = weight
-        }
-    }
-    
-    struct Path {
-        
-        // MARK: - Instance Properties
-        
-        let nodes: [Node]
-        let weights: [Pair: Weight]
-        
-        // MARK: - Initializers
-        
-        init (_ nodes: [Node], _ weights: [Pair: Weight]) {
-            self.nodes = nodes
-            self.weights = weights
-        }
-    }
-    
+
     // MARK: - Instance Properties
      
     var nodes: Set<Node>
@@ -170,6 +131,52 @@ struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
     }
 }
 
+extension Graph {
+
+    // MARK: - Type Aliases
+
+    typealias Node = Pair.A
+}
+
+extension Graph {
+
+    // MARK: - Nested Types
+
+    struct Edge {
+
+        // MARK: - Instance Properties
+
+        let nodes: Pair
+        let weight: Weight
+
+        // MARK: - Initializers
+
+        init (_ a: Graph.Node, _ b: Graph.Node, withWeight weight: Weight) {
+            self.nodes = Pair(a, b)
+            self.weight = weight
+        }
+
+        init (_ nodes: Pair, withWeight weight: Weight) {
+            self.nodes = nodes
+            self.weight = weight
+        }
+    }
+
+    struct Path {
+
+        // MARK: - Instance Properties
+
+        let nodes: [Node]
+        let weights: [Pair: Weight]
+
+        // MARK: - Initializers
+
+        init (_ nodes: [Node], _ weights: [Pair: Weight]) {
+            self.nodes = nodes
+            self.weights = weights
+        }
+    }
+}
 
 extension Graph where Weight == WithoutWeights {
     
