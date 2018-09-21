@@ -115,7 +115,7 @@ extension Graph {
 
 extension Graph {
 
-    // MARK: - Instance Methods
+    // MARK: - Modifying a `Graph`
 
     mutating func insertNode (_ node: Node) {
         nodes.insert(node)
@@ -146,6 +146,11 @@ extension Graph {
     mutating func removeEdge (from source: Node, to destination: Node) {
         adjacents[Pair(source, destination)] = nil
     }
+}
+
+extension Graph {
+
+    // MARK: - Querying a `Graph`
 
     /// - Returns: `true` if the graph contains this `node`, else `false`
     func contains (_ node: Node) -> Bool {
