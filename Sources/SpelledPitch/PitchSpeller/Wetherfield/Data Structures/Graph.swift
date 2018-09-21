@@ -108,6 +108,10 @@ extension Graph {
 
     // MARK: - Computed Properties
 
+    /// - Returns: All of the `Edge` values contained herein.
+    ///
+    /// - TODO: Consider returning a `Set` instead of an `Array`, as order does not have
+    /// significance.
     var edges: [Edge] {
         return adjacents.map(Edge.init)
     }
