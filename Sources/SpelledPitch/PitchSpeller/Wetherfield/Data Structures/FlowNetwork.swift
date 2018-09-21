@@ -7,7 +7,7 @@
 
 // MARK: Type Aliases
 typealias DirectedGraph<Node: Hashable> = Graph<Double, DirectedOver<Node>>
-typealias UnweightedGraph<Node: Hashable> = Graph<WithoutWeights, DirectedOver<Node>>
+typealias UnweightedGraph<Node: Hashable> = Graph<Unweighted, DirectedOver<Node>>
 
 /// Directed Graph with several properties:
 /// - Each edge has a capacity for flow
@@ -66,7 +66,8 @@ public struct FlowNetwork <Node: Hashable> {
         }
         
         while findAugmentingPath() { continue }
-        return (computeFlow(), residualNetwork.unweighted)
+        return (flow: computeFlow(), network: residualNetwork.unweighted)
+//        return (computeFlow(), residualNetwork.unweighted)
     }
     
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a

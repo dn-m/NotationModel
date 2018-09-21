@@ -20,17 +20,10 @@ extension UndirectedOver: Undirected { }
 // MARK: - Weightedness Flags
 
 protocol Weightedness { }
-protocol Unweighted: Weightedness { }
-protocol AsWeight: Weightedness { }
-
-// Allows Double to be used as an edge weight
-extension Double: AsWeight { }
-enum WithoutWeights: Unweighted {
-    case unweighted
-}
+struct Unweighted: Weightedness { }
 
 // Weightable, directable implementation of a Graph structure.
-struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable>
+struct Graph <Weight, Pair: SymmetricPair & Directedness & Hashable>
     where Pair.A: Hashable
 {
     // MARK: - Instance Properties
@@ -213,12 +206,12 @@ extension Graph {
     }
 }
 
-extension Graph where Weight == WithoutWeights {
+extension Graph where Weight == Unweighted {
     
     // MARK: - Instance Methods
     
     mutating func insertEdge (from source: Node, to destination: Node) {
-        insertEdge(from: source, to: destination, withWeight: .unweighted)
+        insertEdge(from: source, to: destination, withWeight: .init())
     }
     
     mutating func insertPath (_ nodes: [Graph.Node]) {
@@ -226,27 +219,27 @@ extension Graph where Weight == WithoutWeights {
     }
 }
 
-extension Graph where Weight: AsWeight {
+extension Graph {
     
     // MARK: - Instance Methods
     
-    static func unWeightedVersion (of weightedGraph: Graph) -> Graph<WithoutWeights, Pair> {
-        let adjacents: [Pair: WithoutWeights] = weightedGraph.adjacents.mapValues { _ in .unweighted }
-        return Graph<WithoutWeights, Pair>(weightedGraph.nodes, adjacents)
+    static func unWeightedVersion (of weightedGraph: Graph) -> Graph<Unweighted, Pair> {
+        let adjacents: [Pair: Unweighted] = weightedGraph.adjacents.mapValues { _ in .init() }
+        return Graph<Unweighted, Pair>(weightedGraph.nodes, adjacents)
     }
     
-    var unweighted: Graph<WithoutWeights,Pair> {
-        return .init(nodes, adjacents.mapValues { _ in .unweighted })
+    var unweighted: Graph<Unweighted,Pair> {
+        return .init(nodes, adjacents.mapValues { _ in .init() })
     }
 }
 
-extension Graph.Edge where Weight == WithoutWeights {
+extension Graph.Edge where Weight == Unweighted {
     
     // MARK: - Initializers
     
     init (_ a: Graph.Node, _ b: Graph.Node) {
         self.nodes = Pair(a, b)
-        self.weight = .unweighted
+        self.weight = .init()
     }
 }
 
@@ -260,7 +253,7 @@ extension Graph where Pair: SwappablePair {
     }
 }
 
-extension Graph.Path where Weight == WithoutWeights {
+extension Graph.Path where Weight == Unweighted {
     
     // MARK: - Instance properties
     
@@ -276,7 +269,7 @@ extension Graph.Path where Weight == WithoutWeights {
         nodes.enumerated().forEach { index, currentNode in
             if index <= count - 2 {
                 let nextNode = nodes[index + 1]
-                weights[Pair(currentNode, nextNode)] = .unweighted
+                weights[Pair(currentNode, nextNode)] = .init()
             }
         }
         self.init(nodes, weights)
@@ -295,7 +288,7 @@ extension Graph {
     
     // MARK: = Typealiases
     
-    typealias UnweightedPath = Graph<WithoutWeights, DirectedOver<Node>>.Path
+    typealias UnweightedPath = Graph<Unweighted, DirectedOver<Node>>.Path
     
     // MARK: - Instance Methods
     
