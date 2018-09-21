@@ -110,7 +110,7 @@ extension Graph {
 
     /// - Returns: All of the `Edge` values contained herein.
     ///
-    /// - TODO: Consider returning a `Set` instead of an `Array`, as order does not have
+    /// - Remark: Consider returning a `Set` instead of an `Array`, as order does not have
     /// significance.
     var edges: [Edge] {
         return adjacents.map(Edge.init)
@@ -121,32 +121,45 @@ extension Graph {
 
     // MARK: - Modifying a `Graph`
 
+    /// Inserts the given `node` into the `Graph`.
     mutating func insertNode (_ node: Node) {
         nodes.insert(node)
     }
 
+    /// Connects the `source` node to the `destination` with the given `weight`.
+    ///
+    /// - Remark: We should consider only exposing this for weighted graphs.
     mutating func insertEdge (from source: Node, to destination: Node, withWeight weight: Weight) {
         adjacents[Pair(source, destination)] = weight
     }
 
-    mutating func insertEdge (_ keyValue: (Pair, Weight)) {
-        insertEdge(from: keyValue.0.a, to: keyValue.0.b, withWeight: keyValue.1)
+    /// Inserts the given pair-value pair into the `Graph`.
+    mutating func insertEdge (_ pairAndWeight: (pair: Pair, weight: Weight)) {
+        insertEdge(pairAndWeight.pair, pairAndWeight.weight)
     }
 
+    /// Insert an `Edge` between the given `pair` with the given `weight`.
+    ///
+    /// - Remark: We should consider only exposing this for weighted graphs.
     mutating func insertEdge(_ pair: Pair, _ weight: Weight) {
         insertEdge(from: pair.a, to: pair.b, withWeight: weight)
     }
 
+    /// Updates the weight of the edge connecting the given `pair`.
+    ///
+    /// > If the nodes in the given `pair` do not exist, or are no connected, no action is taken.
     mutating func updateEdge(_ pair: Pair, with transform: (Weight) -> Weight) {
         guard let weight = weight(pair) else { return }
         insertEdge(pair, transform(weight))
     }
 
+    /// Inserts the given `path` into the `Graph`.
     mutating func insertPath (_ path: Path) {
         path.nodes.forEach { insertNode($0) }
         path.weights.forEach { insertEdge($0) }
     }
 
+    /// Removes the edge between the given `source` and `destination` nodes.
     mutating func removeEdge (from source: Node, to destination: Node) {
         adjacents[Pair(source, destination)] = nil
     }
