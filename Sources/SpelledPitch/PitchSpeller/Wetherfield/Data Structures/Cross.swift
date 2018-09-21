@@ -5,6 +5,7 @@
 //  Created by Benjamin Wetherfield on 6/30/18.
 //
 
+/// - TODO: Move to `dn-m/Structure/DataStructures`
 struct Cross<T,U>: Pair {
     
     typealias A = T
