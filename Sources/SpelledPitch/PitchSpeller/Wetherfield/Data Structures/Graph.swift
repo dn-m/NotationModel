@@ -29,94 +29,151 @@ enum WithoutWeights: Unweighted {
     case unweighted
 }
 
-// Weightable, directable implementation of a Graph structure
-struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
-    
-    // MARK: - Typealiases
-    
+// Weightable, directable implementation of a Graph structure.
+struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable>
+    where Pair.A: Hashable
+{
+    // MARK: - Instance Properties
+     
+    var nodes: Set<Node>
+    var adjacents: [Pair: Weight]
+}
+
+extension Graph {
+
+    // MARK: - Type Aliases
+
     typealias Node = Pair.A
-    
+}
+
+extension Graph {
+
+    // MARK: - Nested Types
+
     struct Edge {
-        
+
         // MARK: - Instance Properties
-        
+
         let nodes: Pair
         let weight: Weight
-        
+
         // MARK: - Initializers
-        
+
         init (_ a: Graph.Node, _ b: Graph.Node, withWeight weight: Weight) {
             self.nodes = Pair(a, b)
             self.weight = weight
         }
-        
+
         init (_ nodes: Pair, withWeight weight: Weight) {
             self.nodes = nodes
             self.weight = weight
         }
     }
-    
+
     struct Path {
-        
+
         // MARK: - Instance Properties
-        
+
         let nodes: [Node]
         let weights: [Pair: Weight]
-        
+
         // MARK: - Initializers
-        
+
         init (_ nodes: [Node], _ weights: [Pair: Weight]) {
             self.nodes = nodes
             self.weights = weights
         }
     }
-    
-    // MARK: - Instance Properties
-     
-    var nodes: Set<Node>
-    var adjacents: [Pair: Weight]
-    
+}
+
+extension Graph {
+
+    // MARK: - Initializers
+
+    /// Creates a `Graph` without nodes.
+    init () {
+        nodes = []
+        adjacents = [:]
+    }
+
+    /// Creates a `Graph` with the given `nodes` and `adjacents`, describing how the given `nodes`
+    /// are connected.
+    init (_ nodes: Set<Node>, _ adjacents: [Pair: Weight]) {
+        self.nodes = nodes
+        self.adjacents = adjacents
+    }
+}
+
+extension Graph {
+
+    // MARK: - Computed Properties
+
+    /// - Returns: All of the `Edge` values contained herein.
+    ///
+    /// - Remark: Consider returning a `Set` instead of an `Array`, as order does not have
+    /// significance.
     var edges: [Edge] {
         return adjacents.map(Edge.init)
     }
-    
-    // MARK: - Instance Methods
-    
+}
+
+extension Graph {
+
+    // MARK: - Modifying a `Graph`
+
+    /// Inserts the given `node` into the `Graph`.
     mutating func insertNode (_ node: Node) {
         nodes.insert(node)
     }
-    
+
+    /// Connects the `source` node to the `destination` with the given `weight`.
+    ///
+    /// - Remark: We should consider only exposing this for weighted graphs.
     mutating func insertEdge (from source: Node, to destination: Node, withWeight weight: Weight) {
         adjacents[Pair(source, destination)] = weight
     }
-    
-    mutating func insertEdge (_ keyValue: (Pair, Weight)) {
-        insertEdge(from: keyValue.0.a, to: keyValue.0.b, withWeight: keyValue.1)
+
+    /// Inserts the given pair-value pair into the `Graph`.
+    mutating func insertEdge (_ pairAndWeight: (pair: Pair, weight: Weight)) {
+        insertEdge(pairAndWeight.pair, pairAndWeight.weight)
     }
-    
+
+    /// Insert an `Edge` between the given `pair` with the given `weight`.
+    ///
+    /// - Remark: We should consider only exposing this for weighted graphs.
     mutating func insertEdge(_ pair: Pair, _ weight: Weight) {
         insertEdge(from: pair.a, to: pair.b, withWeight: weight)
     }
 
+    /// Updates the weight of the edge connecting the given `pair`.
+    ///
+    /// > If the nodes in the given `pair` do not exist, or are no connected, no action is taken.
     mutating func updateEdge(_ pair: Pair, with transform: (Weight) -> Weight) {
         guard let weight = weight(pair) else { return }
         insertEdge(pair, transform(weight))
     }
-    
+
+    /// Inserts the given `path` into the `Graph`.
     mutating func insertPath (_ path: Path) {
         path.nodes.forEach { insertNode($0) }
         path.weights.forEach { insertEdge($0) }
     }
-    
+
+    /// Removes the edge between the given `source` and `destination` nodes.
     mutating func removeEdge (from source: Node, to destination: Node) {
         adjacents[Pair(source, destination)] = nil
     }
-    
+}
+
+extension Graph {
+
+    // MARK: - Querying a `Graph`
+
     /// - Returns: `true` if the graph contains this `node`, else `false`
     func contains (_ node: Node) -> Bool {
         return nodes.contains(node)
     }
-    
+
     /// - Returns: `true` if `edge.nodes` are adjacent in the graph, else `false`
     func contains (_ edge: Pair) -> Bool {
         return adjacents.keys.contains(edge)
@@ -126,7 +183,7 @@ struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable
     func weight (from source: Node, to destination: Node) -> Weight? {
         return weight(Pair(source, destination))
     }
-    
+
     /// - Returns: Weight of the edge containing this `pair` of nodes if it exists, else nil
     func weight (_ pair: Pair) -> Weight? {
         return adjacents[pair]
@@ -136,17 +193,17 @@ struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable
     func neighbors (of source: Node) -> [Node] {
         return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
     }
-    
+
     /// - Returns: Array of nodes adjacent to `source` out of the supplied array of `nodes`.
     func neighbors (of source: Node, from nodes: [Node]) -> [Node] {
         return neighbors(of: source, from: Set(nodes))
     }
-    
+
     /// - Returns: Array of nodes adjacent to `source` out of the supplied set of `nodes`.
     func neighbors (of source: Node, from nodes: Set<Node>) -> [Node] {
         return nodes.filter { adjacents.keys.contains(Pair(source, $0)) }
     }
-    
+
     /// - Returns: Array of edges emanating from `source`
     func edges (from source: Node) -> [Edge] {
         return nodes.compactMap {
@@ -154,20 +211,7 @@ struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable
             return Edge(source, $0, withWeight: weight)
         }
     }
-    
-    // MARK: - Initializers
-    
-    init () {
-        nodes = []
-        adjacents = [:]
-    }
-    
-    init (_ nodes: Set<Node>, _ adjacents: [Pair: Weight]) {
-        self.nodes = nodes
-        self.adjacents = adjacents
-    }
 }
-
 
 extension Graph where Weight == WithoutWeights {
     
