@@ -40,7 +40,7 @@ extension WeightedGraphProtocol {
     mutating func insertEdge(from source: Node, to destination: Node, weight: Weight) {
         adjacents[Edge(source,destination)] = weight
     }
-    
+
     mutating func insertEdge(_ edge: Edge, weight: Weight) {
         adjacents[edge] = weight
     }
