@@ -5,6 +5,7 @@
 //  Created by James Bean on 9/22/18.
 //
 
+/// Interface for weighted graphs.
 protocol WeightedGraphProtocol: GraphProtocol {
     associatedtype Weight: Numeric
     var adjacents: [Edge: Weight] { get set }
@@ -14,7 +15,7 @@ protocol WeightedGraphProtocol: GraphProtocol {
 extension WeightedGraphProtocol {
 
     func unweighted <U> () -> U where U: UnweightedGraphProtocol, U.Edge == Edge {
-        return .init(nodes, Set(adjacents.keys))
+        return .init(nodes, Set(adjacents.keys.lazy))
     }
 
     func contains(_ edge: Edge) -> Bool {

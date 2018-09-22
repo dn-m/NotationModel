@@ -5,6 +5,7 @@
 //  Created by James Bean on 9/22/18.
 //
 
+/// Interface for unweighted graphs.
 protocol UnweightedGraphProtocol: GraphProtocol {
     var edges: Set<Edge> { get set }
     init(_ nodes: Set<Node>, _ edges: Set<Edge>)

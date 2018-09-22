@@ -12,8 +12,6 @@ class GraphTests: XCTestCase {
 
     func testGraphInsertNodes() {
         var result = Graph<Int>()
-        result.insert(0)
-        result.insert(1)
         result.insertEdge(from: 0, to: 1)
         let expected = Graph([0,1], [.init(0,1)])
         XCTAssertEqual(result, expected)
