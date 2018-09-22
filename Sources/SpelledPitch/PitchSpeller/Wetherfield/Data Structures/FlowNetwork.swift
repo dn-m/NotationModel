@@ -67,7 +67,6 @@ public struct FlowNetwork <Node: Hashable> {
         
         while findAugmentingPath() { continue }
         return (flow: computeFlow(), network: residualNetwork.unweighted)
-//        return (computeFlow(), residualNetwork.unweighted)
     }
     
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a

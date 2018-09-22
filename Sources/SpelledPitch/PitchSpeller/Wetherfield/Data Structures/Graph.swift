@@ -22,6 +22,114 @@ extension UndirectedOver: Undirected { }
 protocol Weightedness { }
 struct Unweighted: Weightedness { }
 
+protocol _Graph {
+    associatedtype Node: Hashable
+    associatedtype Weight
+    associatedtype Edge: SymmetricPair & Hashable where Edge.A == Node
+    var nodes: Set<Node> { get set }
+    var adjacents: [Edge: Weight] { get set }
+    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight])
+}
+
+extension _Graph {
+
+    func contains(_ node: Node) -> Bool {
+        return nodes.contains(node)
+    }
+
+    func contains(_ edge: Edge) -> Bool {
+        return adjacents.keys.contains(edge)
+    }
+
+    func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
+        return (nodes ?? self.nodes).filter { destination in
+            adjacents.keys.contains(Edge(source,destination))
+        }
+    }
+
+    mutating func insert(_ node: Node) {
+        nodes.insert(node)
+    }
+
+    mutating func removeEdge (from source: Node, to destination: Node) {
+        adjacents[Edge(source, destination)] = nil
+    }
+}
+
+protocol _DirectedGraph: _Graph where Edge == OrderedPair<Node> { }
+protocol _UndirectedGraph: _Graph where Edge == UnorderedPair<Node> { }
+protocol _WeightedGraph: _Graph where Weight: Numeric { }
+protocol _UnweightedGraph: _Graph where Weight == Unweighted { }
+
+extension _UnweightedGraph {
+    mutating func insertEdge(from source: Node, to destination: Node) {
+        adjacents[Edge(source,destination)] = Unweighted()
+    }
+}
+
+extension _WeightedGraph {
+    func unweighted <U> () -> U where U: _UnweightedGraph, U.Edge == Edge {
+        return .init(nodes, adjacents.mapValues { _ in .init() })
+    }
+}
+
+extension _WeightedGraph {
+
+    func weight(for edge: Edge) -> Weight? {
+        return adjacents[edge]
+    }
+    mutating func insertEdge(from source: Node, to destination: Node, weight: Weight) {
+        adjacents[Edge(source,destination)] = weight
+    }
+    mutating func insertEdge(_ edge: Edge, weight: Weight) {
+        adjacents[edge] = weight
+    }
+    mutating func updateEdge(_ edge: Edge, by transform: (Weight) -> Weight) {
+        guard let weight = weight(for: edge) else { return }
+        insertEdge(edge, weight: transform(weight))
+    }
+}
+
+struct _WeightedDirectedGraph <Node: Hashable, Weight: Numeric>: _WeightedGraph, _DirectedGraph {
+    typealias Edge = OrderedPair<Node>
+    var nodes: Set<Node> = []
+    var adjacents: [Edge: Weight] = [:]
+    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight]) {
+        self.nodes = nodes
+        self.adjacents = adjacents
+    }
+}
+
+struct _WeightedUndirectedGraph <Node: Hashable, Weight: Numeric>: _WeightedGraph, _UndirectedGraph {
+    typealias Edge = UnorderedPair<Node>
+    var nodes: Set<Node> = []
+    var adjacents: [Edge: Weight] = [:]
+    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight]) {
+        self.nodes = nodes
+        self.adjacents = adjacents
+    }
+}
+
+struct _UnweightedDirectedGraph <Node: Hashable>: _UnweightedGraph, _DirectedGraph {
+    typealias Edge = OrderedPair<Node>
+    var nodes: Set<Node> = []
+    var adjacents: [OrderedPair<Node>: Unweighted] = [:]
+    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight]) {
+        self.nodes = nodes
+        self.adjacents = adjacents
+    }
+}
+
+struct _UnweightedUndirectedGraph <Node: Hashable>: _UnweightedGraph, _UndirectedGraph {
+    typealias Edge = UnorderedPair<Node>
+    var nodes: Set<Node> = []
+    var adjacents: [UnorderedPair<Node>: Unweighted] = [:]
+    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight]) {
+        self.nodes = nodes
+        self.adjacents = adjacents
+    }
+}
+
 // Weightable, directable implementation of a Graph structure.
 struct Graph <Weight, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
 
@@ -222,11 +330,11 @@ extension Graph {
     
     // MARK: - Instance Methods
     
-    static func unWeightedVersion (of weightedGraph: Graph) -> Graph<Unweighted, Pair> {
-        let adjacents: [Pair: Unweighted] = weightedGraph.adjacents.mapValues { _ in .init() }
-        return Graph<Unweighted, Pair>(weightedGraph.nodes, adjacents)
-    }
-    
+//    static func unWeightedVersion (of weightedGraph: Graph) -> Graph<Unweighted, Pair> {
+//        let adjacents: [Pair: Unweighted] = weightedGraph.adjacents.mapValues { _ in .init() }
+//        return Graph<Unweighted, Pair>(weightedGraph.nodes, adjacents)
+//    }
+
     var unweighted: Graph<Unweighted,Pair> {
         return .init(nodes, adjacents.mapValues { _ in .init() })
     }
@@ -246,10 +354,10 @@ extension Graph where Pair: SwappablePair {
     
     // MARK: - Instance Methods
     
-    mutating func flipEdge (containing nodes: Pair) {
-        adjacents[nodes.swapped] = adjacents[nodes]
-        adjacents[nodes] = nil
-    }
+//    mutating func flipEdge (containing nodes: Pair) {
+//        adjacents[nodes.swapped] = adjacents[nodes]
+//        adjacents[nodes] = nil
+//    }
 }
 
 extension Graph.Path where Weight == Unweighted {
