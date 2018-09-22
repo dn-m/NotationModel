@@ -22,9 +22,6 @@ extension UndirectedOver: Undirected { }
 protocol Weightedness { }
 struct Unweighted: Weightedness { }
 
-
-
-
 struct _WeightedDirectedGraph <Node: Hashable, Weight: Numeric>: WeightedGraphProtocol, DirectedGraphProtocol {
     typealias Edge = OrderedPair<Node>
     var nodes: Set<Node> = []

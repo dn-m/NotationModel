@@ -5,4 +5,4 @@
 //  Created by James Bean on 9/22/18.
 //
 
-import Foundation
+protocol DirectedGraphProtocol: GraphProtocol where Edge == OrderedPair<Node> { }
