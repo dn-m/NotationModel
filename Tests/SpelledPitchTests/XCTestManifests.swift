@@ -25,28 +25,6 @@ extension FlowNetworkTests {
     ]
 }
 
-extension GraphTests {
-    static let __allTests = [
-        ("testEdgesCount", testEdgesCount),
-        ("testEdgesFromNodeDirected", testEdgesFromNodeDirected),
-        ("testEdgesFromNodeUndirected", testEdgesFromNodeUndirected),
-        ("testEdgeWeight", testEdgeWeight),
-        ("testNeighborsDirected", testNeighborsDirected),
-        ("testNeighborsFromArrayDirected", testNeighborsFromArrayDirected),
-        ("testNeighborsUndirected", testNeighborsUndirected),
-        ("testNodesCount", testNodesCount),
-        ("testPairWeight", testPairWeight),
-        ("testPathAdjacents", testPathAdjacents),
-        ("testRemoveEdge", testRemoveEdge),
-        ("testShortestPathThreeNodes", testShortestPathThreeNodes),
-        ("testShortestPathTwoOptions", testShortestPathTwoOptions),
-        ("testShortestUnweightedPathSingleNode", testShortestUnweightedPathSingleNode),
-        ("testShortestUnweightedPathTwoDirectionallyConnectedNodes", testShortestUnweightedPathTwoDirectionallyConnectedNodes),
-        ("testShortestUnweightedPathTwoUnconnectedNodes", testShortestUnweightedPathTwoUnconnectedNodes),
-        ("testUnweightedEdgesCount", testUnweightedEdgesCount),
-    ]
-}
-
 extension OrderedPairTests {
     static let __allTests = [
         ("testEqualityFunction", testEqualityFunction),
@@ -202,13 +180,34 @@ extension WetherfieldTests {
     ]
 }
 
+extension _GraphTests {
+    static let __allTests = [
+        ("testEdgesCount", testEdgesCount),
+        ("testEdgesFromNodeDirected", testEdgesFromNodeDirected),
+        ("testEdgesFromNodeUndirected", testEdgesFromNodeUndirected),
+        ("testEdgeWeight", testEdgeWeight),
+        ("testNeighborsDirected", testNeighborsDirected),
+        ("testNeighborsFromArrayDirected", testNeighborsFromArrayDirected),
+        ("testNeighborsUndirected", testNeighborsUndirected),
+        ("testNodesCount", testNodesCount),
+        ("testPairWeight", testPairWeight),
+        ("testPathAdjacents", testPathAdjacents),
+        ("testRemoveEdge", testRemoveEdge),
+        ("testShortestPathThreeNodes", testShortestPathThreeNodes),
+        ("testShortestPathTwoOptions", testShortestPathTwoOptions),
+        ("testShortestUnweightedPathSingleNode", testShortestUnweightedPathSingleNode),
+        ("testShortestUnweightedPathTwoDirectionallyConnectedNodes", testShortestUnweightedPathTwoDirectionallyConnectedNodes),
+        ("testShortestUnweightedPathTwoUnconnectedNodes", testShortestUnweightedPathTwoUnconnectedNodes),
+        ("testUnweightedEdgesCount", testUnweightedEdgesCount),
+    ]
+}
+
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(CompoundSpelledIntervalTests.__allTests),
         testCase(CrossTests.__allTests),
         testCase(FlowNetworkTests.__allTests),
-        testCase(GraphTests.__allTests),
         testCase(OrderedPairTests.__allTests),
         testCase(OrderedSpelledIntervalTests.__allTests),
         testCase(PitchSpellingCategoryTests.__allTests),
@@ -221,6 +220,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(UnorderedPairTests.__allTests),
         testCase(UnorderedSpelledIntervalTests.__allTests),
         testCase(WetherfieldTests.__allTests),
+        testCase(_GraphTests.__allTests),
     ]
 }
 #endif

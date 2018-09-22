@@ -1,5 +1,5 @@
 //
-//  GraphTests.swift
+//  _GraphTests.swift
 //  SpelledPitchTests
 //
 //  Created by James Bean on 9/21/18.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import SpelledPitch
 
-class GraphTests: XCTestCase {
+class _GraphTests: XCTestCase {
 
     typealias UnweightedPath = _Graph<Unweighted, DirectedOver<String>>.Path
 
