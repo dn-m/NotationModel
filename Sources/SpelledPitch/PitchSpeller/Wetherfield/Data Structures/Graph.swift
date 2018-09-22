@@ -26,23 +26,13 @@ protocol _Graph {
     associatedtype Node: Hashable
     associatedtype Edge: SymmetricPair & Hashable where Edge.A == Node
     var nodes: Set<Node> { get set }
-    var edges: Set<Edge> { get }
+    func neighbors(of source: Node, in nodes: Set<Node>?) -> Set<Node>
 }
 
 extension _Graph {
 
     func contains(_ node: Node) -> Bool {
         return nodes.contains(node)
-    }
-
-    func contains(_ edge: Edge) -> Bool {
-        return edges.contains(edge)
-    }
-
-    func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
-        return (nodes ?? self.nodes).filter { destination in
-            edges.contains(Edge(source,destination))
-        }
     }
 
     mutating func insert(_ node: Node) {
@@ -60,8 +50,13 @@ protocol _WeightedGraph: _Graph {
 }
 
 extension _WeightedGraph {
-    var edges: Set<Edge> {
-        return Set(adjacents.keys)
+
+    func contains(_ edge: Edge) -> Bool {
+        return adjacents.keys.contains(edge)
+    }
+
+    func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
+        return (nodes ?? self.nodes).filter { contains(Edge(source,$0)) }
     }
 
     mutating func removeEdge (from source: Node, to destination: Node) {
@@ -75,6 +70,17 @@ protocol _UnweightedGraph: _Graph {
 }
 
 extension _UnweightedGraph {
+
+    func contains(_ edge: Edge) -> Bool {
+        return edges.contains(edge)
+    }
+
+    func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
+        return (nodes ?? self.nodes).filter { destination in
+            edges.contains(Edge(source,destination))
+        }
+    }
+
     mutating func insertEdge(from source: Node, to destination: Node) {
         edges.insert(Edge(source,destination))
     }
@@ -86,7 +92,7 @@ extension _UnweightedGraph {
 
 extension _WeightedGraph {
     func unweighted <U> () -> U where U: _UnweightedGraph, U.Edge == Edge {
-        return .init(nodes, edges)
+        return .init(nodes, Set(adjacents.keys))
     }
 }
 
