@@ -22,103 +22,10 @@ extension UndirectedOver: Undirected { }
 protocol Weightedness { }
 struct Unweighted: Weightedness { }
 
-protocol _Graph {
-    associatedtype Node: Hashable
-    associatedtype Edge: SymmetricPair & Hashable where Edge.A == Node
-    var nodes: Set<Node> { get set }
-    func neighbors(of source: Node, in nodes: Set<Node>?) -> Set<Node>
-}
+protocol DirectedGraphProtocol: GraphProtocol where Edge == OrderedPair<Node> { }
+protocol UndirectedGraphProtocol: GraphProtocol where Edge == UnorderedPair<Node> { }
 
-extension _Graph {
-
-    func contains(_ node: Node) -> Bool {
-        return nodes.contains(node)
-    }
-
-    mutating func insert(_ node: Node) {
-        nodes.insert(node)
-    }
-}
-
-protocol _DirectedGraph: _Graph where Edge == OrderedPair<Node> { }
-protocol _UndirectedGraph: _Graph where Edge == UnorderedPair<Node> { }
-
-protocol _WeightedGraph: _Graph {
-    associatedtype Weight: Numeric
-    var adjacents: [Edge: Weight] { get set }
-    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight])
-}
-
-extension _WeightedGraph {
-
-    func contains(_ edge: Edge) -> Bool {
-        return adjacents.keys.contains(edge)
-    }
-
-    func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
-        return (nodes ?? self.nodes).filter { contains(Edge(source,$0)) }
-    }
-
-    mutating func removeEdge (from source: Node, to destination: Node) {
-        adjacents[Edge(source, destination)] = nil
-    }
-}
-
-protocol _UnweightedGraph: _Graph {
-    var edges: Set<Edge> { get set }
-    init(_ nodes: Set<Node>, _ edges: Set<Edge>)
-}
-
-extension _UnweightedGraph {
-
-    func contains(_ edge: Edge) -> Bool {
-        return edges.contains(edge)
-    }
-
-    func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
-        return (nodes ?? self.nodes).filter { destination in
-            edges.contains(Edge(source,destination))
-        }
-    }
-
-    mutating func insertEdge(from source: Node, to destination: Node) {
-        edges.insert(Edge(source,destination))
-    }
-
-    mutating func removeEdge (from source: Node, to destination: Node) {
-        edges.remove(Edge(source,destination))
-    }
-}
-
-extension _WeightedGraph {
-    func unweighted <U> () -> U where U: _UnweightedGraph, U.Edge == Edge {
-        return .init(nodes, Set(adjacents.keys))
-    }
-}
-
-extension _WeightedGraph {
-
-    func weight(for edge: Edge) -> Weight? {
-        return adjacents[edge]
-    }
-
-    func weight(from source: Node, to destination: Node) -> Weight? {
-        return adjacents[Edge(source,destination)]
-    }
-
-    mutating func insertEdge(from source: Node, to destination: Node, weight: Weight) {
-        adjacents[Edge(source,destination)] = weight
-    }
-    mutating func insertEdge(_ edge: Edge, weight: Weight) {
-        adjacents[edge] = weight
-    }
-    mutating func updateEdge(_ edge: Edge, by transform: (Weight) -> Weight) {
-        guard let weight = weight(for: edge) else { return }
-        insertEdge(edge, weight: transform(weight))
-    }
-}
-
-struct _WeightedDirectedGraph <Node: Hashable, Weight: Numeric>: _WeightedGraph, _DirectedGraph {
+struct _WeightedDirectedGraph <Node: Hashable, Weight: Numeric>: WeightedGraphProtocol, DirectedGraphProtocol {
     typealias Edge = OrderedPair<Node>
     var nodes: Set<Node> = []
     var adjacents: [Edge: Weight] = [:]
@@ -128,7 +35,7 @@ struct _WeightedDirectedGraph <Node: Hashable, Weight: Numeric>: _WeightedGraph,
     }
 }
 
-struct _WeightedUndirectedGraph <Node: Hashable, Weight: Numeric>: _WeightedGraph, _UndirectedGraph {
+struct _WeightedUndirectedGraph <Node: Hashable, Weight: Numeric>: WeightedGraphProtocol, UndirectedGraphProtocol {
     typealias Edge = UnorderedPair<Node>
     var nodes: Set<Node> = []
     var adjacents: [Edge: Weight] = [:]
@@ -138,7 +45,7 @@ struct _WeightedUndirectedGraph <Node: Hashable, Weight: Numeric>: _WeightedGrap
     }
 }
 
-struct _UnweightedDirectedGraph <Node: Hashable>: _UnweightedGraph, _DirectedGraph {
+struct _UnweightedDirectedGraph <Node: Hashable>: UnweightedGraphProtocol, DirectedGraphProtocol {
     typealias Edge = OrderedPair<Node>
     var nodes: Set<Node> = []
     var edges: Set<Edge> = []
@@ -148,7 +55,7 @@ struct _UnweightedDirectedGraph <Node: Hashable>: _UnweightedGraph, _DirectedGra
     }
 }
 
-struct _UnweightedUndirectedGraph <Node: Hashable>: _UnweightedGraph, _UndirectedGraph {
+struct _UnweightedUndirectedGraph <Node: Hashable>: UnweightedGraphProtocol, UndirectedGraphProtocol {
     typealias Edge = UnorderedPair<Node>
     var nodes: Set<Node> = []
     var edges: Set<Edge> = []
@@ -357,11 +264,6 @@ extension Graph where Weight == Unweighted {
 extension Graph {
     
     // MARK: - Instance Methods
-    
-//    static func unWeightedVersion (of weightedGraph: Graph) -> Graph<Unweighted, Pair> {
-//        let adjacents: [Pair: Unweighted] = weightedGraph.adjacents.mapValues { _ in .init() }
-//        return Graph<Unweighted, Pair>(weightedGraph.nodes, adjacents)
-//    }
 
     var unweighted: Graph<Unweighted,Pair> {
         return .init(nodes, adjacents.mapValues { _ in .init() })
@@ -376,16 +278,6 @@ extension Graph.Edge where Weight == Unweighted {
         self.nodes = Pair(a, b)
         self.weight = .init()
     }
-}
-
-extension Graph where Pair: SwappablePair {
-    
-    // MARK: - Instance Methods
-    
-//    mutating func flipEdge (containing nodes: Pair) {
-//        adjacents[nodes.swapped] = adjacents[nodes]
-//        adjacents[nodes] = nil
-//    }
 }
 
 extension Graph.Path where Weight == Unweighted {
