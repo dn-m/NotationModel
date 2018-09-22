@@ -1,15 +1,15 @@
 //
-//  WeightedDirectedGraph.swift
+//  WeightedGraph.swift
 //  SpelledPitch
 //
 //  Created by James Bean on 9/22/18.
 //
 
-struct WeightedDirectedGraph <Node: Hashable, Weight: Numeric>:
+struct WeightedGraph <Node: Hashable, Weight: Numeric>:
     WeightedGraphProtocol,
-    DirectedGraphProtocol
+    UndirectedGraphProtocol
 {
-    typealias Edge = OrderedPair<Node>
+    typealias Edge = UnorderedPair<Node>
     var nodes: Set<Node> = []
     var adjacents: [Edge: Weight] = [:]
     init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight]) {

@@ -105,12 +105,12 @@ extension FlowNetwork where Node == Int {
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
     init(source: Int, sink: Int, internalNodes: [Int]) {
-        let graph = DirectedGraph(source: source, sink: sink, internalNodes: internalNodes)
+        let graph = _DirectedGraph(source: source, sink: sink, internalNodes: internalNodes)
         self.init(graph, source: -2, sink: -1)
     }
 }
 
-extension DirectedGraph where Pair.A == Int, Weight == Double {
+extension _DirectedGraph where Pair.A == Int, Weight == Double {
     /// Create a `DirectedGraph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
     init (source: Int, sink: Int, internalNodes: [Int]) {
         self.init(Set([source, sink] + internalNodes), [:])

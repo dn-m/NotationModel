@@ -10,10 +10,10 @@ import XCTest
 
 class GraphTests: XCTestCase {
 
-    typealias UnweightedPath = Graph<Unweighted, DirectedOver<String>>.Path
+    typealias UnweightedPath = _Graph<Unweighted, DirectedOver<String>>.Path
 
-    var simpleGraph: Graph<Double, DirectedOver<Int>> {
-        var graph = Graph<Double, DirectedOver<Int>>()
+    var simpleGraph: _Graph<Double, DirectedOver<Int>> {
+        var graph = _Graph<Double, DirectedOver<Int>>()
         var nodes: [Int] = []
         for value in 0..<10 {
             graph.insertNode(value)
@@ -27,8 +27,8 @@ class GraphTests: XCTestCase {
         return graph
     }
 
-    var unweightedGraph: Graph<Unweighted, DirectedOver<Int>> {
-        var graph = Graph<Unweighted, DirectedOver<Int>>()
+    var unweightedGraph: _Graph<Unweighted, DirectedOver<Int>> {
+        var graph = _Graph<Unweighted, DirectedOver<Int>>()
         var nodes: [Int] = []
         for value in 0..<10 {
             graph.insertNode(value)
@@ -58,7 +58,7 @@ class GraphTests: XCTestCase {
     }
 
     func testEdgeWeight() {
-        var graph = Graph<Double, DirectedOver<Int>>()
+        var graph = _Graph<Double, DirectedOver<Int>>()
         graph.insertNode(0)
         graph.insertNode(1)
         graph.insertEdge(from: 0, to: 1, withWeight: 0.5)
@@ -66,7 +66,7 @@ class GraphTests: XCTestCase {
     }
 
     func testPairWeight() {
-        var graph = Graph<Double, DirectedOver<String>>()
+        var graph = _Graph<Double, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertEdge(from: "a", to: "b", withWeight: 0.5)
@@ -74,7 +74,7 @@ class GraphTests: XCTestCase {
     }
 
     func testRemoveEdge() {
-        var graph = Graph<Double, DirectedOver<String>>()
+        var graph = _Graph<Double, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -86,7 +86,7 @@ class GraphTests: XCTestCase {
     }
 
     func testEdgesFromNodeDirected() {
-        var graph = Graph<Double, DirectedOver<String>>()
+        var graph = _Graph<Double, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -99,7 +99,7 @@ class GraphTests: XCTestCase {
     }
 
     func testEdgesFromNodeUndirected() {
-        var graph = Graph<Double, UndirectedOver<String>>()
+        var graph = _Graph<Double, UndirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -113,7 +113,7 @@ class GraphTests: XCTestCase {
     }
 
     func testNeighborsDirected() {
-        var graph = Graph<Unweighted, DirectedOver<String>>()
+        var graph = _Graph<Unweighted, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -125,7 +125,7 @@ class GraphTests: XCTestCase {
     }
 
     func testNeighborsFromArrayDirected() {
-        var graph = Graph<Unweighted, DirectedOver<String>>()
+        var graph = _Graph<Unweighted, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -139,7 +139,7 @@ class GraphTests: XCTestCase {
     }
 
     func testNeighborsUndirected() {
-        var graph = Graph<Unweighted, UndirectedOver<String>>()
+        var graph = _Graph<Unweighted, UndirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -151,20 +151,20 @@ class GraphTests: XCTestCase {
     }
 
     func testShortestUnweightedPathSingleNode() {
-        var graph = Graph<Unweighted, DirectedOver<String>>()
+        var graph = _Graph<Unweighted, DirectedOver<String>>()
         graph.insertNode("a")
         XCTAssertEqual(graph.shortestUnweightedPath(from: "a", to: "a")!.nodes, ["a"])
     }
 
     func testShortestUnweightedPathTwoUnconnectedNodes() {
-        var graph = Graph<Unweighted, DirectedOver<String>>()
+        var graph = _Graph<Unweighted, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         XCTAssertNil(graph.shortestUnweightedPath(from: "a", to: "b"))
     }
 
     func testShortestUnweightedPathTwoDirectionallyConnectedNodes() {
-        var graph = Graph<Unweighted, DirectedOver<String>>()
+        var graph = _Graph<Unweighted, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertEdge(from: "a", to: "b")
@@ -173,7 +173,7 @@ class GraphTests: XCTestCase {
     }
 
     func testShortestPathThreeNodes() {
-        var graph = Graph<Unweighted, DirectedOver<String>>()
+        var graph = _Graph<Unweighted, DirectedOver<String>>()
         graph.insertNode("a")
         graph.insertNode("b")
         graph.insertNode("c")
@@ -185,7 +185,7 @@ class GraphTests: XCTestCase {
     }
 
     func testShortestPathTwoOptions() {
-        var graph = Graph<Double, DirectedOver<String>>()
+        var graph = _Graph<Double, DirectedOver<String>>()
         graph.insertNode("s")
         graph.insertNode("a")
         graph.insertNode("b")
@@ -198,7 +198,7 @@ class GraphTests: XCTestCase {
     }
 
     func testPathAdjacents() {
-        var graph = Graph<Double, DirectedOver<String>>()
+        var graph = _Graph<Double, DirectedOver<String>>()
         graph.insertNode("s")
         graph.insertNode("a")
         graph.insertNode("b")

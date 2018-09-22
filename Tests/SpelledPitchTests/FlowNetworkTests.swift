@@ -11,7 +11,7 @@ import XCTest
 class FlowNetworkTests: XCTestCase {
 
     var simpleFlowNetwork: FlowNetwork<String> {
-        var graph = DirectedGraph<String>()
+        var graph = _DirectedGraph<String>()
         graph.insertNode("s")
         graph.insertNode("t")
         graph.insertNode("a")
@@ -55,7 +55,7 @@ class FlowNetworkTests: XCTestCase {
     func testRandomNetwork() {
         let iterations = 10
         (0..<iterations).forEach { _ in
-            var randomNetwork = FlowNetwork<Int>(DirectedGraph<Int>([0,1], [:]), source: 0, sink: 1)
+            var randomNetwork = FlowNetwork<Int>(_DirectedGraph<Int>([0,1], [:]), source: 0, sink: 1)
             (2..<100).forEach { randomNetwork.directedGraph.insertNode($0) }
             (0..<100).forEach { source in
                 (0..<100).forEach { destination in

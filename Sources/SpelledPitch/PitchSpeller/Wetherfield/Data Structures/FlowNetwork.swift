@@ -6,17 +6,17 @@
 //
 
 // MARK: Type Aliases
-typealias DirectedGraph<Node: Hashable> = Graph<Double, DirectedOver<Node>>
-typealias UnweightedGraph<Node: Hashable> = Graph<Unweighted, DirectedOver<Node>>
+typealias _DirectedGraph<Node: Hashable> = _Graph<Double, DirectedOver<Node>>
+typealias UnweightedGraph<Node: Hashable> = _Graph<Unweighted, DirectedOver<Node>>
 
-/// Directed Graph with several properties:
+/// Directed _Graph with several properties:
 /// - Each edge has a capacity for flow
 /// - A "source" node, which is only emanates flow outward
 /// - A "sink" node, which only receives flow
 public struct FlowNetwork <Node: Hashable> {
     
-    typealias DirectedPath = DirectedGraph<Node>.Path
-    typealias DirectedEdge = DirectedGraph<Node>.Edge
+    typealias DirectedPath = _DirectedGraph<Node>.Path
+    typealias DirectedEdge = _DirectedGraph<Node>.Edge
 
     /// - Returns: All of the `Node` values contained herein which are neither the `source` nor
     /// the `sink`.
@@ -86,14 +86,14 @@ public struct FlowNetwork <Node: Hashable> {
     }
 
     // TODO: Consider more (space-)efficient storage of Nodes.
-    internal var directedGraph: DirectedGraph<Node>
+    internal var directedGraph: _DirectedGraph<Node>
     internal var source: Node
     internal var sink: Node
 
     // MARK: - Initializers
     
     /// Create a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink` nodes.
-    init(_ directedGraph: DirectedGraph<Node>, source: Node, sink: Node) {
+    init(_ directedGraph: _DirectedGraph<Node>, source: Node, sink: Node) {
         self.directedGraph = directedGraph
         self.source = source
         self.sink = sink

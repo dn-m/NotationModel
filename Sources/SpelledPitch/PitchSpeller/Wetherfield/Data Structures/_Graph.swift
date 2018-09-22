@@ -1,5 +1,5 @@
 //
-//  Graph.swift
+//  _Graph.swift
 //  PitchSpeller
 //
 //  Created by Benjamin Wetherfield on 7/14/18.
@@ -22,48 +22,8 @@ extension UndirectedOver: Undirected { }
 protocol Weightedness { }
 struct Unweighted: Weightedness { }
 
-struct _WeightedDirectedGraph <Node: Hashable, Weight: Numeric>: WeightedGraphProtocol, DirectedGraphProtocol {
-    typealias Edge = OrderedPair<Node>
-    var nodes: Set<Node> = []
-    var adjacents: [Edge: Weight] = [:]
-    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight]) {
-        self.nodes = nodes
-        self.adjacents = adjacents
-    }
-}
-
-struct _WeightedUndirectedGraph <Node: Hashable, Weight: Numeric>: WeightedGraphProtocol, UndirectedGraphProtocol {
-    typealias Edge = UnorderedPair<Node>
-    var nodes: Set<Node> = []
-    var adjacents: [Edge: Weight] = [:]
-    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight]) {
-        self.nodes = nodes
-        self.adjacents = adjacents
-    }
-}
-
-struct _UnweightedDirectedGraph <Node: Hashable>: UnweightedGraphProtocol, DirectedGraphProtocol {
-    typealias Edge = OrderedPair<Node>
-    var nodes: Set<Node> = []
-    var edges: Set<Edge> = []
-    init(_ nodes: Set<Node>, _ edges: Set<Edge>) {
-        self.nodes = nodes
-        self.edges = edges
-    }
-}
-
-struct _UnweightedUndirectedGraph <Node: Hashable>: UnweightedGraphProtocol, UndirectedGraphProtocol {
-    typealias Edge = UnorderedPair<Node>
-    var nodes: Set<Node> = []
-    var edges: Set<Edge> = []
-    init(_ nodes: Set<Node>, _ edges: Set<Edge>) {
-        self.nodes = nodes
-        self.edges = edges
-    }
-}
-
-// Weightable, directable implementation of a Graph structure.
-struct Graph <Weight, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
+// Weightable, directable implementation of a _Graph structure.
+struct _Graph <Weight, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
 
     // MARK: - Instance Properties
      
@@ -71,14 +31,14 @@ struct Graph <Weight, Pair: SymmetricPair & Directedness & Hashable> where Pair.
     var adjacents: [Pair: Weight]
 }
 
-extension Graph {
+extension _Graph {
 
     // MARK: - Type Aliases
 
     typealias Node = Pair.A
 }
 
-extension Graph {
+extension _Graph {
 
     // MARK: - Nested Types
 
@@ -91,7 +51,7 @@ extension Graph {
 
         // MARK: - Initializers
 
-        init (_ a: Graph.Node, _ b: Graph.Node, withWeight weight: Weight) {
+        init (_ a: _Graph.Node, _ b: _Graph.Node, withWeight weight: Weight) {
             self.nodes = Pair(a, b)
             self.weight = weight
         }
@@ -118,17 +78,17 @@ extension Graph {
     }
 }
 
-extension Graph {
+extension _Graph {
 
     // MARK: - Initializers
 
-    /// Creates a `Graph` without nodes.
+    /// Creates a `_Graph` without nodes.
     init () {
         nodes = []
         adjacents = [:]
     }
 
-    /// Creates a `Graph` with the given `nodes` and `adjacents`, describing how the given `nodes`
+    /// Creates a `_Graph` with the given `nodes` and `adjacents`, describing how the given `nodes`
     /// are connected.
     init (_ nodes: Set<Node>, _ adjacents: [Pair: Weight]) {
         self.nodes = nodes
@@ -136,7 +96,7 @@ extension Graph {
     }
 }
 
-extension Graph {
+extension _Graph {
 
     // MARK: - Computed Properties
 
@@ -149,11 +109,11 @@ extension Graph {
     }
 }
 
-extension Graph {
+extension _Graph {
 
-    // MARK: - Modifying a `Graph`
+    // MARK: - Modifying a `_Graph`
 
-    /// Inserts the given `node` into the `Graph`.
+    /// Inserts the given `node` into the `_Graph`.
     mutating func insertNode (_ node: Node) {
         nodes.insert(node)
     }
@@ -165,7 +125,7 @@ extension Graph {
         adjacents[Pair(source, destination)] = weight
     }
 
-    /// Inserts the given pair-value pair into the `Graph`.
+    /// Inserts the given pair-value pair into the `_Graph`.
     mutating func insertEdge (_ pairAndWeight: (pair: Pair, weight: Weight)) {
         insertEdge(pairAndWeight.pair, pairAndWeight.weight)
     }
@@ -185,7 +145,7 @@ extension Graph {
         insertEdge(pair, transform(weight))
     }
 
-    /// Inserts the given `path` into the `Graph`.
+    /// Inserts the given `path` into the `_Graph`.
     mutating func insertPath (_ path: Path) {
         path.nodes.forEach { insertNode($0) }
         path.weights.forEach { insertEdge($0) }
@@ -197,9 +157,9 @@ extension Graph {
     }
 }
 
-extension Graph {
+extension _Graph {
 
-    // MARK: - Querying a `Graph`
+    // MARK: - Querying a `_Graph`
 
     /// - Returns: `true` if the graph contains this `node`, else `false`
     func contains (_ node: Node) -> Bool {
@@ -245,7 +205,7 @@ extension Graph {
     }
 }
 
-extension Graph where Weight == Unweighted {
+extension _Graph where Weight == Unweighted {
     
     // MARK: - Instance Methods
     
@@ -253,31 +213,31 @@ extension Graph where Weight == Unweighted {
         insertEdge(from: source, to: destination, withWeight: .init())
     }
     
-    mutating func insertPath (_ nodes: [Graph.Node]) {
+    mutating func insertPath (_ nodes: [_Graph.Node]) {
         insertPath(Path(nodes))
     }
 }
 
-extension Graph {
+extension _Graph {
     
     // MARK: - Instance Methods
 
-    var unweighted: Graph<Unweighted,Pair> {
+    var unweighted: _Graph<Unweighted,Pair> {
         return .init(nodes, adjacents.mapValues { _ in .init() })
     }
 }
 
-extension Graph.Edge where Weight == Unweighted {
+extension _Graph.Edge where Weight == Unweighted {
     
     // MARK: - Initializers
     
-    init (_ a: Graph.Node, _ b: Graph.Node) {
+    init (_ a: _Graph.Node, _ b: _Graph.Node) {
         self.nodes = Pair(a, b)
         self.weight = .init()
     }
 }
 
-extension Graph.Path where Weight == Unweighted {
+extension _Graph.Path where Weight == Unweighted {
     
     // MARK: - Instance properties
     
@@ -287,7 +247,7 @@ extension Graph.Path where Weight == Unweighted {
     
     // MARK: - Initializers
     
-    init (_ nodes: [Graph.Node]) {
+    init (_ nodes: [_Graph.Node]) {
         let count = nodes.count
         var weights: [Pair: Weight] = [:]
         nodes.enumerated().forEach { index, currentNode in
@@ -300,19 +260,19 @@ extension Graph.Path where Weight == Unweighted {
     }
 }
 
-extension Graph.Edge where Pair: Directed {
+extension _Graph.Edge where Pair: Directed {
     
     // MARK: - Instance Properties
     
-    var source: Graph.Node { return nodes.a }
-    var destination: Graph.Node { return nodes.b }
+    var source: _Graph.Node { return nodes.a }
+    var destination: _Graph.Node { return nodes.b }
 }
 
-extension Graph {
+extension _Graph {
     
     // MARK: = Typealiases
     
-    typealias UnweightedPath = Graph<Unweighted, DirectedOver<Node>>.Path
+    typealias UnweightedPath = _Graph<Unweighted, DirectedOver<Node>>.Path
     
     // MARK: - Instance Methods
     
