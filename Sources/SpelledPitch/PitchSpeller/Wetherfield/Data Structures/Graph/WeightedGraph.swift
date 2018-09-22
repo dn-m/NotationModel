@@ -10,10 +10,13 @@ struct WeightedGraph <Node: Hashable, Weight: Numeric>:
     UndirectedGraphProtocol
 {
     typealias Edge = UnorderedPair<Node>
-    var nodes: Set<Node> = []
-    var adjacents: [Edge: Weight] = [:]
-    init(_ nodes: Set<Node>, _ adjacents: [Edge: Weight]) {
+    var nodes: Set<Node>
+    var adjacents: [Edge: Weight]
+    init(_ nodes: Set<Node> = [], _ adjacents: [Edge: Weight] = [:]) {
         self.nodes = nodes
         self.adjacents = adjacents
     }
 }
+
+extension WeightedGraph: Equatable { }
+extension WeightedGraph: Hashable where Weight: Hashable { }

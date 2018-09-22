@@ -38,6 +38,8 @@ extension WeightedGraphProtocol {
     }
 
     mutating func insertEdge(from source: Node, to destination: Node, weight: Weight) {
+        nodes.insert(source)
+        nodes.insert(destination)
         adjacents[Edge(source,destination)] = weight
     }
 

@@ -23,6 +23,8 @@ extension UnweightedGraphProtocol {
     }
 
     mutating func insertEdge(from source: Node, to destination: Node) {
+        insert(source)
+        insert(destination)
         edges.insert(Edge(source,destination))
     }
 
