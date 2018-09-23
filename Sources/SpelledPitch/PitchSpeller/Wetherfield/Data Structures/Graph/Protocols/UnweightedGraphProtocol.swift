@@ -23,13 +23,17 @@ extension UnweightedGraphProtocol {
         }
     }
 
+    func edges(containing node: Node) -> Set<Edge> {
+        return edges.filter { $0.a == node || $0.b == node }
+    }
+
     mutating func insertEdge(from source: Node, to destination: Node) {
         insert(source)
         insert(destination)
         edges.insert(Edge(source,destination))
     }
 
-    mutating func removeEdge (from source: Node, to destination: Node) {
+    mutating func removeEdge(from source: Node, to destination: Node) {
         edges.remove(Edge(source,destination))
     }
 }

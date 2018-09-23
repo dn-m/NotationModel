@@ -295,11 +295,11 @@ extension _Graph {
         var unvisited = nodes
         var queue: Queue<Node> = []
         
-        queue.push(source)
+        queue.enqueue(source)
         while !queue.isEmpty {
-            let node = queue.pop()
+            let node = queue.dequeue()
             for neighbor in neighbors(of: node, from: unvisited) {
-                queue.push(neighbor)
+                queue.enqueue(neighbor)
                 unvisited.remove(neighbor)
                 breadcrumbs[neighbor] = node
                 if neighbor == destination { return backtrace() }
@@ -307,16 +307,16 @@ extension _Graph {
         }
         return nil
     }
-    
+
     internal func breadthFirstSearch(from source: Node) -> [Node] {
         var visited: [Node] = []
         var queue: Queue<Node> = []
-        queue.push(source)
+        queue.enqueue(source)
         visited.append(source)
         while !queue.isEmpty {
-            let node = queue.pop()
+            let node = queue.dequeue()
             for neighbor in neighbors(of: node) where !visited.contains(neighbor) {
-                queue.push(neighbor)
+                queue.enqueue(neighbor)
                 visited.append(neighbor)
             }
         }

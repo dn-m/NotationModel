@@ -20,11 +20,11 @@ public struct Queue <Element: Equatable> {
         return storage.count
     }
 
-    public mutating func push(_ value: Element) {
+    public mutating func enqueue(_ value: Element) {
         storage.append(value)
     }
 
-    public mutating func pop() -> Element {
+    public mutating func dequeue() -> Element {
         return storage.remove(at: 0)
     }
 

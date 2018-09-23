@@ -6,3 +6,10 @@
 //
 
 protocol SymmetricPair: Pair where A == B { }
+
+extension SymmetricPair where A: Equatable {
+
+    func contains(_ value: A) -> Bool {
+        return a == value || b == value
+    }
+}

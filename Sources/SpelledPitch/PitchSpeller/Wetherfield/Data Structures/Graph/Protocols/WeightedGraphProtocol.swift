@@ -38,6 +38,10 @@ extension WeightedGraphProtocol {
         return adjacents[Edge(source,destination)]
     }
 
+    func edges(containing node: Node) -> Set<Edge> {
+        return Set(adjacents.keys.lazy.filter { $0.contains(node) })
+    }
+
     mutating func insertEdge(from source: Node, to destination: Node, weight: Weight) {
         nodes.insert(source)
         nodes.insert(destination)
@@ -51,5 +55,14 @@ extension WeightedGraphProtocol {
     mutating func updateEdge(_ edge: Edge, by transform: (Weight) -> Weight) {
         guard let weight = weight(for: edge) else { return }
         insertEdge(edge, weight: transform(weight))
+    }
+
+    mutating func updateEdge(
+        from source: Node,
+        to destination: Node,
+        by transform: (Weight) -> Weight
+    )
+    {
+        updateEdge(Edge(source,destination), by: transform)
     }
 }

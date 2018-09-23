@@ -6,4 +6,6 @@
 //
 
 /// Interface for directed graphs.
-protocol DirectedGraphProtocol: GraphProtocol where Edge == OrderedPair<Node> { }
+protocol DirectedGraphProtocol: GraphProtocol where Edge == OrderedPair<Node> {
+    func edges(from source: Node) -> Set<Edge>
+}
