@@ -26,9 +26,6 @@ struct OrderedPair <T>: SwappablePair {
     }
 }
 
-// MARK: - Equatable
 extension OrderedPair: Equatable where T: Equatable { }
-
-// MARK: - Hashable
 extension OrderedPair: Hashable where T: Hashable { }
 

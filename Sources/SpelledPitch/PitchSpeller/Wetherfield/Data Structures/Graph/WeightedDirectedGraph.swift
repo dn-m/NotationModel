@@ -14,8 +14,13 @@ struct WeightedDirectedGraph <Node: Hashable, Weight: Numeric>:
     var nodes: Set<Node>
     var adjacents: [Edge: Weight]
 
-    init(_ nodes: Set<Node> = [], _ adjacents: [Edge: Weight] = [:]) {
+    init(_ nodes: Set<Node> = []) {
         self.nodes = nodes
+        self.adjacents = [:]
+    }
+
+    init(_ nodes: Set<Node> = [], _ adjacents: [Edge: Weight] = [:]) {
+        self.init(nodes)
         self.adjacents = adjacents
     }
 

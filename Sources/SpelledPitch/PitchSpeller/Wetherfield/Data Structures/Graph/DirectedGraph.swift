@@ -12,8 +12,13 @@ struct DirectedGraph <Node: Hashable>: UnweightedGraphProtocol, DirectedGraphPro
     var nodes: Set<Node>
     var edges: Set<Edge>
 
-    init(_ nodes: Set<Node> = [], _ edges: Set<Edge> = []) {
+    init(_ nodes: Set<Node> = []) {
         self.nodes = nodes
+        self.edges = []
+    }
+
+    init(_ nodes: Set<Node> = [], _ edges: Set<Edge> = []) {
+        self.init(nodes)
         self.edges = edges
     }
 

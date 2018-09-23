@@ -12,8 +12,12 @@ protocol GraphProtocol {
 
     var nodes: Set<Node> { get set }
 
+    init(_ nodes: Set<Node>)
+
     func neighbors(of source: Node, in nodes: Set<Node>?) -> Set<Node>
     func edges(containing node: Node) -> Set<Edge>
+    
+    mutating func removeEdge(from source: Node, to destination: Node)
 }
 
 extension GraphProtocol {

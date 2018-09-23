@@ -5,7 +5,7 @@
 //  Created by Benjamin Wetherfield on 6/30/18.
 //
 
-struct UnorderedPair<T>: SymmetricPair {
+struct UnorderedPair <T>: SymmetricPair {
     
     typealias A = T
     
