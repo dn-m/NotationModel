@@ -23,6 +23,15 @@ struct Graph <Node: Hashable>: UnweightedGraphProtocol, UndirectedGraphProtocol 
 
 extension Graph {
 
+    // MARK: - Type Aliases
+
+    /// The type of edges which connect nodes.
+    typealias Edge = UnorderedPair<Node>
+}
+
+
+extension Graph {
+
     // MARK: - Initializers
 
     /// Creates a `Graph` with the given set of nodes, with no edges between the nodes.
@@ -37,14 +46,6 @@ extension Graph {
         self.init(nodes)
         self.edges = edges
     }
-}
-
-extension Graph {
-
-    // MARK: - Type Aliases
-
-    /// The type of edges which connect nodes.
-    typealias Edge = UnorderedPair<Node>
 }
 
 extension Graph: Equatable { }
