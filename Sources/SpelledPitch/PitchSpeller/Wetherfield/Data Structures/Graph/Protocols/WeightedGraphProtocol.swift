@@ -39,7 +39,7 @@ extension WeightedGraphProtocol {
 
     // MARK: - Querying
 
-    /// - Returns: `true` if this graph contains the given `edge`.
+    /// - Returns: `true` if this graph contains the given `edge`. Otherwise, `false`.
     func contains(_ edge: Edge) -> Bool {
         return adjacents.keys.contains(edge)
     }
