@@ -17,7 +17,7 @@ struct DirectedGraph <Node: Hashable>: UnweightedGraphProtocol, DirectedGraphPro
 
     /// All of the edges contained herein.
     ///
-    /// An `Edge` is an `UnorderedPair` of `Node` values.
+    /// An `Edge` is an `OrderedPair` of `Node` values.
     var edges: Set<Edge>
 }
 
