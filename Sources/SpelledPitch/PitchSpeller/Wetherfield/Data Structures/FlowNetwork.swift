@@ -7,7 +7,7 @@
 
 // MARK: Type Aliases
 typealias _DirectedGraph<Node: Hashable> = _Graph<Double, DirectedOver<Node>>
-typealias UnweightedGraph<Node: Hashable> = _Graph<Unweighted, DirectedOver<Node>>
+typealias _UnweightedGraph<Node: Hashable> = _Graph<Unweighted, DirectedOver<Node>>
 
 /// Directed _Graph with several properties:
 /// - Each edge has a capacity for flow
@@ -27,7 +27,7 @@ public struct FlowNetwork <Node: Hashable> {
     /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
     /// saturated edges flipped and all weights removed.
-    var solvedForMaximumFlow: (flow: Double, network: UnweightedGraph<Node>) {
+    var solvedForMaximumFlow: (flow: Double, network: _UnweightedGraph<Node>) {
         var residualNetwork = directedGraph
         
         func findAugmentingPath () -> Bool {
@@ -38,7 +38,7 @@ public struct FlowNetwork <Node: Hashable> {
             return true
         }
             
-        func pushFlow (through path: UnweightedGraph<Node>.Path) {
+        func pushFlow (through path: _UnweightedGraph<Node>.Path) {
             let minimumEdge = (path.adjacents.compactMap(residualNetwork.weight).min())!
             path.adjacents.forEach { edge in
                 residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
