@@ -32,9 +32,6 @@ class UnorderedPairTests: XCTestCase {
     }
 
     func testInitializers() {
-        let pair1 = UnorderedPair<Int>(2,5)
-        let tuple = (2,5)
-        let pair2 = UnorderedPair<Int>(tuple)
-        XCTAssertEqual(pair1, pair2)
+        let _ = UnorderedPair(2,5)
     }
 }

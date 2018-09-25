@@ -43,25 +43,16 @@ extension WeightedGraphProtocol {
     func contains(_ edge: Edge) -> Bool {
         return adjacents.keys.contains(edge)
     }
-
-    /// - Returns: A set of nodes connected to the given `source`, in the given set of
-    /// `nodes`.
-    ///
-    /// If `nodes` is empty, then any nodes contained herein are able to be included in the
-    /// resultant set.
-    func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
-        return (nodes ?? self.nodes).filter { contains(Edge(source,$0)) }
-    }
-
+    
     /// - Returns: The weight for the edge connecting the given `source` and `destination` nodes,
     /// if the given `edge` is contained herein. Otherwise, `nil`.
     func weight(from source: Node, to destination: Node) -> Weight? {
-        return weight(for: Edge(source,destination))
+        return weight(Edge(source,destination))
     }
 
     /// - Returns: The weight for the given `edge`, if the given `edge` is contained herein.
     /// Otherwise, `nil`.
-    func weight(for edge: Edge) -> Weight? {
+    func weight(_ edge: Edge) -> Weight? {
         return adjacents[edge]
     }
 
@@ -107,7 +98,7 @@ extension WeightedGraphProtocol {
 
     /// Updates the weight of the given `edge` by the given `transform`.
     mutating func updateEdge(_ edge: Edge, by transform: (Weight) -> Weight) {
-        guard let weight = weight(for: edge) else { return }
+        guard let weight = weight(edge) else { return }
         insertEdge(edge, weight: transform(weight))
     }
 }

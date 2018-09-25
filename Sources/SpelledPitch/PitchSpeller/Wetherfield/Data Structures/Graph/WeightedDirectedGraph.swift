@@ -50,6 +50,15 @@ extension WeightedDirectedGraph {
     func edges(from source: Node) -> Set<Edge> {
         return Set(adjacents.keys.lazy.filter { $0.a == source })
     }
+
+    /// - Returns: A set of nodes connected to the given `source`, in the given set of
+    /// `nodes`.
+    ///
+    /// If `nodes` is empty, then any nodes contained herein are able to be included in the
+    /// resultant set.
+    func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
+        return (nodes ?? self.nodes).filter { adjacents.keys.contains(Edge(source,$0)) }
+    }
 }
 
 extension WeightedDirectedGraph: Equatable { }

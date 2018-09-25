@@ -5,90 +5,17 @@
 //  Created by James Bean on 5/24/18.
 //
 
-// MARK: Type Aliases
-typealias _DirectedGraph<Node: Hashable> = _Graph<Double, DirectedOver<Node>>
-typealias _UnweightedGraph<Node: Hashable> = _Graph<Unweighted, DirectedOver<Node>>
-
 /// Directed _Graph with several properties:
 /// - Each edge has a capacity for flow
 /// - A "source" node, which is only emanates flow outward
 /// - A "sink" node, which only receives flow
-public struct FlowNetwork <Node: Hashable> {
-    
-    typealias DirectedPath = _DirectedGraph<Node>.Path
-    typealias DirectedEdge = _DirectedGraph<Node>.Edge
+public struct FlowNetwork <Node: Hashable, Weight: Numeric & Comparable> {
 
-    /// - Returns: All of the `Node` values contained herein which are neither the `source` nor
-    /// the `sink`.
-    public var internalNodes: [Node] {
-        return directedGraph.nodes.filter { $0 != source && $0 != sink }
-    }
-    
-    /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
-    /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
-    /// saturated edges flipped and all weights removed.
-    var solvedForMaximumFlow: (flow: Double, network: _UnweightedGraph<Node>) {
-        var residualNetwork = directedGraph
-        
-        func findAugmentingPath () -> Bool {
-            guard let path = residualNetwork.shortestUnweightedPath(from: source, to: sink) else {
-                return false
-            }
-            pushFlow(through: path)
-            return true
-        }
-            
-        func pushFlow (through path: _UnweightedGraph<Node>.Path) {
-            let minimumEdge = (path.adjacents.compactMap(residualNetwork.weight).min())!
-            path.adjacents.forEach { edge in
-                residualNetwork.updateEdge(edge, with: { capacity in capacity - minimumEdge })
-                if residualNetwork.weight(edge)! == 0.0 {
-                    residualNetwork.removeEdge(from: edge.a, to: edge.b)
-                }
-                if residualNetwork.contains(edge.swapped) {
-                    residualNetwork.updateEdge(edge.swapped, with: { capacity in capacity + minimumEdge })
-                }
-                else { residualNetwork.insertEdge(edge.swapped, minimumEdge) }
-            }
-        }
-        
-        func computeFlow () -> Double {
-            let sourceEdges = directedGraph.neighbors(of: source).lazy
-                .map { OrderedPair(self.source, $0) }
-                .partition(residualNetwork.contains)
-            let edgesPresent = sourceEdges.whereTrue.lazy
-                .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
-                .reduce(0.0, +)
-            let edgesAbsent = sourceEdges.whereFalse.lazy
-                .compactMap(directedGraph.weight)
-                .reduce(0.0, +)
-            return edgesPresent + edgesAbsent
-        }
-        
-        while findAugmentingPath() { continue }
-        return (flow: computeFlow(), network: residualNetwork.unweighted)
-    }
-    
-    /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
-    /// tiebreak (in- and out- edges saturated).
-    public var minimumCut: (Set<Node>, Set<Node>) {
-        return (sourceSideNodes, notSourceSideNodes)
-    }
-    
-    /// - Returns: Nodes in residual network reachable from the `source`
-    private var sourceSideNodes: Set<Node> {
-        return Set(solvedForMaximumFlow.network.breadthFirstSearch(from: source))
-    }
-    
-    /// - Returns: Nodes in residual network *not* reachable from the `source`
-    private var notSourceSideNodes: Set<Node> {
-        return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
-    }
+    // MARK: - Instance Properties
 
-    // TODO: Consider more (space-)efficient storage of Nodes.
-    internal var directedGraph: _DirectedGraph<Node>
-    internal var source: Node
-    internal var sink: Node
+    var directedGraph: WeightedDirectedGraph<Node,Weight>
+    var source: Node
+    var sink: Node
 }
 
 extension FlowNetwork {
@@ -96,10 +23,80 @@ extension FlowNetwork {
     // MARK: - Initializers
 
     /// Create a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink` nodes.
-    init(_ directedGraph: _DirectedGraph<Node>, source: Node, sink: Node) {
+    init(_ directedGraph: WeightedDirectedGraph<Node,Weight>, source: Node, sink: Node) {
         self.directedGraph = directedGraph
         self.source = source
         self.sink = sink
+    }
+}
+
+extension FlowNetwork {
+
+    // MARK: - Computed Properties
+
+    /// - Returns: All of the `Node` values contained herein which are neither the `source` nor
+    /// the `sink`.
+    public var internalNodes: [Node] {
+        return directedGraph.nodes.filter { $0 != source && $0 != sink }
+    }
+
+    /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
+    /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
+    /// saturated edges flipped and all weights removed.
+    var solvedForMaximumFlow: (flow: Weight, network: DirectedGraph<Node>) {
+        var residualNetwork = directedGraph
+        func findAugmentingPath () -> Bool {
+            guard let path: DirectedGraph<Node> = residualNetwork
+                .shortestUnweightedPath(from: source, to: sink) else { return false }
+            pushFlow(through: path)
+            return true
+        }
+
+        func pushFlow (through path: DirectedGraph<Node>) {
+            let minimumEdge = path.edges.compactMap(residualNetwork.weight).min()!
+            path.edges.forEach { edge in
+                residualNetwork.updateEdge(edge, by: { capacity in capacity - minimumEdge })
+                if residualNetwork.weight(edge)! == 0 {
+                    residualNetwork.removeEdge(from: edge.a, to: edge.b)
+                }
+                if residualNetwork.contains(edge.swapped) {
+                    residualNetwork.updateEdge(edge.swapped, by: { capacity in capacity + minimumEdge })
+                }
+                else { residualNetwork.insertEdge(edge.swapped, weight: minimumEdge) }
+            }
+        }
+
+        func computeFlow () -> Weight {
+            let sourceEdges = directedGraph.neighbors(of: source).lazy
+                .map { OrderedPair(self.source, $0) }
+                .partition(residualNetwork.contains)
+            let edgesPresent = sourceEdges.whereTrue.lazy
+                .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
+                .reduce(0,+)
+            let edgesAbsent = sourceEdges.whereFalse.lazy
+                .compactMap(directedGraph.weight)
+                .reduce(0,+)
+            return edgesPresent + edgesAbsent
+        }
+
+        while findAugmentingPath() { continue }
+        return (flow: computeFlow(), network: residualNetwork.unweighted())
+    }
+
+    /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
+    /// tiebreak (in- and out- edges saturated).
+    public var minimumCut: (Set<Node>, Set<Node>) {
+        return (sourceSideNodes, notSourceSideNodes)
+    }
+
+    /// - Returns: Nodes in residual network reachable from the `source`
+    private var sourceSideNodes: Set<Node> {
+        return Set(solvedForMaximumFlow.network.breadthFirstSearch(from: source))
+    }
+
+    /// - Returns: Nodes in residual network *not* reachable from the `source`
+    private var notSourceSideNodes: Set<Node> {
+        return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
     }
 }
 

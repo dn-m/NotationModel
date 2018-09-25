@@ -23,8 +23,8 @@ class WeightedGraphTests: XCTestCase {
         graph.insertEdge(from: "b", to: "c", weight: 7)
         graph.insertEdge(from: "b", to: "d", weight: 11)
         graph.insertEdge(from: "d", to: "e", weight: 13)
-        XCTAssertNil(graph.weight(for: UnorderedPair("c","e")))
-        XCTAssertEqual(graph.weight(for: UnorderedPair("b","c")), 7)
+        XCTAssertNil(graph.weight(UnorderedPair("c","e")))
+        XCTAssertEqual(graph.weight(UnorderedPair("b","c")), 7)
         XCTAssertEqual(graph.weight(from: "d", to: "e"), 13)
     }
 

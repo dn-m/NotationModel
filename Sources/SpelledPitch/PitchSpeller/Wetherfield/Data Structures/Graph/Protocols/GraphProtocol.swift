@@ -48,6 +48,7 @@ extension GraphProtocol {
     }
 
     func breadthFirstSearch(from source: Node, to destination: Node? = nil) -> [Node] {
+        print("bfs")
         var visited: [Node] = []
         var queue: Queue<Node> = []
         queue.enqueue(source)
@@ -61,6 +62,35 @@ extension GraphProtocol {
             }
         }
         return visited
+    }
+
+    func shortestUnweightedPath <U> (from source: Node, to destination: Node) -> U?
+        where U: UnweightedGraphProtocol, U.Node == Node
+    {
+        print("shortest unweighted path from: \(source) to \(destination)")
+        var breadcrumbs: [Node: Node] = [:]
+        func backtrace() -> U {
+            var path = [destination]
+            var cursor = destination
+            while cursor != source {
+                path.insert(breadcrumbs[cursor]!, at: 0)
+                cursor = breadcrumbs[cursor]!
+            }
+            return .init(path: path)
+        }
+        if source == destination { return .init([source]) }
+        var unvisited = nodes
+        var queue: Queue<Node> = []
+        while !queue.isEmpty {
+            let node = queue.dequeue()
+            for neighbor in neighbors(of: node, in: unvisited) {
+                queue.enqueue(neighbor)
+                unvisited.remove(neighbor)
+                breadcrumbs[neighbor] = node
+                if neighbor == destination { return backtrace() }
+            }
+        }
+        return nil
     }
 
     mutating func insert(_ node: Node) {

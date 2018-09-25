@@ -14,11 +14,6 @@ struct OrderedPair <T>: SwappablePair {
     let b: T
 
     // MARK: - Initializers
-
-    init(_ pair: (T, T)) {
-        self.a = pair.0
-        self.b = pair.1
-    }
     
     init(_ a: T, _ b: T) {
         self.a = a
