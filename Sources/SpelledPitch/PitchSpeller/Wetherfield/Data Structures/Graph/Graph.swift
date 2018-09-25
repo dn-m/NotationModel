@@ -57,9 +57,7 @@ extension Graph {
     /// If `nodes` is empty, then any nodes contained herein are able to be included in the
     /// resultant set.
     func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
-        return (nodes ?? self.nodes).filter { node in
-            edges.contains { edge in edge.contains(node) }
-        }
+        return (nodes ?? self.nodes).intersection(edges.compactMap { $0.other(source) })
     }
 }
 

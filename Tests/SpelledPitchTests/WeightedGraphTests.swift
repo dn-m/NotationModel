@@ -52,6 +52,7 @@ class WeightedGraphTests: XCTestCase {
         graph.insertEdge(from: "b", to: "d", weight: 11)
         graph.insertEdge(from: "d", to: "e", weight: 13)
         XCTAssertEqual(graph.neighbors(of: "b"), ["a","c","d"])
+        print("-----------------------")
         XCTAssertEqual(graph.neighbors(of: "f"), [])
     }
 

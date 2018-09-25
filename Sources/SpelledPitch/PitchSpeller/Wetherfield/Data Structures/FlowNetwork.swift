@@ -44,17 +44,21 @@ extension FlowNetwork {
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
     /// saturated edges flipped and all weights removed.
     var solvedForMaximumFlow: (flow: Weight, network: DirectedGraph<Node>) {
+
         var residualNetwork = directedGraph
+
         func findAugmentingPath () -> Bool {
-            guard let path: DirectedGraph<Node> = residualNetwork
-                .shortestUnweightedPath(from: source, to: sink) else { return false }
+            guard let path = residualNetwork.shortestUnweightedPath(from: source, to: sink) else {
+                return false
+            }
             pushFlow(through: path)
             return true
         }
 
-        func pushFlow (through path: DirectedGraph<Node>) {
-            let minimumEdge = path.edges.compactMap(residualNetwork.weight).min()!
-            path.edges.forEach { edge in
+        func pushFlow (through path: [Node]) {
+            let edges = path.pairs.map(OrderedPair.init)
+            let minimumEdge = edges.compactMap(residualNetwork.weight).min()!
+            edges.forEach { edge in
                 residualNetwork.updateEdge(edge, by: { capacity in capacity - minimumEdge })
                 if residualNetwork.weight(edge)! == 0 {
                     residualNetwork.removeEdge(from: edge.a, to: edge.b)
@@ -67,15 +71,19 @@ extension FlowNetwork {
         }
 
         func computeFlow () -> Weight {
+            print("compute flow")
+            print("di graph weights: \(directedGraph.adjacents.values)")
             let sourceEdges = directedGraph.neighbors(of: source).lazy
                 .map { OrderedPair(self.source, $0) }
                 .partition(residualNetwork.contains)
+            print("source edges: \(sourceEdges)")
             let edgesPresent = sourceEdges.whereTrue.lazy
                 .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
                 .reduce(0,+)
             let edgesAbsent = sourceEdges.whereFalse.lazy
                 .compactMap(directedGraph.weight)
                 .reduce(0,+)
+            print("edges present: \(edgesPresent), edgesAbsent: \(edgesAbsent)")
             return edgesPresent + edgesAbsent
         }
 
@@ -101,6 +109,7 @@ extension FlowNetwork {
 }
 
 extension Sequence {
+
     func filterComplement (_ predicate: (Element) -> Bool) -> [Element] {
         return filter { !predicate($0) }
     }

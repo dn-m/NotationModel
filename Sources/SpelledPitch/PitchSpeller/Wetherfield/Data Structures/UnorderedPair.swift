@@ -18,6 +18,13 @@ struct UnorderedPair <T>: SymmetricPair {
     }
 }
 
+extension UnorderedPair where T: Equatable {
+
+    func other(_ value: T) -> T? {
+        return a == value ? b : b == value ? a : nil
+    }
+}
+
 extension UnorderedPair: Equatable where T: Equatable {
 
     // MARK: - Equatable

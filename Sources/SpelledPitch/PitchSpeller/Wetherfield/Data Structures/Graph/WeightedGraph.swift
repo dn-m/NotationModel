@@ -60,9 +60,7 @@ extension WeightedGraph {
     /// If `nodes` is empty, then any nodes contained herein are able to be included in the
     /// resultant set.
     func neighbors(of source: Node, in nodes: Set<Node>? = nil) -> Set<Node> {
-        return (nodes ?? self.nodes).filter { node in
-            adjacents.keys.contains { edge in edge.contains(node) }
-        }
+        return (nodes ?? self.nodes).intersection(adjacents.keys.compactMap { $0.other(source) })
     }
 }
 

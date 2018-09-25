@@ -65,7 +65,11 @@ class FlowNetworkTests: XCTestCase {
             (0..<100).forEach { source in
                 (0..<100).forEach { destination in
                     if Double.random(in: 0...1) < 0.3 {
-                        randomNetwork.directedGraph.insertEdge(from: source, to: destination, weight: Double.random(in: 0...1))
+                        randomNetwork.directedGraph.insertEdge(
+                            from: source,
+                            to: destination,
+                            weight: Double.random(in: 0...1)
+                        )
                     }
                 }
             }
