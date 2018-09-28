@@ -100,7 +100,7 @@ extension FlowNetwork {
                 .map { OrderedPair(self.source, $0) }
                 .partition(residualNetwork.contains)
             let edgesPresent = sourceEdges.whereTrue.lazy
-                .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
+                .map { edge in self.directedGraph.weight(edge)! - residualNetwork.weight(edge)! }
                 .reduce(0,+)
             let edgesAbsent = sourceEdges.whereFalse.lazy
                 .compactMap(directedGraph.weight)
