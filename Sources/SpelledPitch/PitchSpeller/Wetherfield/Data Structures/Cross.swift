@@ -6,22 +6,14 @@
 //
 
 /// - TODO: Move to `dn-m/Structure/DataStructures`
-struct Cross<T,U>: Pair {
-    
-    typealias A = T
-    typealias B = U
+struct Cross <T,U>: Pair {
     
     let a: T
     let b: U
     
-    init(_ a: A, _ b: B) {
+    init(_ a: T, _ b: U) {
         self.a = a
         self.b = b
-    }
-    
-    init(_ pair: (A, B)) {
-        self.a = pair.0
-        self.b = pair.1
     }
 }
 
