@@ -6,6 +6,8 @@
 //
 
 /// Pair of values for which the order matters.
+///
+/// - TODO: Move to `dn-m/Structure/DataStructures`
 struct OrderedPair <T>: SwappablePair {
 
     // MARK: - Instance Properties
