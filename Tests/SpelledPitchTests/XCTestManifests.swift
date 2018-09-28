@@ -180,28 +180,6 @@ extension WetherfieldTests {
     ]
 }
 
-extension _GraphTests {
-    static let __allTests = [
-        ("testEdgesCount", testEdgesCount),
-        ("testEdgesFromNodeDirected", testEdgesFromNodeDirected),
-        ("testEdgesFromNodeUndirected", testEdgesFromNodeUndirected),
-        ("testEdgeWeight", testEdgeWeight),
-        ("testNeighborsDirected", testNeighborsDirected),
-        ("testNeighborsFromArrayDirected", testNeighborsFromArrayDirected),
-        ("testNeighborsUndirected", testNeighborsUndirected),
-        ("testNodesCount", testNodesCount),
-        ("testPairWeight", testPairWeight),
-        ("testPathAdjacents", testPathAdjacents),
-        ("testRemoveEdge", testRemoveEdge),
-        ("testShortestPathThreeNodes", testShortestPathThreeNodes),
-        ("testShortestPathTwoOptions", testShortestPathTwoOptions),
-        ("testShortestUnweightedPathSingleNode", testShortestUnweightedPathSingleNode),
-        ("testShortestUnweightedPathTwoDirectionallyConnectedNodes", testShortestUnweightedPathTwoDirectionallyConnectedNodes),
-        ("testShortestUnweightedPathTwoUnconnectedNodes", testShortestUnweightedPathTwoUnconnectedNodes),
-        ("testUnweightedEdgesCount", testUnweightedEdgesCount),
-    ]
-}
-
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
