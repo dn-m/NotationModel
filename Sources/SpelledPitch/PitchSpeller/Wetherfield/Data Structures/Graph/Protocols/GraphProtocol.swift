@@ -49,7 +49,7 @@ extension GraphProtocol {
 
     func breadthFirstSearch(from source: Node, to destination: Node? = nil) -> [Node] {
         var visited: [Node] = []
-        var queue: Queue<Node> = []
+        var queue = Queue<Node>()
         queue.enqueue(source)
         visited.append(source)
         while !queue.isEmpty {
@@ -76,7 +76,7 @@ extension GraphProtocol {
         }
         if source == destination { return .init([source]) }
         var unvisited = nodes
-        var queue: Queue<Node> = []
+        var queue = Queue<Node>()
         queue.enqueue(source)
         while !queue.isEmpty {
             let node = queue.dequeue()

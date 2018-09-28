@@ -16,8 +16,8 @@ public struct Queue <Element: Equatable> {
         return storage.isEmpty
     }
 
-    public var count: Int {
-        return storage.count
+    public var peek: Element? {
+        return storage.first
     }
 
     public mutating func enqueue(_ value: Element) {
@@ -26,20 +26,5 @@ public struct Queue <Element: Equatable> {
 
     public mutating func dequeue() -> Element {
         return storage.remove(at: 0)
-    }
-
-    public func contains(_ value: Element) -> Bool {
-        if storage.index(of: value) != nil {
-            return true
-        }
-        return false
-    }
-}
-
-extension Queue: ExpressibleByArrayLiteral {
-
-    /// Create a `Queue` with an `ArrayLiteral`.
-    public init(arrayLiteral elements: Element...) {
-        self.storage = elements
     }
 }

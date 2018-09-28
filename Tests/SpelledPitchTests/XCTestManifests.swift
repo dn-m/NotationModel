@@ -18,10 +18,34 @@ extension CrossTests {
     ]
 }
 
+extension DirectedGraphTests {
+    static let __allTests = [
+        ("testDirectedGraphInsertNodes", testDirectedGraphInsertNodes),
+        ("testEdgesFromNode", testEdgesFromNode),
+        ("testShortestPathThreeNodes", testShortestPathThreeNodes),
+        ("testShortestUnweightedPathSingleNode", testShortestUnweightedPathSingleNode),
+        ("testShortestUnweightedPathTwoDirectionallyConnectedNodes", testShortestUnweightedPathTwoDirectionallyConnectedNodes),
+        ("testShortestUnweightedPathTwoUnconnectedNodes", testShortestUnweightedPathTwoUnconnectedNodes),
+    ]
+}
+
 extension FlowNetworkTests {
     static let __allTests = [
         ("testMinimumCut", testMinimumCut),
         ("testRandomNetwork", testRandomNetwork),
+    ]
+}
+
+extension GraphTests {
+    static let __allTests = [
+        ("testBreadthFirstSearch", testBreadthFirstSearch),
+        ("testEdgesContainingNode", testEdgesContainingNode),
+        ("testEdgesCount", testEdgesCount),
+        ("testInsertNodes", testInsertNodes),
+        ("testNeighbors", testNeighbors),
+        ("testNeighborsInSet", testNeighborsInSet),
+        ("testNodesCount", testNodesCount),
+        ("testRemoveEdge", testRemoveEdge),
     ]
 }
 
@@ -173,6 +197,27 @@ extension UnorderedSpelledIntervalTests {
     ]
 }
 
+extension WeightedDirectedGraphTests {
+    static let __allTests = [
+        ("testEdgesFromNode", testEdgesFromNode),
+        ("testShortestPathTwoOptions", testShortestPathTwoOptions),
+        ("testWeightedDirectedGraphInsertNodes", testWeightedDirectedGraphInsertNodes),
+    ]
+}
+
+extension WeightedGraphTests {
+    static let __allTests = [
+        ("testContains", testContains),
+        ("testInsertNodes", testInsertNodes),
+        ("testNeighbors", testNeighbors),
+        ("testRemoveEdge", testRemoveEdge),
+        ("testUnweightedFromDirected", testUnweightedFromDirected),
+        ("testUnweightedFromUndirected", testUnweightedFromUndirected),
+        ("testUpdateEdge", testUpdateEdge),
+        ("testWeightForEdge", testWeightForEdge),
+    ]
+}
+
 extension WetherfieldTests {
     static let __allTests = [
         ("testInitDyadNodeCount", testInitDyadNodeCount),
@@ -185,7 +230,9 @@ public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(CompoundSpelledIntervalTests.__allTests),
         testCase(CrossTests.__allTests),
+        testCase(DirectedGraphTests.__allTests),
         testCase(FlowNetworkTests.__allTests),
+        testCase(GraphTests.__allTests),
         testCase(OrderedPairTests.__allTests),
         testCase(OrderedSpelledIntervalTests.__allTests),
         testCase(PitchSpellingCategoryTests.__allTests),
@@ -197,8 +244,9 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(SpelledPitchTests.__allTests),
         testCase(UnorderedPairTests.__allTests),
         testCase(UnorderedSpelledIntervalTests.__allTests),
+        testCase(WeightedDirectedGraphTests.__allTests),
+        testCase(WeightedGraphTests.__allTests),
         testCase(WetherfieldTests.__allTests),
-        testCase(_GraphTests.__allTests),
     ]
 }
 #endif
