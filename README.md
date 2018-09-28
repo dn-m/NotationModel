@@ -19,21 +19,13 @@ Extends the `PlotModel`, incorporating the concept of clefs, noteheads, accident
 
 Defines pitches with names (`G Sharp`, `A Flat`, `B Double Sharp`, etc.) as well as named intervals (`Major Third`, `Perfect Fifth`, `Double Augmented Sixth`, etc.).
 
-### PitchSpeller
-
-Implements Ben Wetherfield's `Graphical Theory of Musical Pitch Spelling`, which converts unspelled pitch values (e.g., MIDI note numbers) into spelled pitch values given context and user-specifiable rules.
-
 ### SpelledRhythm
 
 Extends abstractly-represented rhythms with models of beams, ties, and dots.
 
-### RhythmBeamer
-
-Contains default algorithm for converting an abstractly-represented rhythm into a graphically renderable one.
-
 ## Development
 
-Work on this branch requires the Swift 4.2 toolchain, via Xcode 10 beta, or [development snapshot](https://swift.org/download/#snapshots).
+Work on this branch requires Swift 4.2.
 
 ### Build instructions
 
@@ -72,11 +64,6 @@ Open it up.
 ```Bash
 open NotationModel.xcodeproj/
 ```
-=======
-![Swift](https://img.shields.io/badge/Swift-4.2-brightgreen.svg)
-[![Build Status](https://travis-ci.org/dn-m/NotationModel.svg?branch=master)](https://travis-ci.org/dn-m/NotationModel)
-
-The `NotationModel` package defines structures for describing how musical information can be graphically represented, while being agnostic to the concrete method of graphical representation.
 
 The `NotationModel` package contains several modules:
 
