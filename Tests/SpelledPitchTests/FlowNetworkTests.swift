@@ -59,7 +59,7 @@ class FlowNetworkTests: XCTestCase {
     }
 
     func testRandomNetwork() {
-        let iterations = 10
+        let iterations = 1
         (0..<iterations).forEach { _ in
             var randomNetwork = FlowNetwork<Int,Double>(
                 WeightedDirectedGraph<Int,Double>([0,1], [:]),

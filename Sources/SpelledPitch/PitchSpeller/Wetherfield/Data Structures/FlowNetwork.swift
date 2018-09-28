@@ -92,7 +92,11 @@ extension FlowNetwork {
             return edgesPresent + edgesAbsent
         }
 
-        while findAugmentingPath() { continue }
+        while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
+            pushFlow(through: augmentingPath)
+        }
+
+        //while findAugmentingPath() { continue }
         let flow = computeFlow()
         let unweighted: DirectedGraph = residualNetwork.unweighted()
         return (flow: flow, network: unweighted)
