@@ -72,7 +72,7 @@ extension FlowNetwork {
                 // if flipped edge already exists, increase flow
                 if residualNetwork.contains(edge.swapped) {
                     residualNetwork.updateEdge(edge.swapped, by: { capacity in capacity + minimumEdge })
-                // 
+                // otherwise, insert back edge
                 } else {
                     residualNetwork.insertEdge(edge.swapped, weight: minimumEdge)
                 }
