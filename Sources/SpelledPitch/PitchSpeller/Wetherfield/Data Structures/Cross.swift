@@ -7,7 +7,7 @@
 
 /// - TODO: Move to `dn-m/Structure/DataStructures`
 struct Cross <T,U>: Pair {
-    
+
     let a: T
     let b: U
     

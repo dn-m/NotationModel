@@ -5,7 +5,7 @@
 //  Created by James Bean on 5/24/18.
 //
 
-/// Directed _Graph with several properties:
+/// Directed graph with several properties:
 /// - Each edge has a capacity for flow
 /// - A "source" node, which is only emanates flow outward
 /// - A "sink" node, which only receives flow
