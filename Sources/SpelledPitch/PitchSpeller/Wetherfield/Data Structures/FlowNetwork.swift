@@ -65,8 +65,6 @@ extension WeightedDirectedGraph where Weight: Comparable {
     }
 
     /// Pushes flow through the given `path` in this `graph`.
-    ///
-    /// - TODO: Make `throw` if the `path` is invalid.
     mutating func pushFlow(through path: [Node]) {
         let edges = path.pairs.map(OrderedPair.init)
         let minimumFlow = edges.compactMap(weight).min() ?? 0
@@ -115,8 +113,8 @@ extension FlowNetwork {
     /// tiebreak (in- and out- edges saturated).
     public var minimumCut: (Set<Node>, Set<Node>) {
         let (_, residualNetwork) = maximumFlowAndResidualNetwork
-        let sourceSideNodes = Set(residualNetwork.breadthFirstSearch(from: source).lazy)
-        let notSourceSideNodes = Set(residualNetwork.nodes.subtracting(sourceSideNodes))
+        let sourceSideNodes = Set(residualNetwork.breadthFirstSearch(from: source))
+        let notSourceSideNodes = residualNetwork.nodes.subtracting(sourceSideNodes)
         return (sourceSideNodes, notSourceSideNodes)
     }
 }
