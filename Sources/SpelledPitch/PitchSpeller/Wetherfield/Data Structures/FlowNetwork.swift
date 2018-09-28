@@ -82,6 +82,15 @@ extension FlowNetwork {
         return directedGraph.nodes.filter { $0 != source && $0 != sink }
     }
 
+    /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
+    /// tiebreak (in- and out- edges saturated).
+    public var minimumCut: (Set<Node>, Set<Node>) {
+        let (_, residualNetwork) = maximumFlowAndResidualNetwork
+        let sourceSideNodes = Set(residualNetwork.breadthFirstSearch(from: source))
+        let notSourceSideNodes = residualNetwork.nodes.subtracting(sourceSideNodes)
+        return (sourceSideNodes, notSourceSideNodes)
+    }
+
     /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
     /// saturated edges flipped and all weights removed.
@@ -109,15 +118,6 @@ extension FlowNetwork {
             return edgesPresent + edgesAbsent
         }()
         return (flow: flow, network: residualNetwork.unweighted())
-    }
-
-    /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
-    /// tiebreak (in- and out- edges saturated).
-    public var minimumCut: (Set<Node>, Set<Node>) {
-        let (_, residualNetwork) = maximumFlowAndResidualNetwork
-        let sourceSideNodes = Set(residualNetwork.breadthFirstSearch(from: source))
-        let notSourceSideNodes = residualNetwork.nodes.subtracting(sourceSideNodes)
-        return (sourceSideNodes, notSourceSideNodes)
     }
 }
 
