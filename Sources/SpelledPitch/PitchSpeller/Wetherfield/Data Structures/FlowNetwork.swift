@@ -113,25 +113,11 @@ extension FlowNetwork {
 
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
     /// tiebreak (in- and out- edges saturated).
-    //
-    // - FIXME: Don't compute `maximumFlowAndResidualNetwork` twice (compute `maximumFlowAndResidualNetwork` once
-    // here).
     public var minimumCut: (Set<Node>, Set<Node>) {
+        let (_, residualNetwork) = maximumFlowAndResidualNetwork
+        let sourceSideNodes = Set(residualNetwork.breadthFirstSearch(from: source).lazy)
+        let notSourceSideNodes = Set(residualNetwork.nodes.subtracting(sourceSideNodes))
         return (sourceSideNodes, notSourceSideNodes)
-    }
-
-    /// - Returns: Nodes in residual network reachable from the `source`
-    //
-    // - FIXME: Don't compute `maximumFlowAndResidualNetwork` twice
-    var sourceSideNodes: Set<Node> {
-        return Set(maximumFlowAndResidualNetwork.network.breadthFirstSearch(from: source))
-    }
-
-    /// - Returns: Nodes in residual network *not* reachable from the `source`
-    //
-    // - FIXME: Don't compute `solvedForMaximumFlow` twice
-    var notSourceSideNodes: Set<Node> {
-        return maximumFlowAndResidualNetwork.network.nodes.subtracting(sourceSideNodes)
     }
 }
 
