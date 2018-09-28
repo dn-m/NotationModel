@@ -30,6 +30,50 @@ extension FlowNetwork {
     }
 }
 
+extension WeightedDirectedGraph where Weight: Comparable {
+    // TODO: Make throw
+    mutating func reduceFlow(through edge: Edge, by amount: Weight) {
+        updateEdge(edge) { weight in weight - amount }
+    }
+
+    /// Removes the given edge if its weight is `0`. This happens after an edge, which has the
+    /// minimum flow of an augmenting path, is reduced by the minimum flow (which is its previous
+    /// value).
+    mutating func removeEdgeIfFlowless(_ edge: Edge) {
+        if weight(edge) == 0 {
+            removeEdge(edge)
+        }
+    }
+
+    /// Inserts an edge in the opposite direction of the given `edge` with the minimum flow
+    mutating func updateBackEdge(_ edge: Edge, by minimumFlow: Weight) {
+        let reversedEdge = edge.swapped
+        if contains(reversedEdge) {
+            updateEdge(reversedEdge) { capacity in capacity + minimumFlow }
+        } else {
+            insertEdge(reversedEdge, weight: minimumFlow)
+        }
+    }
+
+    /// Reduces the flow of the given `edge` by the given `minimumFlow`. If the new flow through
+    /// the `edge` is now `0`, removes the `edge` from the network. Updates the reverse of the given
+    /// `edge` by the given `minimumFlow`.
+    mutating func pushFlow(through edge: Edge, by minimumFlow: Weight) {
+        reduceFlow(through: edge, by: minimumFlow)
+        removeEdgeIfFlowless(edge)
+        updateBackEdge(edge, by: minimumFlow)
+    }
+
+    /// Pushes flow through the given `path` in this `graph`.
+    ///
+    /// - TODO: Make `throw` if the `path` is invalid.
+    mutating func pushFlow(through path: [Node]) {
+        let edges = path.pairs.map(OrderedPair.init)
+        let minimumFlow = edges.compactMap(weight).min() ?? 0
+        edges.forEach { edge in pushFlow(through: edge, by: minimumFlow) }
+    }
+}
+
 extension FlowNetwork {
 
     // MARK: - Computed Properties
@@ -47,39 +91,11 @@ extension FlowNetwork {
 
         var residualNetwork = directedGraph
 
-        func findAugmentingPath () -> Bool {
-            guard let path = residualNetwork.shortestUnweightedPath(from: source, to: sink) else {
-                return false
-            }
-            pushFlow(through: path)
-            return true
+        while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
+            residualNetwork.pushFlow(through: augmentingPath)
         }
 
-        func pushFlow (through path: [Node]) {
-            let edges = path.pairs.map(OrderedPair.init)
-            let minimumEdge = edges.compactMap(residualNetwork.weight).min()!
-
-            edges.forEach { edge in
-
-                // reduce flow by minimum flow
-                residualNetwork.updateEdge(edge, by: { capacity in capacity - minimumEdge })
-
-                // remove edges with a flow of 0
-                if residualNetwork.weight(edge)! == 0 {
-                    residualNetwork.removeEdge(from: edge.a, to: edge.b)
-                }
-
-                // if flipped edge already exists, increase flow
-                if residualNetwork.contains(edge.swapped) {
-                    residualNetwork.updateEdge(edge.swapped, by: { capacity in capacity + minimumEdge })
-                // otherwise, insert back edge
-                } else {
-                    residualNetwork.insertEdge(edge.swapped, weight: minimumEdge)
-                }
-            }
-        }
-
-        func computeFlow () -> Weight {
+        let flow: Weight = {
             let sourceEdges = directedGraph.neighbors(of: source).lazy
                 .map { OrderedPair(self.source, $0) }
                 .partition(residualNetwork.contains)
@@ -90,16 +106,9 @@ extension FlowNetwork {
                 .compactMap(directedGraph.weight)
                 .reduce(0,+)
             return edgesPresent + edgesAbsent
-        }
+        }()
 
-        while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
-            pushFlow(through: augmentingPath)
-        }
-
-        //while findAugmentingPath() { continue }
-        let flow = computeFlow()
-        let unweighted: DirectedGraph = residualNetwork.unweighted()
-        return (flow: flow, network: unweighted)
+        return (flow: flow, network: residualNetwork.unweighted())
     }
 
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
