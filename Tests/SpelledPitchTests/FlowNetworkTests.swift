@@ -32,7 +32,7 @@ class FlowNetworkTests: XCTestCase {
     func assertDuality <Node> (_ flowNetwork: FlowNetwork<Node,Double>) {
         let minCut = flowNetwork.minimumCut
         let diGraph = flowNetwork.directedGraph
-        let solvedFlow = flowNetwork.solvedForMaximumFlow.flow
+        let solvedFlow = flowNetwork.maximumFlowAndResidualNetwork.flow
         let cutValue = minCut.0.lazy.map { startNode in
             return diGraph.neighbors(of: startNode, in: minCut.1).lazy
                 .compactMap { diGraph.weight(from: startNode, to: $0) }
@@ -45,7 +45,7 @@ class FlowNetworkTests: XCTestCase {
 
     func assertDisconnectedness <Node,Weight> (_ flowNetwork: FlowNetwork<Node,Weight>) {
         let minCut = flowNetwork.minimumCut
-        let residualNetwork = flowNetwork.solvedForMaximumFlow.network
+        let residualNetwork = flowNetwork.maximumFlowAndResidualNetwork.network
         minCut.0.lazy.forEach { startNode in
             minCut.1.lazy.forEach { endNode in
                 XCTAssertFalse(residualNetwork.contains(OrderedPair(startNode,endNode)))

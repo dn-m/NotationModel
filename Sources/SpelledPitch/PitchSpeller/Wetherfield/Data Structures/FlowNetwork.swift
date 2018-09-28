@@ -87,7 +87,7 @@ extension FlowNetwork {
     /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
     /// saturated edges flipped and all weights removed.
-    var solvedForMaximumFlow: (flow: Weight, network: DirectedGraph<Node>) {
+    var maximumFlowAndResidualNetwork: (flow: Weight, network: DirectedGraph<Node>) {
 
         var residualNetwork = directedGraph
 
@@ -114,7 +114,7 @@ extension FlowNetwork {
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
     /// tiebreak (in- and out- edges saturated).
     //
-    // - FIXME: Don't compute `solvedForMaximumFlow` twice (compute `solvedForMaximumFlow` once
+    // - FIXME: Don't compute `maximumFlowAndResidualNetwork` twice (compute `maximumFlowAndResidualNetwork` once
     // here).
     public var minimumCut: (Set<Node>, Set<Node>) {
         return (sourceSideNodes, notSourceSideNodes)
@@ -122,16 +122,16 @@ extension FlowNetwork {
 
     /// - Returns: Nodes in residual network reachable from the `source`
     //
-    // - FIXME: Don't compute `solvedForMaximumFlow` twice
+    // - FIXME: Don't compute `maximumFlowAndResidualNetwork` twice
     var sourceSideNodes: Set<Node> {
-        return Set(solvedForMaximumFlow.network.breadthFirstSearch(from: source))
+        return Set(maximumFlowAndResidualNetwork.network.breadthFirstSearch(from: source))
     }
 
     /// - Returns: Nodes in residual network *not* reachable from the `source`
     //
     // - FIXME: Don't compute `solvedForMaximumFlow` twice
     var notSourceSideNodes: Set<Node> {
-        return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
+        return maximumFlowAndResidualNetwork.network.nodes.subtracting(sourceSideNodes)
     }
 }
 
