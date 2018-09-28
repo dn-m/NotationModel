@@ -87,12 +87,18 @@ extension FlowNetwork {
     /// saturated edges flipped and all weights removed.
     var maximumFlowAndResidualNetwork: (flow: Weight, network: DirectedGraph<Node>) {
 
+        // Make a copy of the directed representation of the network to be mutated by pushing flow
+        // through it.
         var residualNetwork = directedGraph
 
+        // While an augmenting path (a path emanating directionally from the source node) can be
+        // found, push flow through the path, mutating the residual network
         while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
             residualNetwork.pushFlow(through: augmentingPath)
         }
 
+        // Compares the edges in the mutated residual network against the original directed
+        // graph.
         let flow: Weight = {
             let sourceEdges = directedGraph.neighbors(of: source).lazy
                 .map { OrderedPair(self.source, $0) }
