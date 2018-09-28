@@ -52,7 +52,6 @@ class WeightedGraphTests: XCTestCase {
         graph.insertEdge(from: "b", to: "d", weight: 11)
         graph.insertEdge(from: "d", to: "e", weight: 13)
         XCTAssertEqual(graph.neighbors(of: "b"), ["a","c","d"])
-        print("-----------------------")
         XCTAssertEqual(graph.neighbors(of: "f"), [])
     }
 
@@ -66,7 +65,7 @@ class WeightedGraphTests: XCTestCase {
         XCTAssertFalse(graph.contains(UnorderedPair("b","d")))
     }
 
-    func testUnweighted() {
+    func testUnweightedFromUndirected() {
         var graph = WeightedGraph<String,Int>()
         graph.insertEdge(from: "a", to: "b", weight: 5)
         graph.insertEdge(from: "b", to: "c", weight: 7)
@@ -80,6 +79,25 @@ class WeightedGraphTests: XCTestCase {
                 UnorderedPair("b","c"),
                 UnorderedPair("b","d"),
                 UnorderedPair("d","e")
+            ]
+        )
+        XCTAssertEqual(unweighted, expected)
+    }
+
+    func testUnweightedFromDirected() {
+        var graph = WeightedDirectedGraph<String,Int>()
+        graph.insertEdge(from: "a", to: "b", weight: 5)
+        graph.insertEdge(from: "b", to: "c", weight: 7)
+        graph.insertEdge(from: "b", to: "d", weight: 11)
+        graph.insertEdge(from: "d", to: "e", weight: 13)
+        let unweighted: DirectedGraph<String> = graph.unweighted()
+        let expected: DirectedGraph<String> = DirectedGraph(
+            ["a","b","c","d","e"],
+            [
+                OrderedPair("a","b"),
+                OrderedPair("b","c"),
+                OrderedPair("b","d"),
+                OrderedPair("d","e")
             ]
         )
         XCTAssertEqual(unweighted, expected)

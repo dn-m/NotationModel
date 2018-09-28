@@ -10,6 +10,12 @@ import XCTest
 
 class FlowNetworkTests: XCTestCase {
 
+    /// Simple flow network which looks like this:
+    ///     a
+    ///  1 / \ 3
+    ///   s   t
+    ///  2 \ / 4
+    ///     b
     var simpleFlowNetwork: FlowNetwork<String,Int> {
         var graph = WeightedDirectedGraph<String,Int>()
         graph.insert("s")
@@ -49,7 +55,6 @@ class FlowNetworkTests: XCTestCase {
     }
 
     func testMinimumCut() {
-        print(simpleFlowNetwork.minimumCut)
         XCTAssertEqual(simpleFlowNetwork.minimumCut.0, Set(["s"]))
     }
 

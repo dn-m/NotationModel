@@ -58,52 +58,66 @@ extension FlowNetwork {
         func pushFlow (through path: [Node]) {
             let edges = path.pairs.map(OrderedPair.init)
             let minimumEdge = edges.compactMap(residualNetwork.weight).min()!
+
             edges.forEach { edge in
+
+                // reduce flow by minimum flow
                 residualNetwork.updateEdge(edge, by: { capacity in capacity - minimumEdge })
+
+                // remove edges with a flow of 0
                 if residualNetwork.weight(edge)! == 0 {
                     residualNetwork.removeEdge(from: edge.a, to: edge.b)
                 }
+
+                // if flipped edge already exists, increase flow
                 if residualNetwork.contains(edge.swapped) {
                     residualNetwork.updateEdge(edge.swapped, by: { capacity in capacity + minimumEdge })
+                // 
+                } else {
+                    residualNetwork.insertEdge(edge.swapped, weight: minimumEdge)
                 }
-                else { residualNetwork.insertEdge(edge.swapped, weight: minimumEdge) }
             }
         }
 
         func computeFlow () -> Weight {
-            print("compute flow")
-            print("di graph weights: \(directedGraph.adjacents.values)")
             let sourceEdges = directedGraph.neighbors(of: source).lazy
                 .map { OrderedPair(self.source, $0) }
                 .partition(residualNetwork.contains)
-            print("source edges: \(sourceEdges)")
             let edgesPresent = sourceEdges.whereTrue.lazy
                 .map { self.directedGraph.weight($0)! - residualNetwork.weight($0)! }
                 .reduce(0,+)
             let edgesAbsent = sourceEdges.whereFalse.lazy
                 .compactMap(directedGraph.weight)
                 .reduce(0,+)
-            print("edges present: \(edgesPresent), edgesAbsent: \(edgesAbsent)")
             return edgesPresent + edgesAbsent
         }
 
         while findAugmentingPath() { continue }
-        return (flow: computeFlow(), network: residualNetwork.unweighted())
+        let flow = computeFlow()
+        let unweighted: DirectedGraph = residualNetwork.unweighted()
+        return (flow: flow, network: unweighted)
     }
 
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
     /// tiebreak (in- and out- edges saturated).
+    //
+    // - FIXME: Don't compute `solvedForMaximumFlow` twice (compute `solvedForMaximumFlow` once
+    // here).
     public var minimumCut: (Set<Node>, Set<Node>) {
         return (sourceSideNodes, notSourceSideNodes)
     }
 
     /// - Returns: Nodes in residual network reachable from the `source`
-    private var sourceSideNodes: Set<Node> {
+    //
+    // - FIXME: Don't compute `solvedForMaximumFlow` twice
+    var sourceSideNodes: Set<Node> {
         return Set(solvedForMaximumFlow.network.breadthFirstSearch(from: source))
     }
 
     /// - Returns: Nodes in residual network *not* reachable from the `source`
-    private var notSourceSideNodes: Set<Node> {
+    //
+    // - FIXME: Don't compute `solvedForMaximumFlow` twice
+    var notSourceSideNodes: Set<Node> {
         return solvedForMaximumFlow.network.nodes.subtracting(sourceSideNodes)
     }
 }

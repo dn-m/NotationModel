@@ -77,6 +77,7 @@ extension GraphProtocol {
         if source == destination { return .init([source]) }
         var unvisited = nodes
         var queue: Queue<Node> = []
+        queue.enqueue(source)
         while !queue.isEmpty {
             let node = queue.dequeue()
             for neighbor in neighbors(of: node, in: unvisited) {

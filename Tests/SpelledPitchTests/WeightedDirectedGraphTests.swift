@@ -25,4 +25,17 @@ class WeightedDirectedGraphTests: XCTestCase {
         graph.insertEdge(from: "d", to: "e", weight: 13)
         XCTAssertEqual(graph.edges(from: "b"), [OrderedPair("b","c"),OrderedPair("b","d")])
     }
+
+    func testShortestPathTwoOptions() {
+        var graph = WeightedDirectedGraph<String,Double>()
+        graph.insert("s")
+        graph.insert("a")
+        graph.insert("b")
+        graph.insert("t")
+        graph.insertEdge(from: "s", to: "a", weight: 2.0)
+        graph.insertEdge(from: "s", to: "b", weight: 1.0)
+        graph.insertEdge(from: "a", to: "t", weight: 3.0)
+        graph.insertEdge(from: "b", to: "t", weight: 4.0)
+        XCTAssertEqual(graph.shortestUnweightedPath(from: "s", to: "t")!.count, 3)
+    }
 }
