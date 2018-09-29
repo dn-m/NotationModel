@@ -57,6 +57,7 @@ class FlowNetworkTests: XCTestCase {
 
     func testMinimumCut() {
         XCTAssertEqual(simpleFlowNetwork.minimumCut.0, Set(["s"]))
+        XCTAssertEqual(simpleFlowNetwork.minimumCut.1, Set(["a","b","t"]))
     }
 
     func testRandomNetwork() {
