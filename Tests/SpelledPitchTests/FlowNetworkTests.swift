@@ -59,6 +59,19 @@ class FlowNetworkTests: XCTestCase {
         XCTAssertEqual(simpleFlowNetwork.minimumCut.0, Set(["s"]))
         XCTAssertEqual(simpleFlowNetwork.minimumCut.1, Set(["a","b","t"]))
     }
+    
+    func testUnreachableMinimumCut() {
+        var graph = WeightedDirectedGraph<String,Int>()
+        graph.insert("s")
+        graph.insert("a")
+        graph.insert("b")
+        graph.insert("t")
+        graph.insertEdge(from: "s", to: "a", weight: 2)
+        graph.insertEdge(from: "a", to: "b", weight: 2)
+        graph.insertEdge(from: "b", to: "t", weight: 3)
+        let cut = FlowNetwork(graph, source: "s", sink: "t").minimumCut
+        XCTAssertEqual(cut.0.union(cut.1), ["s", "a", "t", "b"])
+    }
 
     func testRandomNetwork() {
         let iterations = 1
