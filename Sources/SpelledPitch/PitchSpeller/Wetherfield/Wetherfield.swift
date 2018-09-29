@@ -5,6 +5,7 @@
 //  Created by James Bean on 5/23/18.
 //
 
+import DataStructures
 import Pitch
 
 protocol PitchSpellingNode: Hashable {
@@ -58,7 +59,7 @@ struct PitchSpeller {
     let pitchNodes: [Int]
 
     /// The `FlowNetwork` which will be manipulated in order to spell the unspelled `pitches`.
-    let flowNetwork: FlowNetwork<Int>
+    let flowNetwork: FlowNetwork<Int,Double>
 
     // MARK: - Initializers
 
@@ -101,24 +102,28 @@ struct PitchSpeller {
     }
 }
 
-extension FlowNetwork where Node == Int {
+extension FlowNetwork where Node == Int, Weight == Double {
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
     init(source: Int, sink: Int, internalNodes: [Int]) {
-        let graph = DirectedGraph(source: source, sink: sink, internalNodes: internalNodes)
-        self.init(graph, source: -2, sink: -1)
+        let graph = WeightedDirectedGraph<Int,Double>(
+            source: source,
+            sink: sink,
+            internalNodes: internalNodes
+        )
+        self.init(graph, source: source, sink: sink)
     }
 }
 
-extension DirectedGraph where Pair.A == Int, Weight == Double {
+extension WeightedDirectedGraph {
     /// Create a `DirectedGraph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
-    init (source: Int, sink: Int, internalNodes: [Int]) {
-        self.init(Set([source, sink] + internalNodes), [:])
+    init(source: Node, sink: Node, internalNodes: [Node]) {
+        self.init(Set([source,sink] + internalNodes))
         for node in internalNodes {
-            insertEdge(from: source, to: node, withWeight: 1)
-            insertEdge(from: node, to: sink, withWeight: 1)
+            insertEdge(from: source, to: node, weight: 1)
+            insertEdge(from: node, to: sink, weight: 1)
             for other in internalNodes.lazy.filter({ $0 != node }) {
-                insertEdge(from: node, to: other, withWeight: 1)
+                insertEdge(from: node, to: other, weight: 1)
             }
         }
     }

@@ -11,48 +11,10 @@ extension CompoundSpelledIntervalTests {
     ]
 }
 
-extension CrossTests {
-    static let __allTests = [
-        ("testEqualityFunction", testEqualityFunction),
-        ("testHashability", testHashability),
-    ]
-}
-
 extension FlowNetworkTests {
     static let __allTests = [
         ("testMinimumCut", testMinimumCut),
         ("testRandomNetwork", testRandomNetwork),
-    ]
-}
-
-extension GraphTests {
-    static let __allTests = [
-        ("testEdgesCount", testEdgesCount),
-        ("testEdgesFromNodeDirected", testEdgesFromNodeDirected),
-        ("testEdgesFromNodeUndirected", testEdgesFromNodeUndirected),
-        ("testEdgeWeight", testEdgeWeight),
-        ("testNeighborsDirected", testNeighborsDirected),
-        ("testNeighborsFromArrayDirected", testNeighborsFromArrayDirected),
-        ("testNeighborsUndirected", testNeighborsUndirected),
-        ("testNodesCount", testNodesCount),
-        ("testPairWeight", testPairWeight),
-        ("testPathAdjacents", testPathAdjacents),
-        ("testRemoveEdge", testRemoveEdge),
-        ("testShortestPathThreeNodes", testShortestPathThreeNodes),
-        ("testShortestPathTwoOptions", testShortestPathTwoOptions),
-        ("testShortestUnweightedPathSingleNode", testShortestUnweightedPathSingleNode),
-        ("testShortestUnweightedPathTwoDirectionallyConnectedNodes", testShortestUnweightedPathTwoDirectionallyConnectedNodes),
-        ("testShortestUnweightedPathTwoUnconnectedNodes", testShortestUnweightedPathTwoUnconnectedNodes),
-        ("testUnweightedEdgesCount", testUnweightedEdgesCount),
-    ]
-}
-
-extension OrderedPairTests {
-    static let __allTests = [
-        ("testEqualityFunction", testEqualityFunction),
-        ("testHashability", testHashability),
-        ("testInitializers", testInitializers),
-        ("testSwapped", testSwapped),
     ]
 }
 
@@ -173,15 +135,6 @@ extension SpelledPitchTests {
     ]
 }
 
-extension UnorderedPairTests {
-    static let __allTests = [
-        ("testEqualityFunction", testEqualityFunction),
-        ("testHashability", testHashability),
-        ("testInitializers", testInitializers),
-        ("testUnEqual", testUnEqual),
-    ]
-}
-
 extension UnorderedSpelledIntervalTests {
     static let __allTests = [
         ("testBFlatDSharpAugmentedThird", testBFlatDSharpAugmentedThird),
@@ -206,10 +159,7 @@ extension WetherfieldTests {
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(CompoundSpelledIntervalTests.__allTests),
-        testCase(CrossTests.__allTests),
         testCase(FlowNetworkTests.__allTests),
-        testCase(GraphTests.__allTests),
-        testCase(OrderedPairTests.__allTests),
         testCase(OrderedSpelledIntervalTests.__allTests),
         testCase(PitchSpellingCategoryTests.__allTests),
         testCase(PitchSpellingTendencyTests.__allTests),
@@ -218,7 +168,6 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(SpelledDyadTests.__allTests),
         testCase(SpelledIntervalQualityTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
-        testCase(UnorderedPairTests.__allTests),
         testCase(UnorderedSpelledIntervalTests.__allTests),
         testCase(WetherfieldTests.__allTests),
     ]
