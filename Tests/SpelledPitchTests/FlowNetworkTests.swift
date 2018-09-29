@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import DataStructures
 @testable import SpelledPitch
 
 class FlowNetworkTests: XCTestCase {

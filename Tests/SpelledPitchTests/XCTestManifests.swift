@@ -11,50 +11,10 @@ extension CompoundSpelledIntervalTests {
     ]
 }
 
-extension CrossTests {
-    static let __allTests = [
-        ("testEqualityFunction", testEqualityFunction),
-        ("testHashability", testHashability),
-    ]
-}
-
-extension DirectedGraphTests {
-    static let __allTests = [
-        ("testDirectedGraphInsertNodes", testDirectedGraphInsertNodes),
-        ("testEdgesFromNode", testEdgesFromNode),
-        ("testShortestPathThreeNodes", testShortestPathThreeNodes),
-        ("testShortestUnweightedPathSingleNode", testShortestUnweightedPathSingleNode),
-        ("testShortestUnweightedPathTwoDirectionallyConnectedNodes", testShortestUnweightedPathTwoDirectionallyConnectedNodes),
-        ("testShortestUnweightedPathTwoUnconnectedNodes", testShortestUnweightedPathTwoUnconnectedNodes),
-    ]
-}
-
 extension FlowNetworkTests {
     static let __allTests = [
         ("testMinimumCut", testMinimumCut),
         ("testRandomNetwork", testRandomNetwork),
-    ]
-}
-
-extension GraphTests {
-    static let __allTests = [
-        ("testBreadthFirstSearch", testBreadthFirstSearch),
-        ("testEdgesContainingNode", testEdgesContainingNode),
-        ("testEdgesCount", testEdgesCount),
-        ("testInsertNodes", testInsertNodes),
-        ("testNeighbors", testNeighbors),
-        ("testNeighborsInSet", testNeighborsInSet),
-        ("testNodesCount", testNodesCount),
-        ("testRemoveEdge", testRemoveEdge),
-    ]
-}
-
-extension OrderedPairTests {
-    static let __allTests = [
-        ("testEqualityFunction", testEqualityFunction),
-        ("testHashability", testHashability),
-        ("testInitializers", testInitializers),
-        ("testSwapped", testSwapped),
     ]
 }
 
@@ -175,15 +135,6 @@ extension SpelledPitchTests {
     ]
 }
 
-extension UnorderedPairTests {
-    static let __allTests = [
-        ("testEqualityFunction", testEqualityFunction),
-        ("testHashability", testHashability),
-        ("testInitializers", testInitializers),
-        ("testUnEqual", testUnEqual),
-    ]
-}
-
 extension UnorderedSpelledIntervalTests {
     static let __allTests = [
         ("testBFlatDSharpAugmentedThird", testBFlatDSharpAugmentedThird),
@@ -194,27 +145,6 @@ extension UnorderedSpelledIntervalTests {
         ("testInitMinorSecond", testInitMinorSecond),
         ("testInitTripleAugmentedUnison", testInitTripleAugmentedUnison),
         ("testInitUnisonSamePitchClass", testInitUnisonSamePitchClass),
-    ]
-}
-
-extension WeightedDirectedGraphTests {
-    static let __allTests = [
-        ("testEdgesFromNode", testEdgesFromNode),
-        ("testShortestPathTwoOptions", testShortestPathTwoOptions),
-        ("testWeightedDirectedGraphInsertNodes", testWeightedDirectedGraphInsertNodes),
-    ]
-}
-
-extension WeightedGraphTests {
-    static let __allTests = [
-        ("testContains", testContains),
-        ("testInsertNodes", testInsertNodes),
-        ("testNeighbors", testNeighbors),
-        ("testRemoveEdge", testRemoveEdge),
-        ("testUnweightedFromDirected", testUnweightedFromDirected),
-        ("testUnweightedFromUndirected", testUnweightedFromUndirected),
-        ("testUpdateEdge", testUpdateEdge),
-        ("testWeightForEdge", testWeightForEdge),
     ]
 }
 
