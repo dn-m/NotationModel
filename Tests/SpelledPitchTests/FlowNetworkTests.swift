@@ -56,8 +56,8 @@ class FlowNetworkTests: XCTestCase {
     }
 
     func testMinimumCut() {
-        XCTAssertEqual(simpleFlowNetwork.minimumCut.0, Set(["s"]))
-        XCTAssertEqual(simpleFlowNetwork.minimumCut.1, Set(["a","b","t"]))
+        XCTAssertEqual(simpleFlowNetwork.minimumCut.0, ["s"])
+        XCTAssertEqual(simpleFlowNetwork.minimumCut.1, ["a","b","t"])
     }
     
     func testUnreachableMinimumCut() {
