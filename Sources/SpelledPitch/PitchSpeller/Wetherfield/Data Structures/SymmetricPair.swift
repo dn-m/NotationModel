@@ -1,16 +1,16 @@
+////
+////  Symmetric.swift
+////  PitchSpeller
+////
+////  Created by Benjamin Wetherfield on 6/30/18.
+////
 //
-//  Symmetric.swift
-//  PitchSpeller
+///// - TODO: Move to `dn-m/Structure/DataStructures`
+//protocol SymmetricPair: Pair where A == B { }
 //
-//  Created by Benjamin Wetherfield on 6/30/18.
+//extension SymmetricPair where A: Equatable {
 //
-
-/// - TODO: Move to `dn-m/Structure/DataStructures`
-protocol SymmetricPair: Pair where A == B { }
-
-extension SymmetricPair where A: Equatable {
-
-    func contains(_ value: A) -> Bool {
-        return a == value || b == value
-    }
-}
+//    func contains(_ value: A) -> Bool {
+//        return a == value || b == value
+//    }
+//}

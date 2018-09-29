@@ -1,13 +1,13 @@
+////
+////  Swappable.swift
+////  PitchSpeller
+////
+////  Created by Benjamin Wetherfield on 6/30/18.
+////
 //
-//  Swappable.swift
-//  PitchSpeller
+////// - TODO: Move to `dn-m/Structure/DataStructures`
+//protocol SwappablePair: SymmetricPair { }
 //
-//  Created by Benjamin Wetherfield on 6/30/18.
-//
-
-//// - TODO: Move to `dn-m/Structure/DataStructures`
-protocol SwappablePair: SymmetricPair { }
-
-extension SwappablePair {
-    var swapped: Self { return .init(b,a) }
-}
+//extension SwappablePair {
+//    var swapped: Self { return .init(b,a) }
+//}

@@ -5,6 +5,7 @@
 //  Created by James Bean on 5/23/18.
 //
 
+import DataStructures
 import Pitch
 
 protocol PitchSpellingNode: Hashable {
