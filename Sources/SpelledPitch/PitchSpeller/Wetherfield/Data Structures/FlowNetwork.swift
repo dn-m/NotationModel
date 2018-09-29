@@ -5,6 +5,8 @@
 //  Created by James Bean on 5/24/18.
 //
 
+import DataStructures
+
 /// Directed graph with several properties:
 /// - Each edge has a capacity for flow
 /// - A "source" node, which is only emanates flow outward
