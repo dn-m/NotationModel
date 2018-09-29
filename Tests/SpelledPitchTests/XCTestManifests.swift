@@ -159,11 +159,7 @@ extension WetherfieldTests {
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(CompoundSpelledIntervalTests.__allTests),
-        testCase(CrossTests.__allTests),
-        testCase(DirectedGraphTests.__allTests),
         testCase(FlowNetworkTests.__allTests),
-        testCase(GraphTests.__allTests),
-        testCase(OrderedPairTests.__allTests),
         testCase(OrderedSpelledIntervalTests.__allTests),
         testCase(PitchSpellingCategoryTests.__allTests),
         testCase(PitchSpellingTendencyTests.__allTests),
@@ -172,10 +168,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(SpelledDyadTests.__allTests),
         testCase(SpelledIntervalQualityTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
-        testCase(UnorderedPairTests.__allTests),
         testCase(UnorderedSpelledIntervalTests.__allTests),
-        testCase(WeightedDirectedGraphTests.__allTests),
-        testCase(WeightedGraphTests.__allTests),
         testCase(WetherfieldTests.__allTests),
     ]
 }
