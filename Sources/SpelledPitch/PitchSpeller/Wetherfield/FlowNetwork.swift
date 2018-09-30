@@ -27,6 +27,8 @@ extension FlowNetwork {
     /// Create a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink` nodes.
     init(_ directedGraph: WeightedDirectedGraph<Node,Weight>, source: Node, sink: Node) {
         self.directedGraph = directedGraph
+        self.directedGraph.insert(source)
+        self.directedGraph.insert(sink)
         self.source = source
         self.sink = sink
     }
