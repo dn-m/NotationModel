@@ -72,6 +72,14 @@ class FlowNetworkTests: XCTestCase {
         let cut = FlowNetwork(graph, source: "s", sink: "t").minimumCut
         XCTAssertEqual(cut.0.union(cut.1), ["s", "a", "t", "b"])
     }
+    
+    func testFlowNetworkAbsorbsSourceSink() {
+        var graph = WeightedDirectedGraph<String,Double>()
+        graph.insert("a")
+        let flowNetwork = FlowNetwork(graph, source: "s", sink: "t")
+        XCTAssert(flowNetwork.directedGraph.contains("s"))
+        XCTAssert(flowNetwork.directedGraph.contains("t"))
+    }
 
     func testRandomNetwork() {
         let iterations = 1
