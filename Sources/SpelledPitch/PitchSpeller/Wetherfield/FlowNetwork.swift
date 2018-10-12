@@ -47,7 +47,7 @@ extension WeightedDirectedGraph where Weight: Comparable {
     }
 
     /// Pushes `amount` of flow through `edge` while allow the flow come back in the opposite
-    /// direction if the `edge` is completely saturated
+    /// direction. `edge` is removed if it becomes completely saturated.
     mutating func push(_ amount: Weight, through edge: Edge) {
         if amount < weight(edge)! {
             updateEdge(edge) { capacity in capacity - amount }
