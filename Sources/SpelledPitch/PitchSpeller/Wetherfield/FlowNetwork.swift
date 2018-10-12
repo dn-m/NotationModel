@@ -35,44 +35,33 @@ extension FlowNetwork {
 }
 
 extension WeightedDirectedGraph where Weight: Comparable {
-    // TODO: Make throw
-    mutating func reduceFlow(through edge: Edge, by amount: Weight) {
-        updateEdge(edge) { weight in weight - amount }
-    }
 
-    /// Removes the given edge if its weight is `0`. This happens after an edge, which has the
-    /// minimum flow of an augmenting path, is reduced by the minimum flow (which is its previous
-    /// value).
-    mutating func removeEdgeIfFlowless(_ edge: Edge) {
-        if weight(edge) == 0 {
-            removeEdge(edge)
-        }
-    }
-
-    /// Inserts an edge in the opposite direction of the given `edge` with the minimum flow
-    mutating func updateBackEdge(_ edge: Edge, by minimumFlow: Weight) {
+    /// Inserts an edge in the opposite direction of the given `edge` with the minimum capacity
+    mutating func letReturn(_ amount: Weight, through edge: Edge) {
         let reversedEdge = edge.swapped
         if contains(reversedEdge) {
-            updateEdge(reversedEdge) { capacity in capacity + minimumFlow }
+            updateEdge(reversedEdge) { capacity in capacity + amount }
         } else {
-            insertEdge(reversedEdge, weight: minimumFlow)
+            insertEdge(reversedEdge, weight: amount)
         }
     }
 
-    /// Reduces the flow of the given `edge` by the given `minimumFlow`. If the new flow through
-    /// the `edge` is now `0`, removes the `edge` from the network. Updates the reverse of the given
-    /// `edge` by the given `minimumFlow`.
-    mutating func pushFlow(through edge: Edge, by minimumFlow: Weight) {
-        reduceFlow(through: edge, by: minimumFlow)
-        removeEdgeIfFlowless(edge)
-        updateBackEdge(edge, by: minimumFlow)
+    /// Pushes `amount` of flow through `edge` while allow the flow come back in the opposite
+    /// direction if the `edge` is completely saturated
+    mutating func push(_ amount: Weight, through edge: Edge) {
+        if amount < weight(edge)! {
+            updateEdge(edge) { capacity in capacity - amount }
+        } else {
+            removeEdge(edge)
+        }
+        letReturn(amount, through: edge)
     }
 
     /// Pushes flow through the given `path` in this `graph`.
     mutating func pushFlow(through path: [Node]) {
         let edges = path.pairs.map(OrderedPair.init)
-        let minimumFlow = edges.compactMap(weight).min() ?? 0
-        edges.forEach { edge in pushFlow(through: edge, by: minimumFlow) }
+        let mostFlow = edges.compactMap(weight).min() ?? 0
+        edges.forEach { edge in push(mostFlow, through: edge) }
     }
 }
 
