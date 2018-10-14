@@ -7,6 +7,7 @@
 //
 
 import Algorithms
+import Pitch
 
 /// Dyad of `SpelledPitch` values.
 public struct SpelledDyad <Tuning: TuningSystem> {
@@ -38,14 +39,14 @@ extension SpelledDyad where Tuning == EDO12 {
 
     /// - Returns: `UnorderedSpelledInterval`, which does not retain the objective order of this
     /// `SpelledDyad` nor its octave displacement.
-    public var unorderedInterval: UnorderedSpelledInterval {
-        return UnorderedSpelledInterval(lower.spelling, higher.spelling)
+    public var unorderedInterval: UnorderedIntervalDescriptor {
+        return UnorderedIntervalDescriptor(lower.spelling, higher.spelling)
     }
 
     /// - Returns: `CompoundSpelledInterval`, which retains the objective order of this
     /// `SpelledDyad`, though not its octave displacement.
-    public var orderedInterval: CompoundSpelledInterval {
-        return CompoundSpelledInterval(lower, higher)
+    public var orderedInterval: CompoundIntervalDescriptor {
+        return CompoundIntervalDescriptor(lower, higher)
     }
 }
 

@@ -19,17 +19,17 @@ class SpelledDyadTests: XCTestCase {
         XCTAssertEqual(lower, spelledDyad.lower)
     }
 
-    func assertUnorderedSpelledInterval(
+    func assertUnorderedIntervalDescriptor(
         for dyad: SpelledDyad<EDO12>,
-        equals interval: UnorderedSpelledInterval?
+        equals interval: UnorderedIntervalDescriptor?
     )
     {
         XCTAssertEqual(dyad.unorderedInterval, interval)
     }
 
-    func assertCompoundSpelledInterval(
+    func assertCompoundIntervalDescriptor(
         for dyad: SpelledDyad<EDO12>,
-        equals interval: CompoundSpelledInterval?
+        equals interval: CompoundIntervalDescriptor?
     )
     {
         XCTAssertEqual(dyad.orderedInterval, interval)
@@ -52,77 +52,77 @@ class SpelledDyadTests: XCTestCase {
 
     func testRelativeNamedIntervalPerfectUnison() {
         let spelledDyad = SpelledDyad(c,c)
-        assertUnorderedSpelledInterval(for: spelledDyad, equals: UnorderedSpelledInterval(.perfect, .unison))
+        assertUnorderedIntervalDescriptor(for: spelledDyad, equals: UnorderedIntervalDescriptor(.perfect, .unison))
     }
 
     func testRelativeNamedIntervalMinorSecond() {
-        assertUnorderedSpelledInterval(for: SpelledDyad(c, dflat), equals: UnorderedSpelledInterval(.minor, .second))
+        assertUnorderedIntervalDescriptor(for: SpelledDyad(c, dflat), equals: UnorderedIntervalDescriptor(.minor, .second))
     }
 
     func testRelativeNamedIntervalAugmentedFourth() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(c, fsharp),
-            equals: UnorderedSpelledInterval(.single, .augmented, .fourth)
+            equals: UnorderedIntervalDescriptor(.single, .augmented, .fourth)
         )
     }
 
     func testRelativeNamedIntervalDiminishedFourth() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(fsharp, bflat),
-            equals: UnorderedSpelledInterval(.single, .diminished, .fourth)
+            equals: UnorderedIntervalDescriptor(.single, .diminished, .fourth)
         )
     }
 
     func testRelativeNamedIntervalDoubleDiminishedFourth() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(fsharp, bdoubleflat),
             equals: .init(.double, .diminished, .fourth)
         )
     }
 
     func testRelativeNamedIntervalDiminishedSecond() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(c, ddoubleflat),
             equals: .init(.diminished, .second)
         )
     }
 
     func testRelativeNamedIntervalAugmentedSecond() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(c, dsharp),
             equals: .init(.augmented, .second)
         )
     }
 
     func testDiminishedThird() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(dsharp, f),
             equals: .init(.diminished, .third)
         )
     }
 
     func testRelativeNamedIntervalDoubleDiminishedSecond() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(csharp, ddoubleflat),
             equals: .init(.double, .diminished, .second)
         )
     }
 
     func testRelativeNamedIntervalPerfectFourth() {
-        assertUnorderedSpelledInterval(for: SpelledDyad(c, g), equals: UnorderedSpelledInterval(.perfect, .fourth))
+        assertUnorderedIntervalDescriptor(for: SpelledDyad(c, g), equals: UnorderedIntervalDescriptor(.perfect, .fourth))
     }
 
     func testDoubleAugmentedSixth() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(bflat, gdoublesharp),
-            equals: UnorderedSpelledInterval(.double, .diminished, .third)
+            equals: UnorderedIntervalDescriptor(.double, .diminished, .third)
         )
     }
 
     func testTripleAugmentedUnison() {
-        assertUnorderedSpelledInterval(
+        assertUnorderedIntervalDescriptor(
             for: SpelledDyad(cdoublesharp, cflat),
-            equals: UnorderedSpelledInterval(.triple, .augmented, .unison)
+            equals: UnorderedIntervalDescriptor(.triple, .augmented, .unison)
         )
     }
 }

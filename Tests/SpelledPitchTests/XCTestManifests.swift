@@ -1,6 +1,6 @@
 import XCTest
 
-extension CompoundSpelledIntervalTests {
+extension CompoundIntervalDescriptorTests {
     static let __allTests = [
         ("testInitTwoSpelledPitchesAscendingMajorTenth", testInitTwoSpelledPitchesAscendingMajorTenth),
         ("testInitTwoSpelledPitchesAscendingMinorSecond", testInitTwoSpelledPitchesAscendingMinorSecond),
@@ -13,23 +13,10 @@ extension CompoundSpelledIntervalTests {
 
 extension FlowNetworkTests {
     static let __allTests = [
+        ("testFlowNetworkAbsorbsSourceSink", testFlowNetworkAbsorbsSourceSink),
         ("testMinimumCut", testMinimumCut),
         ("testRandomNetwork", testRandomNetwork),
-    ]
-}
-
-extension OrderedSpelledIntervalTests {
-    static let __allTests = [
-        ("testAbsoluteNamedIntervalOrdinalInversion", testAbsoluteNamedIntervalOrdinalInversion),
-        ("testAPI", testAPI),
-        ("testAPIShouldNotCompile", testAPIShouldNotCompile),
-        ("testDoubleAugmentedThirdDoubleDiminishedSixth", testDoubleAugmentedThirdDoubleDiminishedSixth),
-        ("testInversionMajorSecondMinorSeventh", testInversionMajorSecondMinorSeventh),
-        ("testInversionMajorThirdMinorSixth", testInversionMajorThirdMinorSixth),
-        ("testInversionPerfectFifthPerfectFourth", testInversionPerfectFifthPerfectFourth),
-        ("testPerfectOrdinalFourthFifthInverse", testPerfectOrdinalFourthFifthInverse),
-        ("testPerfectOrdinalUnisonInverse", testPerfectOrdinalUnisonInverse),
-        ("testSecondOrdinalInverseSeventh", testSecondOrdinalInverseSeventh),
+        ("testUnreachableMinimumCut", testUnreachableMinimumCut),
     ]
 }
 
@@ -108,14 +95,6 @@ extension SpelledDyadTests {
     ]
 }
 
-extension SpelledIntervalQualityTests {
-    static let __allTests = [
-        ("testInverseDimAug", testInverseDimAug),
-        ("testInverseMinorMajor", testInverseMinorMajor),
-        ("testInversePerfect", testInversePerfect),
-    ]
-}
-
 extension SpelledPitchTests {
     static let __allTests = [
         ("testBQuarterSharp", testBQuarterSharp),
@@ -135,7 +114,7 @@ extension SpelledPitchTests {
     ]
 }
 
-extension UnorderedSpelledIntervalTests {
+extension UnorderedIntervalDescriptorTests {
     static let __allTests = [
         ("testBFlatDSharpAugmentedThird", testBFlatDSharpAugmentedThird),
         ("testCASharpAugmentedSixthDiminishedThird", testCASharpAugmentedSixthDiminishedThird),
@@ -158,17 +137,15 @@ extension WetherfieldTests {
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
-        testCase(CompoundSpelledIntervalTests.__allTests),
+        testCase(CompoundIntervalDescriptorTests.__allTests),
         testCase(FlowNetworkTests.__allTests),
-        testCase(OrderedSpelledIntervalTests.__allTests),
         testCase(PitchSpellingCategoryTests.__allTests),
         testCase(PitchSpellingTendencyTests.__allTests),
         testCase(PitchSpellingTests.__allTests),
         testCase(PitchSpellingsTests.__allTests),
         testCase(SpelledDyadTests.__allTests),
-        testCase(SpelledIntervalQualityTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
-        testCase(UnorderedSpelledIntervalTests.__allTests),
+        testCase(UnorderedIntervalDescriptorTests.__allTests),
         testCase(WetherfieldTests.__allTests),
     ]
 }
