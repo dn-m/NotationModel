@@ -16,13 +16,15 @@ public enum EDO12: EDO {
     /// `EDO12` `TuningSystem`.
     public enum Modifier: PitchSpellingModifier {
 
+//        static let flat: Modifier = .flat(1)
+
         // MARK: - Cases
 
         /// Natural modifier.
         case natural
 
         /// Sharp modifier with degree of sharpness (e.g., double sharp)
-        case sharp(Int)
+        case sharp(count: Int)
 
         /// Flat modifier with degree of sharpness (e.g., triple flat)
         case flat(Int)
@@ -81,20 +83,20 @@ public struct LineOfFifths {
         Pitch.Spelling(.a, .flat(1)): -3,
         Pitch.Spelling(.e, .flat(1)): -2,
         Pitch.Spelling(.b, .flat(1)): -1,
-        Pitch.Spelling(.f, .sharp(1)): 1,
-        Pitch.Spelling(.c, .sharp(1)): 2,
-        Pitch.Spelling(.g, .sharp(1)): 3,
-        Pitch.Spelling(.d, .sharp(1)): 4,
-        Pitch.Spelling(.a, .sharp(1)): 5,
-        Pitch.Spelling(.e, .sharp(1)): 6,
-        Pitch.Spelling(.b, .sharp(1)): 7,
-        Pitch.Spelling(.f, .sharp(2)): 8,
-        Pitch.Spelling(.c, .sharp(2)): 9,
-        Pitch.Spelling(.g, .sharp(2)): 10,
-        Pitch.Spelling(.d, .sharp(2)): 11,
-        Pitch.Spelling(.a, .sharp(2)): 12,
-        Pitch.Spelling(.e, .sharp(2)): 13,
-        Pitch.Spelling(.b, .sharp(2)): 14
+        Pitch.Spelling(.f, .sharp(count: 1)): 1,
+        Pitch.Spelling(.c, .sharp(count: 1)): 2,
+        Pitch.Spelling(.g, .sharp(count: 1)): 3,
+        Pitch.Spelling(.d, .sharp(count: 1)): 4,
+        Pitch.Spelling(.a, .sharp(count: 1)): 5,
+        Pitch.Spelling(.e, .sharp(count: 1)): 6,
+        Pitch.Spelling(.b, .sharp(count: 1)): 7,
+        Pitch.Spelling(.f, .sharp(count: 2)): 8,
+        Pitch.Spelling(.c, .sharp(count: 2)): 9,
+        Pitch.Spelling(.g, .sharp(count: 2)): 10,
+        Pitch.Spelling(.d, .sharp(count: 2)): 11,
+        Pitch.Spelling(.a, .sharp(count: 2)): 12,
+        Pitch.Spelling(.e, .sharp(count: 2)): 13,
+        Pitch.Spelling(.b, .sharp(count: 2)): 14
     ]
 
     static func position(ofPitchSpelling spelling: Pitch.Spelling<EDO12>) -> Position {

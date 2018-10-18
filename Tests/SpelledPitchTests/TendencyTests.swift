@@ -21,7 +21,7 @@ class PitchSpellingTendencyTests: XCTestCase {
     // MARK: - Category "One"
 
     func testPCSixUpUp_EDoubleSharp() {
-        let expected = Pitch.Spelling<EDO12>(.e, .sharp(2))
+        let expected = Pitch.Spelling<EDO12>(.e, .sharp(count: 2))
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 6, tendencies: .init(.up,.up)), expected)
     }
 
@@ -49,7 +49,7 @@ class PitchSpellingTendencyTests: XCTestCase {
     // MARK: - Category "Five"
     
     func testPCEightUpDown_GSharp() {
-        let expected = Pitch.Spelling<EDO12>(.g, .sharp(1))
+        let expected = Pitch.Spelling<EDO12>(.g, .sharp(count: 1))
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 8, tendencies: .init(.up,.down)), expected)
     }
 }

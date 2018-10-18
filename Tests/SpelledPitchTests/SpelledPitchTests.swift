@@ -32,7 +32,7 @@ class SpelledPitchTests: XCTestCase {
     }
 
     func testOctaveBSharp() {
-        let bsharp = SpelledPitch(Pitch.Spelling<EDO48>(.b, .sharp(1)), 3)
+        let bsharp = SpelledPitch(Pitch.Spelling<EDO48>(.b, .sharp(count: 1)), 3)
         XCTAssertEqual(bsharp.pitch, 60)
     }
 
@@ -47,12 +47,12 @@ class SpelledPitchTests: XCTestCase {
     }
 
     func testBQuarterSharp() {
-        let bqsharp = SpelledPitch(Pitch.Spelling<EDO24>(.b, .quarter, .sharp(1)), 3)
+        let bqsharp = SpelledPitch(Pitch.Spelling<EDO24>(.b, .quarter, .sharp(count: 1)), 3)
         XCTAssertEqual(bqsharp.pitch, 59.5)
     }
 
     func testBSharpDown() {
-        let bsharpdown = SpelledPitch(Pitch.Spelling<EDO48>(.b, .sharp(1), .down), 3)
+        let bsharpdown = SpelledPitch(Pitch.Spelling<EDO48>(.b, .sharp(count: 1), .down), 3)
         XCTAssertEqual(bsharpdown.pitch, 59.75)
     }
 
@@ -79,7 +79,7 @@ class SpelledPitchTests: XCTestCase {
 
     func testComparableSameLetter() {
         let d = SpelledPitch(Pitch.Spelling<EDO12>(.d), 4)
-        let dsharp = SpelledPitch(Pitch.Spelling<EDO12>(.d, .sharp(1)), 4)
+        let dsharp = SpelledPitch(Pitch.Spelling<EDO12>(.d, .sharp(count: 1)), 4)
         XCTAssert(d < dsharp)
         XCTAssert(dsharp > d)
     }

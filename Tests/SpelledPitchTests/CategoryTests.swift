@@ -39,7 +39,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCZeroUp_BSharp() {
-        let expected = Pitch.Spelling<EDO12>(.b, .sharp(1))
+        let expected = Pitch.Spelling<EDO12>(.b, .sharp(count: 1))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 0, modifierDirection: .up), expected)
     }
 
@@ -50,12 +50,12 @@ class PitchSpellingCategoryTests: XCTestCase {
 
     // MARK: - Category "One"
     func testPCOneNeutral_CSharp() {
-        let expected = Pitch.Spelling<EDO12>(.c, .sharp(1))
+        let expected = Pitch.Spelling<EDO12>(.c, .sharp(count: 1))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 1, modifierDirection: .neutral), expected)
     }
 
     func testPCOneUp_BDoubleSharp() {
-        let expected = Pitch.Spelling<EDO12>(.b, .sharp(2))
+        let expected = Pitch.Spelling<EDO12>(.b, .sharp(count: 2))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 1, modifierDirection: .up), expected)
     }
 
@@ -71,7 +71,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCTwoUp_CDoubleSharp() {
-        let expected = Pitch.Spelling<EDO12>(.c, .sharp(2))
+        let expected = Pitch.Spelling<EDO12>(.c, .sharp(count: 2))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 2, modifierDirection: .up), expected)
     }
 
@@ -87,7 +87,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCThreeUp_DSharp() {
-        let expected = Pitch.Spelling<EDO12>(.d, .sharp(1))
+        let expected = Pitch.Spelling<EDO12>(.d, .sharp(count: 1))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 3, modifierDirection: .up), expected)
     }
 
@@ -103,7 +103,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCFourUp_DDoubleSharp() {
-        let expected = Pitch.Spelling<EDO12>(.d, .sharp(2))
+        let expected = Pitch.Spelling<EDO12>(.d, .sharp(count: 2))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 4, modifierDirection: .up), expected)
     }
 
@@ -118,7 +118,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCEightUp_GSharp() {
-        let expected = Pitch.Spelling<EDO12>(.g, .sharp(1))
+        let expected = Pitch.Spelling<EDO12>(.g, .sharp(count: 1))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 8, modifierDirection: .up), expected)
     }
 

@@ -22,7 +22,7 @@ class PitchSpellingTests: XCTestCase {
     }
 
     func testPitchClassCSharpOne() {
-        XCTAssertEqual(Pitch.Spelling<EDO48>(.c, .sharp(1)).pitchClass, 1)
+        XCTAssertEqual(Pitch.Spelling<EDO48>(.c, .sharp(count: 1)).pitchClass, 1)
     }
 
     func testPitchClassDDoubleFlatZero() {
@@ -30,15 +30,15 @@ class PitchSpellingTests: XCTestCase {
     }
 
     func testPitchClassCQuarterSharpZeroPointFive() {
-        XCTAssertEqual(Pitch.Spelling<EDO24>(.c, .quarter, .sharp(1)).pitchClass, 0.5)
+        XCTAssertEqual(Pitch.Spelling<EDO24>(.c, .quarter, .sharp(count: 1)).pitchClass, 0.5)
     }
 
     func testPitchClassCQuarterSharpDownZeroPointTwoFive() {
-        XCTAssertEqual(Pitch.Spelling(.c, .quarter, .sharp(1), .down).pitchClass, 0.25)
+        XCTAssertEqual(Pitch.Spelling(.c, .quarter, .sharp(count: 1), .down).pitchClass, 0.25)
     }
 
     func testPitchClassCQuarterSharpUpZeroPointSevenFive() {
-        XCTAssertEqual(Pitch.Spelling(.c, .quarter, .sharp(1), .up).pitchClass, 0.75)
+        XCTAssertEqual(Pitch.Spelling(.c, .quarter, .sharp(count: 1), .up).pitchClass, 0.75)
     }
 
     func testGThreeQuarterFlatUpFivePointSeventyFive() {
