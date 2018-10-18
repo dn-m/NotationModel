@@ -73,13 +73,13 @@ public struct LineOfFifths {
 
     // FIXME: Implement with an `OrderedSet`.
     private static let positionByPitchSpelling: [Pitch.Spelling<EDO12>: Position] = [
-        Pitch.Spelling(.f, .flat): -14,
-        Pitch.Spelling(.c, .flat): -13,
-        Pitch.Spelling(.g, .flat): -12,
-        Pitch.Spelling(.d, .flat): -11,
-        Pitch.Spelling(.a, .flat): -10,
-        Pitch.Spelling(.e, .flat): -9,
-        Pitch.Spelling(.b, .flat): -8,
+        Pitch.Spelling(.f, .flats(count: 2)): -14,
+        Pitch.Spelling(.c, .flats(count: 2)): -13,
+        Pitch.Spelling(.g, .flats(count: 2)): -12,
+        Pitch.Spelling(.d, .flats(count: 2)): -11,
+        Pitch.Spelling(.a, .flats(count: 2)): -10,
+        Pitch.Spelling(.e, .flats(count: 2)): -9,
+        Pitch.Spelling(.b, .flats(count: 2)): -8,
         Pitch.Spelling(.f, .flat): -7,
         Pitch.Spelling(.c, .flat): -6,
         Pitch.Spelling(.g, .flat): -5,

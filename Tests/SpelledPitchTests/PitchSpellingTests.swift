@@ -26,7 +26,7 @@ class PitchSpellingTests: XCTestCase {
     }
 
     func testPitchClassDDoubleFlatZero() {
-        XCTAssertEqual(Pitch.Spelling<EDO24>(.d, .flat).pitchClass, 0)
+        XCTAssertEqual(Pitch.Spelling<EDO24>(.d, .flats(count: 2)).pitchClass, 0)
     }
 
     func testPitchClassCQuarterSharpZeroPointFive() {

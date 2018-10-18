@@ -37,7 +37,7 @@ class SpelledDyadTests: XCTestCase {
 
     let cflat = SpelledPitch(Pitch.Spelling<EDO12>(.c, .flat), 4)
     let c = SpelledPitch(Pitch.Spelling<EDO12>(.c), 4)
-    let ddoubleflat = SpelledPitch(Pitch.Spelling<EDO12>(.d, .flat), 4)
+    let ddoubleflat = SpelledPitch(Pitch.Spelling<EDO12>(.d, .flats(count: 2)), 4)
     let dflat = SpelledPitch(Pitch.Spelling<EDO12>(.d, .flat), 4)
     let csharp = SpelledPitch(Pitch.Spelling<EDO12>(.c, .sharp), 4)
     let cdoublesharp = SpelledPitch(Pitch.Spelling<EDO12>(.c, .sharps(count: 2)), 4)
@@ -46,7 +46,7 @@ class SpelledDyadTests: XCTestCase {
     let fsharp = SpelledPitch(Pitch.Spelling<EDO12>(.f, .sharp), 4)
     let g = SpelledPitch(Pitch.Spelling<EDO12>(.g), 4)
     let gsharp = SpelledPitch(Pitch.Spelling<EDO12>(.g, .sharp), 4)
-    let bdoubleflat = SpelledPitch(Pitch.Spelling<EDO12>(.b, .flat), 4)
+    let bdoubleflat = SpelledPitch(Pitch.Spelling<EDO12>(.b, .flats(count: 2)), 4)
     let bflat = SpelledPitch(Pitch.Spelling<EDO12>(.b, .flat), 4)
     let gdoublesharp = SpelledPitch(Pitch.Spelling<EDO12>(.g, .sharps(count: 2)), 5)
 
