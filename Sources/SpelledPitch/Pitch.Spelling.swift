@@ -46,7 +46,6 @@ extension Pitch.Spelling where Tuning == EDO12 {
     /// **Example Usage**
     ///
     ///     let cNatural = Pitch.Spelling(.c)
-    ///     let aFlat = Pitch.Spelling(.a, .flat)
     ///
     public init(_ letterName: LetterName) {
         self.init(letterName: letterName, modifier: .natural)
