@@ -114,7 +114,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
     ///
     /// **Example Usage**
     ///
-    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .flat(count: 1)))
+    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .flat))
     ///
     public init(_ letterName: LetterName) {
         let edo24 = EDO24.Modifier(edo12: .natural, quarterTone: .none)
@@ -126,7 +126,7 @@ extension Pitch.Spelling where Tuning == EDO48 {
     ///
     /// **Example Usage**
     ///
-    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .flat(count: 1)))
+    ///     let dQuarterFlatDown = Pitch.Spelling(.d, .flat))
     ///
     public init(_ letterName: LetterName, _ halfStep: EDO12.Modifier = .natural) {
         let edo24 = EDO24.Modifier(edo12: halfStep, quarterTone: .none)

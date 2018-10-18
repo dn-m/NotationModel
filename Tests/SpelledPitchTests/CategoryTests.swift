@@ -44,7 +44,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCZeroDown_DDoubleFlat() {
-        let expected = Pitch.Spelling<EDO12>(.d, .flat(count: 1)))
+        let expected = Pitch.Spelling<EDO12>(.d, .flat))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 0, modifierDirection: .down), expected)
     }
 
@@ -60,7 +60,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCOneDown_DFlat() {
-        let expected = Pitch.Spelling<EDO12>(.d, .flat(count: 1)))
+        let expected = Pitch.Spelling<EDO12>(.d, .flat))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 1, modifierDirection: .down), expected)
     }
 
@@ -76,13 +76,13 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCTwoDown_EDoubleFlat() {
-        let expected = Pitch.Spelling<EDO12>(.e, .flat(count: 1)))
+        let expected = Pitch.Spelling<EDO12>(.e, .flat))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 2, modifierDirection: .down), expected)
     }
 
     // MARK: - Category "Three"
     func testPCThreeNeutral_EFlat() {
-        let expected = Pitch.Spelling<EDO12>(.e, .flat(count: 1)))
+        let expected = Pitch.Spelling<EDO12>(.e, .flat))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 3, modifierDirection: .neutral), expected)
     }
 
@@ -92,7 +92,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCThreeDown_FDoubleFlat() {
-        let expected = Pitch.Spelling<EDO12>(.f, .flat(count: 1)))
+        let expected = Pitch.Spelling<EDO12>(.f, .flat))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 3, modifierDirection: .down), expected)
     }
 
@@ -108,7 +108,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCFourDown_FFlat() {
-        let expected = Pitch.Spelling<EDO12>(.f, .flat(count: 1)))
+        let expected = Pitch.Spelling<EDO12>(.f, .flat))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 4, modifierDirection: .down), expected)
     }
 
@@ -123,7 +123,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCEight_AFlat() {
-        let expected = Pitch.Spelling<EDO12>(.a, .flat(count: 1)))
+        let expected = Pitch.Spelling<EDO12>(.a, .flat))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 8, modifierDirection: .down), expected)
     }
 }

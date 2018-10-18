@@ -39,7 +39,7 @@ class UnorderedIntervalDescriptorTests: XCTestCase {
     }
 
     func testInitTripleAugmentedUnison() {
-        let a = Pitch.Spelling<EDO12>(.c, .flat(count: 1)))
+        let a = Pitch.Spelling<EDO12>(.c, .flat))
         let b = Pitch.Spelling<EDO12>(.c, .sharp(count: 2))
         let result = UnorderedIntervalDescriptor(a,b)
         let expected = UnorderedIntervalDescriptor(.triple, .augmented, .unison)
@@ -48,7 +48,7 @@ class UnorderedIntervalDescriptorTests: XCTestCase {
 
     func testInitMinorSecond() {
         let a = Pitch.Spelling<EDO12>(.c)
-        let b = Pitch.Spelling<EDO12>(.d, .flat(count: 1)))
+        let b = Pitch.Spelling<EDO12>(.d, .flat))
         let result = UnorderedIntervalDescriptor(a,b)
         let expected = UnorderedIntervalDescriptor(.minor, .second)
         XCTAssertEqual(result, expected)
@@ -71,7 +71,7 @@ class UnorderedIntervalDescriptorTests: XCTestCase {
     }
 
     func testBFlatDSharpAugmentedThird() {
-        let a = Pitch.Spelling<EDO12>(.b, .flat(count: 1)))
+        let a = Pitch.Spelling<EDO12>(.b, .flat))
         let b = Pitch.Spelling<EDO12>(.d, .sharp(count: 1))
         let result = UnorderedIntervalDescriptor(a,b)
         let expected = UnorderedIntervalDescriptor(.single, .augmented, .third)

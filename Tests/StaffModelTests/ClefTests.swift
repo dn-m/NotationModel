@@ -22,7 +22,7 @@ class ClefTests: XCTestCase {
     }
     
     func testStaffSlotEFlatAboveMiddleC() {
-        let eFlat = SpelledPitch<EDO48>(Pitch.Spelling(.e, .flat(count: 1))), 4)
+        let eFlat = SpelledPitch<EDO48>(Pitch.Spelling(.e, .flat)), 4)
         XCTAssertEqual(slot(.bass, eFlat), 8)
         XCTAssertEqual(slot(.tenor, eFlat), 4)
         XCTAssertEqual(slot(.alto, eFlat), 2)

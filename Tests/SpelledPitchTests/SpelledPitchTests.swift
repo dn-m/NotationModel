@@ -27,7 +27,7 @@ class SpelledPitchTests: XCTestCase {
     }
 
     func testOctaveCFlat() {
-        let cflat = SpelledPitch(Pitch.Spelling<EDO24>(.c, .flat(count: 1)), 4)
+        let cflat = SpelledPitch(Pitch.Spelling<EDO24>(.c, .flat), 4)
         XCTAssertEqual(cflat.pitch, 59)
     }
 
@@ -37,7 +37,7 @@ class SpelledPitchTests: XCTestCase {
     }
 
     func testOctaveCQuarterFlat() {
-        let cqflat = SpelledPitch(Pitch.Spelling<EDO24>(.c, .quarter, .flat(count: 1)), 4)
+        let cqflat = SpelledPitch(Pitch.Spelling<EDO24>(.c, .quarter, .flat), 4)
         XCTAssertEqual(cqflat.pitch, 59.5)
     }
 
@@ -72,7 +72,7 @@ class SpelledPitchTests: XCTestCase {
 
     func testComparableMinorSixth() {
         let d = SpelledPitch<EDO12>(Pitch.Spelling(.d))
-        let b = SpelledPitch<EDO12>(Pitch.Spelling(.b, .flat(count: 1)))
+        let b = SpelledPitch<EDO12>(Pitch.Spelling(.b, .flat))
         XCTAssert(d < b)
         XCTAssert(b > d)
     }

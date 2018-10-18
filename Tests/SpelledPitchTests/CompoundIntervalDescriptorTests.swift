@@ -37,7 +37,7 @@ class CompoundIntervalDescriptorTests: XCTestCase {
 
     func testInitTwoSpelledPitchesAscendingMinorSixth() {
         let a = SpelledPitch<EDO12>(Pitch.Spelling(.d))
-        let b = SpelledPitch<EDO12>(Pitch.Spelling(.b, .flat(count: 1))))
+        let b = SpelledPitch<EDO12>(Pitch.Spelling(.b, .flat)))
         let interval = CompoundIntervalDescriptor(a,b)
         let expected = CompoundIntervalDescriptor(.init(.ascending, .minor, .sixth))
         XCTAssertEqual(interval, expected)
