@@ -16,8 +16,8 @@ public enum EDO12: EDO {
     /// `EDO12` `TuningSystem`.
     public enum Modifier: PitchSpellingModifier {
 
-//        static let flat: Modifier = .flat(count: 1)
-//        static let sharp: Modifier = .sharp(count: 1)
+        static let flat: Modifier = .flat(count: 1)
+        static let sharp: Modifier = .sharp(count: 1)
 
         // MARK: - Cases
 
