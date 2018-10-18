@@ -21,7 +21,7 @@ class CompoundIntervalDescriptorTests: XCTestCase {
 
     func testInitTwoSpelledPitchesAscendingMinorSecond() {
         let a = SpelledPitch<EDO12>(Pitch.Spelling(.f))
-        let b = SpelledPitch<EDO12>(Pitch.Spelling(.f, .sharp(count: 1)))
+        let b = SpelledPitch<EDO12>(Pitch.Spelling(.f, .sharp))
         let interval = CompoundIntervalDescriptor(a,b)
         let expected = CompoundIntervalDescriptor(.init(.augmented, .unison))
         XCTAssertEqual(interval, expected)
@@ -37,7 +37,7 @@ class CompoundIntervalDescriptorTests: XCTestCase {
 
     func testInitTwoSpelledPitchesAscendingMinorSixth() {
         let a = SpelledPitch<EDO12>(Pitch.Spelling(.d))
-        let b = SpelledPitch<EDO12>(Pitch.Spelling(.b, .flat)))
+        let b = SpelledPitch<EDO12>(Pitch.Spelling(.b, .flat))
         let interval = CompoundIntervalDescriptor(a,b)
         let expected = CompoundIntervalDescriptor(.init(.ascending, .minor, .sixth))
         XCTAssertEqual(interval, expected)
@@ -45,7 +45,7 @@ class CompoundIntervalDescriptorTests: XCTestCase {
 
     func testInitTwoSpelledPitchesAscendingMajorTenth() {
         let a = SpelledPitch<EDO12>(Pitch.Spelling(.d), 4)
-        let b = SpelledPitch<EDO12>(Pitch.Spelling(.f, .sharp(count: 1)), 5)
+        let b = SpelledPitch<EDO12>(Pitch.Spelling(.f, .sharp), 5)
         let interval = CompoundIntervalDescriptor(a,b)
         let expected = CompoundIntervalDescriptor(.init(.major, .third), displacedBy: 1)
         XCTAssertEqual(interval, expected)

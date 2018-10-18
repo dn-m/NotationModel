@@ -21,21 +21,21 @@ class PitchSpellingTendencyTests: XCTestCase {
     // MARK: - Category "One"
 
     func testPCSixUpUp_EDoubleSharp() {
-        let expected = Pitch.Spelling<EDO12>(.e, .sharp(count: 2))
+        let expected = Pitch.Spelling<EDO12>(.e, .sharps(count: 2))
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 6, tendencies: .init(.up,.up)), expected)
     }
 
     // MARK: - Category "Two"
 
     func testPCNineDownDown_BDoubleFlat() {
-        let expected = Pitch.Spelling<EDO12>(.b, .flat))
+        let expected = Pitch.Spelling<EDO12>(.b, .flat)
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 9, tendencies: .init(.down,.down)), expected)
     }
 
     // MARK: - Category "Three"
 
     func testPCThreeUpDown_EFlat() {
-        let expected = Pitch.Spelling<EDO12>(.e, .flat))
+        let expected = Pitch.Spelling<EDO12>(.e, .flat)
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 3, tendencies: .init(.up,.down)), expected)
     }
 
@@ -49,7 +49,7 @@ class PitchSpellingTendencyTests: XCTestCase {
     // MARK: - Category "Five"
     
     func testPCEightUpDown_GSharp() {
-        let expected = Pitch.Spelling<EDO12>(.g, .sharp(count: 1))
+        let expected = Pitch.Spelling<EDO12>(.g, .sharp)
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 8, tendencies: .init(.up,.down)), expected)
     }
 }

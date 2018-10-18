@@ -39,28 +39,28 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCZeroUp_BSharp() {
-        let expected = Pitch.Spelling<EDO12>(.b, .sharp(count: 1))
+        let expected = Pitch.Spelling<EDO12>(.b, .sharp)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 0, modifierDirection: .up), expected)
     }
 
     func testPCZeroDown_DDoubleFlat() {
-        let expected = Pitch.Spelling<EDO12>(.d, .flat))
+        let expected = Pitch.Spelling<EDO12>(.d, .flat)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 0, modifierDirection: .down), expected)
     }
 
     // MARK: - Category "One"
     func testPCOneNeutral_CSharp() {
-        let expected = Pitch.Spelling<EDO12>(.c, .sharp(count: 1))
+        let expected = Pitch.Spelling<EDO12>(.c, .sharp)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 1, modifierDirection: .neutral), expected)
     }
 
     func testPCOneUp_BDoubleSharp() {
-        let expected = Pitch.Spelling<EDO12>(.b, .sharp(count: 2))
+        let expected = Pitch.Spelling<EDO12>(.b, .sharps(count: 2))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 1, modifierDirection: .up), expected)
     }
 
     func testPCOneDown_DFlat() {
-        let expected = Pitch.Spelling<EDO12>(.d, .flat))
+        let expected = Pitch.Spelling<EDO12>(.d, .flat)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 1, modifierDirection: .down), expected)
     }
 
@@ -71,28 +71,28 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCTwoUp_CDoubleSharp() {
-        let expected = Pitch.Spelling<EDO12>(.c, .sharp(count: 2))
+        let expected = Pitch.Spelling<EDO12>(.c, .sharps(count: 2))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 2, modifierDirection: .up), expected)
     }
 
     func testPCTwoDown_EDoubleFlat() {
-        let expected = Pitch.Spelling<EDO12>(.e, .flat))
+        let expected = Pitch.Spelling<EDO12>(.e, .flat)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 2, modifierDirection: .down), expected)
     }
 
     // MARK: - Category "Three"
     func testPCThreeNeutral_EFlat() {
-        let expected = Pitch.Spelling<EDO12>(.e, .flat))
+        let expected = Pitch.Spelling<EDO12>(.e, .flat)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 3, modifierDirection: .neutral), expected)
     }
 
     func testPCThreeUp_DSharp() {
-        let expected = Pitch.Spelling<EDO12>(.d, .sharp(count: 1))
+        let expected = Pitch.Spelling<EDO12>(.d, .sharp)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 3, modifierDirection: .up), expected)
     }
 
     func testPCThreeDown_FDoubleFlat() {
-        let expected = Pitch.Spelling<EDO12>(.f, .flat))
+        let expected = Pitch.Spelling<EDO12>(.f, .flat)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 3, modifierDirection: .down), expected)
     }
 
@@ -103,12 +103,12 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCFourUp_DDoubleSharp() {
-        let expected = Pitch.Spelling<EDO12>(.d, .sharp(count: 2))
+        let expected = Pitch.Spelling<EDO12>(.d, .sharps(count: 2))
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 4, modifierDirection: .up), expected)
     }
 
     func testPCFourDown_FFlat() {
-        let expected = Pitch.Spelling<EDO12>(.f, .flat))
+        let expected = Pitch.Spelling<EDO12>(.f, .flat)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 4, modifierDirection: .down), expected)
     }
 
@@ -118,12 +118,12 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCEightUp_GSharp() {
-        let expected = Pitch.Spelling<EDO12>(.g, .sharp(count: 1))
+        let expected = Pitch.Spelling<EDO12>(.g, .sharp)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 8, modifierDirection: .up), expected)
     }
 
     func testPCEight_AFlat() {
-        let expected = Pitch.Spelling<EDO12>(.a, .flat))
+        let expected = Pitch.Spelling<EDO12>(.a, .flat)
         XCTAssertEqual(Pitch.Spelling<EDO12>(pitchClass: 8, modifierDirection: .down), expected)
     }
 }

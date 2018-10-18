@@ -16,8 +16,11 @@ public enum EDO12: EDO {
     /// `EDO12` `TuningSystem`.
     public enum Modifier: PitchSpellingModifier {
 
-        static let flat: Modifier = .flat(count: 1)
-        static let sharp: Modifier = .sharp(count: 1)
+        /// Single sharp modifier.
+        public static let sharp: Modifier = .sharps(count: 1)
+
+        /// Single flat modifier.
+        public static let flat: Modifier = .flats(count: 1)
 
         // MARK: - Cases
 
@@ -25,10 +28,10 @@ public enum EDO12: EDO {
         case natural
 
         /// Sharp modifier with degree of sharpness (e.g., double sharp)
-        case sharp(count: Int)
+        case sharps(count: Int)
 
         /// Flat modifier with degree of sharpness (e.g., triple flat)
-        case flat(count: Int)
+        case flats(count: Int)
 
         // MARK: - Static Properties
 
@@ -42,8 +45,8 @@ public enum EDO12: EDO {
         public var adjustment: Double {
             switch self {
             case .natural: return 0
-            case .sharp(let count): return Double(count)
-            case .flat(let count): return -Double(count)
+            case .sharps(let count): return Double(count)
+            case .flats(let count): return -Double(count)
             }
         }
     }
@@ -57,8 +60,8 @@ extension EDO12.Modifier: CustomStringConvertible {
     public var description: String {
         switch self {
         case .natural: return "natural"
-        case .sharp(let count): return "sharp \(count)"
-        case .flat(let count): return "flat: \(count)"
+        case .sharps(let count): return "sharp \(count)"
+        case .flats(let count): return "flat: \(count)"
         }
     }
 }
@@ -84,20 +87,20 @@ public struct LineOfFifths {
         Pitch.Spelling(.a, .flat): -3,
         Pitch.Spelling(.e, .flat): -2,
         Pitch.Spelling(.b, .flat): -1,
-        Pitch.Spelling(.f, .sharp(count: 1)): 1,
-        Pitch.Spelling(.c, .sharp(count: 1)): 2,
-        Pitch.Spelling(.g, .sharp(count: 1)): 3,
-        Pitch.Spelling(.d, .sharp(count: 1)): 4,
-        Pitch.Spelling(.a, .sharp(count: 1)): 5,
-        Pitch.Spelling(.e, .sharp(count: 1)): 6,
-        Pitch.Spelling(.b, .sharp(count: 1)): 7,
-        Pitch.Spelling(.f, .sharp(count: 2)): 8,
-        Pitch.Spelling(.c, .sharp(count: 2)): 9,
-        Pitch.Spelling(.g, .sharp(count: 2)): 10,
-        Pitch.Spelling(.d, .sharp(count: 2)): 11,
-        Pitch.Spelling(.a, .sharp(count: 2)): 12,
-        Pitch.Spelling(.e, .sharp(count: 2)): 13,
-        Pitch.Spelling(.b, .sharp(count: 2)): 14
+        Pitch.Spelling(.f, .sharp): 1,
+        Pitch.Spelling(.c, .sharp): 2,
+        Pitch.Spelling(.g, .sharp): 3,
+        Pitch.Spelling(.d, .sharp): 4,
+        Pitch.Spelling(.a, .sharp): 5,
+        Pitch.Spelling(.e, .sharp): 6,
+        Pitch.Spelling(.b, .sharp): 7,
+        Pitch.Spelling(.f, .sharps(count: 2)): 8,
+        Pitch.Spelling(.c, .sharps(count: 2)): 9,
+        Pitch.Spelling(.g, .sharps(count: 2)): 10,
+        Pitch.Spelling(.d, .sharps(count: 2)): 11,
+        Pitch.Spelling(.a, .sharps(count: 2)): 12,
+        Pitch.Spelling(.e, .sharps(count: 2)): 13,
+        Pitch.Spelling(.b, .sharps(count: 2)): 14
     ]
 
     static func position(ofPitchSpelling spelling: Pitch.Spelling<EDO12>) -> Position {

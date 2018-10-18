@@ -23,42 +23,42 @@ extension Pitch.Spelling {
         /// Category for pitch classes `0` and `5`.
         struct Zero: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .natural, .up: .sharp(count: 1)]
+                return [.down: .flat, .neutral: .natural, .up: .sharp]
             }
         }
 
         /// Category for pitch classes `1` and `6`.
         struct One: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .sharp(count: 1), .up: .sharp(count: 2)]
+                return [.down: .flat, .neutral: .sharp, .up: .sharps(count: 2)]
             }
         }
 
         /// Category for pitch classes `2`, `7`, and `9`.
         struct Two: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .natural, .up: .sharp(count: 2)]
+                return [.down: .flat, .neutral: .natural, .up: .sharps(count: 2)]
             }
         }
 
         /// Category for pitch classes `3`, and `10`.
         struct Three: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .flat, .up: .sharp(count: 1)]
+                return [.down: .flat, .neutral: .flat, .up: .sharp]
             }
         }
 
         /// Category for pitch classes `4`, and `11`.
         struct Four: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .natural, .up: .sharp(count: 2)]
+                return [.down: .flat, .neutral: .natural, .up: .sharps(count: 2)]
             }
         }
 
         /// Category for pitch class `8`.
         struct Five: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat, .up: .sharp(count: 1)]
+                return [.down: .flat, .up: .sharp]
             }
         }
 
