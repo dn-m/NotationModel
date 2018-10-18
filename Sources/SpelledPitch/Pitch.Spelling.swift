@@ -17,8 +17,6 @@ extension Pitch {
 
         /// `Pitch.Class` represented by this `Pitch.Spelling` value.
         public var pitchClass: Pitch.Class {
-            print("letterName: \(letterName); ln pc: \(letterName.pitchClass)")
-            print("modifier.adjustment: \(modifier.adjustment)")
             let noteNumber = NoteNumber(letterName.pitchClass + modifier.adjustment)
             return Pitch.Class(noteNumber)
         }
