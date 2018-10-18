@@ -28,14 +28,14 @@ class PitchSpellingTendencyTests: XCTestCase {
     // MARK: - Category "Two"
 
     func testPCNineDownDown_BDoubleFlat() {
-        let expected = Pitch.Spelling<EDO12>(.b, .flat(2))
+        let expected = Pitch.Spelling<EDO12>(.b, .flat(count: 1)))
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 9, tendencies: .init(.down,.down)), expected)
     }
 
     // MARK: - Category "Three"
 
     func testPCThreeUpDown_EFlat() {
-        let expected = Pitch.Spelling<EDO12>(.e, .flat(1))
+        let expected = Pitch.Spelling<EDO12>(.e, .flat(count: 1)))
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 3, tendencies: .init(.up,.down)), expected)
     }
 

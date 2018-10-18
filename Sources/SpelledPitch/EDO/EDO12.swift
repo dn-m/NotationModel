@@ -16,7 +16,8 @@ public enum EDO12: EDO {
     /// `EDO12` `TuningSystem`.
     public enum Modifier: PitchSpellingModifier {
 
-//        static let flat: Modifier = .flat(1)
+//        static let flat: Modifier = .flat(count: 1)
+//        static let sharp: Modifier = .sharp(count: 1)
 
         // MARK: - Cases
 
@@ -27,7 +28,7 @@ public enum EDO12: EDO {
         case sharp(count: Int)
 
         /// Flat modifier with degree of sharpness (e.g., triple flat)
-        case flat(Int)
+        case flat(count: Int)
 
         // MARK: - Static Properties
 
@@ -69,20 +70,20 @@ public struct LineOfFifths {
 
     // FIXME: Implement with an `OrderedSet`.
     private static let positionByPitchSpelling: [Pitch.Spelling<EDO12>: Position] = [
-        Pitch.Spelling(.f, .flat(2)): -14,
-        Pitch.Spelling(.c, .flat(2)): -13,
-        Pitch.Spelling(.g, .flat(2)): -12,
-        Pitch.Spelling(.d, .flat(2)): -11,
-        Pitch.Spelling(.a, .flat(2)): -10,
-        Pitch.Spelling(.e, .flat(2)): -9,
-        Pitch.Spelling(.b, .flat(2)): -8,
-        Pitch.Spelling(.f, .flat(1)): -7,
-        Pitch.Spelling(.c, .flat(1)): -6,
-        Pitch.Spelling(.g, .flat(1)): -5,
-        Pitch.Spelling(.d, .flat(1)): -4,
-        Pitch.Spelling(.a, .flat(1)): -3,
-        Pitch.Spelling(.e, .flat(1)): -2,
-        Pitch.Spelling(.b, .flat(1)): -1,
+        Pitch.Spelling(.f, .flat(count: 1)): -14,
+        Pitch.Spelling(.c, .flat(count: 1)): -13,
+        Pitch.Spelling(.g, .flat(count: 1)): -12,
+        Pitch.Spelling(.d, .flat(count: 1)): -11,
+        Pitch.Spelling(.a, .flat(count: 1)): -10,
+        Pitch.Spelling(.e, .flat(count: 1)): -9,
+        Pitch.Spelling(.b, .flat(count: 1)): -8,
+        Pitch.Spelling(.f, .flat(count: 1)): -7,
+        Pitch.Spelling(.c, .flat(count: 1)): -6,
+        Pitch.Spelling(.g, .flat(count: 1)): -5,
+        Pitch.Spelling(.d, .flat(count: 1)): -4,
+        Pitch.Spelling(.a, .flat(count: 1)): -3,
+        Pitch.Spelling(.e, .flat(count: 1)): -2,
+        Pitch.Spelling(.b, .flat(count: 1)): -1,
         Pitch.Spelling(.f, .sharp(count: 1)): 1,
         Pitch.Spelling(.c, .sharp(count: 1)): 2,
         Pitch.Spelling(.g, .sharp(count: 1)): 3,
