@@ -6,12 +6,6 @@
 //
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
-
 import Pitch
 
 /// A `Pitch.Spelling` in a specific octave.
