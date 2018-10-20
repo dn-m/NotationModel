@@ -13,6 +13,12 @@ struct Spelling {
     /// The modification of a `Pitch.Spelling` from the given `LetterName`.
     struct Modifier {
 
+        static let doubleFlat = Modifier(.doubleFlat)
+        static let flat = Modifier(.flat)
+        static let natural = Modifier(.natural)
+        static let sharp = Modifier(.sharp)
+        static let doubleSharp = Modifier(.doubleSharp)
+
         // MARK: - Nested Types
 
         /// Base modifier (natural, sharps, flats).
