@@ -14,9 +14,13 @@ struct Spelling {
     struct Modifier {
 
         static let doubleFlat = Modifier(.doubleFlat)
+        static let threeQuarterFlat = Modifier(.flat, [.undecimal(-1)])
         static let flat = Modifier(.flat)
+        static let quarterFlat = Modifier(.natural, [.undecimal(-1)])
         static let natural = Modifier(.natural)
+        static let quarterSharp = Modifier(.natural, [.undecimal(1)])
         static let sharp = Modifier(.sharp)
+        static let threeQuarterSharp = Modifier(.sharp, [.undecimal(1)])
         static let doubleSharp = Modifier(.doubleSharp)
 
         // MARK: - Nested Types
