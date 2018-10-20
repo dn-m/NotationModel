@@ -63,6 +63,9 @@ struct Spelling {
             /// Alteration by one tridecimal third tone (27/26). +/- 65.3 cents.
             case tridecimal(Int)
 
+            /// Alteration by the given amount of cents.
+            case cents(Double)
+
             /// - Returns: The amount of adjustment in semitones.
             var adjustment: Double {
                 switch self {
@@ -70,6 +73,7 @@ struct Spelling {
                 case .septimal(let amount): return 0.273 * Double(amount)
                 case .undecimal(let amount): return 0.535 * Double(amount)
                 case .tridecimal(let amount): return 0.653 * Double(amount)
+                case .cents(let amount): return amount / 100
                 }
             }
         }
