@@ -47,6 +47,8 @@ struct Spelling {
         }
 
         /// Alteration to the base pythagorean modifier.
+        ///
+        /// - TODO: Prime
         enum Alteration {
 
             /// Alteration by one syntonic comma (81/80). +/- 21.5 cents.
@@ -55,7 +57,7 @@ struct Spelling {
             /// Alteration by one septimal comma (64/63). +/- 27.3 cents.
             case septimal(Int)
 
-            /// Alteration by one undecimal quarter-tone (33/32). +/- 53.3 cents.
+            /// Alteration by one undecimal quarter tone (33/32). +/- 53.3 cents.
             case undecimal(Int)
 
             /// Alteration by one tridecimal third tone (27/26). +/- 65.3 cents.
