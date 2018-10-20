@@ -39,26 +39,6 @@ extension SpelledPitch {
     }
 }
 
-//extension SpelledPitch {
-//
-//    /// - Returns: The `Pitch` value represented by this `SpelledPitch`.
-//    public var pitch: Pitch {
-//        let octaves = Pitch(NoteNumber(value: Double((octave + 1) * 12)))
-//        return Pitch(spelling.pitchClass) + octaves
-//    }
-//}
-//
-//extension SpelledPitch {
-//
-//    /// - Returns: The `Pitch` value represented by this `SpelledPitch`.
-//    public var pitch: Pitch {
-//        let pitchClass = spelling.pitchClass
-//        let octave = self.octave + reachAroundAdjustment(for: spelling)
-//        let octaveDisplacement = Double(octave + 1) * 12
-//        return Pitch(NoteNumber(value: pitchClass.value.value + octaveDisplacement))
-//    }
-//}
-
 extension SpelledPitch {
 
     // MARK: - Computed Properties
@@ -97,54 +77,3 @@ func reachAroundAdjustment (for spelling: Pitch.Spelling) -> Int {
     if spelling.letterName == .b && spelling.modifier.adjustment >= 1 { return 1 }
     return 0
 }
-
-//extension SpelledPitch {
-//
-//    // MARK: - EDO12
-//
-//    /// Creates a `SpelledPitch` in the `EDO12` `TuningSystem` with a `SpelledPitch` from the
-//    /// `EDO24` `TuningSystem`.
-//    public init(_ edo24: SpelledPitch<EDO24>) {
-//        self.init(spelling: Pitch.Spelling(edo24.spelling), octave: edo24.octave)
-//    }
-//
-//    /// Creates a `SpelledPitch` in the `EDO12` `TuningSystem` with a `SpelledPitch` from the
-//    /// `EDO48` `TuningSystem`.
-//    public init(_ edo48: SpelledPitch<EDO48>) {
-//        self.init(spelling: Pitch.Spelling(edo48.spelling), octave: edo48.octave)
-//    }
-//}
-//
-//extension SpelledPitch where Tuning == EDO24 {
-//
-//    // MARK: - EDO24
-//
-//    /// Creates a `SpelledPitch` in the `EDO24` `TuningSystem` with a `SpelledPitch` from the
-//    /// `EDO12` `TuningSystem`.
-//    public init(_ edo12: SpelledPitch<EDO12>) {
-//        self.init(spelling: Pitch.Spelling(edo12.spelling), octave: edo12.octave)
-//    }
-//
-//    /// Creates a `SpelledPitch` in the `EDO24` `TuningSystem` with a `SpelledPitch` from the
-//    /// `EDO48` `TuningSystem`.
-//    public init(_ edo48: SpelledPitch<EDO48>) {
-//        self.init(spelling: Pitch.Spelling(edo48.spelling), octave: edo48.octave)
-//    }
-//}
-//
-//extension SpelledPitch where Tuning == EDO48 {
-//
-//    // MARK: - EDO48
-//
-//    /// Creates a `SpelledPitch` in the `EDO48` `TuningSystem` with a `SpelledPitch` from the
-//    /// `EDO12` `TuningSystem`.
-//    public init(_ edo12: SpelledPitch<EDO12>) {
-//        self.init(spelling: Pitch.Spelling(edo12.spelling), octave: edo12.octave)
-//    }
-//
-//    /// Creates a `SpelledPitch` in the `EDO24` `TuningSystem` with a `SpelledPitch` from the
-//    /// `EDO12` `TuningSystem`.
-//    public init(_ edo24: SpelledPitch<EDO24>) {
-//        self.init(spelling: Pitch.Spelling(edo24.spelling), octave: edo24.octave)
-//    }
-//}
