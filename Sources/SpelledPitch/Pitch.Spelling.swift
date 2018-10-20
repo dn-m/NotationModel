@@ -48,7 +48,7 @@ struct Spelling {
 
         /// Alteration to the base pythagorean modifier.
         ///
-        /// - TODO: Prime
+        /// - TODO: Prime intervals in limits 16-64.
         enum Alteration {
 
             /// Alteration by one syntonic comma (81/80). +/- 21.5 cents.
