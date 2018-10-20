@@ -112,6 +112,29 @@ struct Spelling {
             self.alterations = alterations
         }
     }
+
+    // MARK: - Computed Properties
+
+    /// `Pitch.Class` represented by this `Pitch.Spelling` value.
+    public var pitchClass: Pitch.Class {
+        return Pitch.Class(letterName.pitchClass + modifier.adjustment)
+    }
+
+    // MARK: - Instance Properties
+
+    /// `LetterName` of a `Pitch.Spelling`.
+    let letterName: LetterName
+
+    /// `Modifier` of a `Pitch.Spelling`.
+    let modifier: Modifier
+
+    // MARK: - Initializers
+
+    /// Creates a Pitch.Spelling with the given `letterName` and the given `modifier`.
+    init(_ letterName: LetterName, modifier: Modifier) {
+        self.letterName = letterName
+        self.modifier = modifier
+    }
 }
 
 extension Pitch {
