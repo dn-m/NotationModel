@@ -49,7 +49,7 @@ struct PitchSpeller {
     // MARK: - Instance Properties
 
     /// The omnipresent, tie-breaking `Pitch.Spelling` value.
-    let parsimonyPivot: Pitch.Spelling<EDO12>
+    let parsimonyPivot: Pitch.Spelling
 
     /// The unspelled `Pitch` values to be spelled.
     let pitches: [Pitch]
@@ -64,7 +64,7 @@ struct PitchSpeller {
     // MARK: - Initializers
 
     /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
-    init(pitches: [Pitch], parsimonyPivot: Pitch.Spelling<EDO12> = .init(.d)) {
+    init(pitches: [Pitch], parsimonyPivot: Pitch.Spelling = .init(.d)) {
         self.pitches = pitches
         self.parsimonyPivot = parsimonyPivot
         self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
@@ -73,7 +73,7 @@ struct PitchSpeller {
 
     /// - Returns: An array of `SpelledPitch` values in the order in which the original
     /// unspelled `Pitch` values are given.
-    func spell() -> [SpelledPitch<EDO12>] {
+    func spell() -> [SpelledPitch] {
 
         var assignedNodes: [AssignedNode] {
             let (sourceSide, sinkSide) = flowNetwork.minimumCut
@@ -89,11 +89,11 @@ struct PitchSpeller {
             .map(spellPitch)
     }
 
-    private func spellPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch<EDO12> {
+    private func spellPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch {
         let pitch = self.pitch(node: up.index)
         let tendencies = TendencyPair((up.assignment, down.assignment))
-        let spelling = Pitch.Spelling<EDO12>(pitchClass: pitch.class, tendencies: tendencies)!
-        return SpelledPitch(try! pitch.spelled(with: Pitch.Spelling<EDO48>(spelling)))
+        let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
+        return try! pitch.spelled(with: spelling)
     }
 
     /// - Returns: The `Pitch` value for the given `node` value.

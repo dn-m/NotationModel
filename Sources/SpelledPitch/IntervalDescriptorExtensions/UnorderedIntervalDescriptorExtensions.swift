@@ -13,7 +13,7 @@ import Pitch
 extension UnorderedIntervalDescriptor {
 
     /// Creates a `UnorderedSpelledInterval` with two `SpelledPitch` values.
-    public init(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) {
+    public init(_ a: Pitch.Spelling, _ b: Pitch.Spelling) {
         let (a,b) = ordered(a,b)
         let (interval, steps) = intervalAndSteps(a,b)
         self.init(interval: interval, steps: steps)
@@ -22,25 +22,25 @@ extension UnorderedIntervalDescriptor {
 
 /// - Returns: The two `Pitch.Spelling` values such that the difference between `b` and `a` is less
 /// that the difference between `a` and `b`.
-private func ordered (_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>)
-    -> (Pitch.Spelling<EDO12>,Pitch.Spelling<EDO12>)
+private func ordered (_ a: Pitch.Spelling, _ b: Pitch.Spelling)
+    -> (Pitch.Spelling,Pitch.Spelling)
 {
     let (a,b,_) = swapped(a, b) { mod(steps(a,b), 7) > mod(steps(b,a), 7) }
     return (a,b)
 }
 
 /// - Returns: The steps and interval between the two given `Pitch.Spelling` values.
-private func intervalAndSteps(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> (Double,Int) {
+private func intervalAndSteps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> (Double,Int) {
     return (interval(a,b), steps(a,b))
 }
 
 /// - Returns: The amount of semitones between the two given `Pitch.Spelling` values.
-private func interval(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> Double {
+private func interval(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Double {
     return OrderedInterval(a.pitchClass,b.pitchClass).value.value
 }
 
 /// - Returns: The amount of steps between the two given `Pitch.Spelling` values.
-private func steps(_ a: Pitch.Spelling<EDO12>, _ b: Pitch.Spelling<EDO12>) -> Int {
+private func steps(_ a: Pitch.Spelling, _ b: Pitch.Spelling) -> Int {
     return mod(b.letterName.steps - a.letterName.steps, 7)
 }
 

@@ -10,15 +10,15 @@ import Algorithms
 import Pitch
 
 /// Dyad of `SpelledPitch` values.
-public struct SpelledDyad <Tuning: TuningSystem> {
+public struct SpelledDyad {
     
     // MARK: - Instance Properties
     
     /// Lower of the two `SpelledPitch` values.
-    public let lower: SpelledPitch<Tuning>
+    public let lower: SpelledPitch
     
     /// Higher of the two `SpelledPitch` values.
-    public let higher: SpelledPitch<Tuning>
+    public let higher: SpelledPitch
 }
 
 extension SpelledDyad {
@@ -26,14 +26,14 @@ extension SpelledDyad {
     // MARK: - Initializers
 
     /// Creates a `SpelledDyad` with two `SpelledPitch` values.
-    public init(_ lower: SpelledPitch<Tuning>, _ higher: SpelledPitch<Tuning>) {
+    public init(_ lower: SpelledPitch, _ higher: SpelledPitch) {
         let (lower, higher) = ordered(lower, higher)
         self.lower = lower
         self.higher = higher
     }
 }
 
-extension SpelledDyad where Tuning == EDO12 {
+extension SpelledDyad {
 
     // MARK: - Computed Properties
 
@@ -50,5 +50,5 @@ extension SpelledDyad where Tuning == EDO12 {
     }
 }
 
-extension SpelledDyad: Equatable where Tuning.Modifier: Equatable { }
-extension SpelledDyad: Hashable where Tuning.Modifier: Hashable { }
+extension SpelledDyad: Equatable { }
+extension SpelledDyad: Hashable { }

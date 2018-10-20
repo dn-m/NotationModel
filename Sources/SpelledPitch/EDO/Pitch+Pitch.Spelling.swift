@@ -18,17 +18,17 @@ extension Pitch {
 
     /// Things that can go wrong while applying a `Pitch.Spelling` to a `Pitch`.
     public enum Error: Swift.Error {
-        case incompatibleSpelling(Pitch.Spelling<EDO48>,Pitch)
+        case incompatibleSpelling(Pitch.Spelling,Pitch)
     }
 
     /// All `Pitch.Spelling` structures available for this `Pitch`.
-    public var spellings: [Pitch.Spelling<EDO48>] {
+    public var spellings: [Pitch.Spelling] {
         return self.class.spellings
     }
 
     /// The first available `Pitch.Spelling` for this `Pitch`, if present. Otherwise `nil`.
-    public var defaultSpelling: Pitch.Spelling<EDO48> {
-        return EDO48.defaultSpelling(forPitchClass: self.class)!
+    public var defaultSpelling: Pitch.Spelling {
+        return Pitch.defaultSpelling(forPitchClass: self.class)!
     }
 
     /// - Returns: `SpelledPitch` with the given `Pitch.Spelling`,
@@ -37,7 +37,7 @@ extension Pitch {
     /// - Throws: `Pitch.Spelling.Error.incompatibleSpelling` if the given `spelling` is not
     /// appropriate for this `Pitch`.
     ///
-    public func spelled(with spelling: Pitch.Spelling<EDO48>) throws -> SpelledPitch<EDO48> {
+    public func spelled(with spelling: Pitch.Spelling) throws -> SpelledPitch {
         guard spelling.pitchClass == self.class else {
             throw Error.incompatibleSpelling(spelling, self)
         }
@@ -47,7 +47,7 @@ extension Pitch {
     }
 
     /// - Returns: `SpelledPitch` with the default spelling for this `Pitch`.
-    public var spelledWithDefaultSpelling: SpelledPitch<EDO48> {
+    public var spelledWithDefaultSpelling: SpelledPitch {
         return try! spelled(with: defaultSpelling)
     }
 }

@@ -19,7 +19,7 @@ public struct StaffPointModel: PointModel {
     public typealias HorizontalAxis = Clef
     public typealias VerticalAxis = Clef
     
-    public typealias Entity = SpelledPitch<EDO48>
+    public typealias Entity = SpelledPitch
     public typealias VerticalCoordinate = StaffSlot
     public typealias HorizontalCoordinate = Double
 
