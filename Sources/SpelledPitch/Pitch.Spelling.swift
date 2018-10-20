@@ -143,7 +143,8 @@ extension Pitch {
         public init(
             _ letterName: LetterName,
             _ base: Modifier.Pythagorean = .natural,
-            _ alterations: Modifier.Alteration...)
+            _ alterations: Modifier.Alteration...
+        )
         {
             self.letterName = letterName
             self.modifier = Modifier(base, alterations)
