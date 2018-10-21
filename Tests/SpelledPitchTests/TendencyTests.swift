@@ -52,4 +52,13 @@ class PitchSpellingTendencyTests: XCTestCase {
         let expected = Pitch.Spelling(.g, .sharp)
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 8, tendencies: .init(.up,.down)), expected)
     }
+
+    // MARK: - Comparable
+
+    func testTendencyComparable() {
+        let a = Tendency.down
+        let b = Tendency.up
+        XCTAssertLessThan(a,b)
+        XCTAssertGreaterThan(b,a)
+    }
 }
