@@ -20,7 +20,7 @@ class PitchSpellerTests: XCTestCase {
     }
 
     func testSpellCF() {
-        let pitchSpeller = PitchSpeller(pitches: [60,65])
+        let pitchSpeller = PitchSpeller(pitches: [0:60,1:65])
         let _ = pitchSpeller.spell()
         // FIXME: Add assertion
     }

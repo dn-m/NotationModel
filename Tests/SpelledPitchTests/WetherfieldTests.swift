@@ -13,12 +13,12 @@ import Pitch
 class WetherfieldTests: XCTestCase {
 
     func testInitMonadNodeCount() {
-        let speller = PitchSpeller(pitches: [60], parsimonyPivot: Pitch.Spelling(.d))
+        let speller = PitchSpeller(pitches: [0:60], parsimonyPivot: Pitch.Spelling(.d))
         XCTAssertEqual(speller.flowNetwork.internalNodes.count, 2)
     }
 
     func testInitDyadNodeCount() {
-        let speller = PitchSpeller(pitches: [60,61], parsimonyPivot: Pitch.Spelling(.d))
+        let speller = PitchSpeller(pitches: [0:60,1:61], parsimonyPivot: Pitch.Spelling(.d))
         XCTAssertEqual(speller.flowNetwork.internalNodes.count, 4)
     }
 }
