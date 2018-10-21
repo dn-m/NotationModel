@@ -14,7 +14,7 @@ import SpelledPitch
 class ClefTests: XCTestCase {
 
     func testStaffSlotMiddleC() {
-        let middleC = SpelledPitch<EDO48>.middleC
+        let middleC = SpelledPitch.middleC
         XCTAssertEqual(slot(.bass, middleC), 6)
         XCTAssertEqual(slot(.tenor, middleC), 2)
         XCTAssertEqual(slot(.alto, middleC), 0)
@@ -22,7 +22,7 @@ class ClefTests: XCTestCase {
     }
     
     func testStaffSlotEFlatAboveMiddleC() {
-        let eFlat = SpelledPitch<EDO48>(Pitch.Spelling(.e, .flat(1)), 4)
+        let eFlat = SpelledPitch(Pitch.Spelling(.e, .flat), 4)
         XCTAssertEqual(slot(.bass, eFlat), 8)
         XCTAssertEqual(slot(.tenor, eFlat), 4)
         XCTAssertEqual(slot(.alto, eFlat), 2)
@@ -30,7 +30,7 @@ class ClefTests: XCTestCase {
     }
 
     func testStaffSlotASharpTwoOctavesBelowMiddleC() {
-        let aSharp = SpelledPitch<EDO48>(Pitch.Spelling(.a, .sharp(1)), 2)
+        let aSharp = SpelledPitch(Pitch.Spelling(.a, .sharp), 2)
         XCTAssertEqual(slot(.bass, aSharp), -3)
         XCTAssertEqual(slot(.tenor, aSharp), -7)
         XCTAssertEqual(slot(.alto, aSharp), -9)
@@ -38,7 +38,7 @@ class ClefTests: XCTestCase {
     }
 
     func testStaffSlotDSharpTwoOctavesAboveMiddleC() {
-        let dSharp = SpelledPitch<EDO48>(Pitch.Spelling(.d, .sharp(1)), 6)
+        let dSharp = SpelledPitch(Pitch.Spelling(.d, .sharp), 6)
         XCTAssertEqual(slot(.bass, dSharp), 21)
         XCTAssertEqual(slot(.tenor, dSharp), 17)
         XCTAssertEqual(slot(.alto, dSharp), 15)

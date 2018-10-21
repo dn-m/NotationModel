@@ -17,7 +17,7 @@ public struct StaffModel: VerticalPlotModel {
     public typealias Point = StaffPointModel
     public typealias VerticalCoordinate = StaffSlot
     public typealias HorizontalCoordinate = Double
-    public typealias Entity = SpelledPitch<EDO48>
+    public typealias Entity = SpelledPitch
     
     public let verticalAxis: Clef
     public let horizontalAxis = DefaultAxis<Double>()

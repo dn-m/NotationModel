@@ -6,19 +6,20 @@
 //
 //
 
+import Pitch
 import SpelledPitch
 
 public struct StaffRepresentablePitch {
     
-    public let spelledPitch: SpelledPitch<EDO48>
+    public let spelledPitch: SpelledPitch
     public let notehead: Notehead
-    public let accidental: Accidental
+    public let accidental: Pitch.Spelling.Modifier
     
     /// Creates a `StaffRepresentablePitch` with a `SpelledPitch` and `Notehead`.
-    public init(_ spelledPitch: SpelledPitch<EDO48>, _ notehead: Notehead = .ord) {
+    public init(_ spelledPitch: SpelledPitch, _ notehead: Notehead = .ord) {
         self.spelledPitch = spelledPitch
         self.notehead = notehead
-        self.accidental = Accidental(spelling: spelledPitch.spelling)!
+        self.accidental = spelledPitch.spelling.modifier
     }
 }
 

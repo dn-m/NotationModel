@@ -13,7 +13,7 @@ import Pitch
 extension OrderedIntervalDescriptor {
 
     /// Creates an `OrderedIntervalDescriptor` with two `SpelledPitch` values.
-    public init(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) {
+    public init(_ a: SpelledPitch, _ b: SpelledPitch) {
         let (a,b,didSwap) = swapped(a,b) { a > b }
         let (interval,steps) = intervalAndSteps(a,b)
         let (quality,ordinal) = OrderedIntervalDescriptor.qualityAndOrdinal(interval: interval, steps: steps)
@@ -62,14 +62,14 @@ extension OrderedIntervalDescriptor.Ordinal: SpelledPitchConvertingIntervalOrdin
     }
 }
 
-private func intervalAndSteps(_ a: SpelledPitch<EDO12>,  _ b: SpelledPitch<EDO12>) -> (Double,Int) {
+private func intervalAndSteps(_ a: SpelledPitch,  _ b: SpelledPitch) -> (Double,Int) {
     return ((interval(a,b), steps(a,b)))
 }
 
-private func interval(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) -> Double {
+private func interval(_ a: SpelledPitch, _ b: SpelledPitch) -> Double {
     return (b.pitch - a.pitch).value.value
 }
 
-private func steps(_ a: SpelledPitch<EDO12>, _ b: SpelledPitch<EDO12>) -> Int {
+private func steps(_ a: SpelledPitch, _ b: SpelledPitch) -> Int {
     return mod(b.spelling.letterName.steps - a.spelling.letterName.steps, 7)
 }

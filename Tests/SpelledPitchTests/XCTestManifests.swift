@@ -59,10 +59,7 @@ extension PitchSpellingTendencyTests {
 
 extension PitchSpellingTests {
     static let __allTests = [
-        ("testGThreeQuarterFlatUpFivePointSeventyFive", testGThreeQuarterFlatUpFivePointSeventyFive),
         ("testInitJustLetterName", testInitJustLetterName),
-        ("testPitchClassCQuarterSharpDownZeroPointTwoFive", testPitchClassCQuarterSharpDownZeroPointTwoFive),
-        ("testPitchClassCQuarterSharpUpZeroPointSevenFive", testPitchClassCQuarterSharpUpZeroPointSevenFive),
         ("testPitchClassCQuarterSharpZeroPointFive", testPitchClassCQuarterSharpZeroPointFive),
         ("testPitchClassCSharpOne", testPitchClassCSharpOne),
         ("testPitchClassCZero", testPitchClassCZero),
@@ -98,7 +95,7 @@ extension SpelledDyadTests {
 extension SpelledPitchTests {
     static let __allTests = [
         ("testBQuarterSharp", testBQuarterSharp),
-        ("testBSharpDown", testBSharpDown),
+        ("testBSharpPtolemaicDown", testBSharpPtolemaicDown),
         ("testComparableDifferentOctave", testComparableDifferentOctave),
         ("testComparableMinorSixth", testComparableMinorSixth),
         ("testComparableSameLetter", testComparableSameLetter),

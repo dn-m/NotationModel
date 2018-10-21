@@ -10,9 +10,9 @@ import Pitch
 
 /// Interface for the six pitch spelling categories.
 protocol PitchSpellingCategoryProtocol {
-    typealias ModifierMap = [ModifierDirection: EDO12.Modifier]
+    typealias ModifierMap = [ModifierDirection: Pitch.Spelling.Modifier]
     /// The available `QuarterStepModifier` value by the given `ModifierDirection`.
-    static var modifiers: [ModifierDirection: EDO12.Modifier] { get }
+    static var modifiers: ModifierMap { get }
 }
 
 extension Pitch.Spelling {
@@ -23,42 +23,42 @@ extension Pitch.Spelling {
         /// Category for pitch classes `0` and `5`.
         struct Zero: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat(2), .neutral: .natural, .up: .sharp(1)]
+                return [.down: .flat, .neutral: .natural, .up: .sharp]
             }
         }
 
         /// Category for pitch classes `1` and `6`.
         struct One: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat(1), .neutral: .sharp(1), .up: .sharp(2)]
+                return [.down: .flat, .neutral: .sharp, .up: .doubleSharp]
             }
         }
 
         /// Category for pitch classes `2`, `7`, and `9`.
         struct Two: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat(2), .neutral: .natural, .up: .sharp(2)]
+                return [.down: .flat, .neutral: .natural, .up: .doubleSharp]
             }
         }
 
         /// Category for pitch classes `3`, and `10`.
         struct Three: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat(2), .neutral: .flat(1), .up: .sharp(1)]
+                return [.down: .flat, .neutral: .flat, .up: .sharp]
             }
         }
 
         /// Category for pitch classes `4`, and `11`.
         struct Four: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat(1), .neutral: .natural, .up: .sharp(2)]
+                return [.down: .flat, .neutral: .natural, .up: .doubleSharp]
             }
         }
 
         /// Category for pitch class `8`.
         struct Five: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat(1), .up: .sharp(1)]
+                return [.down: .flat, .up: .sharp]
             }
         }
 
@@ -78,7 +78,7 @@ extension Pitch.Spelling {
     }
 }
 
-extension Pitch.Spelling where Tuning == EDO12 {
+extension Pitch.Spelling {
 
     /// - Returns: The `Pitch.Spelling` value for the given `pitchClass` with the given
     /// `modifierDirection`, if the `pitchClass` is an integral value, and if the
