@@ -24,12 +24,12 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testNeutralLetterName() {
-        XCTAssertEqual(LetterName.neutral(for: 0), .c)
-        XCTAssertEqual(LetterName.neutral(for: 5), .f)
-        XCTAssertEqual(LetterName.neutral(for: 9), .a)
-        XCTAssertEqual(LetterName.neutral(for: 1), .c)
-        XCTAssertEqual(LetterName.neutral(for: 10), .b)
-        XCTAssertNil(LetterName.neutral(for: 8))
+        XCTAssertEqual(Pitch.Spelling.neutralLetterName(for: 0), .c)
+        XCTAssertEqual(Pitch.Spelling.neutralLetterName(for: 5), .f)
+        XCTAssertEqual(Pitch.Spelling.neutralLetterName(for: 9), .a)
+        XCTAssertEqual(Pitch.Spelling.neutralLetterName(for: 1), .c)
+        XCTAssertEqual(Pitch.Spelling.neutralLetterName(for: 10), .b)
+        XCTAssertNil(Pitch.Spelling.neutralLetterName(for: 8))
     }
 
     // MARK: - Category "Zero"
