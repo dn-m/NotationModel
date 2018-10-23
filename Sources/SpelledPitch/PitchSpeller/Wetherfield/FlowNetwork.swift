@@ -45,7 +45,7 @@ extension WeightedDirectedGraph where Weight: Comparable {
     /// value).
     mutating func removeEdgeIfFlowless(_ edge: Edge) {
         if weight(edge) == 0 {
-            removeEdge(edge)
+            remove(edge)
         }
     }
 

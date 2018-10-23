@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Algebra
 import DataStructures
 @testable import SpelledPitch
 
@@ -37,9 +38,8 @@ class FlowNetworkTests: XCTestCase {
         let cutValue = minCut.0.lazy.map { startNode in
             return diGraph.neighbors(of: startNode, in: minCut.1).lazy
                 .compactMap { diGraph.weight(from: startNode, to: $0) }
-                .reduce(0,+)
-            }
-            .reduce(0,+)
+                .sum
+            }.sum
         XCTAssertLessThanOrEqual(cutValue, solvedFlow + 1E-5)
         XCTAssertGreaterThanOrEqual(cutValue + 1E-5, solvedFlow)
     }

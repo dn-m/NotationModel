@@ -12,7 +12,7 @@ extension IntervalQuality {
         let (diminished, augmented) = (-platonicThreshold,platonicThreshold)
         switch distance {
         case diminished - 4:
-            self =  .extended(.init(.quintuple, .diminished))
+            self = .extended(.init(.quintuple, .diminished))
         case diminished - 3:
             self = .extended(.init(.quadruple, .diminished))
         case diminished - 2:

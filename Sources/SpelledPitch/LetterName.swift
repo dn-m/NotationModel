@@ -67,6 +67,20 @@ extension LetterName {
 
     // MARK: - Initializers
 
+    /// Creates a `LetterName` with the amount of diatonic steps from `c`.
+    public init(steps: Int) {
+        switch steps % 7 {
+        case 0: self = .c
+        case 1: self = .d
+        case 2: self = .e
+        case 3: self = .f
+        case 4: self = .g
+        case 5: self = .a
+        case 6: self = .b
+        default: fatalError("Impossible")
+        }
+    }
+
     /// Creates a `LetterName` with a given `string` value. Uppercase and lowercase values are
     /// accepted here.
     public init?(string: String) {
@@ -80,5 +94,15 @@ extension LetterName {
         case "g", "G": self = .g
         default: return nil
         }
+    }
+}
+
+extension LetterName {
+
+    // MARK: - Instance Properties
+
+    /// - Returns: The `LetterName` value displaced by the given amount of `steps`.
+    public func displaced(by steps: Int) -> LetterName {
+        return .init(steps: self.steps + steps)
     }
 }

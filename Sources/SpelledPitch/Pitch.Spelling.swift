@@ -160,7 +160,6 @@ extension Pitch.Spelling {
     public static let middleC = Pitch.Spelling(.c, .natural)
 }
 
-
 extension Pitch.Spelling: Comparable {
 
     // MARK: - Comparable
