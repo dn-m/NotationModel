@@ -115,17 +115,24 @@ extension SpelledPitch {
         let octave = self.octave + octaveAdjustment(octaveDelta, for: originalInterval.direction)
         return SpelledPitch(Pitch.Spelling(letterName, modifier), octave)
     }
+
+    /// - Returns: A `SpelledPitch` which is displaced by the given `interval`.
+    public func displaced(by interval: CompoundIntervalDescriptor) -> SpelledPitch {
+        let result = self.displaced(by: interval.interval)
+        let octaveDelta = interval.interval.direction.rawValue * interval.octaveDisplacement
+        return SpelledPitch(result.spelling, result.octave + octaveDelta)
+    }
 }
 
 /// - Returns: A `SpelledPitch` which resultant from displacing the left-hand value by the right-
 /// hand value.
-public func + (lhs: SpelledPitch, rhs: OrderedIntervalDescriptor) -> SpelledPitch {
+public func + (lhs: SpelledPitch, rhs: CompoundIntervalDescriptor) -> SpelledPitch {
     return lhs.displaced(by: rhs)
 }
 
 /// - Returns: A `SpelledPitch` which resultant from displacing the right-hand value by the left-
 /// hand value.
-public func + (lhs: OrderedIntervalDescriptor, rhs: SpelledPitch) -> SpelledPitch {
+public func + (lhs: CompoundIntervalDescriptor, rhs: SpelledPitch) -> SpelledPitch {
     return rhs.displaced(by: lhs)
 }
 
