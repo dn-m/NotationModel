@@ -5,7 +5,10 @@
 //  Created by James Bean on 5/22/18.
 //
 
+import DataStructures
 import Pitch
+
+typealias TendencyPair = OrderedPair<Tendency>
 
 /// One of two values encoded in a Wetherfield `FlowNetwork`. Each provides a tendency `up`, or
 /// `down` for the purposes of spelling an unspelled pitch in a given musical context.
@@ -17,24 +20,6 @@ enum Tendency: Int {
 extension Tendency: Comparable {
     static func < (lhs: Tendency, rhs: Tendency) -> Bool {
         return lhs.rawValue < rhs.rawValue
-    }
-}
-
-/// A pair of `Tendency` values. Wrapped up here for the purposes of `Equatable` and `Hashable`
-/// synthesizing.
-struct TendencyPair: Hashable {
-
-    let up: Tendency
-    let down: Tendency
-
-    init(_ up: Tendency, _ down: Tendency) {
-        self.up = up
-        self.down = down
-    }
-
-    init(_ tuple: (Tendency, Tendency)) {
-        self.up = tuple.0
-        self.down = tuple.1
     }
 }
 

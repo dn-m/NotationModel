@@ -108,7 +108,7 @@ struct PitchSpeller {
 
     private func spellPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch {
         let pitch = self.pitch(node: up.index)
-        let tendencies = TendencyPair((up.assignment, down.assignment))
+        let tendencies = TendencyPair(up.assignment, down.assignment)
         let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
         return try! pitch.spelled(with: spelling)
     }
