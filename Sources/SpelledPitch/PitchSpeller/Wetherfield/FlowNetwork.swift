@@ -11,13 +11,19 @@ import DataStructures
 /// - Each edge has a capacity for flow
 /// - A "source" node, which only emanates flow outward
 /// - A "sink" node, which only receives flow
-public struct FlowNetwork <Node: Hashable, Weight: Numeric & Comparable> {
+public struct FlowNetwork<Node: Hashable, Weight: Numeric & Comparable>:
+    WeightedGraphProtocol,
+    DirectedGraphProtocol
+{
+    public var weights: [Edge : Weight]
+    public var nodes: Set<Node>
+    public var source: Node
+    public var sink: Node
+}
 
-    // MARK: - Instance Properties
-
-    var directedGraph: WeightedDirectedGraph<Node,Weight>
-    var source: Node
-    var sink: Node
+extension FlowNetwork {
+    
+    public typealias Edge = OrderedPair<Node>
 }
 
 extension FlowNetwork {
@@ -26,16 +32,26 @@ extension FlowNetwork {
 
     /// Create a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink` nodes.
     init(_ directedGraph: WeightedDirectedGraph<Node,Weight>, source: Node, sink: Node) {
-        self.directedGraph = directedGraph
-        self.directedGraph.insert(source)
-        self.directedGraph.insert(sink)
+        self.nodes = directedGraph.nodes
+        self.weights = directedGraph.weights
         self.source = source
         self.sink = sink
     }
 }
 
-extension WeightedDirectedGraph where Weight: Comparable {
-    // TODO: Make throw
+extension FlowNetwork {
+
+    // MARK: - Instance Methods
+
+    func contains(_ node: Node) -> Bool {
+        return node == source || node == sink || nodes.contains(node)
+    }
+}
+
+extension FlowNetwork {
+
+    // MARK: - Mutating Methods
+
     mutating func reduceFlow(through edge: Edge, by amount: Weight) {
         updateEdge(edge) { weight in weight - amount }
     }
@@ -83,7 +99,7 @@ extension FlowNetwork {
     /// - Returns: All of the `Node` values contained herein which are neither the `source` nor
     /// the `sink`.
     public var internalNodes: [Node] {
-        return directedGraph.nodes.filter { $0 != source && $0 != sink }
+        return nodes.filter { $0 != source && $0 != sink }
     }
 
     /// - Returns: A minimum cut with nodes included on the `sink` side in case of a
@@ -101,7 +117,7 @@ extension FlowNetwork {
     var maximumFlowAndResidualNetwork: (flow: Weight, network: DirectedGraph<Node>) {
         // Make a copy of the directed representation of the network to be mutated by pushing flow
         // through it.
-        var residualNetwork = directedGraph
+        var residualNetwork = self
         // While an augmenting path (a path emanating directionally from the source node) can be
         // found, push flow through the path, mutating the residual network
         while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
@@ -110,14 +126,14 @@ extension FlowNetwork {
         // Compares the edges in the mutated residual network against the original directed
         // graph.
         let flow: Weight = {
-            let sourceEdges = directedGraph.neighbors(of: source).lazy
+            let sourceEdges = neighbors(of: source).lazy
                 .map { OrderedPair(self.source, $0) }
                 .partition(residualNetwork.contains)
             let edgesPresent = sourceEdges.whereTrue.lazy
-                .map { edge in self.directedGraph.weight(edge)! - residualNetwork.weight(edge)! }
+                .map { edge in self.weight(edge)! - residualNetwork.weight(edge)! }
                 .reduce(0,+)
             let edgesAbsent = sourceEdges.whereFalse.lazy
-                .compactMap(directedGraph.weight)
+                .compactMap(weight)
                 .reduce(0,+)
             return edgesPresent + edgesAbsent
         }()
@@ -130,7 +146,7 @@ extension Sequence {
     func filterComplement (_ predicate: (Element) -> Bool) -> [Element] {
         return filter { !predicate($0) }
     }
-    
+
     func partition (_ predicate: (Element) -> Bool) -> (whereFalse: [Element], whereTrue: [Element]) {
         return (filterComplement(predicate), filter(predicate))
     }

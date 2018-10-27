@@ -28,7 +28,7 @@ struct PitchSpeller {
             self.assignment = assignment
         }
     }
-    
+
     struct IndexedPitch: PitchSpellingNode {
         let index: Int
         let pitch: Pitch

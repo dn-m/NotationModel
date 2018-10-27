@@ -30,10 +30,10 @@ class FlowNetworkTests: XCTestCase {
         graph.insertEdge(from: "b", to: "t", weight: 4)
         return FlowNetwork(graph, source: "s", sink: "t")
     }
-
+    
     func assertDuality <Node> (_ flowNetwork: FlowNetwork<Node,Double>) {
         let minCut = flowNetwork.minimumCut
-        let diGraph = flowNetwork.directedGraph
+        let diGraph = flowNetwork
         let solvedFlow = flowNetwork.maximumFlowAndResidualNetwork.flow
         let cutValue = minCut.0.lazy.map { startNode in
             return diGraph.neighbors(of: startNode, in: minCut.1).lazy
@@ -43,7 +43,7 @@ class FlowNetworkTests: XCTestCase {
         XCTAssertLessThanOrEqual(cutValue, solvedFlow + 1E-5)
         XCTAssertGreaterThanOrEqual(cutValue + 1E-5, solvedFlow)
     }
-
+    
     func assertDisconnectedness <Node,Weight> (_ flowNetwork: FlowNetwork<Node,Weight>) {
         let minCut = flowNetwork.minimumCut
         let residualNetwork = flowNetwork.maximumFlowAndResidualNetwork.network
@@ -54,7 +54,7 @@ class FlowNetworkTests: XCTestCase {
             }
         }
     }
-
+    
     func testMinimumCut() {
         XCTAssertEqual(simpleFlowNetwork.minimumCut.0, ["s"])
         XCTAssertEqual(simpleFlowNetwork.minimumCut.1, ["a","b","t"])
@@ -77,10 +77,11 @@ class FlowNetworkTests: XCTestCase {
         var graph = WeightedDirectedGraph<String,Double>()
         graph.insert("a")
         let flowNetwork = FlowNetwork(graph, source: "s", sink: "t")
-        XCTAssert(flowNetwork.directedGraph.contains("s"))
-        XCTAssert(flowNetwork.directedGraph.contains("t"))
+        XCTAssert(flowNetwork.contains("s"))
+        XCTAssert(flowNetwork.contains("t"))
+        XCTAssert(flowNetwork.contains("a"))
     }
-
+    
     func testRandomNetwork() {
         let iterations = 1
         (0..<iterations).forEach { _ in
@@ -89,11 +90,11 @@ class FlowNetworkTests: XCTestCase {
                 source: 0,
                 sink: 1
             )
-            (2..<100).forEach { randomNetwork.directedGraph.insert($0) }
+            (2..<100).forEach { randomNetwork.insert($0) }
             (0..<100).forEach { source in
                 (0..<100).forEach { destination in
                     if Double.random(in: 0...1) < 0.3 {
-                        randomNetwork.directedGraph.insertEdge(
+                        randomNetwork.insertEdge(
                             from: source,
                             to: destination,
                             weight: Double.random(in: 0...1)
