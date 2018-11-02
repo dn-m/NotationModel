@@ -15,7 +15,6 @@ extension FlowNetworkTests {
     static let __allTests = [
         ("testFlowNetworkAbsorbsSourceSink", testFlowNetworkAbsorbsSourceSink),
         ("testMinimumCut", testMinimumCut),
-        ("testRandomNetwork", testRandomNetwork),
         ("testUnreachableMinimumCut", testUnreachableMinimumCut),
     ]
 }

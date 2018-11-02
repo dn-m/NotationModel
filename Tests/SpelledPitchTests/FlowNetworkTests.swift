@@ -81,29 +81,66 @@ class FlowNetworkTests: XCTestCase {
         XCTAssert(flowNetwork.contains("t"))
         XCTAssert(flowNetwork.contains("a"))
     }
-    
-    func testRandomNetwork() {
-        let iterations = 1
-        (0..<iterations).forEach { _ in
-            var randomNetwork = FlowNetwork<Int,Double>(
-                WeightedDirectedGraph<Int,Double>([0,1], [:]),
-                source: 0,
-                sink: 1
-            )
-            (2..<100).forEach { randomNetwork.insert($0) }
-            (0..<100).forEach { source in
-                (0..<100).forEach { destination in
-                    if Double.random(in: 0...1) < 0.3 {
-                        randomNetwork.insertEdge(
-                            from: source,
-                            to: destination,
-                            weight: Double.random(in: 0...1)
-                        )
-                    }
-                }
-            }
-            assertDuality(randomNetwork)
-            assertDisconnectedness(randomNetwork)
+
+    func testFlowNetworkMaskEmpty() {
+        let maskGraph = WeightedGraph<String,Int>()
+        let weightCarrying = WeightCarrying.build(from: maskGraph)
+        var flowNetwork = simpleFlowNetwork
+        flowNetwork.mask(weightCarrying)
+        XCTAssertEqual(flowNetwork.nodes, simpleFlowNetwork.nodes)
+        XCTAssert(flowNetwork.edges.isEmpty)
+    }
+
+    func testFlowNetworkMaskSquared() {
+        let weightCarrying = WeightCarrying.build(from: simpleFlowNetwork)
+        var flowNetwork = simpleFlowNetwork
+        flowNetwork.mask(weightCarrying)
+        for edge in flowNetwork.edges {
+            let expected = simpleFlowNetwork.weight(edge)! * simpleFlowNetwork.weight(edge)!
+            XCTAssertEqual(flowNetwork.weight(edge)!, expected)
         }
     }
+
+    func testFlowNetworkMaskPullback() {
+        var maskGraph = WeightedGraph<Int,Int>()
+        maskGraph.insertEdge(from: 0, to: 1, weight: 1)
+        maskGraph.insertEdge(from: 1, to: 2, weight: 2)
+        let preWeightCarrying = WeightCarrying.build(from: maskGraph)
+        let weightCarrying: WeightCarrying<WeightedGraph<String,Int>> = preWeightCarrying.pullback {
+            $0.count
+        }
+        var graph = WeightedDirectedGraph<String,Int>()
+        graph.insertEdge(from: "", to: ".", weight: 3)
+        graph.insertEdge(from: ".", to: "..", weight: 5)
+        var flowNetwork = FlowNetwork(graph, source: "", sink: "..")
+        flowNetwork.mask(weightCarrying)
+        XCTAssertEqual(flowNetwork.weight(from: "", to: "."), 3)
+        XCTAssertEqual(flowNetwork.weight(from: ".", to: ".."), 10)
+    }
+
+    #warning("Reinstate")
+//    func testRandomNetwork() {
+//        let iterations = 1
+//        (0..<iterations).forEach { _ in
+//            var randomNetwork = FlowNetwork<Int,Double>(
+//                WeightedDirectedGraph<Int,Double>([0,1], [:]),
+//                source: 0,
+//                sink: 1
+//            )
+//            (2..<100).forEach { randomNetwork.insert($0) }
+//            (0..<100).forEach { source in
+//                (0..<100).forEach { destination in
+//                    if Double.random(in: 0...1) < 0.3 {
+//                        randomNetwork.insertEdge(
+//                            from: source,
+//                            to: destination,
+//                            weight: Double.random(in: 0...1)
+//                        )
+//                    }
+//                }
+//            }
+//            assertDuality(randomNetwork)
+//            assertDisconnectedness(randomNetwork)
+//        }
+//    }
 }

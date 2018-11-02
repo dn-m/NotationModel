@@ -40,6 +40,20 @@ extension FlowNetwork {
 }
 
 extension FlowNetwork {
+    mutating func mask <G: WeightedGraphProtocol> (_ weightCarrying: WeightCarrying<G>)
+        where Node == G.Node, Weight == G.Weight
+    {
+        for edge in weights.keys {
+            if let maskWeight = weightCarrying.weight(from: edge.a, to: edge.b) {
+                updateEdge(edge) { $0 * maskWeight }
+            } else {
+                remove(edge)
+            }
+        }
+    }
+}
+
+extension FlowNetwork {
 
     // MARK: - Instance Methods
 
