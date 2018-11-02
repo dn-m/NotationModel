@@ -16,7 +16,7 @@ struct WeightCarrying<G: WeightedGraphProtocol> {
     
     func weight (from start: G.Node, to end: G.Node) -> G.Weight? {
         return weight(G.Edge(start, end))
-		}
+    }
 
     func pullback <H: WeightedGraphProtocol> (_ f: @escaping (H.Node) -> G.Node) -> WeightCarrying<H>
         where H.Weight == G.Weight

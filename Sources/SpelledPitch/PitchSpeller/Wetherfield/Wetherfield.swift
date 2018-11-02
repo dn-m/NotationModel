@@ -15,6 +15,21 @@ protocol PitchSpellingNode: Hashable {
 
 struct PitchSpeller {
 
+    // FIXME: Flesh out for all tendencies
+    static let tendencyGraph: WeightedGraph<Tendency,Double> = WeightedGraph(
+        [
+            .up,
+            .down
+        ],
+        [
+            UnorderedPair(.up,.up): 1,
+            UnorderedPair(.down, .down): 1
+        ]
+    )
+
+    static let weightCarrying = WeightCarrying.build(from: PitchSpeller.tendencyGraph)
+    static let tendencyMask: WeightCarrying<WeightedGraph<Cross<Int,Tendency>,Double>> = weightCarrying.pullback { $0.b }
+
     struct UnassignedNode: PitchSpellingNode {
         let index: Index
     }
@@ -75,6 +90,7 @@ struct PitchSpeller {
             sink: PitchSpellingNode.Index(-1, .up),
             internalNodes: pitchNodes
         )
+        flowNetwork.mask(PitchSpeller.tendencyMask)
     }
 
     /// - Returns: An array of `SpelledPitch` values with the same indices as the original
@@ -89,7 +105,6 @@ struct PitchSpeller {
             let upNodes = sinkSide.map { index in AssignedNode(index, .up) }
             return downNodes + upNodes
         }
-
         return assignedNodes
             .reduce(into: [Int: (AssignedNode, AssignedNode)]()) { pairs, node in
                 if !pairs.keys.contains(node.index.a) {
