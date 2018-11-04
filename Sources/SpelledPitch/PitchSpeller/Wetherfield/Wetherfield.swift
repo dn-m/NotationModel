@@ -8,8 +8,14 @@
 import DataStructures
 import Pitch
 
+enum FlowNode<Index>: Hashable where Index: Hashable {
+    case `internal`(Index)
+    case source
+    case sink
+}
+
 protocol PitchSpellingNode: Hashable {
-    typealias Index = Cross<Int,Tendency>
+    typealias Index = FlowNode<Cross<Int,Tendency>>
     var index: Index { get }
 }
 
@@ -28,8 +34,13 @@ struct PitchSpeller {
     )
 
     static let adjacencyCarrying = AdjacencyCarrying.build(from: PitchSpeller.tendencyGraph)
-    static let tendencyMask: AdjacencyCarrying<Graph<Cross<Int,Tendency>>>
-        = adjacencyCarrying.pullback { $0.b }
+    static let tendencyMask: AdjacencyCarrying<Graph<FlowNode<Cross<Int,Tendency>>>> = adjacencyCarrying.pullback {
+        switch $0 {
+        case .source: return .down
+        case .sink: return .up
+        case .`internal`(let index): return index.b
+        }
+    }
 
     struct UnassignedNode: PitchSpellingNode {
         let index: Index
@@ -43,19 +54,21 @@ struct PitchSpeller {
             self.assignment = assignment
         }
     }
-
-    /// - Returns: The nodes for the `Pitch` at the given `index`.
-    private static func nodes(pitchAtIndex index: Int)
-        -> (PitchSpellingNode.Index, PitchSpellingNode.Index)
-    {
-        return (.init(index, .down), .init(index, .up))
+    
+    struct InternalAssignedNode {
+        let index: Cross<Int, Tendency>
+        let assignment: Tendency
+        init(_ index: Cross<Int, Tendency>, _ assignment: Tendency) {
+            self.index = index
+            self.assignment = assignment
+        }
     }
 
     /// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
     /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
     /// the given `Pitch`.)
     private static func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
-        return .init(offset, index)
+        return .`internal`(.init(offset, index))
     }
 
     /// - Returns: An array of nodes, each representing the index of the unassigned node in
@@ -70,7 +83,7 @@ struct PitchSpeller {
     let parsimonyPivot: Pitch.Spelling
 
     /// The unspelled `Pitch` values to be spelled.
-    let pitches: [Int: Pitch]
+    let pitch: (PitchSpellingNode.Index) -> Pitch?
 
     /// The nodes within the `FlowNetwork`. The values are the encodings of the indices of `Pitch`
     /// values in `pitches.
@@ -83,12 +96,19 @@ struct PitchSpeller {
 
     /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
     init(pitches: [Int: Pitch], parsimonyPivot: Pitch.Spelling = .init(.d)) {
-        self.pitches = pitches
+        self.pitch = { index in
+            switch index {
+            case .source, .sink:
+                return Pitch(value: parsimonyPivot.pitchClass.value)
+            case .`internal`(let cross):
+                return pitches[cross.a]
+            }
+        }
         self.parsimonyPivot = parsimonyPivot
         self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
         self.flowNetwork = FlowNetwork(
-            source: PitchSpellingNode.Index(-1, .down),
-            sink: PitchSpellingNode.Index(-1, .up),
+            source: .source,
+            sink: .sink,
             internalNodes: pitchNodes
         )
         flowNetwork.mask(PitchSpeller.tendencyMask)
@@ -107,7 +127,13 @@ struct PitchSpeller {
             return downNodes + upNodes
         }
         return assignedNodes
-            .reduce(into: [Int: (AssignedNode, AssignedNode)]()) { pairs, node in
+            .compactMap { (assignedNode) -> InternalAssignedNode? in
+                switch assignedNode.index {
+                case .source, .sink: return nil
+                case .`internal`(let index): return InternalAssignedNode(index, assignedNode.assignment)
+                }
+            }
+            .reduce(into: [Int: (InternalAssignedNode, InternalAssignedNode)]()) { pairs, node in
                 if !pairs.keys.contains(node.index.a) {
                     pairs[node.index.a] = (node, node)
                 }
@@ -118,16 +144,11 @@ struct PitchSpeller {
             }.mapValues(spellPitch)
     }
 
-    private func spellPitch(_ up: AssignedNode, _ down: AssignedNode) -> SpelledPitch {
-        let pitch = self.pitch(node: up.index)
+    private func spellPitch(_ up: InternalAssignedNode, _ down: InternalAssignedNode) -> SpelledPitch {
+        let pitch = self.pitch(.`internal`(up.index))!
         let tendencies = TendencyPair(up.assignment, down.assignment)
         let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
         return try! pitch.spelled(with: spelling)
-    }
-
-    /// - Returns: The `Pitch` value for the given `node` value.
-    private func pitch(node: PitchSpellingNode.Index) -> Pitch {
-        return pitches[node.a]!
     }
 }
 
@@ -141,12 +162,6 @@ extension FlowNetwork where Node == PitchSpellingNode.Index, Weight == Double {
             internalNodes: internalNodes
         )
         self.init(graph, source: source, sink: sink)
-    }
-}
-
-extension PitchSpeller.AssignedNode: Comparable {
-    static func < (lhs: PitchSpeller.AssignedNode, rhs: PitchSpeller.AssignedNode) -> Bool {
-        return lhs.index < rhs.index
     }
 }
 

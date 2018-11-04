@@ -25,6 +25,10 @@ struct AdjacencyCarrying <G: GraphProtocol> {
     static func build (from g: G) -> AdjacencyCarrying {
         return AdjacencyCarrying(contains: g.contains)
     }
+    
+    static func build (_ contains: @escaping (G.Edge) -> Bool) -> AdjacencyCarrying {
+        return AdjacencyCarrying(contains: contains)
+    }
 }
 
 extension AdjacencyCarrying {

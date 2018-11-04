@@ -13,12 +13,12 @@ import Pitch
 class PitchSpellerTests: XCTestCase {
 
     // MARK: - AssignedNode
-
-    func testAssignedNodeComparable() {
-        let a = PitchSpeller.AssignedNode(Cross(0,.down), .down)
-        let b = PitchSpeller.AssignedNode(Cross(1,.up), .down)
-        XCTAssertLessThan(a,b)
-    }
+//
+//    func testAssignedNodeComparable() {
+//        let a = PitchSpeller.AssignedNode(Cross(0,.down), .down)
+//        let b = PitchSpeller.AssignedNode(Cross(1,.up), .down)
+//        XCTAssertLessThan(a,b)
+//    }
 
     func testSpellZeroOverDNatural() {
         let pitchSpeller = PitchSpeller(pitches: [0: 60], parsimonyPivot: Pitch.Spelling(.d))

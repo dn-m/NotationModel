@@ -27,6 +27,10 @@ struct WeightCarrying<G: WeightedGraphProtocol> {
     static func build (from g: G) -> WeightCarrying {
         return WeightCarrying(weight: g.weight)
     }
+    
+    static func build (_ weight: @escaping (G.Edge) -> G.Weight?) -> WeightCarrying {
+        return WeightCarrying(weight: weight)
+    }
 }
 
 extension WeightCarrying {
