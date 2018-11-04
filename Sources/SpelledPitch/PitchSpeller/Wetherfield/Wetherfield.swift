@@ -34,8 +34,8 @@ struct PitchSpeller {
     )
 
     static let adjacencyCarrying = AdjacencyCarrying.build(from: PitchSpeller.tendencyGraph)
-    static let tendencyMask: AdjacencyCarrying<Graph<FlowNode<Cross<Int,Tendency>>>> = adjacencyCarrying.pullback {
-        switch $0 {
+    static let tendencyMask: AdjacencyCarrying<Graph<FlowNode<Cross<Int,Tendency>>>> = adjacencyCarrying.pullback { node in
+        switch node {
         case .source: return .down
         case .sink: return .up
         case .`internal`(let index): return index.b
