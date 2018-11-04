@@ -7,7 +7,7 @@
 
 import DataStructures
 
-struct WeightCarrying<G: WeightedGraphProtocol> {
+public struct WeightCarrying<G: WeightedGraphProtocol> {
     let weight: (G.Edge) -> G.Weight?
     
     private init (weight: @escaping (G.Edge) -> G.Weight?) {
@@ -70,6 +70,17 @@ extension WeightCarrying {
             guard let rweight = rhs.weight(e) else { return lhs.weight(e) }
             return lweight + rweight
         }
+    }
+}
+
+extension WeightCarrying {
+    
+    func weightedScheme <Scheme: WeightedGraphSchemeProtocol> () -> Scheme where
+        Scheme.Edge == G.Edge,
+        Scheme.Node == G.Node,
+        Scheme.Weight == G.Weight
+    {
+        return Scheme.init(weight)
     }
 }
 

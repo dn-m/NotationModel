@@ -7,7 +7,7 @@
 
 import DataStructures
 
-protocol UnweightedGraphSchemeProtocol: GraphSchemeProtocol {
+public protocol UnweightedGraphSchemeProtocol: GraphSchemeProtocol {
     var contains: (Edge) -> Bool { get }
     
     init (_ contains: @escaping (Edge) -> Bool)

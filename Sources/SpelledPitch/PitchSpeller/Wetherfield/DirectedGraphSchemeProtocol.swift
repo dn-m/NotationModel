@@ -7,4 +7,4 @@
 
 import DataStructures
 
-protocol DirectedGraphSchemeProtocol: GraphSchemeProtocol where Edge == OrderedPair<Node> { }
+public protocol DirectedGraphSchemeProtocol: GraphSchemeProtocol where Edge == OrderedPair<Node> { }

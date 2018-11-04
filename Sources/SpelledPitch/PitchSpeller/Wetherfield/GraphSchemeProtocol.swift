@@ -7,7 +7,7 @@
 
 import DataStructures
 
-protocol GraphSchemeProtocol {
+public protocol GraphSchemeProtocol {
     associatedtype Node
     associatedtype Edge: SymmetricPair where Edge.A == Node
 }

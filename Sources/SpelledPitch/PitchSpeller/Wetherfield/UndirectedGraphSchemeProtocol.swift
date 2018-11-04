@@ -7,4 +7,4 @@
 
 import DataStructures
 
-protocol UndirectedGraphSchemeProtocol: GraphSchemeProtocol where Edge == UnorderedPair<Node> { }
+public protocol UndirectedGraphSchemeProtocol: GraphSchemeProtocol where Edge == UnorderedPair<Node> { }

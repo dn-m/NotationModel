@@ -7,7 +7,7 @@
 
 import DataStructures
 
-struct AdjacencyCarrying <G: GraphProtocol> {
+public struct AdjacencyCarrying <G: GraphProtocol> {
     let contains: (G.Edge) -> Bool
     
     private init (contains: @escaping (G.Edge) -> Bool) {
