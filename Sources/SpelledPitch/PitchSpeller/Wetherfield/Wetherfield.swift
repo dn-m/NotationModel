@@ -16,19 +16,20 @@ protocol PitchSpellingNode: Hashable {
 struct PitchSpeller {
 
     // FIXME: Flesh out for all tendencies
-    static let tendencyGraph: WeightedGraph<Tendency,Double> = WeightedGraph(
+    static let tendencyGraph: Graph<Tendency> = Graph(
         [
             .up,
             .down
         ],
         [
-            UnorderedPair(.up,.up): 1,
-            UnorderedPair(.down, .down): 1
+            UnorderedPair(.up,.up),
+            UnorderedPair(.down,.down)
         ]
     )
 
-    static let weightCarrying = WeightCarrying.build(from: PitchSpeller.tendencyGraph)
-    static let tendencyMask: WeightCarrying<WeightedGraph<Cross<Int,Tendency>,Double>> = weightCarrying.pullback { $0.b }
+    static let adjacencyCarrying = AdjacencyCarrying.build(from: PitchSpeller.tendencyGraph)
+    static let tendencyMask: AdjacencyCarrying<Graph<Cross<Int,Tendency>>>
+        = adjacencyCarrying.pullback { $0.b }
 
     struct UnassignedNode: PitchSpellingNode {
         let index: Index
