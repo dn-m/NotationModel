@@ -59,6 +59,12 @@ extension FlowNetwork {
             if !adjacencyCarrying.contains(from: edge.a, to: edge.b) { remove(edge) }
         }
     }
+    
+    mutating func mask (_ adjacencyScheme: GraphScheme<Node>) {
+        for edge in edges where !adjacencyScheme.contains(GraphScheme<Node>.Edge(edge.a, edge.b)) {
+            remove(edge)
+        }
+    }
 }
 
 extension FlowNetwork {

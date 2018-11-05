@@ -13,9 +13,11 @@ public protocol GraphSchemeProtocol {
 }
 
 extension GraphProtocol {
-    func adjacencyScheme <G> (_ f: @escaping (G.Node) -> Node) -> AdjacencyCarrying<G> where
-        G: GraphProtocol
+    func adjacencyScheme <G> () -> G where
+        G: UnweightedGraphSchemeProtocol,
+        G.Edge == Edge,
+        G.Node == Node
     {
-        return AdjacencyCarrying.build(from: self).pullback(f)
+        return G.init(self.contains)
     }
 }

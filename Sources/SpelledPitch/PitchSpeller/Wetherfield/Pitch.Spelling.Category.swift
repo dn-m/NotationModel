@@ -220,7 +220,9 @@ extension Pitch.Spelling.Category.Five: TendencyConverting {
     static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
         return [
             .init(.down,.down): .down,
-            .init(.up,.down): .up
+            .init(.down,.up): .down,
+            .init(.up,.down): .up,
+            .init(.up,.up): .up
         ]
     }
 }
