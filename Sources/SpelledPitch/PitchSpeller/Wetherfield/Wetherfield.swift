@@ -53,18 +53,6 @@ struct PitchSpeller {
         }
     }
     
-    // FIXME: Flesh out for all tendencies
-    static let tendencyGraph: Graph<Tendency> = Graph(
-        [
-            .up,
-            .down
-        ],
-        [
-            UnorderedPair(.up,.up),
-            UnorderedPair(.down,.down)
-        ]
-    )
-    
     // For each `Pitch.Class` `n`, denotes which of `(n, .up)` and `(n, .down)` should
     // be connected to `(8, .up)` in the spelling dependency model.
     static let eightTendencyLink: [(Pitch.Class, Tendency)] = [
@@ -91,15 +79,15 @@ struct PitchSpeller {
         }
     )
     
-    static let sameTendencyScheme: GraphScheme = tendencyGraph.adjacencyScheme()
     static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index>
-        = sameTendencyScheme.pullback { node in
-            switch node {
-            case .source: return .down
-            case .sink: return .up
-            case .internal(let index): return index.b
+        = GraphScheme<Tendency> { edge in edge.a == edge.b }
+            .pullback { node in
+                switch node {
+                case .source: return .down
+                case .sink: return .up
+                case .internal(let index): return index.b
+                }
             }
-    }
     
     static func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
         func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
