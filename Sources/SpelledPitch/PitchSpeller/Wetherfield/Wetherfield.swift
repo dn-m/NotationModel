@@ -71,12 +71,7 @@ struct PitchSpeller {
     
     // Maps `eightTendencyLink` to a `Set` of `Edge` values (to check for membership)
     static let eightLookup = Set<UnorderedPair<Cross<Pitch.Class, Tendency>>> (
-        PitchSpeller.eightTendencyLink.lazy
-            .map { pitchClass, tendency in
-                .init(pitchClass, tendency)
-            }.map { cross in
-                .init(cross, .init(8, .up))
-        }
+        PitchSpeller.eightTendencyLink.lazy.map(Cross.init).map { UnorderedPair($0, .init(8, .up)) }
     )
     
     static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index>
