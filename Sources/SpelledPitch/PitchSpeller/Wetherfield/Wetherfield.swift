@@ -14,19 +14,19 @@ enum FlowNode<Index>: Hashable where Index: Hashable {
     case sink
 }
 
-protocol PitchSpellingNode: Hashable {
-    typealias Index = FlowNode<Cross<Int,Tendency>>
-    var index: Index { get }
-}
-
 extension FlowNode where Index == Cross<Int,Tendency> {
     var tendency: Tendency {
         switch self {
         case .source: return .down
-        case.sink: return .up
-        case.internal(let index): return index.b
+        case .sink: return .up
+        case .internal(let index): return index.b
         }
     }
+}
+
+protocol PitchSpellingNode: Hashable {
+    typealias Index = FlowNode<Cross<Int,Tendency>>
+    var index: Index { get }
 }
 
 struct PitchSpeller {
@@ -74,15 +74,7 @@ struct PitchSpeller {
         PitchSpeller.eightTendencyLink.lazy.map(Cross.init).map { UnorderedPair($0, .init(8, .up)) }
     )
     
-    static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index>
-        = GraphScheme<Tendency> { edge in edge.a == edge.b }
-            .pullback { node in
-                switch node {
-                case .source: return .down
-                case .sink: return .up
-                case .internal(let index): return index.b
-                }
-            }
+    static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> = GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency }
     
     static func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
         func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
