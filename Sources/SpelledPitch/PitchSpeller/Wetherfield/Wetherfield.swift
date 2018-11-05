@@ -149,8 +149,12 @@ struct PitchSpeller {
         let connectToEight: GraphScheme<PitchSpellingNode.Index> = specificToEight.pullback { flowNode in
             .init(getPitchClass(flowNode), flowNode.tendency)
         }
-        flowNetwork.mask((PitchSpeller.connectSameTendencies * whereEdge(contains: false)(8)) +
-            (connectToEight * whereEdge(contains: true)(8)) )
+        let connectedToTwoNotEight = PitchSpeller.connectSameTendencies * whereEdge(contains: false)(8) * whereEdge(contains: true)(2)
+        let sameClass = PitchSpeller.connectSameTendencies * GraphScheme<Pitch.Class> { edge in
+            edge.a == edge.b }
+            .pullback(getPitchClass)
+        let connectedToEight = connectToEight * whereEdge(contains: true)(8)
+        flowNetwork.mask(connectedToTwoNotEight + sameClass + connectedToEight)
     }
 
     /// - Returns: An array of `SpelledPitch` values with the same indices as the original
@@ -192,10 +196,10 @@ struct PitchSpeller {
     
     func whereEdge (contains: Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
         func doesContain (pitchClass: Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
-            return PitchSpeller.adjacencyScheme(contains: true)(8).pullback(getPitchClass)
+            return PitchSpeller.adjacencyScheme(contains: true)(pitchClass).pullback(getPitchClass)
         }
         func doesNotContain (pitchClass: Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
-            return PitchSpeller.adjacencyScheme(contains: false)(8).pullback(getPitchClass)
+            return PitchSpeller.adjacencyScheme(contains: false)(pitchClass).pullback(getPitchClass)
         }
         return contains ? doesContain : doesNotContain
     }

@@ -130,6 +130,15 @@ class PitchSpellerTests: XCTestCase {
         let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(.g, .sharp))]
         XCTAssertEqual(result, expected)
     }
+    
+    func testSpellSelfAsPivot() {
+        for letterName in LetterName.allCases {
+            let pitchSpeller = PitchSpeller(pitches: [0: Pitch(letterName.pitchClass)], parsimonyPivot: Pitch.Spelling(letterName))
+            let result = pitchSpeller.spell()
+            let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(letterName), -1)]
+            XCTAssertEqual(result, expected)
+        }
+    }
 
     func testSpellCF() {
         let pitchSpeller = PitchSpeller(pitches: [0:60,1:65])
