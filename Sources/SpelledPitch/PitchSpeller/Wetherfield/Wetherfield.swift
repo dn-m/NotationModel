@@ -49,6 +49,33 @@ struct PitchSpeller {
 
 extension PitchSpeller {
 
+    // MARK: - Nested Types
+
+    struct UnassignedNode: PitchSpellingNode {
+        let index: Index
+    }
+
+    struct AssignedNode: PitchSpellingNode {
+        let index: Index
+        let assignment: Tendency
+        init(_ index: Index, _ assignment: Tendency) {
+            self.index = index
+            self.assignment = assignment
+        }
+    }
+
+    struct InternalAssignedNode {
+        let index: Cross<Int, Tendency>
+        let assignment: Tendency
+        init(_ index: Cross<Int, Tendency>, _ assignment: Tendency) {
+            self.index = index
+            self.assignment = assignment
+        }
+    }
+}
+
+extension PitchSpeller {
+
     // MARK: - Initializers
 
     /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
@@ -174,14 +201,14 @@ extension PitchSpeller {
         return try! pitch.spelled(with: spelling)
     }
 
+    /// FIXME: Consider implementing as:
+    /// `let whereEdge: (Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index>`
     func whereEdge (contains: Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
-        func doesContain (pitchClass: Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
-            return PitchSpeller.adjacencyScheme(contains: true)(pitchClass).pullback(getPitchClass)
+        return { pitchClass in
+            return PitchSpeller
+                .adjacencyScheme(contains: contains)(pitchClass)
+                .pullback(self.getPitchClass)
         }
-        func doesNotContain (pitchClass: Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
-            return PitchSpeller.adjacencyScheme(contains: false)(pitchClass).pullback(getPitchClass)
-        }
-        return contains ? doesContain : doesNotContain
     }
 }
 
@@ -206,37 +233,15 @@ private let eightLookup = Set<UnorderedPair<Cross<Pitch.Class, Tendency>>> (
     eightTendencyLink.lazy.map(Cross.init).map { UnorderedPair($0, .init(8, .up)) }
 )
 
-extension PitchSpeller {
-
-    // MARK: - Nested Types
-
-    struct UnassignedNode: PitchSpellingNode {
-        let index: Index
-    }
-
-    struct AssignedNode: PitchSpellingNode {
-        let index: Index
-        let assignment: Tendency
-        init(_ index: Index, _ assignment: Tendency) {
-            self.index = index
-            self.assignment = assignment
-        }
-    }
-
-    struct InternalAssignedNode {
-        let index: Cross<Int, Tendency>
-        let assignment: Tendency
-        init(_ index: Cross<Int, Tendency>, _ assignment: Tendency) {
-            self.index = index
-            self.assignment = assignment
-        }
-    }
-}
-
 extension FlowNetwork where Node == PitchSpellingNode.Index, Weight == Double {
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
-    init(source: PitchSpellingNode.Index, sink: PitchSpellingNode.Index, internalNodes: [PitchSpellingNode.Index]) {
+    init(
+        source: PitchSpellingNode.Index,
+        sink: PitchSpellingNode.Index,
+        internalNodes: [PitchSpellingNode.Index]
+    )
+    {
         let graph = WeightedDirectedGraph<PitchSpellingNode.Index,Double>(
             source: source,
             sink: sink,
