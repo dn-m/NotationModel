@@ -76,6 +76,11 @@ extension PitchSpeller {
 
     /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
     init(pitches: [Int: Pitch], parsimonyPivot: Pitch.Spelling = .init(.d)) {
+        self.flowNetwork = FlowNetwork(
+            source: .source,
+            sink: .sink,
+            internalNodes: internalNodes(pitches: pitches)
+        )
         self.pitch = { index in
             switch index {
             case .source, .sink:
@@ -93,11 +98,7 @@ extension PitchSpeller {
             }
         }
         self.getPitchClass = getPitchClass
-        self.flowNetwork = FlowNetwork(
-            source: .source,
-            sink: .sink,
-            internalNodes: internalNodes(pitches: pitches)
-        )
+
         let specificToEight = GraphScheme<Cross<Pitch.Class, Tendency>>(eightLookup.contains)
         let connectToEight: GraphScheme<PitchSpellingNode.Index> = specificToEight.pullback { flowNode in
             .init(getPitchClass(flowNode), flowNode.tendency)
@@ -108,25 +109,6 @@ extension PitchSpeller {
             .pullback(getPitchClass)
         let connectedToEight = connectToEight * whereEdge(contains: true)(8)
         flowNetwork.mask(connectedToTwoNotEight + sameClass + connectedToEight)
-    }
-}
-
-extension PitchSpeller {
-
-    // MARK: - Type Properties
-
-    static func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
-        func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
-            return GraphScheme<Pitch.Class> { edge in
-                edge.contains(pitchClass)
-            }
-        }
-        func pitchClassNonAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
-            return GraphScheme<Pitch.Class> { edge in
-                !edge.contains(pitchClass)
-            }
-        }
-        return contains ? pitchClassAdjacencyScheme : pitchClassNonAdjacencyScheme
     }
 }
 
@@ -181,9 +163,7 @@ extension PitchSpeller {
     /// `let whereEdge: (Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index>`
     func whereEdge (contains: Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
         return { pitchClass in
-            return PitchSpeller
-                .adjacencyScheme(contains: contains)(pitchClass)
-                .pullback(self.getPitchClass)
+            adjacencyScheme(contains: contains)(pitchClass).pullback(self.getPitchClass)
         }
     }
 }
@@ -199,6 +179,20 @@ private func internalNodes(pitches: [Int: Pitch]) -> [PitchSpellingNode.Index] {
 /// the given `Pitch`.)
 private func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
     return .internal(.init(offset, index))
+}
+
+private func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
+    func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
+        return GraphScheme<Pitch.Class> { edge in
+            edge.contains(pitchClass)
+        }
+    }
+    func pitchClassNonAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
+        return GraphScheme<Pitch.Class> { edge in
+            !edge.contains(pitchClass)
+        }
+    }
+    return contains ? pitchClassAdjacencyScheme : pitchClassNonAdjacencyScheme
 }
 
 let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> =
