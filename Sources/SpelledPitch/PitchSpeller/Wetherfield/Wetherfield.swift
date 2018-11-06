@@ -36,10 +36,6 @@ struct PitchSpeller {
     /// The unspelled `Pitch` values to be spelled.
     let pitch: (PitchSpellingNode.Index) -> Pitch?
 
-    /// The nodes within the `FlowNetwork`. The values are the encodings of the indices of `Pitch`
-    /// values in `pitches.
-    let pitchNodes: [PitchSpellingNode.Index]
-
     /// The `FlowNetwork` which will be manipulated in order to spell the unspelled `pitches`.
     var flowNetwork: FlowNetwork<PitchSpellingNode.Index,Double>
     
@@ -97,11 +93,11 @@ extension PitchSpeller {
             }
         }
         self.getPitchClass = getPitchClass
-        self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
+//        self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
         self.flowNetwork = FlowNetwork(
             source: .source,
             sink: .sink,
-            internalNodes: pitchNodes
+            internalNodes: internalNodes(pitches: pitches)
         )
         let specificToEight = GraphScheme<Cross<Pitch.Class, Tendency>>(eightLookup.contains)
         let connectToEight: GraphScheme<PitchSpellingNode.Index> = specificToEight.pullback { flowNode in
@@ -132,14 +128,6 @@ extension PitchSpeller {
             }
         }
         return contains ? pitchClassAdjacencyScheme : pitchClassNonAdjacencyScheme
-    }
-
-
-
-    /// - Returns: An array of nodes, each representing the index of the unassigned node in
-    /// `pitchNodes`.
-    private static func internalNodes(pitches: [Int: Pitch]) -> [PitchSpellingNode.Index] {
-        return pitches.keys.flatMap { offset in [.down,.up].map { index in node(offset, index) } }
     }
 }
 
@@ -195,6 +183,12 @@ extension PitchSpeller {
                 .pullback(self.getPitchClass)
         }
     }
+}
+
+/// - Returns: An array of nodes, each representing the index of the unassigned node in
+/// `pitchNodes`.
+private func internalNodes(pitches: [Int: Pitch]) -> [PitchSpellingNode.Index] {
+    return pitches.keys.flatMap { offset in [.down,.up].map { index in node(offset, index) } }
 }
 
 /// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
