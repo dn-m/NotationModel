@@ -93,7 +93,6 @@ extension PitchSpeller {
             }
         }
         self.getPitchClass = getPitchClass
-//        self.pitchNodes = PitchSpeller.internalNodes(pitches: pitches)
         self.flowNetwork = FlowNetwork(
             source: .source,
             sink: .sink,
