@@ -121,13 +121,7 @@ extension PitchSpeller {
     // MARK: - Type Properties
 
     static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index>
-        = GraphScheme<Tendency> { edge in edge.a == edge.b }
-            .pullback { node in
-                switch node {
-                case .source: return .down
-                case .sink: return .up
-                case .internal(let index): return index.b
-                }
+        = GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency
     }
 
     static func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
