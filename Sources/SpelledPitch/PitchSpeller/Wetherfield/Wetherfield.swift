@@ -99,7 +99,7 @@ extension PitchSpeller {
         }
         self.getPitchClass = getPitchClass
 
-        let specificToEight = GraphScheme<Cross<Pitch.Class, Tendency>>(eightLookup.contains)
+        let specificToEight = GraphScheme<Cross<Pitch.Class, Tendency>> (eightLookup.contains)
         let connectToEight: GraphScheme<PitchSpellingNode.Index> = specificToEight.pullback { flowNode in
             .init(getPitchClass(flowNode), flowNode.tendency)
         }
@@ -195,7 +195,7 @@ private func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pi
     return contains ? pitchClassAdjacencyScheme : pitchClassNonAdjacencyScheme
 }
 
-let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> =
+private let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> =
     GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency }
 
 // For each `Pitch.Class` `n`, denotes which of `(n, .up)` and `(n, .down)` should
