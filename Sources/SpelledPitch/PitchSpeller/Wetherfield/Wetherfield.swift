@@ -166,7 +166,11 @@ extension PitchSpeller {
             }.mapValues(spellPitch)
     }
 
-    private func spellPitch(_ up: InternalAssignedNode, _ down: InternalAssignedNode) -> SpelledPitch {
+    private func spellPitch(
+        _ up: InternalAssignedNode,
+        _ down: InternalAssignedNode
+    ) -> SpelledPitch
+    {
         let pitch = self.pitch(.internal(up.index))!
         let tendencies = TendencyPair(up.assignment, down.assignment)
         let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
