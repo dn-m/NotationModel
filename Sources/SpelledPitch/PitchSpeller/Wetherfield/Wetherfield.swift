@@ -33,12 +33,12 @@ struct PitchSpeller {
 
     // MARK: - Instance Properties
 
+    /// The `FlowNetwork` which will be manipulated in order to spell the unspelled `pitches`.
+    var flowNetwork: FlowNetwork<PitchSpellingNode.Index,Double>
+
     /// The unspelled `Pitch` values to be spelled.
     let pitch: (PitchSpellingNode.Index) -> Pitch?
 
-    /// The `FlowNetwork` which will be manipulated in order to spell the unspelled `pitches`.
-    var flowNetwork: FlowNetwork<PitchSpellingNode.Index,Double>
-    
     /// Getter for pitch class (from Index)
     let getPitchClass: (PitchSpellingNode.Index) -> Pitch.Class
 }
