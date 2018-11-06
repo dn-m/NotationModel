@@ -107,8 +107,8 @@ extension PitchSpeller {
         let connectToEight: GraphScheme<PitchSpellingNode.Index> = specificToEight.pullback { flowNode in
             .init(getPitchClass(flowNode), flowNode.tendency)
         }
-        let connectedToTwoNotEight = PitchSpeller.connectSameTendencies * whereEdge(contains: false)(8) * whereEdge(contains: true)(2)
-        let sameClass = PitchSpeller.connectSameTendencies * GraphScheme<Pitch.Class> { edge in
+        let connectedToTwoNotEight = connectSameTendencies * whereEdge(contains: false)(8) * whereEdge(contains: true)(2)
+        let sameClass = connectSameTendencies * GraphScheme<Pitch.Class> { edge in
             edge.a == edge.b }
             .pullback(getPitchClass)
         let connectedToEight = connectToEight * whereEdge(contains: true)(8)
@@ -119,10 +119,6 @@ extension PitchSpeller {
 extension PitchSpeller {
 
     // MARK: - Type Properties
-
-    static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index>
-        = GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency
-    }
 
     static func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
         func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
@@ -205,6 +201,9 @@ extension PitchSpeller {
         }
     }
 }
+
+let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> = GraphScheme<Tendency> { edge in edge.a == edge.b
+}.pullback { node in node.tendency }
 
 // For each `Pitch.Class` `n`, denotes which of `(n, .up)` and `(n, .down)` should
 // be connected to `(8, .up)` in the spelling dependency model.
