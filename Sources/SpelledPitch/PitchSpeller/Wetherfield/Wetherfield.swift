@@ -134,12 +134,7 @@ extension PitchSpeller {
         return contains ? pitchClassAdjacencyScheme : pitchClassNonAdjacencyScheme
     }
 
-    /// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
-    /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
-    /// the given `Pitch`.)
-    private static func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
-        return .internal(.init(offset, index))
-    }
+
 
     /// - Returns: An array of nodes, each representing the index of the unassigned node in
     /// `pitchNodes`.
@@ -200,6 +195,13 @@ extension PitchSpeller {
                 .pullback(self.getPitchClass)
         }
     }
+}
+
+/// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
+/// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
+/// the given `Pitch`.)
+private func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
+    return .internal(.init(offset, index))
 }
 
 let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> = GraphScheme<Tendency> { edge in edge.a == edge.b
