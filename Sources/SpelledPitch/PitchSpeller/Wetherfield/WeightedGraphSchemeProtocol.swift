@@ -80,14 +80,3 @@ extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, W
         return rhs * lhs
     }
 }
-
-extension WeightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtocol {
-    
-    func directed <D> () -> D where
-        D: DirectedGraphSchemeProtocol & WeightedGraphSchemeProtocol,
-        D.Weight == Weight,
-        D.Node == Node
-    {
-        return .init { edge in self.weight(from: edge.a, to: edge.b) }
-    }
-}
