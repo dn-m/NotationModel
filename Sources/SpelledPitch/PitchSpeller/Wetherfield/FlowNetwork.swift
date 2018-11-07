@@ -73,8 +73,10 @@ extension FlowNetwork {
         Scheme.Weight == Weight
     {
         for edge in edges {
-            guard let scalar = weightScheme.weight(from: edge.a, to: edge.b) else { remove(edge); return }
-            updateEdge(edge) { $0 * scalar }
+            if let scalar = weightScheme.weight(from: edge.a, to: edge.b) {
+                updateEdge(edge) { $0 * scalar }
+            }
+            else { remove(edge) }
         }
     }
 }

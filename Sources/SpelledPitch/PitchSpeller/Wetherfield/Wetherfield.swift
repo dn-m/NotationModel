@@ -114,7 +114,12 @@ extension PitchSpeller {
             edge.a == edge.b }
             .pullback(getPitchClass)
         let connectedToEight = connectToEight * whereEdge(contains: true)(8)
-        flowNetwork.mask(connectedToTwoNotEight + sameClass + connectedToEight)
+        let generalConnections: DirectedGraphScheme<PitchSpellingNode.Index> =
+            (connectDifferentInts * (connectedToTwoNotEight + sameClass + connectedToEight)).directed
+        
+        let maskArgument: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
+            1.0 * generalConnections * connectDifferentInts + bigMAssignment * connectSameInts
+        flowNetwork.mask(maskArgument)
     }
 }
 
@@ -217,6 +222,9 @@ private let bigMAssignment: WeightedDirectedGraphScheme<PitchSpellingNode.Index,
 
 private let connectSameInts: GraphScheme<PitchSpellingNode.Index> =
     GraphScheme<Int?> { edge in edge.a == edge.b && edge.a != nil }.pullback { node in node.int }
+
+private let connectDifferentInts: GraphScheme<PitchSpellingNode.Index> =
+    GraphScheme<Int?> { edge in edge.a != edge.b }.pullback { node in node.int }
 
 // For each `Pitch.Class` `n`, denotes which of `(n, .up)` and `(n, .down)` should
 // be connected to `(8, .up)` in the spelling dependency model.
