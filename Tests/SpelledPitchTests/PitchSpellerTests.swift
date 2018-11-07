@@ -144,17 +144,6 @@ class PitchSpellerTests: XCTestCase {
 
     // MARK: - Dyads
 
-    func testSpellZeroSevenOverDNatural() {
-        let pitches: [Int: Pitch] = [0: 60, 1: 67]
-        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
-        let result = pitchSpeller.spell()
-        let expected: [Int: SpelledPitch] = [
-            0: SpelledPitch(Pitch.Spelling(.c), 4),
-            1: SpelledPitch(Pitch.Spelling(.g), 4)
-        ]
-        XCTAssertEqual(result, expected)
-    }
-
     func testSpelledZeroOneOverDNatural() {
         let pitches: [Int: Pitch] = [0: 60, 1: 61]
         let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
