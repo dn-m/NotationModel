@@ -23,7 +23,7 @@ extension WeightedGraphSchemeProtocol {
         H: WeightedGraphSchemeProtocol,
         H.Weight == Weight
     {
-        return H.init { self.weight(Edge(f($0.a),f($0.b))) }
+        return H.init { self.weight(from: f($0.a), to: f($0.b)) }
     }
 
     @inlinable
