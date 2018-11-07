@@ -80,7 +80,7 @@ extension WeightCarrying {
         Scheme.Node == G.Node,
         Scheme.Weight == G.Weight
     {
-        return Scheme.init(weight)
+        return Scheme(weight)
     }
 }
 

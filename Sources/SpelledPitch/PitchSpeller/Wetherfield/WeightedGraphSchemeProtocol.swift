@@ -13,6 +13,8 @@ public protocol WeightedGraphSchemeProtocol: GraphSchemeProtocol {
     var weight: (Edge) -> Weight? { get }
     
     init (_ weight: @escaping (Edge) -> Weight?)
+    
+    func weight (from start: Node, to end: Node) -> Weight?
 }
 
 extension WeightedGraphSchemeProtocol {
@@ -21,25 +23,60 @@ extension WeightedGraphSchemeProtocol {
         H: WeightedGraphSchemeProtocol,
         H.Weight == Weight
     {
-        return H.init { self.weight(Edge(f($0.a),f($0.b))) }
+        return H { self.weight(from: f($0.a), to: f($0.b)) }
     }
-}
 
-extension WeightedGraphSchemeProtocol {
     @inlinable
     func unweighted <H> () -> H where
         H: UnweightedGraphSchemeProtocol,
         H.Edge == Edge
     {
-        return H.init { self.weight($0) != nil }
+        return H { self.weight($0) != nil }
     }
 }
 
-extension WeightedGraphProtocol {
-    func weightScheme <G> (_ f: @escaping (G.Node) -> Node) -> WeightCarrying<G> where
-        G: WeightedGraphProtocol,
-        G.Weight == Weight
+extension WeightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtocol, Weight: Numeric {
+    
+    static func * (lhs: Self, rhs: Self) -> Self {
+        return Self { edge in
+            guard let lweight = lhs.weight(edge), let rweight = rhs.weight(edge) else { return nil }
+            return lweight * rweight
+        }
+    }
+}
+
+extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, Weight: Numeric {
+    
+    static func * <Scheme> (lhs: Self, rhs: Scheme) -> Self where
+    Scheme: WeightedGraphSchemeProtocol,
+    Scheme.Node == Node,
+    Scheme.Weight == Weight
     {
-        return WeightCarrying.build(from: self).pullback(f)
+        return Self { edge in
+            guard
+                let lweight = lhs.weight(edge),
+                let rweight = rhs.weight(from: edge.a, to: edge.b) else { return nil }
+            return lweight * rweight
+        }
+    }
+    
+    static func * <Scheme> (lhs: Self, rhs: Scheme) -> Self where
+        Scheme: UnweightedGraphSchemeProtocol,
+        Scheme.Node == Node
+    {
+        return Self { edge in
+            if let lweight = lhs.weight(edge) {
+                return rhs.contains(from: edge.a, to: edge.b) ? lweight : nil
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    static func * <Scheme> (lhs: Scheme, rhs: Self) -> Self where
+        Scheme: UnweightedGraphSchemeProtocol,
+        Scheme.Node == Node
+    {
+        return rhs * lhs
     }
 }
