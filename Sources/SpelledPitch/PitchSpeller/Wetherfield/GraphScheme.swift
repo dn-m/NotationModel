@@ -21,3 +21,10 @@ struct GraphScheme <Node>: UndirectedGraphSchemeProtocol, UnweightedGraphSchemeP
         return contains(Edge(start, end))
     }
 }
+
+extension GraphScheme {
+    
+    var directed: DirectedGraphScheme<Node> {
+        return .init { edge in self.contains(from: edge.a, to: edge.b) }
+    }
+}
