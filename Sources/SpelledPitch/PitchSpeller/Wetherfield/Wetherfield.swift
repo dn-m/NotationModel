@@ -204,6 +204,17 @@ private func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pi
 private let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> =
     GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency }
 
+private let connectUpToDown: DirectedGraphScheme<PitchSpellingNode.Index> =
+    DirectedGraphScheme<Tendency> { edge in
+        edge.a == .up && edge.b == .down
+        }.pullback { node in node.tendency }
+
+private let bigMAdjacency: DirectedGraphScheme<PitchSpellingNode.Index> =
+    connectSameTendencies * connectUpToDown
+
+private let bigMAssignment: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
+    Double.infinity * bigMAdjacency
+
 private let connectSameInts: GraphScheme<PitchSpellingNode.Index> =
     GraphScheme<Int?> { edge in edge.a == edge.b && edge.a != nil }.pullback { node in node.int }
 
