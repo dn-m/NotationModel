@@ -1,5 +1,5 @@
 //
-//  WeightedDirectedGraphSchema.swift
+//  WeightedDirectedGraphScheme.swift
 //  SpelledPitch
 //
 //  Created by Benjamin Wetherfield on 03/11/2018.
