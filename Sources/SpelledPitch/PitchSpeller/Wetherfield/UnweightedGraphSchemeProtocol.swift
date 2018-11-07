@@ -32,3 +32,13 @@ extension UnweightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtoco
         return Self.init { edge in lhs.contains(edge) || rhs.contains(edge) }
     }
 }
+
+extension UnweightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol {
+    
+    static func * <Scheme> (lhs: Self, rhs: Scheme) -> Self where
+        Scheme: UnweightedGraphSchemeProtocol,
+        Scheme.Node == Node
+    {
+        return Self.init { edge in lhs.contains(edge) && rhs.contains(from: edge.a, to: edge.b) }
+    }
+}
