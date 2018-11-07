@@ -59,4 +59,24 @@ extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, W
             return lweight * rweight
         }
     }
+    
+    static func * <Scheme> (lhs: Self, rhs: Scheme) -> Self where
+        Scheme: UnweightedGraphSchemeProtocol,
+        Scheme.Node == Node
+    {
+        return Self { edge in
+            if let lweight = lhs.weight(edge) {
+                return rhs.contains(from: edge.a, to: edge.b) ? lweight : nil
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    static func * <Scheme> (lhs: Scheme, rhs: Self) -> Self where
+        Scheme: UnweightedGraphSchemeProtocol,
+        Scheme.Node == Node
+    {
+        return rhs * lhs
+    }
 }
