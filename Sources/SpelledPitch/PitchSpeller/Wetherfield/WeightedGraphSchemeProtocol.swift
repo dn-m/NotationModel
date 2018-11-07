@@ -34,12 +34,3 @@ extension WeightedGraphSchemeProtocol {
         return H.init { self.weight($0) != nil }
     }
 }
-
-extension WeightedGraphProtocol {
-    func weightScheme <G> (_ f: @escaping (G.Node) -> Node) -> WeightCarrying<G> where
-        G: WeightedGraphProtocol,
-        G.Weight == Weight
-    {
-        return WeightCarrying.build(from: self).pullback(f)
-    }
-}
