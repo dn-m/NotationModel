@@ -12,6 +12,8 @@ import Pitch
 
 class PitchSpellerTests: XCTestCase {
 
+    // MARK: - Monads
+
     func testSpellZeroOverDNatural() {
         let pitchSpeller = PitchSpeller(pitches: [0: 60], parsimonyPivot: Pitch.Spelling(.d))
         let result = pitchSpeller.spell()
@@ -140,9 +142,104 @@ class PitchSpellerTests: XCTestCase {
         }
     }
 
-    func testSpellCF() {
-        let pitchSpeller = PitchSpeller(pitches: [0:60,1:65])
-        let _ = pitchSpeller.spell()
-        // FIXME: Add assertion
+    // MARK: - Dyads
+
+    func testSpellZeroSevenOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 67]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.g), 4)
+        ]
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSpelledZeroOneOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 61]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.c, .sharp), 4)
+        ]
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSpelledZeroTwoOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 62]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.d), 4)
+        ]
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSpelledZeroThreeOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 63]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.e, .flat), 4)
+        ]
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSpelledZeroFourOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 64]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.e), 4)
+        ]
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSpelledZeroFiveOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 65]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.f), 4)
+        ]
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSpelledZeroSixOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 66]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.f, .sharp), 4)
+        ]
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSpelledZeroSevenOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 67]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.g), 4)
+        ]
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSpelledZeroEightOverDNatural() {
+        let pitches: [Int: Pitch] = [0: 60, 1: 68]
+        let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let result = pitchSpeller.spell()
+        let expected: [Int: SpelledPitch] = [
+            0: SpelledPitch(Pitch.Spelling(.c), 4),
+            1: SpelledPitch(Pitch.Spelling(.g, .sharp), 4)
+        ]
+        XCTAssertEqual(result, expected)
     }
 }
