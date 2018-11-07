@@ -204,6 +204,9 @@ private func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pi
 private let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> =
     GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency }
 
+private let connectSameInts: GraphScheme<PitchSpellingNode.Index> =
+    GraphScheme<Int?> { edge in edge.a == edge.b && edge.a != nil }.pullback { node in node.int }
+
 // For each `Pitch.Class` `n`, denotes which of `(n, .up)` and `(n, .down)` should
 // be connected to `(8, .up)` in the spelling dependency model.
 private let eightTendencyLink: [(Pitch.Class, Tendency)] = [
