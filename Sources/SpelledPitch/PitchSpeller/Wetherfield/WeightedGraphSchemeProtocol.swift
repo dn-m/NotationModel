@@ -34,3 +34,29 @@ extension WeightedGraphSchemeProtocol {
         return H.init { self.weight($0) != nil }
     }
 }
+
+extension WeightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtocol, Weight: Numeric {
+    
+    static func * (lhs: Self, rhs: Self) -> Self {
+        return Self { edge in
+            guard let lweight = lhs.weight(edge), let rweight = rhs.weight(edge) else { return nil }
+            return lweight * rweight
+        }
+    }
+}
+
+extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, Weight: Numeric {
+    
+    static func * <Scheme> (lhs: Self, rhs: Scheme) -> Self where
+    Scheme: WeightedGraphSchemeProtocol,
+    Scheme.Node == Node,
+    Scheme.Weight == Weight
+    {
+        return Self { edge in
+            guard
+                let lweight = lhs.weight(edge),
+                let rweight = rhs.weight(from: edge.a, to: edge.b) else { return nil }
+            return lweight * rweight
+        }
+    }
+}
