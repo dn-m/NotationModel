@@ -23,9 +23,7 @@ extension WeightedGraphSchemeProtocol {
     {
         return H.init { self.weight(Edge(f($0.a),f($0.b))) }
     }
-}
 
-extension WeightedGraphSchemeProtocol {
     @inlinable
     func unweighted <H> () -> H where
         H: UnweightedGraphSchemeProtocol,
