@@ -24,7 +24,7 @@ struct WeightedGraphScheme <Node,Weight>: UndirectedGraphSchemeProtocol, Weighte
 
 extension WeightedGraphScheme {
     
-    var directed : WeightedDirectedGraphScheme<Node,Weight> {
+    var directed: WeightedDirectedGraphScheme<Node,Weight> {
         return .init { edge in self.weight(from: edge.a, to: edge.b) }
     }
 }
