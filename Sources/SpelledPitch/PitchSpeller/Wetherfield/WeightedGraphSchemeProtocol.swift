@@ -13,6 +13,8 @@ public protocol WeightedGraphSchemeProtocol: GraphSchemeProtocol {
     var weight: (Edge) -> Weight? { get }
     
     init (_ weight: @escaping (Edge) -> Weight?)
+    
+    func weight (from start: Node, to end: Node) -> Weight?
 }
 
 extension WeightedGraphSchemeProtocol {

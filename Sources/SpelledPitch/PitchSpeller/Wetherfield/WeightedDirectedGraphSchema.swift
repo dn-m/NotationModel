@@ -16,4 +16,8 @@ struct WeightedDirectedGraphScheme <Node,Weight>: DirectedGraphSchemeProtocol, W
     init (_ weight: @escaping (Edge) -> Weight?) {
         self.weight = weight
     }
+    
+    func weight(from start: Node, to end: Node) -> Weight? {
+        return weight(Edge(start, end))
+    }
 }
