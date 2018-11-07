@@ -22,6 +22,12 @@ extension FlowNode where Index == Cross<Int,Tendency> {
         case .internal(let index): return index.b
         }
     }
+    var int: Int? {
+        switch self {
+        case .internal(let index): return index.a
+        case .source, .sink: return nil
+        }
+    }
 }
 
 protocol PitchSpellingNode: Hashable {
