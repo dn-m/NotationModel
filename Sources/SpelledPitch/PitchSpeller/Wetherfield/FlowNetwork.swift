@@ -51,7 +51,7 @@ extension FlowNetwork {
             }
         }
     }
-    
+
     mutating func mask <G: GraphProtocol> (_ adjacencyCarrying: AdjacencyCarrying<G>)
         where Node == G.Node
     {
@@ -60,9 +60,21 @@ extension FlowNetwork {
         }
     }
     
-    mutating func mask (_ adjacencyScheme: GraphScheme<Node>) {
-        for edge in edges where !adjacencyScheme.contains(GraphScheme<Node>.Edge(edge.a, edge.b)) {
+    mutating func mask <Scheme: UnweightedGraphSchemeProtocol> (_ adjacencyScheme: Scheme) where
+        Scheme.Node == Node
+    {
+        for edge in edges where !adjacencyScheme.contains(from: edge.a, to: edge.b) {
             remove(edge)
+        }
+    }
+    
+    mutating func mask <Scheme: WeightedGraphSchemeProtocol> (_ weightScheme: Scheme) where
+        Scheme.Node == Node,
+        Scheme.Weight == Weight
+    {
+        for edge in edges {
+            guard let scalar = weightScheme.weight(from: edge.a, to: edge.b) else { remove(edge); return }
+            updateEdge(edge) { $0 * scalar }
         }
     }
 }
