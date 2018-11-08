@@ -78,7 +78,7 @@ extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, W
     {
         return Self { edge in
             if let lweight = lhs.weight(edge) {
-                return rhs.contains(from: edge.a, to: edge.b) ? lweight : nil
+                return rhs.containsEdge(from: edge.a, to: edge.b) ? lweight : nil
             } else {
                 return nil
             }

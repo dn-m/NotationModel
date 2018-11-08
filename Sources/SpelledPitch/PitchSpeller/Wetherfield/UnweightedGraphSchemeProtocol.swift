@@ -12,7 +12,7 @@ public protocol UnweightedGraphSchemeProtocol: GraphSchemeProtocol {
     
     init (_ contains: @escaping (Edge) -> Bool)
     
-    func contains (from start: Node, to end: Node) -> Bool
+    func containsEdge (from start: Node, to end: Node) -> Bool
 }
 
 extension UnweightedGraphSchemeProtocol {
@@ -39,7 +39,7 @@ extension UnweightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol 
         Scheme: UnweightedGraphSchemeProtocol,
         Scheme.Node == Node
     {
-        return Self { edge in lhs.contains(edge) && rhs.contains(from: edge.a, to: edge.b) }
+        return Self { edge in lhs.contains(edge) && rhs.containsEdge(from: edge.a, to: edge.b) }
     }
     
     static func * <Scheme> (lhs: Scheme, rhs: Self) -> Self where

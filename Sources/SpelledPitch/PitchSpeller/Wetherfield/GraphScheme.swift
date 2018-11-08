@@ -17,7 +17,7 @@ struct GraphScheme <Node>: UndirectedGraphSchemeProtocol, UnweightedGraphSchemeP
         self.contains = contains
     }
     
-    func contains(from start: Node, to end: Node) -> Bool {
+    func containsEdge(from start: Node, to end: Node) -> Bool {
         return contains(Edge(start, end))
     }
 }
@@ -25,6 +25,6 @@ struct GraphScheme <Node>: UndirectedGraphSchemeProtocol, UnweightedGraphSchemeP
 extension GraphScheme {
     
     var directed: DirectedGraphScheme<Node> {
-        return .init { edge in self.contains(from: edge.a, to: edge.b) }
+        return .init { edge in self.containsEdge(from: edge.a, to: edge.b) }
     }
 }

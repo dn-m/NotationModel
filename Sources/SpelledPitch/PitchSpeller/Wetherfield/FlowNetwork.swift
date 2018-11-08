@@ -63,7 +63,7 @@ extension FlowNetwork {
     mutating func mask <Scheme: UnweightedGraphSchemeProtocol> (_ adjacencyScheme: Scheme) where
         Scheme.Node == Node
     {
-        for edge in edges where !adjacencyScheme.contains(from: edge.a, to: edge.b) {
+        for edge in edges where !adjacencyScheme.containsEdge(from: edge.a, to: edge.b) {
             remove(edge)
         }
     }
