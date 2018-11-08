@@ -150,7 +150,7 @@ class PitchSpellerTests: XCTestCase {
         let result = pitchSpeller.spell()
         let expected: [Int: SpelledPitch] = [
             0: SpelledPitch(Pitch.Spelling(.c), 4),
-            1: SpelledPitch(Pitch.Spelling(.c, .sharp), 4)
+            1: SpelledPitch(Pitch.Spelling(.d, .flat), 4)
         ]
         XCTAssertEqual(result, expected)
     }
