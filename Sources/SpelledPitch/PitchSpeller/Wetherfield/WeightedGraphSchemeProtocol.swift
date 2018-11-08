@@ -35,24 +35,26 @@ extension WeightedGraphSchemeProtocol {
     }
 }
 
+extension WeightedGraphSchemeProtocol where Weight: Numeric {
+    
+    static func + (lhs: Self, rhs: Self) -> Self {
+        return Self { edge in
+            switch (lhs.weight(edge), rhs.weight(edge)) {
+            case (nil,nil): return nil
+            case let (lhs?, rhs?): return lhs + rhs
+            case let (lhs?, nil): return lhs
+            case let (nil, rhs?): return rhs
+            }
+        }
+    }
+}
+
 extension WeightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtocol, Weight: Numeric {
     
     static func * (lhs: Self, rhs: Self) -> Self {
         return Self { edge in
             guard let lweight = lhs.weight(edge), let rweight = rhs.weight(edge) else { return nil }
             return lweight * rweight
-        }
-    }
-    
-    static func + (lhs: Self, rhs: Self) -> Self {
-        return Self { edge in
-            if let lweight = lhs.weight(edge) {
-                if let rweight = rhs.weight(edge) { return lweight + rweight }
-                return lweight
-            } else {
-                guard let rweight = rhs.weight(edge) else { return nil }
-                return rweight
-            }
         }
     }
 }
@@ -89,17 +91,5 @@ extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, W
         Scheme.Node == Node
     {
         return rhs * lhs
-    }
-    
-    static func + (lhs: Self, rhs: Self) -> Self {
-        return Self { edge in
-            if let lweight = lhs.weight(edge) {
-                if let rweight = rhs.weight(edge) { return lweight + rweight }
-                return lweight
-            } else {
-                guard let rweight = rhs.weight(edge) else { return nil }
-                return rweight
-            }
-        }
     }
 }
