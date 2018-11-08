@@ -1,5 +1,16 @@
 import XCTest
 
+extension AdjacencyCarryingTests {
+    static let __allTests = [
+        ("testAddition", testAddition),
+        ("testConvenienceConstructor", testConvenienceConstructor),
+        ("testMultiplicationBuildOrderMatters", testMultiplicationBuildOrderMatters),
+        ("testMultiplicationDirectedH", testMultiplicationDirectedH),
+        ("testMultiplicationInitializationFreeze", testMultiplicationInitializationFreeze),
+        ("testPullback", testPullback),
+    ]
+}
+
 extension CompoundIntervalDescriptorTests {
     static let __allTests = [
         ("testInitTwoSpelledPitchesAscendingMajorTenth", testInitTwoSpelledPitchesAscendingMajorTenth),
@@ -14,8 +25,58 @@ extension CompoundIntervalDescriptorTests {
 extension FlowNetworkTests {
     static let __allTests = [
         ("testFlowNetworkAbsorbsSourceSink", testFlowNetworkAbsorbsSourceSink),
+        ("testFlowNetworkMaskEmpty", testFlowNetworkMaskEmpty),
+        ("testFlowNetworkMaskPullback", testFlowNetworkMaskPullback),
+        ("testFlowNetworkMaskSquared", testFlowNetworkMaskSquared),
         ("testMinimumCut", testMinimumCut),
         ("testUnreachableMinimumCut", testUnreachableMinimumCut),
+    ]
+}
+
+extension LetterNameTests {
+    static let __allTests = [
+        ("testDisplacedUnison", testDisplacedUnison),
+        ("testLetterNameSimpleNegative", testLetterNameSimpleNegative),
+        ("testLetterNameSimplePositive", testLetterNameSimplePositive),
+        ("testLetterNameWrapping", testLetterNameWrapping),
+    ]
+}
+
+extension PitchSpellerTests {
+    static let __allTests = [
+        ("testSpelledOneFiveOverDNatural", testSpelledOneFiveOverDNatural),
+        ("testSpelledOneFourOverDNatural", testSpelledOneFourOverDNatural),
+        ("testSpelledOneThreeOverDNatural", testSpelledOneThreeOverDNatural),
+        ("testSpelledOneTwoOverDNatural", testSpelledOneTwoOverDNatural),
+        ("testSpelledZeroEightOverDNatural", testSpelledZeroEightOverDNatural),
+        ("testSpelledZeroElevenOverDNatural", testSpelledZeroElevenOverDNatural),
+        ("testSpelledZeroFiveOverDNatural", testSpelledZeroFiveOverDNatural),
+        ("testSpelledZeroFourOverDNatural", testSpelledZeroFourOverDNatural),
+        ("testSpelledZeroNineOverDNatural", testSpelledZeroNineOverDNatural),
+        ("testSpelledZeroOneOverC", testSpelledZeroOneOverC),
+        ("testSpelledZeroSevenOverDNatural", testSpelledZeroSevenOverDNatural),
+        ("testSpelledZeroSixOverDNatural", testSpelledZeroSixOverDNatural),
+        ("testSpelledZeroTenOverDNatural", testSpelledZeroTenOverDNatural),
+        ("testSpelledZeroThreeOverDNatural", testSpelledZeroThreeOverDNatural),
+        ("testSpelledZeroTwoOverDNatural", testSpelledZeroTwoOverDNatural),
+        ("testSpellEightOverANatural", testSpellEightOverANatural),
+        ("testSpellEightOverBNatural", testSpellEightOverBNatural),
+        ("testSpellEightOverCNatural", testSpellEightOverCNatural),
+        ("testSpellEightOverENatural", testSpellEightOverENatural),
+        ("testSpellEightOverFNatural", testSpellEightOverFNatural),
+        ("testSpellEightOverGNatural", testSpellEightOverGNatural),
+        ("testSpellElevenOverDNatural", testSpellElevenOverDNatural),
+        ("testSpellFiveOverDNatural", testSpellFiveOverDNatural),
+        ("testSpellFourOverDNatural", testSpellFourOverDNatural),
+        ("testSpellNineOverDNatural", testSpellNineOverDNatural),
+        ("testSpellOneOverDNatural", testSpellOneOverDNatural),
+        ("testSpellSelfAsPivot", testSpellSelfAsPivot),
+        ("testSpellSevenOverDNatural", testSpellSevenOverDNatural),
+        ("testSpellSixOverDNatural", testSpellSixOverDNatural),
+        ("testSpellTenOverDNatural", testSpellTenOverDNatural),
+        ("testSpellThreeOverDNatural", testSpellThreeOverDNatural),
+        ("testSpellTwoOverDNatural", testSpellTwoOverDNatural),
+        ("testSpellZeroOverDNatural", testSpellZeroOverDNatural),
     ]
 }
 
@@ -53,6 +114,7 @@ extension PitchSpellingTendencyTests {
         ("testPCSixUpUp_EDoubleSharp", testPCSixUpUp_EDoubleSharp),
         ("testPCThreeUpDown_EFlat", testPCThreeUpDown_EFlat),
         ("testPCZeroUpDown_CNatural", testPCZeroUpDown_CNatural),
+        ("testTendencyComparable", testTendencyComparable),
     ]
 }
 
@@ -93,13 +155,29 @@ extension SpelledDyadTests {
 
 extension SpelledPitchTests {
     static let __allTests = [
+        ("testANaturalPlusPerfectFourthOctave", testANaturalPlusPerfectFourthOctave),
+        ("testBNaturalPlusMajorThird", testBNaturalPlusMajorThird),
         ("testBQuarterSharp", testBQuarterSharp),
         ("testBSharpPtolemaicDown", testBSharpPtolemaicDown),
+        ("testCDoubleSharpPlusAugmentedFourth", testCDoubleSharpPlusAugmentedFourth),
+        ("testCNaturalDisplacedByMajorSecondDNatural", testCNaturalDisplacedByMajorSecondDNatural),
+        ("testCNaturalDisplacedByMinorThirdEFlat", testCNaturalDisplacedByMinorThirdEFlat),
+        ("testCNaturalPlusDescendingMajorSecond", testCNaturalPlusDescendingMajorSecond),
+        ("testCNaturalPlusMinorSeventh", testCNaturalPlusMinorSeventh),
         ("testComparableDifferentOctave", testComparableDifferentOctave),
         ("testComparableMinorSixth", testComparableMinorSixth),
         ("testComparableSameLetter", testComparableSameLetter),
         ("testComparableSameOctave", testComparableSameOctave),
+        ("testCSharpMajorThirdESharp", testCSharpMajorThirdESharp),
+        ("testCSharpPlusMajorSecondDSharp", testCSharpPlusMajorSecondDSharp),
+        ("testCSharpPlusMinorSecondDNatural", testCSharpPlusMinorSecondDNatural),
+        ("testDisplacedByUnisonIsSelf", testDisplacedByUnisonIsSelf),
+        ("testENaturalPlusMajorSecond", testENaturalPlusMajorSecond),
         ("testExtrema", testExtrema),
+        ("testFNaturalPlusDescendingMajorSecondNoOctaveChange", testFNaturalPlusDescendingMajorSecondNoOctaveChange),
+        ("testFNaturalPlusMinorSeventh", testFNaturalPlusMinorSeventh),
+        ("testFSharpPlusMajorThirdASharp", testFSharpPlusMajorThirdASharp),
+        ("testGSharpPlusDescendingMajorSeventh", testGSharpPlusDescendingMajorSeventh),
         ("testOctaveBBelowMiddleC", testOctaveBBelowMiddleC),
         ("testOctaveBSharp", testOctaveBSharp),
         ("testOctaveCFlat", testOctaveCFlat),
@@ -123,6 +201,17 @@ extension UnorderedIntervalDescriptorTests {
     ]
 }
 
+extension WeightCarryingTests {
+    static let __allTests = [
+        ("testAddition", testAddition),
+        ("testConvenienceConstructor", testConvenienceConstructor),
+        ("testMultiplicationDirectedBuildOrderMatters", testMultiplicationDirectedBuildOrderMatters),
+        ("testMultiplicationDirectedH", testMultiplicationDirectedH),
+        ("testMultiplicationInitializationFreeze", testMultiplicationInitializationFreeze),
+        ("testPullback", testPullback),
+    ]
+}
+
 extension WetherfieldTests {
     static let __allTests = [
         ("testInitDyadNodeCount", testInitDyadNodeCount),
@@ -133,8 +222,11 @@ extension WetherfieldTests {
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
+        testCase(AdjacencyCarryingTests.__allTests),
         testCase(CompoundIntervalDescriptorTests.__allTests),
         testCase(FlowNetworkTests.__allTests),
+        testCase(LetterNameTests.__allTests),
+        testCase(PitchSpellerTests.__allTests),
         testCase(PitchSpellingCategoryTests.__allTests),
         testCase(PitchSpellingTendencyTests.__allTests),
         testCase(PitchSpellingTests.__allTests),
@@ -142,6 +234,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(SpelledDyadTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
         testCase(UnorderedIntervalDescriptorTests.__allTests),
+        testCase(WeightCarryingTests.__allTests),
         testCase(WetherfieldTests.__allTests),
     ]
 }
