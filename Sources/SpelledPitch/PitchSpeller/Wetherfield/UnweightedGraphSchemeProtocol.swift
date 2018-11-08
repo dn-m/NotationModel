@@ -22,14 +22,17 @@ extension UnweightedGraphSchemeProtocol {
     }
 }
 
+extension UnweightedGraphSchemeProtocol {
+    
+    static func + (lhs: Self, rhs: Self) -> Self {
+        return Self { edge in lhs.contains(edge) || rhs.contains(edge) }
+    }
+}
+
 extension UnweightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtocol {
     
     static func * (lhs: Self, rhs: Self) -> Self {
         return Self { edge in lhs.contains(edge) && rhs.contains(edge) }
-    }
-    
-    static func + (lhs: Self, rhs: Self) -> Self {
-        return Self { edge in lhs.contains(edge) || rhs.contains(edge) }
     }
 }
 
