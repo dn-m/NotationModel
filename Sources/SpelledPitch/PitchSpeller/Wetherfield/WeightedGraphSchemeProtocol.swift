@@ -65,10 +65,11 @@ extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, W
     Scheme.Weight == Weight
     {
         return Self { edge in
-            guard
-                let lweight = lhs.weight(edge),
-                let rweight = rhs.weight(from: edge.a, to: edge.b) else { return nil }
-            return lweight * rweight
+            lhs.weight(edge).flatMap { lweight in
+                rhs.weight(from: edge.a, to: edge.b).flatMap { rweight in
+                    lweight * rweight
+                }
+            }
         }
     }
     
