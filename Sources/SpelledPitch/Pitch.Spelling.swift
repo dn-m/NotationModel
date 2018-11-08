@@ -54,7 +54,7 @@ extension Pitch {
                 // MARK: - Initializers
 
                 /// Creates a `Pythagorean` base modifier with the given `amount`.
-                init(_ amount: Int) {
+                public init(_ amount: Int) {
                     self.amount = amount
                 }
             }
@@ -174,6 +174,42 @@ extension Pitch.Spelling: Comparable {
     }
 }
 
+extension Pitch.Spelling.Modifier.Pythagorean: CustomStringConvertible {
+
+    // FIXME: Extend for quarter tones, septimal commas, etc.
+    public var description: String {
+        if amount < 0 {
+            return String(repeating: "b", count: abs(amount))
+        } else if amount > 0 {
+            return (
+                String(repeating: "x", count: amount / 2) +
+                String(repeating: "#", count: amount % 2)
+            )
+        }
+        return ""
+    }
+}
+
+extension Pitch.Spelling.Modifier: CustomStringConvertible {
+    // FIXME: Extend for quarter tones, septimal commas, etc.
+    public var description: String {
+        if self == .natural { return "" }
+        return (["\(base)"] + alterations.map { "\($0)" })
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+    }
+}
+
+extension Pitch.Spelling: CustomStringConvertible {
+    // FIXME: Extend for quarter tones, septimal commas, etc.
+    public var description: String {
+        return [letterName, modifier]
+            .map { "\($0)" }
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+    }
+}
+
 extension Pitch.Spelling.Modifier.Pythagorean: Equatable { }
 extension Pitch.Spelling.Modifier.Pythagorean: Hashable { }
 extension Pitch.Spelling.Modifier.Alteration: Equatable { }
@@ -191,4 +227,3 @@ extension Pitch.Spelling {
         return LineOfFifths.distance(ofPitchSpelling: self)
     }
 }
-
