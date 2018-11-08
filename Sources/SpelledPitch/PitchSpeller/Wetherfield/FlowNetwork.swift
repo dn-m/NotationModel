@@ -75,8 +75,7 @@ extension FlowNetwork {
         for edge in edges {
             if let scalar = weightScheme.weight(from: edge.a, to: edge.b) {
                 updateEdge(edge) { $0 * scalar }
-            }
-            else { remove(edge) }
+            } else { remove(edge) }
         }
     }
 }
