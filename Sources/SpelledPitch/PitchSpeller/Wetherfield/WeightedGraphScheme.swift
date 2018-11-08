@@ -16,4 +16,15 @@ struct WeightedGraphScheme <Node,Weight>: UndirectedGraphSchemeProtocol, Weighte
     init (_ weight: @escaping (Edge) -> Weight?) {
         self.weight = weight
     }
+    
+    func weight(from start: Node, to end: Node) -> Weight? {
+        return weight(Edge(start, end))
+    }
+}
+
+extension WeightedGraphScheme {
+    
+    var directed: WeightedDirectedGraphScheme<Node,Weight> {
+        return .init { edge in self.weight(from: edge.a, to: edge.b) }
+    }
 }

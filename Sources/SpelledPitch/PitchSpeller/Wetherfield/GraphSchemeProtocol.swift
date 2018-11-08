@@ -18,6 +18,6 @@ extension GraphProtocol {
         G.Edge == Edge,
         G.Node == Node
     {
-        return G.init(self.contains)
+        return G(self.contains)
     }
 }
