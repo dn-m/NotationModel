@@ -144,7 +144,7 @@ class PitchSpellerTests: XCTestCase {
 
     // MARK: - Dyads
 
-    func testSpelledZeroOneOverC() {
+    func testSpelledZeroOneOverDNatural() {
         let pitches: [Int: Pitch] = [0: 60, 1: 61]
         let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
         let result = pitchSpeller.spell()

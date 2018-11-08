@@ -32,4 +32,49 @@ class PitchSpellingTests: XCTestCase {
     func testPitchClassCQuarterSharpZeroPointFive() {
         XCTAssertEqual(Pitch.Spelling(.c, .quarterSharp).pitchClass, 0.5)
     }
+
+    // MARK: - CustomStringConvertible
+
+    func testCNaturalDescription() {
+        let cNatural = Pitch.Spelling(.c, .natural)
+        XCTAssertEqual(cNatural.description, "c")
+    }
+
+    func testCSharpDescription() {
+        let cSharp = Pitch.Spelling(.c, .sharp)
+        XCTAssertEqual(cSharp.description, "c #")
+    }
+
+    func testCFlatDescription() {
+        let cFlat = Pitch.Spelling(.c, .flat)
+        XCTAssertEqual(cFlat.description, "c b")
+    }
+
+    func testCDoubleFlatDescription() {
+        let cDoubleFlat = Pitch.Spelling(.c, .doubleFlat)
+        XCTAssertEqual(cDoubleFlat.description, "c bb")
+    }
+
+    func testCDoubleSharpDescription() {
+        let cDoubleSharp = Pitch.Spelling(.c, .doubleSharp)
+        XCTAssertEqual(cDoubleSharp.description, "c x")
+    }
+
+    func testGQuadrupleSharpDescription() {
+        let quadrupleSharp = Pitch.Spelling.Modifier.Pythagorean(4)
+        let gQuadrupleSharp = Pitch.Spelling(.g, quadrupleSharp)
+        XCTAssertEqual(gQuadrupleSharp.description, "g xx")
+    }
+
+    func testFQuintupleSharpDescription() {
+        let quintupleSharp = Pitch.Spelling.Modifier.Pythagorean(5)
+        let fQuintupleSharp = Pitch.Spelling(.f, quintupleSharp)
+        XCTAssertEqual(fQuintupleSharp.description, "f xx#")
+    }
+
+    func testENonTupleFlatDescription() {
+        let nontupleFlat = Pitch.Spelling.Modifier.Pythagorean(-9)
+        let eNontupleFlat = Pitch.Spelling(.e, nontupleFlat)
+        XCTAssertEqual(eNontupleFlat.description, "e bbbbbbbbb")
+    }
 }

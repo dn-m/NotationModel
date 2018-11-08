@@ -16,7 +16,7 @@ struct GraphScheme <Node>: UndirectedGraphSchemeProtocol, UnweightedGraphSchemeP
     init (_ contains: @escaping (Edge) -> Bool) {
         self.contains = contains
     }
-    
+
     func containsEdge(from start: Node, to end: Node) -> Bool {
         return contains(Edge(start, end))
     }

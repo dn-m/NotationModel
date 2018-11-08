@@ -53,7 +53,6 @@ extension PitchSpellerTests {
         ("testSpelledZeroFiveOverDNatural", testSpelledZeroFiveOverDNatural),
         ("testSpelledZeroFourOverDNatural", testSpelledZeroFourOverDNatural),
         ("testSpelledZeroNineOverDNatural", testSpelledZeroNineOverDNatural),
-        ("testSpelledZeroOneOverC", testSpelledZeroOneOverC),
         ("testSpelledZeroSevenOverDNatural", testSpelledZeroSevenOverDNatural),
         ("testSpelledZeroSixOverDNatural", testSpelledZeroSixOverDNatural),
         ("testSpelledZeroTenOverDNatural", testSpelledZeroTenOverDNatural),
@@ -120,6 +119,14 @@ extension PitchSpellingTendencyTests {
 
 extension PitchSpellingTests {
     static let __allTests = [
+        ("testCDoubleFlatDescription", testCDoubleFlatDescription),
+        ("testCDoubleSharpDescription", testCDoubleSharpDescription),
+        ("testCFlatDescription", testCFlatDescription),
+        ("testCNaturalDescription", testCNaturalDescription),
+        ("testCSharpDescription", testCSharpDescription),
+        ("testENonTupleFlatDescription", testENonTupleFlatDescription),
+        ("testFQuintupleSharpDescription", testFQuintupleSharpDescription),
+        ("testGQuadrupleSharpDescription", testGQuadrupleSharpDescription),
         ("testInitJustLetterName", testInitJustLetterName),
         ("testPitchClassCQuarterSharpZeroPointFive", testPitchClassCQuarterSharpZeroPointFive),
         ("testPitchClassCSharpOne", testPitchClassCSharpOne),
