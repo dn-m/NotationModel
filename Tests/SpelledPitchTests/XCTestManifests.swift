@@ -44,7 +44,6 @@ extension LetterNameTests {
 
 extension PitchSpellerTests {
     static let __allTests = [
-        ("testSpellCF", testSpellCF),
         ("testSpellEightOverANatural", testSpellEightOverANatural),
         ("testSpellEightOverBNatural", testSpellEightOverBNatural),
         ("testSpellEightOverCNatural", testSpellEightOverCNatural),
