@@ -65,7 +65,7 @@ extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, W
     {
         return Self { edge in
             lhs.weight(edge).flatMap { lweight in
-                rhs.weight(from: edge.a, to: edge.b).flatMap { rweight in
+                rhs.weight(from: edge.a, to: edge.b).map { rweight in
                     lweight * rweight
                 }
             }
