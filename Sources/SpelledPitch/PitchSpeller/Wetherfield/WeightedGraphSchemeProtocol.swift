@@ -35,16 +35,13 @@ extension WeightedGraphSchemeProtocol {
     }
 }
 
-extension WeightedGraphSchemeProtocol where Weight: Numeric {
+extension WeightedGraphSchemeProtocol {
     
+    /// - Returns: rhs weight function whenever the lhs is missing the edge in question.
+    /// This function is non-commutative.
     static func + (lhs: Self, rhs: Self) -> Self {
         return Self { edge in
-            switch (lhs.weight(edge), rhs.weight(edge)) {
-            case (nil,nil): return nil
-            case let (lhs?, rhs?): return lhs + rhs
-            case let (lhs?, nil): return lhs
-            case let (nil, rhs?): return rhs
-            }
+            lhs.weight(edge) ?? rhs.weight(edge)
         }
     }
 }
