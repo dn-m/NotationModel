@@ -105,20 +105,29 @@ extension PitchSpeller {
         }
         self.getPitchClass = getPitchClass
 
-        let specificToEight = GraphScheme<Cross<Pitch.Class, Tendency>> (eightLookup.contains)
-        let connectToEight: GraphScheme<PitchSpellingNode.Index> = specificToEight.pullback { flowNode in
+        // Masks that operate on pitch class information
+        let containsEightSet: GraphScheme<PitchSpellingNode.Index> =
+            GraphScheme<Cross<Pitch.Class, Tendency>> (eightLookup.contains).pullback { flowNode in
             .init(getPitchClass(flowNode), flowNode.tendency)
         }
-        let connectedToTwoNotEight = connectSameTendencies * whereEdge(contains: false)(8) * whereEdge(contains: true)(2)
-        let sameClass = connectSameTendencies * GraphScheme<Pitch.Class> { edge in
-            edge.a == edge.b }
-            .pullback(getPitchClass)
-        let connectedToEight = connectToEight * whereEdge(contains: true)(8)
-        let generalConnections: DirectedGraphScheme<PitchSpellingNode.Index> =
-            (connectDifferentInts * (connectedToTwoNotEight + sameClass + connectedToEight)).directed
+
+        let differentTendenciesSet: GraphScheme<PitchSpellingNode.Index> = connectDifferentLookup.pullback(getPitchClass)
+        let sameTendenciesSet: GraphScheme<PitchSpellingNode.Index> =
+            connectSameLookup.pullback(getPitchClass)
         
+        // ... combined with masks that operate on tendency information
+        let connectToEight = (containsEightSet * whereEdge(contains: true)(8))
+        let sameTendencies = (sameTendenciesSet * connectSameTendencies)
+        let differentTendencies = (differentTendenciesSet * connectDifferentTendencies)
+        
+        // All the connections that rely on pitch class specific information
+        let generalConnections: DirectedGraphScheme<PitchSpellingNode.Index> =
+            (connectDifferentInts * (sameTendencies + differentTendencies + connectToEight)).directed
+        
+        // Combination of pitch class specific information and connections within each `Int` index
+        // regardless of pitch class.
         let maskArgument: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
-            1.0 * generalConnections * connectDifferentInts + bigMAssignment * connectSameInts
+            1.0 * (generalConnections) + bigMAssignment * connectSameInts
         flowNetwork.mask(maskArgument)
     }
 }
@@ -209,6 +218,9 @@ private func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pi
 private let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> =
     GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency }
 
+private let connectDifferentTendencies: GraphScheme<PitchSpellingNode.Index> =
+    GraphScheme<Tendency> { edge in edge.a != edge.b }.pullback { node in node.tendency }
+
 private let connectUpToDown: DirectedGraphScheme<PitchSpellingNode.Index> =
     DirectedGraphScheme<Tendency> { edge in
         edge.a == .up && edge.b == .down
@@ -241,6 +253,28 @@ private let eightTendencyLink: [(Pitch.Class, Tendency)] = [
     (10, .down),
     (11, .up)
 ]
+
+private let connectDifferentLookup = GraphScheme<Pitch.Class> { edge in
+    Set<UnorderedPair<Pitch.Class>> ([
+        .init(11,03),
+        .init(01,03),
+        .init(03,06),
+        .init(01,05),
+        .init(01,10),
+        .init(06,10),
+        .init(00,01),
+        .init(03,04),
+        .init(10,11)
+    ]).contains(edge)
+}
+
+private let nonTriToneLookup = GraphScheme<Pitch.Class> { edge in
+    edge.a + 6 != edge.b
+}
+
+private let connectSameLookup = GraphScheme<Pitch.Class> { edge in
+    (adjacencyScheme(contains: false)(8) * nonTriToneLookup).contains(edge) && !connectDifferentLookup.contains(edge)
+}
 
 // Maps `eightTendencyLink` to a `Set` of `Edge` values (to check for membership)
 private let eightLookup = Set<UnorderedPair<Cross<Pitch.Class, Tendency>>> (
