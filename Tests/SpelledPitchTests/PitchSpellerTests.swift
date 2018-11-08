@@ -227,7 +227,7 @@ class PitchSpellerTests: XCTestCase {
         let result = pitchSpeller.spell()
         let expected: [Int: SpelledPitch] = [
             0: SpelledPitch(Pitch.Spelling(.c), 4),
-            1: SpelledPitch(Pitch.Spelling(.g, .sharp), 4)
+            1: SpelledPitch(Pitch.Spelling(.a, .flat), 4)
         ]
         XCTAssertEqual(result, expected)
     }
