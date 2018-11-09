@@ -194,3 +194,5 @@ extension Sequence {
         return (filterComplement(predicate), filter(predicate))
     }
 }
+
+extension FlowNetwork: Equatable where Node: Hashable, Weight: Hashable { }

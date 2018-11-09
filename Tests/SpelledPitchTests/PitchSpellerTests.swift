@@ -147,6 +147,33 @@ class PitchSpellerTests: XCTestCase {
     func testSpelledZeroOneOverDNatural() {
         let pitches: [Int: Pitch] = [0: 60, 1: 61]
         let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let expectedGraph = WeightedDirectedGraph<PitchSpellingNode.Index,Double> (Set([
+            .internal(.init(0,.down)),
+            .internal(.init(0,.up)),
+            .internal(.init(1,.down)),
+            .internal(.init(1,.up)),
+            .source,
+            .sink]), [
+            .init(.source,.internal(.init(0,.down))): 1.0,
+            .init(.source,.internal(.init(1,.down))): 1.0,
+            .init(.internal(.init(0,.up)),.sink): 1.0,
+            .init(.internal(.init(1,.up)),.sink): 1.0,
+//            .init(.internal(.init(1,.up)),.internal(.init(1,.down))): Double.infinity,
+//            .init(.internal(.init(0,.up)),.internal(.init(0,.down))): Double.infinity,
+            .init(.internal(.init(1,.up)),.internal(.init(0,.down))): 1.0,
+            .init(.internal(.init(1,.down)),.internal(.init(0,.up))): 1.0,
+            .init(.internal(.init(0,.up)),.internal(.init(1,.down))): 1.0,
+            .init(.internal(.init(0,.down)),.internal(.init(1,.up))): 1.0,
+            ]
+        )
+        let expectedFlowNetwork = FlowNetwork<PitchSpellingNode.Index,Double> (
+            expectedGraph, source: .source, sink: .sink
+        )
+        XCTAssertEqual(pitchSpeller.flowNetwork.nodes, expectedFlowNetwork.nodes)
+        XCTAssertEqual(pitchSpeller.flowNetwork.edges, expectedFlowNetwork.edges)
+        XCTAssertEqual(pitchSpeller.flowNetwork, expectedFlowNetwork)
+//
+//        )
         let result = pitchSpeller.spell()
         let expected: [Int: SpelledPitch] = [
             0: SpelledPitch(Pitch.Spelling(.c), 4),
