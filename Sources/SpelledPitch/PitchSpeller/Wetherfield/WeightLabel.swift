@@ -65,7 +65,13 @@ extension WeightLabel: ExpressibleByIntegerLiteral {
     }
 }
 
-extension WeightLabel: Equatable where Edge: Equatable { }
+extension WeightLabel: Equatable where Edge: Equatable {
+    
+    static func == (lhs: WeightLabel, rhs: WeightLabel) -> Bool {
+        return lhs.plusColumn == rhs.plusColumn && lhs.minusColumn == rhs.minusColumn
+    }
+}
+
 extension WeightLabel: Comparable where Edge.A: Assigned {
     static func < (lhs: WeightLabel<Edge>, rhs: WeightLabel<Edge>) -> Bool {
         return lhs.edge.flatMap { left in
