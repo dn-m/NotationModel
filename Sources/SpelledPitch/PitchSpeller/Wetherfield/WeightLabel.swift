@@ -8,7 +8,7 @@
 import DataStructures
 import Pitch
 
-protocol WeightLabelProtocol: AdditiveGroup {
+protocol WeightLabelProtocol: _AdditiveGroup {
     
     associatedtype Edge: SymmetricPair
     
@@ -81,7 +81,7 @@ protocol Assigned {
     var assignment: Tendency { get }
 }
 
-protocol AdditiveGroup {
+protocol _AdditiveGroup {
     
     static var zero: Self { get }
     
