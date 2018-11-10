@@ -68,7 +68,7 @@ extension WeightLabel: ExpressibleByIntegerLiteral {
 extension WeightLabel: Equatable where Edge: Equatable {
     
     static func == (lhs: WeightLabel, rhs: WeightLabel) -> Bool {
-        return lhs.plusColumn == rhs.plusColumn && lhs.minusColumn == rhs.minusColumn
+        return lhs.plusColumn.subtracting(lhs.minusColumn) == rhs.plusColumn.subtracting(rhs.minusColumn)
     }
 }
 
