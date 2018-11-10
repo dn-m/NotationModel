@@ -15,19 +15,6 @@ protocol WeightLabelProtocol: AdditiveGroup {
     static func build (_ edge: Edge) -> Self
 }
 
-protocol AdditiveGroup {
-    
-    static var zero: Self { get }
-    
-    static prefix func - (_ invert: Self) -> Self
-    static func + (lhs: Self, rhs: Self) -> Self
-    static func - (lhs: Self, rhs: Self) -> Self
-}
-
-protocol Assigned {
-    var assignment: Tendency { get }
-}
-
 struct WeightLabel<Edge>: WeightLabelProtocol where
     Edge: SymmetricPair & Hashable
 {
@@ -88,4 +75,17 @@ extension WeightLabel: Comparable where Edge.A: Assigned {
             }
         } ?? false
     }
+}
+
+protocol Assigned {
+    var assignment: Tendency { get }
+}
+
+protocol AdditiveGroup {
+    
+    static var zero: Self { get }
+    
+    static prefix func - (_ invert: Self) -> Self
+    static func + (lhs: Self, rhs: Self) -> Self
+    static func - (lhs: Self, rhs: Self) -> Self
 }
