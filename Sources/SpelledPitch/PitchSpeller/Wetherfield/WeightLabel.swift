@@ -76,8 +76,8 @@ extension WeightLabel: Comparable where Edge.A: Assigned {
     static func < (lhs: WeightLabel<Edge>, rhs: WeightLabel<Edge>) -> Bool {
         return lhs.edge.flatMap { left in
             rhs.edge.map { right in
-                left.a.assignment.rawValue < left.b.assignment.rawValue &&
-                !(right.a.assignment.rawValue < right.b.assignment.rawValue)
+                left.a.assignment < left.b.assignment &&
+                !(right.a.assignment < right.b.assignment)
             }
         } ?? false
     }
