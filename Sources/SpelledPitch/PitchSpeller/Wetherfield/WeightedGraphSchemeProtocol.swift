@@ -35,6 +35,17 @@ extension WeightedGraphSchemeProtocol {
     }
 }
 
+extension WeightedGraphSchemeProtocol {
+    
+    /// - Returns: rhs weight function whenever the lhs is missing the edge in question.
+    /// This function is non-commutative.
+    static func + (lhs: Self, rhs: Self) -> Self {
+        return Self { edge in
+            lhs.weight(edge) ?? rhs.weight(edge)
+        }
+    }
+}
+
 extension WeightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtocol, Weight: Numeric {
     
     static func * (lhs: Self, rhs: Self) -> Self {
@@ -53,10 +64,11 @@ extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, W
     Scheme.Weight == Weight
     {
         return Self { edge in
-            guard
-                let lweight = lhs.weight(edge),
-                let rweight = rhs.weight(from: edge.a, to: edge.b) else { return nil }
-            return lweight * rweight
+            lhs.weight(edge).flatMap { lweight in
+                rhs.weight(from: edge.a, to: edge.b).map { rweight in
+                    lweight * rweight
+                }
+            }
         }
     }
     
@@ -65,10 +77,8 @@ extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, W
         Scheme.Node == Node
     {
         return Self { edge in
-            if let lweight = lhs.weight(edge) {
-                return rhs.contains(from: edge.a, to: edge.b) ? lweight : nil
-            } else {
-                return nil
+            lhs.weight(edge).flatMap { weight in
+                rhs.containsEdge(from: edge.a, to: edge.b) ? weight : nil
             }
         }
     }

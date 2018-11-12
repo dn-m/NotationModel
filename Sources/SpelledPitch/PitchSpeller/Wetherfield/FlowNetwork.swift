@@ -63,7 +63,7 @@ extension FlowNetwork {
     mutating func mask <Scheme: UnweightedGraphSchemeProtocol> (_ adjacencyScheme: Scheme) where
         Scheme.Node == Node
     {
-        for edge in edges where !adjacencyScheme.contains(from: edge.a, to: edge.b) {
+        for edge in edges where !adjacencyScheme.containsEdge(from: edge.a, to: edge.b) {
             remove(edge)
         }
     }
@@ -73,8 +73,11 @@ extension FlowNetwork {
         Scheme.Weight == Weight
     {
         for edge in edges {
-            guard let scalar = weightScheme.weight(from: edge.a, to: edge.b) else { remove(edge); return }
-            updateEdge(edge) { $0 * scalar }
+            if let scalar = weightScheme.weight(from: edge.a, to: edge.b) {
+                updateEdge(edge) { $0 * scalar }
+            } else {
+                remove(edge)
+            }
         }
     }
 }
@@ -191,3 +194,5 @@ extension Sequence {
         return (filterComplement(predicate), filter(predicate))
     }
 }
+
+extension FlowNetwork: Equatable where Node: Hashable, Weight: Hashable { }

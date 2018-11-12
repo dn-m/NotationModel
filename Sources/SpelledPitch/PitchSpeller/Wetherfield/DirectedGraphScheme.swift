@@ -17,7 +17,7 @@ struct DirectedGraphScheme <Node>: DirectedGraphSchemeProtocol, UnweightedGraphS
         self.contains = contains
     }
     
-    func contains(from start: Node, to end: Node) -> Bool {
+    func containsEdge(from start: Node, to end: Node) -> Bool {
         return contains(Edge(start, end))
     }
 }

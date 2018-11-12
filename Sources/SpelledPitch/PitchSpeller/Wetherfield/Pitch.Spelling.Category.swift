@@ -23,7 +23,7 @@ extension Pitch.Spelling {
         /// Category for pitch classes `0` and `5`.
         struct Zero: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .natural, .up: .sharp]
+                return [.down: .doubleFlat, .neutral: .natural, .up: .sharp]
             }
         }
 
@@ -44,7 +44,7 @@ extension Pitch.Spelling {
         /// Category for pitch classes `3`, and `10`.
         struct Three: PitchSpellingCategoryProtocol {
             static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .flat, .up: .sharp]
+                return [.down: .doubleFlat, .neutral: .flat, .up: .sharp]
             }
         }
 
