@@ -117,6 +117,47 @@ class FlowNetworkTests: XCTestCase {
         XCTAssertEqual(flowNetwork.weight(from: "", to: "."), 3)
         XCTAssertEqual(flowNetwork.weight(from: ".", to: ".."), 10)
     }
+    
+    func testPitchSpellingTestCase() {
+        let expectedGraph = WeightedDirectedGraph<PitchSpellingNode.Index,Double> (Set([
+            .internal(.init(1,.down)),
+            .internal(.init(1,.up)),
+            .internal(.init(3,.down)),
+            .internal(.init(3,.up)),
+            .source,
+            .sink]), [
+                
+                // source edges
+                .init(.source,                  .internal(.init(1,.down))): 3,
+                .init(.source,                  .internal(.init(3,.down))): 1,
+                
+                //sink edges
+                .init(.internal(.init(1,  .up)),                    .sink): 1,
+                .init(.internal(.init(3,  .up)),                    .sink): 3,
+                
+                // bigM edges
+                .init(.internal(.init(1,  .up)),.internal(.init(1,.down))): Double.infinity,
+                .init(.internal(.init(3,  .up)),.internal(.init(3,.down))): Double.infinity,
+                
+                // internal edges
+                .init(.internal(.init(1,  .up)),.internal(.init(3,.down))): 0.5,
+                .init(.internal(.init(1,.down)),.internal(.init(3,  .up))): 4,
+                .init(.internal(.init(3,  .up)),.internal(.init(1,.down))): 4,
+                .init(.internal(.init(3,.down)),.internal(.init(1,  .up))): 0.5,
+                ]
+        )
+        let expectedFlowNetwork = FlowNetwork<PitchSpellingNode.Index,Double> (
+            expectedGraph, source: .source, sink: .sink
+        )
+        let (sourceNodes, sinkNodes) = expectedFlowNetwork.minimumCut
+        let expectedSourceNodes = Set<PitchSpellingNode.Index>([.source, .internal(.init(3, .down))])
+        let expectedSinkNodes = Set<PitchSpellingNode.Index>([.sink,
+                                                              .internal(.init(3, .up)),
+                                                              .internal(.init(1, .down)),
+                                                              .internal(.init(1, .up))])
+        XCTAssertEqual(sourceNodes, expectedSourceNodes)
+        XCTAssertEqual(sinkNodes, expectedSinkNodes)
+    }
 
     #warning("Reinstate")
 //    func testRandomNetwork() {

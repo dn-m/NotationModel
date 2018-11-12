@@ -92,55 +92,12 @@ class PitchSpellerTests: XCTestCase {
     }
     
     func testSpellEightOverCNatural() {
-        let pitchSpeller = PitchSpeller(pitches: [0: 68], parsimonyPivot: Pitch.Spelling(.c))
-        let result = pitchSpeller.spell()
-        let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(.a, .flat))]
-        XCTAssertEqual(result, expected)
-    }
-    
-    func testSpellEightOverBNatural() {
-        let pitchSpeller = PitchSpeller(pitches: [0: 68], parsimonyPivot: Pitch.Spelling(.b))
+        let pitchSpeller = PitchSpeller(pitches: [0: 68], parsimonyPivot: Pitch.Spelling(.d))
         let result = pitchSpeller.spell()
         let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(.g, .sharp))]
         XCTAssertEqual(result, expected)
     }
     
-    func testSpellEightOverANatural() {
-        let pitchSpeller = PitchSpeller(pitches: [0: 68], parsimonyPivot: Pitch.Spelling(.a))
-        let result = pitchSpeller.spell()
-        let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(.g, .sharp))]
-        XCTAssertEqual(result, expected)
-    }
-    
-    func testSpellEightOverGNatural() {
-        let pitchSpeller = PitchSpeller(pitches: [0: 68], parsimonyPivot: Pitch.Spelling(.g))
-        let result = pitchSpeller.spell()
-        let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(.a, .flat))]
-        XCTAssertEqual(result, expected)
-    }
-    
-    func testSpellEightOverFNatural() {
-        let pitchSpeller = PitchSpeller(pitches: [0: 68], parsimonyPivot: Pitch.Spelling(.f))
-        let result = pitchSpeller.spell()
-        let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(.a, .flat))]
-        XCTAssertEqual(result, expected)
-    }
-    
-    func testSpellEightOverENatural() {
-        let pitchSpeller = PitchSpeller(pitches: [0: 68], parsimonyPivot: Pitch.Spelling(.e))
-        let result = pitchSpeller.spell()
-        let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(.g, .sharp))]
-        XCTAssertEqual(result, expected)
-    }
-    
-    func testSpellSelfAsPivot() {
-        for letterName in LetterName.allCases {
-            let pitchSpeller = PitchSpeller(pitches: [0: Pitch(letterName.pitchClass)], parsimonyPivot: Pitch.Spelling(letterName))
-            let result = pitchSpeller.spell()
-            let expected: [Int: SpelledPitch] = [0: SpelledPitch(Pitch.Spelling(letterName), -1)]
-            XCTAssertEqual(result, expected)
-        }
-    }
 
     // MARK: - Dyads
 
@@ -154,16 +111,24 @@ class PitchSpellerTests: XCTestCase {
             .internal(.init(1,.up)),
             .source,
             .sink]), [
-            .init(.source,.internal(.init(0,.down))): 1.0,
-            .init(.source,.internal(.init(1,.down))): 1.0,
-            .init(.internal(.init(0,.up)),.sink): 1.0,
-            .init(.internal(.init(1,.up)),.sink): 1.0,
-//            .init(.internal(.init(1,.up)),.internal(.init(1,.down))): Double.infinity,
-//            .init(.internal(.init(0,.up)),.internal(.init(0,.down))): Double.infinity,
-            .init(.internal(.init(1,.up)),.internal(.init(0,.down))): 1.0,
-            .init(.internal(.init(1,.down)),.internal(.init(0,.up))): 1.0,
-            .init(.internal(.init(0,.up)),.internal(.init(1,.down))): 1.0,
-            .init(.internal(.init(0,.down)),.internal(.init(1,.up))): 1.0,
+                
+            // source edges
+            .init(.source,                  .internal(.init(0,.down))): 2,
+            .init(.source,                  .internal(.init(1,.down))): 3,
+            
+            //sink edges
+            .init(.internal(.init(0,  .up)),                    .sink): 3,
+            .init(.internal(.init(1,  .up)),                    .sink): 1,
+            
+            // bigM edges
+            .init(.internal(.init(1,  .up)),.internal(.init(1,.down))): Double.infinity,
+            .init(.internal(.init(0,  .up)),.internal(.init(0,.down))): Double.infinity,
+            
+            // internal edges
+            .init(.internal(.init(1,  .up)),.internal(.init(0,.down))): 1.5,
+            .init(.internal(.init(1,.down)),.internal(.init(0,  .up))): 0.5,
+            .init(.internal(.init(0,  .up)),.internal(.init(1,.down))): 0.5,
+            .init(.internal(.init(0,.down)),.internal(.init(1,  .up))): 1.5,
             ]
         )
         let expectedFlowNetwork = FlowNetwork<PitchSpellingNode.Index,Double> (
@@ -172,8 +137,6 @@ class PitchSpellerTests: XCTestCase {
         XCTAssertEqual(pitchSpeller.flowNetwork.nodes, expectedFlowNetwork.nodes)
         XCTAssertEqual(pitchSpeller.flowNetwork.edges, expectedFlowNetwork.edges)
         XCTAssertEqual(pitchSpeller.flowNetwork, expectedFlowNetwork)
-//
-//        )
         let result = pitchSpeller.spell()
         let expected: [Int: SpelledPitch] = [
             0: SpelledPitch(Pitch.Spelling(.c), 4),
@@ -304,12 +267,45 @@ class PitchSpellerTests: XCTestCase {
     }
 
     func testSpelledOneThreeOverDNatural() {
-        let pitches: [Int: Pitch] = [0: 61, 1: 63]
+        let pitches: [Int: Pitch] = [1: 61, 3: 63]
         let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let expectedGraph = WeightedDirectedGraph<PitchSpellingNode.Index,Double> (Set([
+            .internal(.init(1,.down)),
+            .internal(.init(1,.up)),
+            .internal(.init(3,.down)),
+            .internal(.init(3,.up)),
+            .source,
+            .sink]), [
+                
+                // source edges
+                .init(.source,                  .internal(.init(1,.down))): 3,
+                .init(.source,                  .internal(.init(3,.down))): 1,
+                
+                //sink edges
+                .init(.internal(.init(1,  .up)),                    .sink): 1,
+                .init(.internal(.init(3,  .up)),                    .sink): 3,
+                
+                // bigM edges
+                .init(.internal(.init(1,  .up)),.internal(.init(1,.down))): Double.infinity,
+                .init(.internal(.init(3,  .up)),.internal(.init(3,.down))): Double.infinity,
+                
+                // internal edges
+                .init(.internal(.init(1,  .up)),.internal(.init(3,.down))): 1,
+                .init(.internal(.init(1,.down)),.internal(.init(3,  .up))): 1,
+                .init(.internal(.init(3,  .up)),.internal(.init(1,.down))): 1,
+                .init(.internal(.init(3,.down)),.internal(.init(1,  .up))): 1,
+                ]
+        )
+        let expectedFlowNetwork = FlowNetwork<PitchSpellingNode.Index,Double> (
+            expectedGraph, source: .source, sink: .sink
+        )
+        XCTAssertEqual(pitchSpeller.flowNetwork.nodes, expectedFlowNetwork.nodes)
+        XCTAssertEqual(pitchSpeller.flowNetwork.edges, expectedFlowNetwork.edges)
+        XCTAssertEqual(pitchSpeller.flowNetwork, expectedFlowNetwork)
         let result = pitchSpeller.spell()
         let expected: [Int: SpelledPitch] = [
-            0: SpelledPitch(Pitch.Spelling(.c, .sharp), 4),
-            1: SpelledPitch(Pitch.Spelling(.d, .sharp), 4)
+            1: SpelledPitch(Pitch.Spelling(.c, .sharp), 4),
+            3: SpelledPitch(Pitch.Spelling(.d, .sharp), 4)
         ]
         XCTAssertEqual(result, expected)
     }
@@ -326,12 +322,47 @@ class PitchSpellerTests: XCTestCase {
     }
 
     func testSpelledOneFiveOverDNatural() {
-        let pitches: [Int: Pitch] = [0: 61, 1: 65]
+        let pitches: [Int: Pitch] = [1: 61, 5: 65]
         let pitchSpeller = PitchSpeller(pitches: pitches, parsimonyPivot: Pitch.Spelling(.d))
+        let expectedGraph = WeightedDirectedGraph<PitchSpellingNode.Index,Double> (Set([
+            .internal(.init(1,.down)),
+            .internal(.init(1,.up)),
+            .internal(.init(5,.down)),
+            .internal(.init(5,.up)),
+            .source,
+            .sink]), [
+                
+                // source edges
+                .init(.source,                  .internal(.init(1,.down))): 3,
+                .init(.source,                  .internal(.init(5,.down))): 2,
+                
+                //sink edges
+                .init(.internal(.init(1,  .up)),                    .sink): 1,
+                .init(.internal(.init(5,  .up)),                    .sink): 3,
+                
+                // bigM edges
+                .init(.internal(.init(1,  .up)),.internal(.init(1,.down))): Double.infinity,
+                .init(.internal(.init(5,  .up)),.internal(.init(5,.down))): Double.infinity,
+                
+                // internal edges
+                .init(.internal(.init(1,  .up)),.internal(.init(5,.down))): 1.5,
+                .init(.internal(.init(1,.down)),.internal(.init(5,  .up))): 0.5,
+                .init(.internal(.init(5,  .up)),.internal(.init(1,.down))): 0.5,
+                .init(.internal(.init(5,.down)),.internal(.init(1,  .up))): 1.5,
+                ]
+        )
+        let expectedFlowNetwork = FlowNetwork<PitchSpellingNode.Index,Double> (
+            expectedGraph, source: .source, sink: .sink
+        )
+        XCTAssertEqual(pitchSpeller.flowNetwork.nodes,  expectedFlowNetwork.nodes)
+        XCTAssertEqual(pitchSpeller.flowNetwork.edges,  expectedFlowNetwork.edges)
+        XCTAssertEqual(pitchSpeller.flowNetwork.sink,   expectedFlowNetwork.sink)
+        XCTAssertEqual(pitchSpeller.flowNetwork.source, expectedFlowNetwork.source)
+        XCTAssertEqual(pitchSpeller.flowNetwork, expectedFlowNetwork)
         let result = pitchSpeller.spell()
         let expected: [Int: SpelledPitch] = [
-            0: SpelledPitch(Pitch.Spelling(.d, .flat), 4),
-            1: SpelledPitch(Pitch.Spelling(.f), 4)
+            1: SpelledPitch(Pitch.Spelling(.d, .flat), 4),
+            5: SpelledPitch(Pitch.Spelling(.f), 4)
         ]
         XCTAssertEqual(result, expected)
     }

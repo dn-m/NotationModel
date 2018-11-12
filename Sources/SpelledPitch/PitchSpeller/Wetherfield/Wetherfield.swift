@@ -14,6 +14,16 @@ enum FlowNode<Index>: Hashable where Index: Hashable {
     case sink
 }
 
+func bind <S: Hashable, A: Hashable> (_ f: @escaping (S) -> A) -> (FlowNode<S>) -> FlowNode<A> {
+    return { flowNodeS in
+        switch flowNodeS {
+        case .internal(let index): return .internal(f(index))
+        case .source: return .source
+        case .sink: return .sink
+        }
+    }
+}
+
 extension FlowNode where Index == Cross<Int,Tendency> {
     var tendency: Tendency {
         switch self {
@@ -26,6 +36,33 @@ extension FlowNode where Index == Cross<Int,Tendency> {
         switch self {
         case .internal(let index): return index.a
         case .source, .sink: return nil
+        }
+    }
+}
+
+extension FlowNode where Index: Pair, Index.A == Int {
+    var int: Int? {
+        switch self {
+        case .internal(let index): return index.a
+        default: return nil
+        }
+    }
+}
+
+extension FlowNode where Index: Pair, Index.A == Pitch.Class {
+    var pitchClass: Pitch.Class? {
+        switch self {
+        case .internal(let index): return index.a
+        case .source, .sink: return nil
+        }
+    }
+}
+
+extension FlowNode where Index: Pair, Index.B == Tendency {
+    var tendency: Tendency? {
+        switch self {
+        case .internal(let index): return index.b
+        default: return nil
         }
     }
 }
@@ -44,9 +81,6 @@ struct PitchSpeller {
 
     /// The unspelled `Pitch` values to be spelled.
     let pitch: (PitchSpellingNode.Index) -> Pitch?
-
-    /// Getter for pitch class (from Index)
-    let getPitchClass: (PitchSpellingNode.Index) -> Pitch.Class
 }
 
 extension PitchSpeller {
@@ -95,39 +129,27 @@ extension PitchSpeller {
                 return pitches[cross.a]
             }
         }
-        let getPitchClass: (FlowNode<Cross<Int,Tendency>>) -> Pitch.Class = { flowNode in
-            switch flowNode {
-            case .source, .sink:
-                return parsimonyPivot.pitchClass
-            case .internal(let cross):
-                return pitches[cross.a]!.class
-            }
-        }
-        self.getPitchClass = getPitchClass
-
-        // Masks that operate on pitch class information
-        let containsEightSet: GraphScheme<PitchSpellingNode.Index> =
-            GraphScheme<Cross<Pitch.Class, Tendency>> (eightLookup.contains).pullback { flowNode in
-            .init(getPitchClass(flowNode), flowNode.tendency)
-        }
-
-        let differentTendenciesSet: GraphScheme<PitchSpellingNode.Index> = connectDifferentLookup.pullback(getPitchClass)
-        let sameTendenciesSet: GraphScheme<PitchSpellingNode.Index> =
-            connectSameLookup.pullback(getPitchClass)
         
-        // ... combined with masks that operate on tendency information
-        let connectToEight = (containsEightSet * whereEdge(contains: true)(8))
-        let sameTendencies = (sameTendenciesSet * connectSameTendencies)
-        let differentTendencies = (differentTendenciesSet * connectDifferentTendencies)
+        let internalPitchClassTendency = { (cross: Cross<Int, Tendency>) in
+            Cross(pitches[cross.a]!.class, cross.b)
+        }
+        let pitchClassTendencyGetter = bind(internalPitchClassTendency)
+        
+        let specificSourceEdges: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
+            sourceEdges.pullback(pitchClassTendencyGetter)
+        let specificInternalEdges: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
+            internalEdges.pullback(pitchClassTendencyGetter)
+        let specificSinkEdges: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
+            sinkEdges.pullback(pitchClassTendencyGetter)
         
         // All the connections that rely on pitch class specific information
-        let generalConnections: DirectedGraphScheme<PitchSpellingNode.Index> =
-            (connectDifferentInts * (sameTendencies + differentTendencies + connectToEight)).directed
+        let connections: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
+            (connectDifferentInts * specificInternalEdges) + specificSourceEdges + specificSinkEdges
         
         // Combination of pitch class specific information and connections within each `Int` index
         // regardless of pitch class.
         let maskArgument: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
-            1.0 * (generalConnections) + bigMAssignment * connectSameInts
+            connections + bigMAssignment
         flowNetwork.mask(maskArgument)
     }
 }
@@ -160,10 +182,11 @@ extension PitchSpeller {
             .reduce(into: [Int: (InternalAssignedNode, InternalAssignedNode)]()) { pairs, node in
                 if !pairs.keys.contains(node.index.a) {
                     pairs[node.index.a] = (node, node)
-                }
-                switch node.index.b {
-                case .up: pairs[node.index.a]!.0 = node
-                case .down: pairs[node.index.a]!.1 = node
+                } else {
+                    switch node.index.b {
+                    case .up: pairs[node.index.a]!.0 = node
+                    case .down: pairs[node.index.a]!.1 = node
+                    }
                 }
             }.mapValues(spellPitch)
     }
@@ -177,14 +200,6 @@ extension PitchSpeller {
         let tendencies = TendencyPair(up.assignment, down.assignment)
         let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
         return try! pitch.spelled(with: spelling)
-    }
-
-    /// FIXME: Consider implementing as:
-    /// `let whereEdge: (Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index>`
-    func whereEdge (contains: Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
-        return { pitchClass in
-            adjacencyScheme(contains: contains)(pitchClass).pullback(self.getPitchClass)
-        }
     }
 }
 
@@ -201,33 +216,13 @@ private func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
     return .internal(.init(offset, index))
 }
 
-private func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
-    func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
-        return GraphScheme<Pitch.Class> { edge in
-            edge.contains(pitchClass)
-        }
-    }
-    func pitchClassNonAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
-        return GraphScheme<Pitch.Class> { edge in
-            !edge.contains(pitchClass)
-        }
-    }
-    return contains ? pitchClassAdjacencyScheme : pitchClassNonAdjacencyScheme
-}
-
-private let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> =
-    GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency }
-
-private let connectDifferentTendencies: GraphScheme<PitchSpellingNode.Index> =
-    GraphScheme<Tendency> { edge in edge.a != edge.b }.pullback { node in node.tendency }
-
 private let connectUpToDown: DirectedGraphScheme<PitchSpellingNode.Index> =
     DirectedGraphScheme<Tendency> { edge in
         edge.a == .up && edge.b == .down
         }.pullback { node in node.tendency }
 
 private let bigMAdjacency: DirectedGraphScheme<PitchSpellingNode.Index> =
-    connectSameTendencies * connectUpToDown
+    connectSameInts * connectUpToDown
 
 private let bigMAssignment: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
     Double.infinity * bigMAdjacency
@@ -236,50 +231,83 @@ private let connectSameInts: GraphScheme<PitchSpellingNode.Index> =
     GraphScheme<Int?> { edge in edge.a == edge.b && edge.a != nil }.pullback { node in node.int }
 
 private let connectDifferentInts: GraphScheme<PitchSpellingNode.Index> =
-    GraphScheme<Int?> { edge in edge.a != edge.b }.pullback { node in node.int }
+    GraphScheme<Int?> { edge in !(edge.a == edge.b && edge.a != nil) }.pullback { node in node.int }
 
-// For each `Pitch.Class` `n`, denotes which of `(n, .up)` and `(n, .down)` should
-// be connected to `(8, .up)` in the spelling dependency model.
-private let eightTendencyLink: [(Pitch.Class, Tendency)] = [
-    (00, .down),
-    (01, .up),
-    (03, .down),
-    (04, .up),
-    (05, .down),
-    (06, .up),
-    (07, .down),
-    (08, .up),
-    (09, .up),
-    (10, .down),
-    (11, .up)
+private let sourceEdges =
+    WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>, Double> { edge in
+        (edge.a == .source && edge.b.tendency == .down) ?
+            edge.b.pitchClass.flatMap { index in sourceEdgeLookup[index] } : nil
+}
+
+private let sourceEdgeLookup: [Pitch.Class: Double] = [
+    00: 2,
+    01: 3,
+    02: 3,
+    03: 1,
+    04: 3,
+    05: 2,
+    06: 3,
+    07: 3,
+
+    09: 3,
+    10: 1,
+    11: 3,
 ]
 
-private let connectDifferentLookup = GraphScheme<Pitch.Class> { edge in
-    Set<UnorderedPair<Pitch.Class>> ([
-        .init(11,03),
-        .init(01,03),
-        .init(03,06),
-        .init(01,05),
-        .init(01,10),
-        .init(06,10),
-        .init(00,01),
-        .init(03,04),
-        .init(10,11)
-    ]).contains(edge)
+private let sinkEdges =
+    WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>, Double> { edge in
+        (edge.b == .sink && edge.a.tendency == .up) ?
+            edge.a.pitchClass.flatMap { index in sinkEdgeLookup[index] } : nil
 }
 
-private let nonTriToneLookup = GraphScheme<Pitch.Class> { edge in
-    edge.a + 6 != edge.b
-}
+private let sinkEdgeLookup: [Pitch.Class: Double] = [
+    00: 3,
+    01: 1,
+    02: 2,
+    03: 3,
+    04: 3,
+    05: 3,
+    06: 1,
+    07: 3,
+    
+    09: 3,
+    10: 3,
+    11: 2,
+]
 
-private let connectSameLookup = GraphScheme<Pitch.Class> { edge in
-    (adjacencyScheme(contains: false)(8) * nonTriToneLookup).contains(edge) && !connectDifferentLookup.contains(edge)
-}
+private let internalEdges: WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>, Double> =
+        WeightedGraphScheme { edge in
+            switch (edge.a, edge.b) {
+            case (.internal(let source), .internal(let destination)):
+                return internalEdgeLookup[.init(source, destination)]
+            default: return nil
+            }
+}.directed
 
-// Maps `eightTendencyLink` to a `Set` of `Edge` values (to check for membership)
-private let eightLookup = Set<UnorderedPair<Cross<Pitch.Class, Tendency>>> (
-    eightTendencyLink.lazy.map(Cross.init).map { UnorderedPair($0, .init(8, .up)) }
-)
+private let internalEdgeLookup: [UnorderedPair<Cross<Pitch.Class, Tendency>>: Double] = [
+    
+    // Replacement for eightTendencyLink
+    .init(.init(00, .down), .init(08,   .up)): 1,
+    .init(.init(01,   .up), .init(08,   .up)): 1,
+    .init(.init(03, .down), .init(08,   .up)): 1,
+    .init(.init(04,   .up), .init(08,   .up)): 1,
+    .init(.init(05, .down), .init(08,   .up)): 1,
+    .init(.init(06,   .up), .init(08,   .up)): 1,
+    .init(.init(07, .down), .init(08,   .up)): 1,
+    .init(.init(08,   .up), .init(08,   .up)): 1,
+    .init(.init(09,   .up), .init(08,   .up)): 1,
+    .init(.init(10, .down), .init(08,   .up)): 1,
+    .init(.init(11,   .up), .init(08,   .up)): 1,
+
+    .init(.init(00, .down), .init(01,   .up)): 1.5,
+    .init(.init(00,   .up), .init(01, .down)): 0.5,
+    
+    .init(.init(01, .down), .init(03,   .up)): 1,
+    .init(.init(01,   .up), .init(03, .down)): 1,
+    
+    .init(.init(01, .down), .init(05,   .up)): 0.5,
+    .init(.init(01,   .up), .init(05, .down)): 1.5,
+]
 
 extension FlowNetwork where Node == PitchSpellingNode.Index, Weight == Double {
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
