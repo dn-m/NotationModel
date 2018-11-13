@@ -195,3 +195,63 @@ extension Sequence {
 }
 
 extension FlowNetwork: Equatable where Node: Hashable, Weight: Hashable { }
+
+extension FlowNetwork where Weight == WeightLabel<Edge> {
+    
+    /// - Returns: A compressed version of the FlowNetwork where edge labels are grouped according
+    /// to the nodes that the original `Node` type map to under `f`.
+    /// `compress` can be thought of as the opposite of a pullback.
+    /// - TODO: Implement `compress ( ... ) -> FlowNetwork< ... >`
+    func compress <CompressedNode: Hashable> (_ f: @escaping (Node) -> CompressedNode) ->
+        WeightedDirectedGraph<CompressedNode, [WeightLabel<OrderedPair<CompressedNode>>]>
+    {
+        return WeightedDirectedGraph(
+            Set<CompressedNode>(self.nodes.map(f)),
+            self.weights.reduce(
+                into: [OrderedPair<CompressedNode>: [WeightLabel<OrderedPair<CompressedNode>>]]())
+                { weightLabels, pair in
+                    let edge = OrderedPair<CompressedNode>(f(pair.0.a), f(pair.0.b))
+                    let weightLabel = WeightLabel<OrderedPair<CompressedNode>>(
+                        edge: edge,
+                        plus: Set(pair.1.plusColumn.map { edge in
+                            .init(f(edge.a), f(edge.b))
+                    }),
+                        minus: Set(pair.1.minusColumn.map { edge in
+                            .init(f(edge.a), f(edge.b))
+                        })
+                    )
+                    if !weightLabels.keys.contains(edge) {
+                        weightLabels[edge] = []
+                    }
+                    weightLabels[edge]!.append(weightLabel)
+            }
+        )
+    }
+}
+
+extension WeightedDirectedGraph where Weight == [WeightLabel<Edge>] {
+    
+    func inoutReducer (_ concreteWeights: inout [Edge: Double], _ weightPair: (Edge, Weight)) {
+        let (edge, _) = weightPair
+        
+        func getConcreteWeight (_ edge: Edge) -> Double {
+            if concreteWeights.keys.contains(edge) {
+                return concreteWeights[edge]!
+            } else {
+                let weightLabelList: [WeightLabel] = self.weight(edge)!
+                var list: [Double] = []
+                for weightLabel in weightLabelList {
+                    var sublist: [Double] = []
+                    for edge in weightLabel.minusColumn {
+                        sublist.append(getConcreteWeight(edge))
+                    }
+                    list.append(sublist.max() ?? 0)
+                }
+                let weight = list.reduce(0, +) + 1
+                concreteWeights[edge] = weight
+                return weight
+            }
+        }
+        _ = getConcreteWeight(edge)
+    }
+}

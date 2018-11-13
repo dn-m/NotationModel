@@ -49,8 +49,8 @@ struct WeightLabel <Edge: SymmetricPair & Hashable>: AdditiveGroup {
     }
     
     let edge: Edge?
-    private let plusColumn: Set<Edge>
-    private let minusColumn: Set<Edge>
+    let plusColumn: Set<Edge>
+    let minusColumn: Set<Edge>
 }
 
 extension WeightLabel: Equatable where Edge: Equatable {
