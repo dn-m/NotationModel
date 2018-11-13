@@ -6,12 +6,19 @@
 //
 
 import DataStructures
+import Algebra
+
+extension Double: AdditiveGroup {
+    public var inverse: Double {
+        return -self
+    }
+}
 
 /// Directed graph with several properties:
 /// - Each edge has a capacity for flow
 /// - A "source" node, which only emanates flow outward
 /// - A "sink" node, which only receives flow
-public struct FlowNetwork<Node: Hashable, Weight: Numeric & Comparable>:
+public struct FlowNetwork<Node: Hashable, Weight: AdditiveGroup & Comparable>:
     WeightedGraphProtocol,
     DirectedGraphProtocol
 {
@@ -48,7 +55,9 @@ extension FlowNetwork {
             remove(edge)
         }
     }
-    
+}
+
+extension FlowNetwork where Weight: Numeric {
     mutating func mask <Scheme: WeightedGraphSchemeProtocol> (_ weightScheme: Scheme) where
         Scheme.Node == Node,
         Scheme.Weight == Weight
@@ -70,6 +79,12 @@ extension FlowNetwork {
     func contains(_ node: Node) -> Bool {
         return node == source || node == sink || nodes.contains(node)
     }
+    
+    var removeIfFlowlessFlag: Bool { return true }
+}
+
+extension FlowNetwork where Weight == WeightLabel<Edge> {
+    var removeIfFlowlessFlag: Bool { return false }
 }
 
 extension FlowNetwork {
@@ -83,10 +98,13 @@ extension FlowNetwork {
     /// Removes the given edge if its weight is `0`. This happens after an edge, which has the
     /// minimum flow of an augmenting path, is reduced by the minimum flow (which is its previous
     /// value).
-    mutating func removeEdgeIfFlowless(_ edge: Edge) {
-        if weight(edge) == 0 {
-            remove(edge)
+    mutating func removeEdgeIfFlowless (_ flag: Bool) -> (Edge) -> () {
+        func removeEdge(_ edge: Edge) {
+            if weight(edge) == .zero {
+                remove(edge)
+            }
         }
+        return flag ? removeEdge: { _ in return }
     }
 
     /// Inserts an edge in the opposite direction of the given `edge` with the minimum flow
@@ -104,14 +122,14 @@ extension FlowNetwork {
     /// `edge` by the given `minimumFlow`.
     mutating func pushFlow(through edge: Edge, by minimumFlow: Weight) {
         reduceFlow(through: edge, by: minimumFlow)
-        removeEdgeIfFlowless(edge)
+        removeEdgeIfFlowless(removeIfFlowlessFlag)(edge)
         updateBackEdge(edge, by: minimumFlow)
     }
 
     /// Pushes flow through the given `path` in this `graph`.
     mutating func pushFlow(through path: [Node]) {
         let edges = path.pairs.map(OrderedPair.init)
-        let minimumFlow = edges.compactMap(weight).min() ?? 0
+        let minimumFlow = edges.compactMap(weight).min() ?? .zero
         edges.forEach { edge in pushFlow(through: edge, by: minimumFlow) }
     }
 }
@@ -138,7 +156,7 @@ extension FlowNetwork {
     /// - Returns: (0) The maximum flow of the network and (1) the residual network produced after
     /// pushing all possible flow from source to sink (while satisfying flow constraints) - with
     /// saturated edges flipped and all weights removed.
-    var maximumFlowAndResidualNetwork: (flow: Weight, network: DirectedGraph<Node>) {
+    var maximumFlowAndResidualNetwork: (flow: Weight, network: FlowNetwork<Node, Weight>) {
         // Make a copy of the directed representation of the network to be mutated by pushing flow
         // through it.
         var residualNetwork = self
@@ -155,13 +173,13 @@ extension FlowNetwork {
                 .partition(residualNetwork.contains)
             let edgesPresent = sourceEdges.whereTrue.lazy
                 .map { edge in self.weight(edge)! - residualNetwork.weight(edge)! }
-                .reduce(0,+)
+                .reduce(.zero,+)
             let edgesAbsent = sourceEdges.whereFalse.lazy
                 .compactMap(weight)
-                .reduce(0,+)
+                .reduce(.zero,+)
             return edgesPresent + edgesAbsent
         }()
-        return (flow: flow, network: residualNetwork.unweighted())
+        return (flow: flow, network: residualNetwork)
     }
 }
 
