@@ -114,13 +114,9 @@ extension PitchSpeller {
 
     // MARK: - Initializers
 
-    /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
+    /// Creates a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
     init(pitches: [Int: Pitch], parsimonyPivot: Pitch.Spelling = .init(.d)) {
-        self.flowNetwork = FlowNetwork(
-            source: .source,
-            sink: .sink,
-            internalNodes: internalNodes(pitches: pitches)
-        )
+        self.flowNetwork = FlowNetwork(internalNodes: internalNodes(pitches: pitches))
         self.pitch = { index in
             switch index {
             case .source, .sink:
@@ -203,12 +199,6 @@ extension PitchSpeller {
     }
 }
 
-/// - Returns: An array of nodes, each representing the index of the unassigned node in
-/// `pitchNodes`.
-private func internalNodes(pitches: [Int: Pitch]) -> [PitchSpellingNode.Index] {
-    return pitches.keys.flatMap { offset in [.down,.up].map { index in node(offset, index) } }
-}
-
 /// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
 /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
 /// the given `Pitch`.)
@@ -217,9 +207,8 @@ private func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
 }
 
 private let connectUpToDown: DirectedGraphScheme<PitchSpellingNode.Index> =
-    DirectedGraphScheme<Tendency> { edge in
-        edge.a == .up && edge.b == .down
-        }.pullback { node in node.tendency }
+    DirectedGraphScheme<Tendency> { edge in edge.a == .up && edge.b == .down }
+        .pullback { node in node.tendency }
 
 private let bigMAdjacency: DirectedGraphScheme<PitchSpellingNode.Index> =
     connectSameInts * connectUpToDown
@@ -235,8 +224,9 @@ private let connectDifferentInts: GraphScheme<PitchSpellingNode.Index> =
 
 private let sourceEdges =
     WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>, Double> { edge in
-        (edge.a == .source && edge.b.tendency == .down) ?
-            edge.b.pitchClass.flatMap { index in sourceEdgeLookup[index] } : nil
+        (edge.a == .source && edge.b.tendency == .down)
+            ? edge.b.pitchClass.flatMap { index in sourceEdgeLookup[index] }
+            : nil
 }
 
 private let sourceEdgeLookup: [Pitch.Class: Double] = [
@@ -256,8 +246,9 @@ private let sourceEdgeLookup: [Pitch.Class: Double] = [
 
 private let sinkEdges =
     WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>, Double> { edge in
-        (edge.b == .sink && edge.a.tendency == .up) ?
-            edge.a.pitchClass.flatMap { index in sinkEdgeLookup[index] } : nil
+        (edge.b == .sink && edge.a.tendency == .up)
+            ? edge.a.pitchClass.flatMap { index in sinkEdgeLookup[index] }
+            : nil
 }
 
 private let sinkEdgeLookup: [Pitch.Class: Double] = [
@@ -310,27 +301,11 @@ private let internalEdgeLookup: [UnorderedPair<Cross<Pitch.Class, Tendency>>: Do
 ]
 
 extension FlowNetwork where Node == PitchSpellingNode.Index, Weight == Double {
+
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
-    init(
-        source: PitchSpellingNode.Index,
-        sink: PitchSpellingNode.Index,
-        internalNodes: [PitchSpellingNode.Index]
-    )
-    {
-        let graph = WeightedDirectedGraph<PitchSpellingNode.Index,Double>(
-            source: source,
-            sink: sink,
-            internalNodes: internalNodes
-        )
-        self.init(graph, source: source, sink: sink)
-    }
-}
-
-extension WeightedDirectedGraph where Weight: ExpressibleByIntegerLiteral {
-    /// Create a `DirectedGraph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
-    init(source: Node, sink: Node, internalNodes: [Node]) {
-        self.init(Set([source,sink] + internalNodes))
+    init(internalNodes: [PitchSpellingNode.Index]) {
+        self.init(source: .source, sink: .sink)
         for node in internalNodes {
             insertEdge(from: source, to: node, weight: 1)
             insertEdge(from: node, to: sink, weight: 1)
@@ -339,4 +314,10 @@ extension WeightedDirectedGraph where Weight: ExpressibleByIntegerLiteral {
             }
         }
     }
+}
+
+/// - Returns: An array of nodes, each representing the index of the unassigned node in
+/// `pitchNodes`.
+private func internalNodes(pitches: [Int: Pitch]) -> [PitchSpellingNode.Index] {
+    return pitches.keys.flatMap { offset in [.down,.up].map { index in node(offset, index) } }
 }
