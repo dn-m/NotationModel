@@ -104,7 +104,7 @@ extension FlowNetwork {
                 remove(edge)
             }
         }
-        return flag ? removeEdge: { _ in return }
+        return flag ? removeEdge : { _ in return }
     }
 
     /// Inserts an edge in the opposite direction of the given `edge` with the minimum flow
