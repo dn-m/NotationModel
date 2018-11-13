@@ -5,19 +5,15 @@
 //  Created by Benjamin Wetherfield on 09/11/2018.
 //
 
+import Algebra
 import DataStructures
 import Pitch
 
-protocol WeightLabelProtocol: _AdditiveGroup {
-    
-    associatedtype Edge: SymmetricPair
-    
-    static func build (_ edge: Edge) -> Self
-}
+struct WeightLabel <Edge: SymmetricPair & Hashable>: AdditiveGroup {
 
-struct WeightLabel<Edge>: WeightLabelProtocol where
-    Edge: SymmetricPair & Hashable
-{
+    var inverse: WeightLabel<Edge> {
+        return -self
+    }
 
     init (edge: Edge? = nil, plus plusColumn: Set<Edge> = [], minus minusColumn: Set<Edge> = []) {
         self.edge = edge
@@ -57,14 +53,6 @@ struct WeightLabel<Edge>: WeightLabelProtocol where
     private let minusColumn: Set<Edge>
 }
 
-extension WeightLabel: ExpressibleByIntegerLiteral {
-    
-    // Hack so that `0` -- (or any `IntegerLiteral`) -- evaluates to `.zero`
-    init (integerLiteral _: IntegerLiteralType) {
-        self = .zero
-    }
-}
-
 extension WeightLabel: Equatable where Edge: Equatable {
     
     static func == (lhs: WeightLabel, rhs: WeightLabel) -> Bool {
@@ -85,13 +73,4 @@ extension WeightLabel: Comparable where Edge.A: Assigned {
 
 protocol Assigned {
     var assignment: Tendency { get }
-}
-
-protocol _AdditiveGroup {
-    
-    static var zero: Self { get }
-    
-    static prefix func - (_ invert: Self) -> Self
-    static func + (lhs: Self, rhs: Self) -> Self
-    static func - (lhs: Self, rhs: Self) -> Self
 }

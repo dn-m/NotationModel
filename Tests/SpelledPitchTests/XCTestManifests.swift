@@ -1,16 +1,5 @@
 import XCTest
 
-extension AdjacencyCarryingTests {
-    static let __allTests = [
-        ("testAddition", testAddition),
-        ("testConvenienceConstructor", testConvenienceConstructor),
-        ("testMultiplicationBuildOrderMatters", testMultiplicationBuildOrderMatters),
-        ("testMultiplicationDirectedH", testMultiplicationDirectedH),
-        ("testMultiplicationInitializationFreeze", testMultiplicationInitializationFreeze),
-        ("testPullback", testPullback),
-    ]
-}
-
 extension CompoundIntervalDescriptorTests {
     static let __allTests = [
         ("testInitTwoSpelledPitchesAscendingMajorTenth", testInitTwoSpelledPitchesAscendingMajorTenth),
@@ -29,6 +18,7 @@ extension FlowNetworkTests {
         ("testFlowNetworkMaskPullback", testFlowNetworkMaskPullback),
         ("testFlowNetworkMaskSquared", testFlowNetworkMaskSquared),
         ("testMinimumCut", testMinimumCut),
+        ("testPitchSpellingTestCase", testPitchSpellingTestCase),
         ("testUnreachableMinimumCut", testUnreachableMinimumCut),
     ]
 }
@@ -53,14 +43,14 @@ extension PitchSpellerTests {
         ("testSpelledZeroFiveOverDNatural", testSpelledZeroFiveOverDNatural),
         ("testSpelledZeroFourOverDNatural", testSpelledZeroFourOverDNatural),
         ("testSpelledZeroNineOverDNatural", testSpelledZeroNineOverDNatural),
+        ("testSpelledZeroOneOverDNatural", testSpelledZeroOneOverDNatural),
         ("testSpelledZeroSevenOverDNatural", testSpelledZeroSevenOverDNatural),
         ("testSpelledZeroSixOverDNatural", testSpelledZeroSixOverDNatural),
         ("testSpelledZeroTenOverDNatural", testSpelledZeroTenOverDNatural),
         ("testSpelledZeroThreeOverDNatural", testSpelledZeroThreeOverDNatural),
         ("testSpelledZeroTwoOverDNatural", testSpelledZeroTwoOverDNatural),
-        ("testSpellEightOverANatural", testSpellEightOverANatural),
-        ("testSpellEightOverBNatural", testSpellEightOverBNatural),
         ("testSpellEightOverCNatural", testSpellEightOverCNatural),
+        ("testSpellElevenOverDNatural", testSpellElevenOverDNatural),
         ("testSpellFiveOverDNatural", testSpellFiveOverDNatural),
         ("testSpellFourOverDNatural", testSpellFourOverDNatural),
         ("testSpellNineOverDNatural", testSpellNineOverDNatural),
@@ -203,14 +193,16 @@ extension UnorderedIntervalDescriptorTests {
     ]
 }
 
-extension WeightCarryingTests {
+extension WeightLabelTests {
     static let __allTests = [
         ("testAddition", testAddition),
-        ("testConvenienceConstructor", testConvenienceConstructor),
-        ("testMultiplicationDirectedBuildOrderMatters", testMultiplicationDirectedBuildOrderMatters),
-        ("testMultiplicationDirectedH", testMultiplicationDirectedH),
-        ("testMultiplicationInitializationFreeze", testMultiplicationInitializationFreeze),
-        ("testPullback", testPullback),
+        ("testArithmetic", testArithmetic),
+        ("testComparison", testComparison),
+        ("testInverseOfInverseEqualToOriginalMinusColumn", testInverseOfInverseEqualToOriginalMinusColumn),
+        ("testInverseOfInverseEqualToOriginalPlusColumn", testInverseOfInverseEqualToOriginalPlusColumn),
+        ("testSubtraction", testSubtraction),
+        ("testZeroEqualsEmpty", testZeroEqualsEmpty),
+        ("testZeroEqualToEdgeCarrying", testZeroEqualToEdgeCarrying),
     ]
 }
 
@@ -224,7 +216,6 @@ extension WetherfieldTests {
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
-        testCase(AdjacencyCarryingTests.__allTests),
         testCase(CompoundIntervalDescriptorTests.__allTests),
         testCase(FlowNetworkTests.__allTests),
         testCase(LetterNameTests.__allTests),
@@ -236,7 +227,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(SpelledDyadTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
         testCase(UnorderedIntervalDescriptorTests.__allTests),
-        testCase(WeightCarryingTests.__allTests),
+        testCase(WeightLabelTests.__allTests),
         testCase(WetherfieldTests.__allTests),
     ]
 }

@@ -83,18 +83,19 @@ class FlowNetworkTests: XCTestCase {
     }
 
     func testFlowNetworkMaskEmpty() {
-        let maskGraph = WeightedGraph<String,Int>()
-        let weightCarrying = WeightCarrying.build(from: maskGraph)
+        let weightScheme = WeightedGraphScheme<String,Int> { _ in nil }
         var flowNetwork = simpleFlowNetwork
-        flowNetwork.mask(weightCarrying)
+        flowNetwork.mask(weightScheme)
         XCTAssertEqual(flowNetwork.nodes, simpleFlowNetwork.nodes)
         XCTAssert(flowNetwork.edges.isEmpty)
     }
 
     func testFlowNetworkMaskSquared() {
-        let weightCarrying = WeightCarrying.build(from: simpleFlowNetwork)
+        let maskScheme = WeightedGraphScheme<String,Int> { edge in
+            self.simpleFlowNetwork.weight(from: edge.a, to: edge.b)
+        }
         var flowNetwork = simpleFlowNetwork
-        flowNetwork.mask(weightCarrying)
+        flowNetwork.mask(maskScheme)
         for edge in flowNetwork.edges {
             let expected = simpleFlowNetwork.weight(edge)! * simpleFlowNetwork.weight(edge)!
             XCTAssertEqual(flowNetwork.weight(edge)!, expected)
@@ -105,19 +106,18 @@ class FlowNetworkTests: XCTestCase {
         var maskGraph = WeightedGraph<Int,Int>()
         maskGraph.insertEdge(from: 0, to: 1, weight: 1)
         maskGraph.insertEdge(from: 1, to: 2, weight: 2)
-        let preWeightCarrying = WeightCarrying.build(from: maskGraph)
-        let weightCarrying: WeightCarrying<WeightedGraph<String,Int>> = preWeightCarrying.pullback {
-            $0.count
-        }
+        let maskScheme: WeightedDirectedGraphScheme<String,Int> = WeightedDirectedGraphScheme<Int,Int> { edge in
+                maskGraph.weight(from: edge.a, to: edge.b)
+            }.pullback { (s: String) -> Int in s.count }
         var graph = WeightedDirectedGraph<String,Int>()
         graph.insertEdge(from: "", to: ".", weight: 3)
         graph.insertEdge(from: ".", to: "..", weight: 5)
         var flowNetwork = FlowNetwork(graph, source: "", sink: "..")
-        flowNetwork.mask(weightCarrying)
+        flowNetwork.mask(maskScheme)
         XCTAssertEqual(flowNetwork.weight(from: "", to: "."), 3)
         XCTAssertEqual(flowNetwork.weight(from: ".", to: ".."), 10)
     }
-    
+
     func testPitchSpellingTestCase() {
         let expectedGraph = WeightedDirectedGraph<PitchSpellingNode.Index,Double> (Set([
             .internal(.init(1,.down)),

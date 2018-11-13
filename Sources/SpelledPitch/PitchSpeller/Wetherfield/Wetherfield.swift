@@ -134,7 +134,7 @@ extension PitchSpeller {
             Cross(pitches[cross.a]!.class, cross.b)
         }
         let pitchClassTendencyGetter = bind(internalPitchClassTendency)
-        
+
         let specificSourceEdges: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
             sourceEdges.pullback(pitchClassTendencyGetter)
         let specificInternalEdges: WeightedDirectedGraphScheme<PitchSpellingNode.Index, Double> =
@@ -327,7 +327,7 @@ extension FlowNetwork where Node == PitchSpellingNode.Index, Weight == Double {
     }
 }
 
-extension WeightedDirectedGraph {
+extension WeightedDirectedGraph where Weight: ExpressibleByIntegerLiteral {
     /// Create a `DirectedGraph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
     init(source: Node, sink: Node, internalNodes: [Node]) {
         self.init(Set([source,sink] + internalNodes))
