@@ -88,12 +88,6 @@ extension FlowNetwork {
     func contains(_ node: Node) -> Bool {
         return node == source || node == sink || nodes.contains(node)
     }
-    
-    var removeIfFlowlessFlag: Bool { return true }
-}
-
-extension FlowNetwork where Weight == WeightLabel<Edge> {
-    var removeIfFlowlessFlag: Bool { return false }
 }
 
 extension FlowNetwork {
@@ -107,13 +101,10 @@ extension FlowNetwork {
     /// Removes the given edge if its weight is `0`. This happens after an edge, which has the
     /// minimum flow of an augmenting path, is reduced by the minimum flow (which is its previous
     /// value).
-    mutating func removeEdgeIfFlowless (_ flag: Bool) -> (Edge) -> () {
-        func removeEdge(_ edge: Edge) {
-            if weight(edge) == .zero {
-                remove(edge)
-            }
+    mutating func removeEdgeIfFlowless (_ edge: Edge) {
+        if weight(edge) == .zero {
+            remove(edge)
         }
-        return flag ? removeEdge : { _ in return }
     }
 
     /// Inserts an edge in the opposite direction of the given `edge` with the minimum flow
@@ -131,7 +122,7 @@ extension FlowNetwork {
     /// `edge` by the given `minimumFlow`.
     mutating func pushFlow(through edge: Edge, by minimumFlow: Weight) {
         reduceFlow(through: edge, by: minimumFlow)
-        removeEdgeIfFlowless(removeIfFlowlessFlag)(edge)
+        removeEdgeIfFlowless(edge)
         updateBackEdge(edge, by: minimumFlow)
     }
 
@@ -245,10 +236,11 @@ extension WeightedDirectedGraph where Weight == [WeightLabel<Edge>] {
             if concreteWeights.keys.contains(edge) {
                 return concreteWeights[edge]!
             } else {
-                let weightLabelList: [WeightLabel] = self.weight(edge)!
-                let concreteWeight: Double = weightLabelList.map { weightLabel in
-                    weightLabel.minusColumn.map { getConcreteWeight($0) }.reduce(0, +)
-                }.max() ?? 0 + 1
+                let concreteWeight: Double = weight(edge).flatMap { weightLabelList in
+                    weightLabelList.map { weightLabel in
+                        weightLabel.minusColumn.map { getConcreteWeight($0) }.reduce(0,+)
+                        }.max()
+                    } ?? 0 + 1
                 concreteWeights[edge] = concreteWeight
                 return concreteWeight
             }
