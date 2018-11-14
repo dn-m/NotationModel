@@ -199,35 +199,37 @@ extension FlowNetwork where Weight == WeightLabel<Edge> {
     /// - Returns: A compressed version of the FlowNetwork where edge labels are grouped according
     /// to the nodes that the original `Node` type map to under `f`.
     /// `compress` can be thought of as the opposite of a pullback.
-    /// - TODO: Implement `compress ( ... ) -> FlowNetwork< ... >`
     func compress <CompressedNode: Hashable> (_ f: @escaping (Node) -> CompressedNode) ->
         WeightedDirectedGraph<CompressedNode, [WeightLabel<OrderedPair<CompressedNode>>]>
     {
         return WeightedDirectedGraph(
             Set<CompressedNode>(self.nodes.map(f)),
             self.weights.reduce(
-                into: [OrderedPair<CompressedNode>: [WeightLabel<OrderedPair<CompressedNode>>]]())
-                { weightLabels, pair in
-                    let edge = OrderedPair<CompressedNode>(f(pair.0.a), f(pair.0.b))
-                    let weightLabel = WeightLabel<OrderedPair<CompressedNode>>(
-                        edge: edge,
-                        plus: Set(pair.1.plusColumn.map { edge in
-                            .init(f(edge.a), f(edge.b))
+                into: [OrderedPair<CompressedNode>: [WeightLabel<OrderedPair<CompressedNode>>]]()
+                )
+                { weightLabels, keyValue in
+                    let (edge, weightLabel) = keyValue
+                    let compressedEdge = OrderedPair<CompressedNode>(f(edge.a), f(edge.b))
+                    let compressedWeightLabel = WeightLabel<OrderedPair<CompressedNode>>(
+                        edge: compressedEdge,
+                        plus: Set(weightLabel.plusColumn.map { plusEdge in
+                            .init(f(plusEdge.a), f(plusEdge.b))
                     }),
-                        minus: Set(pair.1.minusColumn.map { edge in
-                            .init(f(edge.a), f(edge.b))
+                        minus: Set(weightLabel.minusColumn.map { minusEdge in
+                            .init(f(minusEdge.a), f(minusEdge.b))
                         })
                     )
-                    if !weightLabels.keys.contains(edge) {
-                        weightLabels[edge] = []
+                    if !weightLabels.keys.contains(compressedEdge) {
+                        weightLabels[compressedEdge] = []
                     }
-                    weightLabels[edge]!.append(weightLabel)
+                    weightLabels[compressedEdge]!.append(compressedWeightLabel)
             }
         )
     }
     
     func renderWeights <CompressedNode: Hashable> (_ f: @escaping (Node) -> CompressedNode) ->
-        WeightedDirectedGraph<CompressedNode, Double> {
+        WeightedDirectedGraph<CompressedNode, Double>
+    {
             let compressed = self.compress(f)
             return WeightedDirectedGraph(
                 compressed.nodes,
@@ -240,8 +242,11 @@ extension FlowNetwork where Weight == WeightLabel<Edge> {
 
 extension WeightedDirectedGraph where Weight == [WeightLabel<Edge>] {
     
-    func weightReducer (_ concreteWeights: inout [Edge: Double],
-                       _ weightPair: (key: Edge, value : [WeightLabel<Edge>])) {
+    func weightReducer (
+        _ concreteWeights: inout [Edge: Double],
+        _ weightPair: (key: Edge, value : [WeightLabel<Edge>])
+        )
+    {
         let edge = weightPair.key
         
         func getConcreteWeight (_ edge: Edge) -> Double {
