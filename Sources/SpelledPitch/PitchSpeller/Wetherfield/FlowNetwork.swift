@@ -225,12 +225,24 @@ extension FlowNetwork where Weight == WeightLabel<Edge> {
             }
         )
     }
+    
+    func renderWeights <CompressedNode: Hashable> (_ f: @escaping (Node) -> CompressedNode) ->
+        WeightedDirectedGraph<CompressedNode, Double> {
+            let compressed = self.compress(f)
+            return WeightedDirectedGraph(
+                compressed.nodes,
+                compressed.weights.reduce(
+                    into: [OrderedPair<CompressedNode>: Double](), compressed.inoutReducer
+                )
+            )
+    }
 }
 
 extension WeightedDirectedGraph where Weight == [WeightLabel<Edge>] {
     
-    func inoutReducer (_ concreteWeights: inout [Edge: Double], _ weightPair: (Edge, [WeightLabel<Edge>])) {
-        let (edge, _) = weightPair
+    func inoutReducer (_ concreteWeights: inout [Edge: Double],
+                       _ weightPair: (key: Edge, value : [WeightLabel<Edge>])) {
+        let edge = weightPair.key
         
         func getConcreteWeight (_ edge: Edge) -> Double {
             if concreteWeights.keys.contains(edge) {
