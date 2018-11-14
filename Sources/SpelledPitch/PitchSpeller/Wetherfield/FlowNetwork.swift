@@ -22,7 +22,7 @@ public struct FlowNetwork<Node: Hashable, Weight: AdditiveGroup & Comparable>:
     WeightedGraphProtocol,
     DirectedGraphProtocol
 {
-    public var weights: [Edge : Weight]
+    public var weights: [Edge: Weight]
     public var nodes: Set<Node>
     public var source: Node
     public var sink: Node
@@ -37,12 +37,21 @@ extension FlowNetwork {
 
     // MARK: - Initializers
 
-    /// Create a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink` nodes.
+    /// Creates a `FlowNetwork` with the given `directedGraph` and the given `source` and `sink`
+    /// nodes.
     init(_ directedGraph: WeightedDirectedGraph<Node,Weight>, source: Node, sink: Node) {
         self.nodes = directedGraph.nodes
         self.weights = directedGraph.weights
         self.source = source
         self.sink = sink
+    }
+
+    /// Creates a `FlowNetwork` with the given `source`, `sink`, `nodes`, and `weights`.
+    public init(source: Node, sink: Node, nodes: Set<Node> = [], weights: [Edge: Weight] = [:]) {
+        self.source = source
+        self.sink = sink
+        self.nodes = nodes
+        self.weights = weights
     }
 }
 
@@ -194,8 +203,6 @@ extension Sequence {
     }
 }
 
-extension FlowNetwork: Equatable where Node: Hashable, Weight: Hashable { }
-
 extension FlowNetwork where Weight == WeightLabel<Edge> {
     
     /// - Returns: A compressed version of the FlowNetwork where edge labels are grouped according
@@ -255,3 +262,6 @@ extension WeightedDirectedGraph where Weight == [WeightLabel<Edge>] {
         _ = getConcreteWeight(edge)
     }
 }
+
+extension FlowNetwork: Equatable { }
+extension FlowNetwork: Hashable where Weight: Hashable { }

@@ -59,9 +59,9 @@ extension WeightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtocol,
 extension WeightedGraphSchemeProtocol where Self: DirectedGraphSchemeProtocol, Weight: Numeric {
     
     static func * <Scheme> (lhs: Self, rhs: Scheme) -> Self where
-    Scheme: WeightedGraphSchemeProtocol,
-    Scheme.Node == Node,
-    Scheme.Weight == Weight
+        Scheme: WeightedGraphSchemeProtocol,
+        Scheme.Node == Node,
+        Scheme.Weight == Weight
     {
         return Self { edge in
             lhs.weight(edge).flatMap { lweight in
