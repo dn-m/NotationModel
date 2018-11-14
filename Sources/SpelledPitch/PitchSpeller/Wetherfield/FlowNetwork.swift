@@ -246,17 +246,11 @@ extension WeightedDirectedGraph where Weight == [WeightLabel<Edge>] {
                 return concreteWeights[edge]!
             } else {
                 let weightLabelList: [WeightLabel] = self.weight(edge)!
-                var list: [Double] = []
-                for weightLabel in weightLabelList {
-                    var sublist: [Double] = []
-                    for edge in weightLabel.minusColumn {
-                        sublist.append(getConcreteWeight(edge))
-                    }
-                    list.append(sublist.max() ?? 0)
-                }
-                let weight = list.reduce(0, +) + 1
-                concreteWeights[edge] = weight
-                return weight
+                let concreteWeight: Double = weightLabelList.map { weightLabel in
+                    weightLabel.minusColumn.map { getConcreteWeight($0) }.reduce(0, +)
+                }.max() ?? 0 + 1
+                concreteWeights[edge] = concreteWeight
+                return concreteWeight
             }
         }
         _ = getConcreteWeight(edge)
