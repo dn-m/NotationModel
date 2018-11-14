@@ -229,7 +229,7 @@ extension FlowNetwork where Weight == WeightLabel<Edge> {
 
 extension WeightedDirectedGraph where Weight == [WeightLabel<Edge>] {
     
-    func inoutReducer (_ concreteWeights: inout [Edge: Double], _ weightPair: (Edge, Weight)) {
+    func inoutReducer (_ concreteWeights: inout [Edge: Double], _ weightPair: (Edge, [WeightLabel<Edge>])) {
         let (edge, _) = weightPair
         
         func getConcreteWeight (_ edge: Edge) -> Double {
