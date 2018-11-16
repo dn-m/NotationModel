@@ -11,9 +11,9 @@ import Pitch
 
 /// Interface for the six pitch spelling categories.
 protocol PitchSpellingCategoryProtocol {
-    typealias ModifierMap = Bimap<ModifierDirection,Pitch.Spelling.Modifier>
+    typealias Map = Bimap<ModifierDirection,Pitch.Spelling.Modifier>
     /// The available `Pitch.Spelling.Modifier` value by the given `ModifierDirection`.
-    static var modifiers: ModifierMap { get }
+    static var map: Map { get }
 }
 
 extension Pitch.Spelling {
@@ -23,44 +23,32 @@ extension Pitch.Spelling {
 
         /// Category for pitch classes `0` and `5`.
         struct Zero: PitchSpellingCategoryProtocol {
-            static var modifiers: ModifierMap {
-                return [.down: .doubleFlat, .neutral: .natural, .up: .sharp]
-            }
+            static let map: Map = [.down: .doubleFlat, .neutral: .natural, .up: .sharp]
         }
 
         /// Category for pitch classes `1` and `6`.
         struct One: PitchSpellingCategoryProtocol {
-            static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .sharp, .up: .doubleSharp]
-            }
+            static let map: Map = [.down: .flat, .neutral: .sharp, .up: .doubleSharp]
         }
 
         /// Category for pitch classes `2`, `7`, and `9`.
         struct Two: PitchSpellingCategoryProtocol {
-            static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .natural, .up: .doubleSharp]
-            }
+            static let map: Map = [.down: .flat, .neutral: .natural, .up: .doubleSharp]
         }
 
         /// Category for pitch classes `3`, and `10`.
         struct Three: PitchSpellingCategoryProtocol {
-            static var modifiers: ModifierMap {
-                return [.down: .doubleFlat, .neutral: .flat, .up: .sharp]
-            }
+            static let map: Map = [.down: .doubleFlat, .neutral: .flat, .up: .sharp]
         }
 
         /// Category for pitch classes `4`, and `11`.
         struct Four: PitchSpellingCategoryProtocol {
-            static var modifiers: ModifierMap {
-                return [.down: .flat, .neutral: .natural, .up: .doubleSharp]
-            }
+            static let map: Map = [.down: .flat, .neutral: .natural, .up: .doubleSharp]
         }
 
         /// Category for pitch class `8`.
         struct Five: PitchSpellingCategoryProtocol {
-            static var modifiers: ModifierMap {
-                return [.down: .flat, .up: .sharp]
-            }
+            static let map: Map = [.down: .flat, .up: .sharp]
         }
 
         /// - Returns: The type of `PitchSpellingCategoryProtocol` in which the given `pitchClass`
@@ -89,7 +77,7 @@ extension Pitch.Spelling {
         let letterName = Pitch.Spelling.letterName(pitchClass: pitchClass, with: modifierDirection)
         guard
             let category = Category.category(for: pitchClass),
-            let modifier = category.modifiers[modifierDirection]
+            let modifier = category.map[modifierDirection]
         else {
             return nil
         }
@@ -103,7 +91,7 @@ extension Pitch.Spelling {
     /// the given `pitchClass`, if such a `LetterName` exists. Otherwise, `nil`.
     static func neutralLetterName(for pitchClass: Pitch.Class) -> LetterName? {
         guard let category = Category.category(for: pitchClass) else { return nil }
-        guard let modifier = category.modifiers[.neutral] else { return nil }
+        guard let modifier = category.map[.neutral] else { return nil }
         switch modifier {
         case .natural:
             return LetterName.default(for: pitchClass)
