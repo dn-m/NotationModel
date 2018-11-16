@@ -5,13 +5,14 @@
 //  Created by James Bean on 6/10/18.
 //
 
+import DataStructures
 import Pitch
 
 /// Interface for `PitchSpellingCategoryProtocol` types which can convert a `TendencyPair` into a
 /// `ModifierDirection`.
 protocol TendencyConverting {
-    typealias TendencyMap = [TendencyPair: ModifierDirection]
-    static var modifierDirectionByTendencies: TendencyMap { get }
+    typealias DirectionCodec = Bimap<TendencyPair,ModifierDirection>
+    static var modifierDirectionByTendencies: DirectionCodec { get }
 }
 
 extension TendencyConverting {

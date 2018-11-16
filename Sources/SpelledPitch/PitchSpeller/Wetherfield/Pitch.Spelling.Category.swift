@@ -11,9 +11,9 @@ import Pitch
 
 /// Interface for the six pitch spelling categories.
 protocol PitchSpellingCategoryProtocol {
-    typealias Map = Bimap<ModifierDirection,Pitch.Spelling.Modifier>
+    typealias ModifierLookup = Bimap<ModifierDirection,Pitch.Spelling.Modifier>
     /// The available `Pitch.Spelling.Modifier` value by the given `ModifierDirection`.
-    static var map: Map { get }
+    static var lookup: ModifierLookup { get }
 }
 
 extension Pitch.Spelling {
@@ -23,32 +23,32 @@ extension Pitch.Spelling {
 
         /// Category for pitch classes `0` and `5`.
         struct Zero: PitchSpellingCategoryProtocol {
-            static let map: Map = [.down: .doubleFlat, .neutral: .natural, .up: .sharp]
+            static let lookup: ModifierLookup = [.down: .doubleFlat, .neutral: .natural, .up: .sharp]
         }
 
         /// Category for pitch classes `1` and `6`.
         struct One: PitchSpellingCategoryProtocol {
-            static let map: Map = [.down: .flat, .neutral: .sharp, .up: .doubleSharp]
+            static let lookup: ModifierLookup = [.down: .flat, .neutral: .sharp, .up: .doubleSharp]
         }
 
         /// Category for pitch classes `2`, `7`, and `9`.
         struct Two: PitchSpellingCategoryProtocol {
-            static let map: Map = [.down: .flat, .neutral: .natural, .up: .doubleSharp]
+            static let lookup: ModifierLookup = [.down: .flat, .neutral: .natural, .up: .doubleSharp]
         }
 
         /// Category for pitch classes `3`, and `10`.
         struct Three: PitchSpellingCategoryProtocol {
-            static let map: Map = [.down: .doubleFlat, .neutral: .flat, .up: .sharp]
+            static let lookup: ModifierLookup = [.down: .doubleFlat, .neutral: .flat, .up: .sharp]
         }
 
         /// Category for pitch classes `4`, and `11`.
         struct Four: PitchSpellingCategoryProtocol {
-            static let map: Map = [.down: .flat, .neutral: .natural, .up: .doubleSharp]
+            static let lookup: ModifierLookup = [.down: .flat, .neutral: .natural, .up: .doubleSharp]
         }
 
         /// Category for pitch class `8`.
         struct Five: PitchSpellingCategoryProtocol {
-            static let map: Map = [.down: .flat, .up: .sharp]
+            static let lookup: ModifierLookup = [.down: .flat, .up: .sharp]
         }
 
         /// - Returns: The type of `PitchSpellingCategoryProtocol` in which the given `pitchClass`
@@ -77,7 +77,7 @@ extension Pitch.Spelling {
         let letterName = Pitch.Spelling.letterName(pitchClass: pitchClass, with: modifierDirection)
         guard
             let category = Category.category(for: pitchClass),
-            let modifier = category.map[modifierDirection]
+            let modifier = category.lookup[modifierDirection]
         else {
             return nil
         }
@@ -91,7 +91,7 @@ extension Pitch.Spelling {
     /// the given `pitchClass`, if such a `LetterName` exists. Otherwise, `nil`.
     static func neutralLetterName(for pitchClass: Pitch.Class) -> LetterName? {
         guard let category = Category.category(for: pitchClass) else { return nil }
-        guard let modifier = category.map[.neutral] else { return nil }
+        guard let modifier = category.lookup[.neutral] else { return nil }
         switch modifier {
         case .natural:
             return LetterName.default(for: pitchClass)
@@ -156,7 +156,7 @@ extension LetterName {
 // MARK: `Pitch.Spelling.Category` -> `TendencyConverting`
 
 extension Pitch.Spelling.Category.Zero: TendencyConverting {
-    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+    static var modifierDirectionByTendencies: TendencyConverting.DirectionCodec {
         return [
             .init(.down,.down): .down,
             .init(.up,.down): .neutral,
@@ -166,7 +166,7 @@ extension Pitch.Spelling.Category.Zero: TendencyConverting {
 }
 
 extension Pitch.Spelling.Category.One: TendencyConverting {
-    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+    static var modifierDirectionByTendencies: TendencyConverting.DirectionCodec {
         return [
             .init(.down,.down): .down,
             .init(.up,.down): .neutral,
@@ -176,7 +176,7 @@ extension Pitch.Spelling.Category.One: TendencyConverting {
 }
 
 extension Pitch.Spelling.Category.Two: TendencyConverting {
-    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+    static var modifierDirectionByTendencies: TendencyConverting.DirectionCodec {
         return [
             .init(.down,.down): .down,
             .init(.up,.down): .neutral,
@@ -186,7 +186,7 @@ extension Pitch.Spelling.Category.Two: TendencyConverting {
 }
 
 extension Pitch.Spelling.Category.Three: TendencyConverting {
-    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+    static var modifierDirectionByTendencies: TendencyConverting.DirectionCodec {
         return [
             .init(.down,.down): .down,
             .init(.up,.down): .neutral,
@@ -196,7 +196,7 @@ extension Pitch.Spelling.Category.Three: TendencyConverting {
 }
 
 extension Pitch.Spelling.Category.Four: TendencyConverting {
-    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+    static var modifierDirectionByTendencies: TendencyConverting.DirectionCodec {
         return [
             .init(.down,.down): .down,
             .init(.up,.down): .neutral,
@@ -206,7 +206,7 @@ extension Pitch.Spelling.Category.Four: TendencyConverting {
 }
 
 extension Pitch.Spelling.Category.Five: TendencyConverting {
-    static var modifierDirectionByTendencies: TendencyConverting.TendencyMap {
+    static var modifierDirectionByTendencies: TendencyConverting.DirectionCodec {
         return [
             .init(.down,.down): .down,
             .init(.down,.up): .down,
