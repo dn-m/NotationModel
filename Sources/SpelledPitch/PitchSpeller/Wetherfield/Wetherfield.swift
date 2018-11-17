@@ -334,3 +334,20 @@ extension WeightedDirectedGraph where Weight: ExpressibleByIntegerLiteral {
         }
     }
 }
+
+extension FlowNode: CustomStringConvertible {
+
+    // MARK: - CustomStringConvertible
+
+    /// Printable description of `FlowNode`.
+    public var description: String {
+        switch self {
+        case .source:
+            return "source"
+        case .sink:
+            return "sink"
+        case .internal(let index):
+            return "\(index)"
+        }
+    }
+}
