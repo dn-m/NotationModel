@@ -32,6 +32,12 @@ extension FlowNode where Index == Cross<Int,Tendency> {
         case .internal(let index): return index.b
         }
     }
+    var int: Int? {
+        switch self {
+        case .internal(let index): return index.a
+        case .source, .sink: return nil
+        }
+    }
 }
 
 extension FlowNode where Index: Pair, Index.A == Int {
@@ -108,13 +114,9 @@ extension PitchSpeller {
 
     // MARK: - Initializers
 
-    /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
+    /// Creates a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
     init(pitches: [Int: Pitch], parsimonyPivot: Pitch.Spelling = .init(.d)) {
-        self.flowNetwork = FlowNetwork(
-            source: .source,
-            sink: .sink,
-            internalNodes: internalNodes(pitches: pitches)
-        )
+        self.flowNetwork = FlowNetwork(internalNodes: internalNodes(pitches: pitches))
         self.pitch = { index in
             switch index {
             case .source, .sink:
@@ -197,23 +199,9 @@ extension PitchSpeller {
     }
 }
 
-/// - Returns: An array of nodes, each representing the index of the unassigned node in
-/// `pitchNodes`.
-private func internalNodes(pitches: [Int: Pitch]) -> [PitchSpellingNode.Index] {
-    return pitches.keys.flatMap { offset in [.down,.up].map { index in node(offset, index) } }
-}
-
-/// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
-/// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
-/// the given `Pitch`.)
-private func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
-    return .internal(.init(offset, index))
-}
-
 private let connectUpToDown: DirectedGraphScheme<PitchSpellingNode.Index> =
-    DirectedGraphScheme<Tendency> { edge in
-        edge.a == .up && edge.b == .down
-        }.pullback { node in node.tendency }
+    DirectedGraphScheme<Tendency> { edge in edge.a == .up && edge.b == .down }
+        .pullback { node in node.tendency }
 
 private let bigMAdjacency: DirectedGraphScheme<PitchSpellingNode.Index> =
     connectSameInts * connectUpToDown
@@ -229,44 +217,55 @@ private let connectDifferentInts: GraphScheme<PitchSpellingNode.Index> =
 
 private let sourceEdges =
     WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>, Double> { edge in
-        (edge.a == .source && edge.b.tendency == .down) ?
-            edge.b.pitchClass.flatMap { index in sourceEdgeLookup[index] } : nil
+        (edge.a == .source && edge.b.tendency == .down)
+            ? edge.b.pitchClass.flatMap { index in sourceEdgeLookup[index] }
+            : nil
 }
 
-private let sourceEdgeLookup: [Pitch.Class: Double] = [
-    00: 2,
-    01: 3,
-    02: 3,
-    03: 1,
-    04: 3,
-    05: 2,
-    06: 3,
-    07: 3,
+// Default weights:
+let heavyWeight: Double = 3
+let middleWeight: Double = 2
+// welterWeight (if necessary)
+let lightWeight: Double = 1.5
+let featherWeight: Double = 1
+// bantamWeight (if necessary)
+let flyWeight: Double = 0.5
 
-    09: 3,
-    10: 1,
-    11: 3,
+private let sourceEdgeLookup: [Pitch.Class: Double] = [
+    00: middleWeight,
+    01: heavyWeight,
+    02: heavyWeight,
+    03: featherWeight,
+    04: heavyWeight,
+    05: middleWeight,
+    06: heavyWeight,
+    07: heavyWeight,
+
+    09: heavyWeight,
+    10: featherWeight,
+    11: heavyWeight,
 ]
 
 private let sinkEdges =
     WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>, Double> { edge in
-        (edge.b == .sink && edge.a.tendency == .up) ?
-            edge.a.pitchClass.flatMap { index in sinkEdgeLookup[index] } : nil
+        (edge.b == .sink && edge.a.tendency == .up)
+            ? edge.a.pitchClass.flatMap { index in sinkEdgeLookup[index] }
+            : nil
 }
 
 private let sinkEdgeLookup: [Pitch.Class: Double] = [
-    00: 3,
-    01: 1,
-    02: 2,
-    03: 3,
-    04: 3,
-    05: 3,
-    06: 1,
-    07: 3,
+    00: heavyWeight,
+    01: featherWeight,
+    02: middleWeight,
+    03: heavyWeight,
+    04: heavyWeight,
+    05: heavyWeight,
+    06: featherWeight,
+    07: heavyWeight,
     
-    09: 3,
-    10: 3,
-    11: 2,
+    09: heavyWeight,
+    10: heavyWeight,
+    11: middleWeight,
 ]
 
 private let internalEdges: WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>, Double> =
@@ -281,58 +280,64 @@ private let internalEdges: WeightedDirectedGraphScheme<FlowNode<Cross<Pitch.Clas
 private let internalEdgeLookup: [UnorderedPair<Cross<Pitch.Class, Tendency>>: Double] = [
     
     // Replacement for eightTendencyLink
-    .init(.init(00, .down), .init(08,   .up)): 1,
-    .init(.init(01,   .up), .init(08,   .up)): 1,
-    .init(.init(03, .down), .init(08,   .up)): 1,
-    .init(.init(04,   .up), .init(08,   .up)): 1,
-    .init(.init(05, .down), .init(08,   .up)): 1,
-    .init(.init(06,   .up), .init(08,   .up)): 1,
-    .init(.init(07, .down), .init(08,   .up)): 1,
-    .init(.init(08,   .up), .init(08,   .up)): 1,
-    .init(.init(09,   .up), .init(08,   .up)): 1,
-    .init(.init(10, .down), .init(08,   .up)): 1,
-    .init(.init(11,   .up), .init(08,   .up)): 1,
+    .init(.init(00, .down), .init(08,   .up)): featherWeight,
+    .init(.init(01,   .up), .init(08,   .up)): featherWeight,
+    .init(.init(03, .down), .init(08,   .up)): featherWeight,
+    .init(.init(04,   .up), .init(08,   .up)): featherWeight,
+    .init(.init(05, .down), .init(08,   .up)): featherWeight,
+    .init(.init(06,   .up), .init(08,   .up)): featherWeight,
+    .init(.init(07, .down), .init(08,   .up)): featherWeight,
+    .init(.init(08,   .up), .init(08,   .up)): featherWeight,
+    .init(.init(09,   .up), .init(08,   .up)): featherWeight,
+    .init(.init(10, .down), .init(08,   .up)): featherWeight,
+    .init(.init(11,   .up), .init(08,   .up)): featherWeight,
 
-    .init(.init(00, .down), .init(01,   .up)): 1.5,
-    .init(.init(00,   .up), .init(01, .down)): 0.5,
+    .init(.init(00, .down), .init(01,   .up)): lightWeight,
+    .init(.init(00,   .up), .init(01, .down)): flyWeight,
     
-    .init(.init(01, .down), .init(03,   .up)): 1,
-    .init(.init(01,   .up), .init(03, .down)): 1,
+    .init(.init(01, .down), .init(03,   .up)): featherWeight,
+    .init(.init(01,   .up), .init(03, .down)): featherWeight,
     
-    .init(.init(01, .down), .init(05,   .up)): 0.5,
-    .init(.init(01,   .up), .init(05, .down)): 1.5,
+    .init(.init(01, .down), .init(05,   .up)): flyWeight,
+    .init(.init(01,   .up), .init(05, .down)): lightWeight
 ]
 
 extension FlowNetwork where Node == PitchSpellingNode.Index, Weight == Double {
+
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
-    init(
-        source: PitchSpellingNode.Index,
-        sink: PitchSpellingNode.Index,
-        internalNodes: [PitchSpellingNode.Index]
-    )
-    {
-        let graph = WeightedDirectedGraph<PitchSpellingNode.Index,Double>(
-            source: source,
-            sink: sink,
-            internalNodes: internalNodes
-        )
-        self.init(graph, source: source, sink: sink)
-    }
-}
-
-extension WeightedDirectedGraph where Weight: ExpressibleByIntegerLiteral {
-    /// Create a `DirectedGraph` which is hooked up as necessary for the Wetherfield pitch-spelling process.
-    init(source: Node, sink: Node, internalNodes: [Node]) {
-        self.init(Set([source,sink] + internalNodes))
+    init(internalNodes: [PitchSpellingNode.Index]) {
+        self.init(source: .source, sink: .sink)
         for node in internalNodes {
-            insertEdge(from: source, to: node, weight: 1)
-            insertEdge(from: node, to: sink, weight: 1)
+            insertEdge(from: source, to: node, weight: featherWeight)
+            insertEdge(from: node, to: sink, weight: featherWeight)
             for other in internalNodes.lazy.filter({ $0 != node }) {
-                insertEdge(from: node, to: other, weight: 1)
+                insertEdge(from: node, to: other, weight: featherWeight)
             }
         }
     }
+
+    /// Creates an empty `FlowNetwork` ready to be used incrementally constructed for the purposes
+    /// of pitch spelling.
+    init() {
+        self.source = .source
+        self.sink = .sink
+        self.nodes = []
+        self.weights = [:]
+    }
+}
+
+/// - Returns: An array of nodes, each representing the index of the unassigned node in
+/// `pitchNodes`.
+private func internalNodes(pitches: [Int: Pitch]) -> [PitchSpellingNode.Index] {
+    return pitches.keys.flatMap { offset in [.down,.up].map { index in node(offset, index) } }
+}
+
+/// - Returns: The value of a node at the given offset (index of a `Pitch` within `pitches`),
+/// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
+/// the given `Pitch`.)
+private func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
+    return .internal(.init(offset, index))
 }
 
 extension FlowNode: CustomStringConvertible {

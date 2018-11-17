@@ -22,9 +22,11 @@ public struct SpelledPitch {
 
 extension SpelledPitch {
 
+    // MARK: - Static Properties
+
     /// The `c natural` nearest to the middle of an 88-key piano.
     public static var middleC: SpelledPitch {
-        return .init(Pitch.Spelling.middleC, 4)
+        return .init(.c, 4)
     }
 }
 

@@ -34,33 +34,12 @@ extension LetterNameTests {
 
 extension PitchSpellerTests {
     static let __allTests = [
+        ("testDyads", testDyads),
+        ("testFailingDyads", testFailingDyads),
+        ("testMonads", testMonads),
         ("testSpelledOneFiveOverDNatural", testSpelledOneFiveOverDNatural),
-        ("testSpelledOneFourOverDNatural", testSpelledOneFourOverDNatural),
         ("testSpelledOneThreeOverDNatural", testSpelledOneThreeOverDNatural),
-        ("testSpelledOneTwoOverDNatural", testSpelledOneTwoOverDNatural),
-        ("testSpelledZeroEightOverDNatural", testSpelledZeroEightOverDNatural),
-        ("testSpelledZeroElevenOverDNatural", testSpelledZeroElevenOverDNatural),
-        ("testSpelledZeroFiveOverDNatural", testSpelledZeroFiveOverDNatural),
-        ("testSpelledZeroFourOverDNatural", testSpelledZeroFourOverDNatural),
-        ("testSpelledZeroNineOverDNatural", testSpelledZeroNineOverDNatural),
         ("testSpelledZeroOneOverDNatural", testSpelledZeroOneOverDNatural),
-        ("testSpelledZeroSevenOverDNatural", testSpelledZeroSevenOverDNatural),
-        ("testSpelledZeroSixOverDNatural", testSpelledZeroSixOverDNatural),
-        ("testSpelledZeroTenOverDNatural", testSpelledZeroTenOverDNatural),
-        ("testSpelledZeroThreeOverDNatural", testSpelledZeroThreeOverDNatural),
-        ("testSpelledZeroTwoOverDNatural", testSpelledZeroTwoOverDNatural),
-        ("testSpellEightOverCNatural", testSpellEightOverCNatural),
-        ("testSpellElevenOverDNatural", testSpellElevenOverDNatural),
-        ("testSpellFiveOverDNatural", testSpellFiveOverDNatural),
-        ("testSpellFourOverDNatural", testSpellFourOverDNatural),
-        ("testSpellNineOverDNatural", testSpellNineOverDNatural),
-        ("testSpellOneOverDNatural", testSpellOneOverDNatural),
-        ("testSpellSevenOverDNatural", testSpellSevenOverDNatural),
-        ("testSpellSixOverDNatural", testSpellSixOverDNatural),
-        ("testSpellTenOverDNatural", testSpellTenOverDNatural),
-        ("testSpellThreeOverDNatural", testSpellThreeOverDNatural),
-        ("testSpellTwoOverDNatural", testSpellTwoOverDNatural),
-        ("testSpellZeroOverDNatural", testSpellZeroOverDNatural),
     ]
 }
 
