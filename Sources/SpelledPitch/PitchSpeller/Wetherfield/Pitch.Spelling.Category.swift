@@ -10,7 +10,7 @@ import Math
 import Pitch
 
 /// Interface for the six pitch spelling categories.
-protocol PitchSpellingCategoryProtocol {
+protocol PitchSpellingCategoryProtocol: TendencyConverting {
     typealias ModifierLookup = Bimap<ModifierDirection,Pitch.Spelling.Modifier>
     /// The available `Pitch.Spelling.Modifier` value by the given `ModifierDirection`.
     static var directionToModifier: ModifierLookup { get }
