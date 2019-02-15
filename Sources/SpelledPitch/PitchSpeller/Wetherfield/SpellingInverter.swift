@@ -10,15 +10,16 @@ import Pitch
 
 struct SpellingInverter {
     
-    // The `Tendency` `FlowNetwork` which would solve to the spellings passed in
-    var flowNetwork: FlowNetwork<FlowNode<PitchSpeller.InternalAssignedNode>,Double>
+    // The `Tendency` `DirectedGraph` which stands in for the `FlowNetwork` that
+    // would solve to the set of spellings passed into the `SpellingInverter`.
+    var flowNetwork: DirectedGraph<FlowNode<PitchSpeller.InternalAssignedNode>>
     
     let pitchSpelling: (PitchSpellingNode.Index) -> Pitch.Spelling?
 }
 
 extension SpellingInverter {
     init(spellings: [Int: Pitch.Spelling], parsimonyPivot: Pitch.Spelling = .init(.d)) {
-        self.flowNetwork = FlowNetwork(internalNodes: internalNodes(spellings: spellings))
+        self.flowNetwork = DirectedGraph(internalNodes: internalNodes(spellings: spellings))
         self.pitchSpelling = { index in
             switch index {
             case .source, .sink:
@@ -53,27 +54,20 @@ private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spell
     return .init(.init(offset, index), index == .down ? tendencies.a : tendencies.b)
 }
 
-extension FlowNetwork where Node == FlowNode<PitchSpeller.InternalAssignedNode>, Weight == Double {
+extension DirectedGraph where Node == FlowNode<PitchSpeller.InternalAssignedNode> {
     
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
     init(internalNodes: [PitchSpeller.InternalAssignedNode]) {
-        self.init(source: .source, sink: .sink)
+        self.init()
+        self.insert(.source)
+        self.insert(.sink)
         for node in internalNodes {
-            insertEdge(from: source, to: .internal(node), weight: featherWeight)
-            insertEdge(from: .internal(node), to: sink, weight: featherWeight)
+            insertEdge(from: .source, to: .internal(node))
+            insertEdge(from: .internal(node), to: .sink)
             for other in internalNodes.lazy.filter({ $0 != node }) {
-                insertEdge(from: .internal(node), to: .internal(other), weight: featherWeight)
+                insertEdge(from: .internal(node), to: .internal(other))
             }
         }
-    }
-    
-    /// Creates an empty `FlowNetwork` ready to be used incrementally constructed for the purposes
-    /// of pitch spelling.
-    init() {
-        self.source = .source
-        self.sink = .sink
-        self.nodes = []
-        self.weights = [:]
     }
 }
