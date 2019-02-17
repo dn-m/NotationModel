@@ -12,6 +12,18 @@ import Pitch
 
 class SpellingInverterTests: XCTestCase {
     
+    func testSpellingInverterPitchClass0() {
+        let spellingInverterD = SpellingInverter(spellings: [1: Pitch.Spelling(.c)])
+        let spellingInverterCx = SpellingInverter(spellings: [1: Pitch.Spelling(.b,.sharp)])
+        let spellingInverterEbb = SpellingInverter(spellings: [1: Pitch.Spelling(.d,.doubleFlat)])
+        XCTAssertTrue(spellingInverterD.flowNetwork.contains(.internal(.init(.init(1,.up),.up))))
+        XCTAssertTrue(spellingInverterD.flowNetwork.contains(.internal(.init(.init(1,.down),.down))))
+        XCTAssertTrue(spellingInverterCx.flowNetwork.contains(.internal(.init(.init(1,.up),.up))))
+        XCTAssertTrue(spellingInverterCx.flowNetwork.contains(.internal(.init(.init(1,.down),.up))))
+        XCTAssertTrue(spellingInverterEbb.flowNetwork.contains(.internal(.init(.init(1,.up),.down))))
+        XCTAssertTrue(spellingInverterEbb.flowNetwork.contains(.internal(.init(.init(1,.down),.down))))
+    }
+    
     func testSpellingInverterPitchClass2() {
         let spellingInverterD = SpellingInverter(spellings: [1: Pitch.Spelling(.d)])
         let spellingInverterCx = SpellingInverter(spellings: [1: Pitch.Spelling(.c,.doubleSharp)])
