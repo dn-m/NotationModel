@@ -80,3 +80,59 @@ extension DirectedGraph where Node == FlowNode<PitchSpeller.InternalAssignedNode
         }
     }
 }
+
+extension DirectedGraph where Node == FlowNode<PitchSpeller.InternalAssignedNode> {
+    
+    /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights, the edge's weight
+    /// must be greater than for the inverse spelling procedure to be valid.
+    var weightDependencies: [Edge: Set<Edge>] {
+        var residualNetwork = self
+        var weightDependencies: [Edge: Set<Edge>] = [:]
+        
+        while let augmentingPath = residualNetwork.shortestUnweightedPath(from: .source, to: .sink) {
+            let preCutIndex = augmentingPath.lastIndex { node in
+                switch node {
+                case .source: return true
+                case .sink: return false
+                case .internal(let internalNode): return internalNode.assignment == .down
+                }
+            }!
+            let cutEdge = Edge(augmentingPath[preCutIndex], augmentingPath[preCutIndex+1])
+            for edge in augmentingPath.pairs.map(Edge.init) where edge != cutEdge {
+                weightDependencies[edge]!.insert(cutEdge)
+            }
+            residualNetwork.remove(cutEdge)
+            residualNetwork.insertEdge(from: cutEdge.b, to: cutEdge.a)
+        }
+        
+        return weightDependencies
+    }
+    
+    /// - Returns: A concrete distribution of weights to satisfy the weight relationships delimited by
+    /// `weightDependencies`.
+    var weights: [Edge: Double] {
+        func dependeciesReducer (
+            _ weights: inout [Edge: Double],
+            _ dependency: (key: Edge, value: Set<Edge>)
+            ) {
+            
+            func recursiveReducer (
+                _ weights: inout [Edge: Double],
+                _ dependency: (key: Edge, value: Set<Edge>)
+                ) -> Double {
+                return dependency.value.reduce(1.0) { result, edge in
+                    guard let dependencies = weightDependencies[edge] else { return result }
+                    if dependencies.isEmpty {
+                        return result
+                    } else {
+                        return result + recursiveReducer(&weights, (key: edge, value: dependencies))
+                    }
+                }
+            }
+            
+            let _ = recursiveReducer(&weights, dependency)
+        }
+        
+        return weightDependencies.reduce(into: [Edge: Double](), dependeciesReducer)
+    }
+}
