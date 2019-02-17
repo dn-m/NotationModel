@@ -42,7 +42,7 @@ extension Pitch.Spelling {
         /// Category for pitch classes `2`, `7`, and `9`.
         struct Two: PitchSpellingCategoryProtocol {
             static let directionToModifier: ModifierLookup = [
-                .down: .flat,
+                .down: .doubleFlat,
                 .neutral: .natural,
                 .up: .doubleSharp
             ]
