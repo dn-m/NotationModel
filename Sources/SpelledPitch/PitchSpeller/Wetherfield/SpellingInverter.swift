@@ -126,4 +126,15 @@ extension DirectedGraph where Node == FlowNode<PitchSpeller.InternalAssignedNode
         
         return weightDependencies.reduce(into: [Edge: Double](), dependeciesReducer)
     }
+    
+    func contains(_ indexing: (index: Int, offset: Tendency), _ assignment: Tendency) -> Bool {
+        return contains(
+            .internal(
+                PitchSpeller.InternalAssignedNode(
+                    Cross(indexing.index, indexing.offset),
+                    assignment
+                )
+            )
+        )
+    }
 }
