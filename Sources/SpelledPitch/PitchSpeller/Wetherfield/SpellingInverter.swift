@@ -31,15 +31,6 @@ extension SpellingInverter {
     }
 }
 
-extension SpellingInverter {
-    
-    // Produces weights that would yield the `Pitch.Spelling` values that were passed in
-    // if just the `Pitch` values were solved for using a `PitchSpeller` with said weights
-    func getWeights () -> [OrderedPair<Int>: Double] {
-        return [:]
-    }
-}
-
 /// - Returns: Index and assignment of all internal nodes of the `flowNetwork`.
 private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.InternalAssignedNode] {
     return spellings.map {
