@@ -84,7 +84,7 @@ extension SpellingInverter {
     /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights, the edge's weight
     /// must be greater than for the inverse spelling procedure to be valid.
     var weightDependencies: [UnassignedEdge: Set<UnassignedEdge>] {
-        var residualNetwork = self.flowNetwork
+        var residualNetwork = flowNetwork
         var weightDependencies: [UnassignedEdge: Set<UnassignedEdge>] = flowNetwork.edges.lazy
             .map { UnassignedEdge($0.a.unassigned, $0.b.unassigned) }
             .reduce(into: [UnassignedEdge: Set<UnassignedEdge>]()) { dependencies, edge in
