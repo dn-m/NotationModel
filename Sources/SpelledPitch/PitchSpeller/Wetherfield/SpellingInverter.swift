@@ -85,8 +85,12 @@ extension SpellingInverter {
     /// must be greater than for the inverse spelling procedure to be valid.
     var weightDependencies: [UnassignedEdge: Set<UnassignedEdge>] {
         var residualNetwork = self.flowNetwork
-        var weightDependencies: [UnassignedEdge: Set<UnassignedEdge>] = [:]
-        
+        var weightDependencies: [UnassignedEdge: Set<UnassignedEdge>] = flowNetwork.edges.lazy
+            .map { UnassignedEdge($0.a.unassigned, $0.b.unassigned) }
+            .reduce(into: [UnassignedEdge: Set<UnassignedEdge>]()) { dependencies, edge in
+                dependencies[edge] = []
+        }
+
         let source = PitchSpeller.AssignedNode(.source, .down)
         let sink = PitchSpeller.AssignedNode(.sink, .up)
         while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
