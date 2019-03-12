@@ -12,7 +12,7 @@ struct SpellingInverter {
     
     // The `Tendency` `DirectedGraph` which stands in for the `FlowNetwork` that
     // would solve to the set of spellings passed into the `SpellingInverter`.
-    var flowNetwork: DirectedGraph<FlowNode<PitchSpeller.InternalAssignedNode>>
+    var flowNetwork: DirectedGraph<PitchSpeller.AssignedNode>
     
     let pitchSpelling: (PitchSpellingNode.Index) -> Pitch.Spelling?
 }
@@ -32,12 +32,12 @@ extension SpellingInverter {
 }
 
 /// - Returns: Index and assignment of all internal nodes of the `flowNetwork`.
-private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.InternalAssignedNode] {
+private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.AssignedNode] {
     return spellings.map {
         let (offset,pitchSpelling) = $0
         return [.down,.up].map { index in node(offset, index, pitchSpelling) }
-        }.reduce([]) { (result: [PitchSpeller.InternalAssignedNode],
-            element: [PitchSpeller.InternalAssignedNode]) -> [PitchSpeller.InternalAssignedNode] in
+        }.reduce([]) { (result: [PitchSpeller.AssignedNode],
+            element: [PitchSpeller.AssignedNode]) -> [PitchSpeller.AssignedNode] in
             return result + element
         }
 }
@@ -45,34 +45,37 @@ private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.In
 /// - Returns: The value of a node at the given offset (index of a `Pitch.Spelling` within `spellings`),
 /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
 /// the given `Pitch.Spelling`.)
-private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling) -> PitchSpeller.InternalAssignedNode {
+private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling) -> PitchSpeller.AssignedNode {
     let pitchCategory = Pitch.Spelling.Category.category(
         for: pitchSpelling.pitchClass
         )!
     let direction = pitchCategory.directionToModifier[value: pitchSpelling.modifier]!
     let tendencies = pitchCategory.tendenciesToDirection[value: direction]!
-    return .init(.init(offset, index), index == .up ? tendencies.a : tendencies.b)
+    return .init(.internal(.init(offset, index)), index == .up ? tendencies.a : tendencies.b)
+//    return .init(.init(offset, index), index == .up ? tendencies.a : tendencies.b)
 }
 
-extension DirectedGraph where Node == FlowNode<PitchSpeller.InternalAssignedNode> {
+extension DirectedGraph where Node == PitchSpeller.AssignedNode {
     
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
-    init(internalNodes: [PitchSpeller.InternalAssignedNode]) {
+    init(internalNodes: [PitchSpeller.AssignedNode]) {
         self.init()
-        self.insert(.source)
-        self.insert(.sink)
+        let source = PitchSpeller.AssignedNode(.source, .down)
+        let sink = PitchSpeller.AssignedNode(.sink, .up)
+        self.insert(source)
+        self.insert(sink)
         for node in internalNodes {
-            insertEdge(from: .source, to: .internal(node))
-            insertEdge(from: .internal(node), to: .sink)
+            insertEdge(from: source, to: node)
+            insertEdge(from: node, to: sink)
             for other in internalNodes.lazy.filter({ $0 != node }) {
-                insertEdge(from: .internal(node), to: .internal(other))
+                insertEdge(from: node, to: other)
             }
         }
     }
 }
 
-extension DirectedGraph where Node == FlowNode<PitchSpeller.InternalAssignedNode> {
+extension DirectedGraph where Node == PitchSpeller.AssignedNode {
     
     /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights, the edge's weight
     /// must be greater than for the inverse spelling procedure to be valid.
@@ -80,14 +83,10 @@ extension DirectedGraph where Node == FlowNode<PitchSpeller.InternalAssignedNode
         var residualNetwork = self
         var weightDependencies: [Edge: Set<Edge>] = [:]
         
-        while let augmentingPath = residualNetwork.shortestUnweightedPath(from: .source, to: .sink) {
-            let preCutIndex = augmentingPath.lastIndex { node in
-                switch node {
-                case .source: return true
-                case .sink: return false
-                case .internal(let internalNode): return internalNode.assignment == .down
-                }
-            }!
+        let source = PitchSpeller.AssignedNode(.source, .down)
+        let sink = PitchSpeller.AssignedNode(.sink, .up)
+        while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
+            let preCutIndex = augmentingPath.lastIndex { $0.assignment == .down }!
             let cutEdge = Edge(augmentingPath[preCutIndex], augmentingPath[preCutIndex+1])
             for edge in augmentingPath.pairs.map(Edge.init) where edge != cutEdge {
                 weightDependencies[edge]!.insert(cutEdge)
@@ -128,13 +127,6 @@ extension DirectedGraph where Node == FlowNode<PitchSpeller.InternalAssignedNode
     }
     
     func contains(_ indexing: (index: Int, offset: Tendency), _ assignment: Tendency) -> Bool {
-        return contains(
-            .internal(
-                PitchSpeller.InternalAssignedNode(
-                    Cross(indexing.index, indexing.offset),
-                    assignment
-                )
-            )
-        )
+        return contains(Node(.internal(Cross(indexing.index, indexing.offset)), assignment))
     }
 }
