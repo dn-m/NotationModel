@@ -28,7 +28,7 @@ class PitchSpellingTendencyTests: XCTestCase {
     // MARK: - Category "Two"
 
     func testPCNineDownDown_BDoubleFlat() {
-        let expected = Pitch.Spelling(.b, .flat)
+        let expected = Pitch.Spelling(.b, .doubleFlat)
         XCTAssertEqual(Pitch.Spelling.init(pitchClass: 9, tendencies: .init(.down,.down)), expected)
     }
 
