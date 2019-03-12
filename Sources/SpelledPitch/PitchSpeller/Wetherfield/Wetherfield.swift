@@ -110,6 +110,13 @@ extension PitchSpeller {
     }
 }
 
+extension PitchSpeller.AssignedNode {
+    
+    var unassigned: PitchSpeller.UnassignedNode {
+        return .init(index: index)
+    }
+}
+
 extension PitchSpeller {
 
     // MARK: - Initializers
