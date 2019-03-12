@@ -18,7 +18,6 @@ struct SpellingInverter {
     
     typealias AssignedEdge = OrderedPair<PitchSpeller.AssignedNode>
     typealias UnassignedEdge = OrderedPair<PitchSpeller.UnassignedNode>
-    typealias Node = PitchSpeller.AssignedNode
 }
 
 extension SpellingInverter {
@@ -138,7 +137,7 @@ extension SpellingInverter {
     
     func contains(_ indexing: (index: Int, offset: Tendency), _ assignment: Tendency) -> Bool {
         return flowNetwork.contains(
-            Node(.internal(Cross(indexing.index, indexing.offset)), assignment)
+            PitchSpeller.AssignedNode(.internal(Cross(indexing.index, indexing.offset)), assignment)
         )
     }
 }
