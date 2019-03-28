@@ -68,6 +68,18 @@ extension DirectedGraph where Node == PitchSpeller.AssignedNode {
         let sink = PitchSpeller.AssignedNode(.sink, .up)
         self.insert(source)
         self.insert(sink)
+        internalNodes.lazy.filter { node in
+            switch node.index {
+            case .source, .sink: return false
+            case .internal(let index): return index.b == .down
+            }
+            }.forEach { insertEdge(from: source, to: $0) }
+        internalNodes.lazy.filter { node in
+            switch node.index {
+            case .source, .sink: return false
+            case .internal(let index): return index.b == .up
+            }
+            }.forEach { insertEdge(from: $0, to: sink) }
         for node in internalNodes {
             insertEdge(from: source, to: node)
             insertEdge(from: node, to: sink)
