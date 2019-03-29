@@ -73,19 +73,35 @@ extension DirectedGraph where Node == PitchSpeller.AssignedNode {
             case .source, .sink: return false
             case .internal(let index): return index.b == .down
             }
-            }.forEach { insertEdge(from: source, to: $0) }
+            }.forEach { node in
+                insertEdge(from: source, to: node)
+                internalNodes.lazy.filter { other in
+                    switch other.index {
+                    case .source, .sink: return false
+                    case .internal(let otherIndex): return other != node && otherIndex.b == .down
+                    }
+                    }.forEach { other in
+                        insertEdge(from: node, to: other)
+            }
+        }
         internalNodes.lazy.filter { node in
             switch node.index {
             case .source, .sink: return false
             case .internal(let index): return index.b == .up
             }
-            }.forEach { insertEdge(from: $0, to: sink) }
-        for node in internalNodes {
-            insertEdge(from: source, to: node)
-            insertEdge(from: node, to: sink)
-            for other in internalNodes.lazy.filter({ $0 != node }) {
-                insertEdge(from: node, to: other)
-            }
+            }.forEach { node in
+                insertEdge(from: node, to: sink)
+                insertEdge(from: node, to: internalNodes.first { downVersion in
+                    downVersion != node && downVersion.index.int! == node.index.int!
+                }!)
+                internalNodes.lazy.filter { other in
+                    switch other.index {
+                    case .source, .sink: return false
+                    case .internal(let otherIndex): return other != node && otherIndex.b == .up
+                    }
+                    }.forEach { other in
+                        insertEdge(from: node, to: other)
+                }
         }
     }
 }
