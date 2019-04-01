@@ -194,4 +194,28 @@ extension SpellingInverter {
             )
             )
     }
+    
+    func containsSourceEdge(
+        from sourceTendency: Tendency,
+        to destination: (index: Int, offset: Tendency, assignment: Tendency)
+        ) -> Bool {
+        return flowNetwork.containsEdge(
+            from: PitchSpeller.AssignedNode(.source, sourceTendency),
+            to: PitchSpeller.AssignedNode(
+                .internal(Cross(destination.index, destination.offset)), destination.assignment
+        )
+        )
+    }
+    
+    func containsSinkEdge(
+        from source: (index: Int, offset: Tendency, assignment: Tendency),
+        to destinationTendency: Tendency
+        ) -> Bool {
+        return flowNetwork.containsEdge(
+            from: PitchSpeller.AssignedNode(
+                .internal(Cross(source.index, source.offset)), source.assignment
+            ),
+            to: PitchSpeller.AssignedNode(.sink, destinationTendency)
+        )
+    }
 }
