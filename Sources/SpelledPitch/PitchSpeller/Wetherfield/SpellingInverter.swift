@@ -198,11 +198,11 @@ extension SpellingInverter {
     func containsSourceEdge(
         to destination: (index: Int, offset: Tendency)
         ) -> Bool {
-        return [(.up,.up),(.up,.down),(.down,.down)].reduce(false) {
-            (accumulating: Bool, next: (Tendency, Tendency)) -> Bool in
+        return [.up, .down].reduce(false) {
+            (accumulating: Bool, next: Tendency) -> Bool in
             accumulating || containsSourceEdge(
-                from: next.0,
-                to: (destination.index, destination.offset, next.1)
+                from: .down,
+                to: (destination.index, destination.offset, next)
             )
         }
     }
@@ -210,11 +210,11 @@ extension SpellingInverter {
     func containsSinkEdge(
         from source: (index: Int, offset: Tendency)
         ) -> Bool {
-        return [(.up,.up),(.up,.down),(.down,.down)].reduce(false) {
-            (accumulating: Bool, next: (Tendency, Tendency)) -> Bool in
+        return [.up, .down].reduce(false) {
+            (accumulating: Bool, next: Tendency) -> Bool in
             accumulating || containsSinkEdge(
-                from: (source.index, source.offset, next.0),
-                to: next.1
+                from: (source.index, source.offset, next),
+                to: .up
             )
         }
     }

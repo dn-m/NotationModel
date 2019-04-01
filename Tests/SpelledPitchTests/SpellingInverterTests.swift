@@ -160,5 +160,8 @@ class SpellingInverterTests: XCTestCase {
         XCTAssertTrue(spellingInverterNeutral.containsEdge(from: (1, .up), to: (1, .down)))
         XCTAssertTrue(spellingInverterUp.containsEdge(from: (1, .up), to: (1, .down)))
         XCTAssertTrue(spellingInverterDown.containsEdge(from: (1, .up), to: (1, .down)))
+        XCTAssertTrue(spellingInverterNeutral.containsSourceEdge(to: (1, .down)))
+        XCTAssertTrue(spellingInverterUp.containsSourceEdge(to: (1, .down)))
+        XCTAssertTrue(spellingInverterDown.containsSourceEdge(to: (1, .down)))
     }
 }
