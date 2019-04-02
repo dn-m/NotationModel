@@ -148,11 +148,21 @@ extension SpellingInverter {
                 _ dependency: (key: UnassignedEdge, value: Set<UnassignedEdge>)
                 ) -> Double {
                 return dependency.value.reduce(1.0) { result, edge in
+                    if weights[edge] != nil { return weights[edge]! }
                     guard let dependencies = weightDependencies[edge] else { return result }
-                    if dependencies.isEmpty {
+                    let edge = dependency.key
+                    let int1 = edge.a.index.int
+                    let int2 = edge.b.index.int
+                    if int1 == int2 && int1 != nil {
+                        weights[edge] = .infinity
+                        return .infinity
+                    } else if dependencies.isEmpty {
+                        weights[edge] = result
                         return result
                     } else {
-                        return result + recursiveReducer(&weights, (key: edge, value: dependencies))
+                        let result = result + recursiveReducer(&weights, (key: edge, value: dependencies))
+                        weights[edge] = result
+                        return result
                     }
                 }
             }
