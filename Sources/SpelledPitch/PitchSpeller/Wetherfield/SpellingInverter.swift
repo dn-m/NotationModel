@@ -18,6 +18,16 @@ struct SpellingInverter {
     
     typealias AssignedEdge = OrderedPair<PitchSpeller.AssignedNode>
     typealias UnassignedEdge = OrderedPair<PitchSpeller.UnassignedNode>
+    typealias PitchClassTendencyEdge = OrderedPair<Cross<Pitch.Class, Tendency>>
+    
+    func tackTendency (_ pitchClass: @escaping (Int) -> Pitch.Class)
+        -> (Cross<Int, Tendency>) -> Cross<Pitch.Class, Tendency> {
+        return { cross in
+            Cross<Pitch.Class, Tendency>(pitchClass(cross.a), cross.b)
+        }
+    }
+    
+    let pitchClass: (Int) -> Pitch.Class?
 }
 
 extension SpellingInverter {
@@ -31,6 +41,7 @@ extension SpellingInverter {
                 return spellings[cross.a]
             }
         }
+        self.pitchClass = { int in spellings[int]?.pitchClass }
     }
 }
 
@@ -127,7 +138,6 @@ extension SpellingInverter {
                     let int1 = edge.a.index.int
                     let int2 = edge.b.index.int
                     if int1 == int2 && int1 != nil {
-                        weights[edge] = .infinity
                         return .infinity
                     } else if dependencies.isEmpty {
                         weights[edge] = result
