@@ -114,25 +114,21 @@ extension SpellingInverter {
     
     /// - Returns: A concrete distribution of weights to satisfy the weight relationships delimited by
     /// `weightDependencies`.
-    var weights: [UnassignedEdge: Double] {
+    var weights: [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Double] {
         func dependeciesReducer (
-            _ weights: inout [UnassignedEdge: Double],
-            _ dependency: (key: UnassignedEdge, value: Set<UnassignedEdge>)
+            _ weights: inout [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Double],
+            _ dependency: (key: UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>, value: Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>)
             ) {
             
             func recursiveReducer (
-                _ weights: inout [UnassignedEdge: Double],
-                _ dependency: (key: UnassignedEdge, value: Set<UnassignedEdge>)
+                _ weights: inout [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Double],
+                _ dependency: (key: UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>, value: Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>)
                 ) -> Double {
                 return dependency.value.reduce(1.0) { result, edge in
                     if weights[edge] != nil { return weights[edge]! }
-                    guard let dependencies = weightDependencies[edge] else { return result }
+                    guard let dependencies = pitchedWeightDependencies[edge] else { return result }
                     let edge = dependency.key
-                    let int1 = edge.a.index.int
-                    let int2 = edge.b.index.int
-                    if int1 == int2 && int1 != nil {
-                        return .infinity
-                    } else if dependencies.isEmpty {
+                    if dependencies.isEmpty {
                         weights[edge] = result
                         return result
                     } else {
@@ -146,7 +142,8 @@ extension SpellingInverter {
             let _ = recursiveReducer(&weights, dependency)
         }
         
-        return weightDependencies.reduce(into: [UnassignedEdge: Double](), dependeciesReducer)
+        return pitchedWeightDependencies.reduce(
+            into: [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Double](), dependeciesReducer)
     }
     
     func mapKeys<A,B,C>(_ dictionary: [A:C],
