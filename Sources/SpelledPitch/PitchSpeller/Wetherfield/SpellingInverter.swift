@@ -20,13 +20,6 @@ struct SpellingInverter {
     typealias UnassignedEdge = OrderedPair<PitchSpeller.UnassignedNode>
     typealias PitchClassTendencyEdge = OrderedPair<Cross<Pitch.Class, Tendency>>
     
-    func tackTendency (_ pitchClass: @escaping (Int) -> Pitch.Class)
-        -> (Cross<Int, Tendency>) -> Cross<Pitch.Class, Tendency> {
-        return { cross in
-            Cross<Pitch.Class, Tendency>(pitchClass(cross.a), cross.b)
-        }
-    }
-    
     let pitchClass: (Int) -> Pitch.Class?
 }
 
@@ -154,6 +147,66 @@ extension SpellingInverter {
         }
         
         return weightDependencies.reduce(into: [UnassignedEdge: Double](), dependeciesReducer)
+    }
+    
+    func mapKeys<A,B,C>(_ dictionary: [A:C],
+                        with function: @escaping (A) -> B,
+                        uniquingKeysWith: (C,C) -> C)
+        -> [B:C] {
+        return dictionary.reduce(into: [B:C]()) { outputDictionary, keyValue in
+            let newKey = function(keyValue.key)
+            guard let existingValue = outputDictionary[newKey] else {
+                outputDictionary[newKey] = keyValue.value
+                return
+            }
+            outputDictionary[newKey] = uniquingKeysWith(existingValue, keyValue.value)
+        }
+    }
+    
+    func mapValues<A,B,C>(_ dictionary: [A:B], with function: @escaping (B) -> C) -> [A:C] {
+        return dictionary.reduce(into: [A:C]()) { output, keyValue in
+            output[keyValue.key] = function(keyValue.value)
+        }
+    }
+    
+    var pitchedWeightDependencies: [
+        UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
+        Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
+        ] {
+        
+        var pitchClassMapper: (Cross<Int,Tendency>) -> Cross<Pitch.Class, Tendency> {
+            return { input in
+                Cross<Pitch.Class, Tendency>(self.pitchClass(input.a)!, input.b)
+            }
+        }
+        
+        let flowNodeMapper: (FlowNode<Cross<Int,Tendency>>) -> FlowNode<Cross<Pitch.Class,Tendency>>
+            = bind(pitchClassMapper)
+        
+        var nodeMapper: (PitchSpeller.UnassignedNode) -> FlowNode<Cross<Pitch.Class,Tendency>> {
+            return { flowNodeMapper($0.index) }
+        }
+        
+        var pairMapper: (UnassignedEdge)
+            -> UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>> {
+            return { pair in
+                .init(nodeMapper(pair.a),nodeMapper(pair.b))
+            }
+        }
+        
+        let keysMapped: [
+            UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
+            Set<UnassignedEdge>
+            ]
+            = mapKeys(weightDependencies, with: pairMapper) { $0.union($1) }
+        
+        let keysValuesMapped: [
+            UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
+            Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
+            ]
+            = mapValues(keysMapped) { Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>($0.map(pairMapper)) }
+        
+        return keysValuesMapped
     }
     
     /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights, the edge's weight
