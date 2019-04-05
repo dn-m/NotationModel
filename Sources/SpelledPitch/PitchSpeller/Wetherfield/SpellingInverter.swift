@@ -166,30 +166,31 @@ extension SpellingInverter {
         }
     }
     
+    var pitchClassMapper: (Cross<Int,Tendency>) -> Cross<Pitch.Class, Tendency> {
+        return { input in
+            Cross<Pitch.Class, Tendency>(self.pitchClass(input.a)!, input.b)
+        }
+    }
+    
+    var flowNodeMapper: (FlowNode<Cross<Int,Tendency>>) -> FlowNode<Cross<Pitch.Class,Tendency>> {
+        return bind(pitchClassMapper)
+    }
+    
+    var nodeMapper: (PitchSpeller.UnassignedNode) -> FlowNode<Cross<Pitch.Class,Tendency>> {
+        return { self.flowNodeMapper($0.index) }
+    }
+    
+    var pairMapper: (UnassignedEdge)
+        -> UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>> {
+        return { pair in
+            .init(self.nodeMapper(pair.a), self.nodeMapper(pair.b))
+        }
+    }
+    
     var pitchedWeightDependencies: [
         UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
         Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
         ] {
-        
-        var pitchClassMapper: (Cross<Int,Tendency>) -> Cross<Pitch.Class, Tendency> {
-            return { input in
-                Cross<Pitch.Class, Tendency>(self.pitchClass(input.a)!, input.b)
-            }
-        }
-        
-        let flowNodeMapper: (FlowNode<Cross<Int,Tendency>>) -> FlowNode<Cross<Pitch.Class,Tendency>>
-            = bind(pitchClassMapper)
-        
-        var nodeMapper: (PitchSpeller.UnassignedNode) -> FlowNode<Cross<Pitch.Class,Tendency>> {
-            return { flowNodeMapper($0.index) }
-        }
-        
-        var pairMapper: (UnassignedEdge)
-            -> UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>> {
-            return { pair in
-                .init(nodeMapper(pair.a),nodeMapper(pair.b))
-            }
-        }
         
         let keysMapped: [
             UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
@@ -201,7 +202,7 @@ extension SpellingInverter {
             UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
             Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
             ]
-            = mapValues(keysMapped) { Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>($0.map(pairMapper)) }
+            = mapValues(keysMapped) { Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>($0.map(self.pairMapper)) }
         
         return keysValuesMapped
     }
@@ -313,3 +314,43 @@ extension SpellingInverter {
         )
     }
 }
+
+private let sameIntsScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
+    DirectedGraphScheme<Tendency?> {edge in edge.a == .up && edge.b == .down }
+        .pullback { node in node.index.tendency}
+
+private let connectSameInts: GraphScheme<PitchSpeller.UnassignedNode> =
+    GraphScheme<Int?> { edge in edge.a == edge.b && edge.a != nil }.pullback { node in node.index.int }
+
+private let connectDifferentInts: GraphScheme<PitchSpeller.UnassignedNode> =
+    GraphScheme<Int?> { edge in !(edge.a == edge.b && edge.a != nil) }.pullback { node in node.index.int }
+
+private let upDownEdgeScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
+    GraphScheme { edge in
+        switch (edge.a, edge.b) {
+        case (.internal(let source), .internal(let destination)):
+            return source.b != destination.b && upDownEdgeLookup.contains(.init(source.a, destination.a))
+        default: return false
+        }
+        }.directed
+
+private let upDownEdgeLookup: [UnorderedPair<Pitch.Class>] = [
+    .init(00, 01),
+    .init(00, 04),
+    .init(00, 08),
+    .init(01, 03),
+    .init(01, 05),
+    .init(01, 09),
+    .init(03, 04),
+    .init(03, 06),
+    .init(03, 08),
+    .init(03, 11),
+    .init(04, 05),
+    .init(05, 06),
+    .init(05, 08),
+    .init(05, 11),
+    .init(06, 09),
+    .init(07, 08),
+    .init(08, 10),
+    .init(10, 11)
+    ]
