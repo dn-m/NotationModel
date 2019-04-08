@@ -76,8 +76,7 @@ private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spell
         )!
     let direction = pitchCategory.directionToModifier[value: pitchSpelling.modifier]!
     let tendencies = pitchCategory.tendenciesToDirection[value: direction]!
-    return .init((.init(offset, index)), index == .up ? tendencies.a : tendencies.b)
-//    return .init(.init(offset, index), index == .up ? tendencies.a : tendencies.b)
+    return .init(.init(offset, index), index == .up ? tendencies.a : tendencies.b)
 }
 
 extension DirectedGraph where Node == PitchSpeller.AssignedNode {
