@@ -57,12 +57,12 @@ extension SpellingInverter {
 }
 
 /// - Returns: Index and assignment of all internal nodes of the `flowNetwork`.
-private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.AssignedNode] {
+private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.InternalAssignedNode] {
     return spellings.map {
         let (offset,pitchSpelling) = $0
         return [.down,.up].map { index in node(offset, index, pitchSpelling) }
-        }.reduce([]) { (result: [PitchSpeller.AssignedNode],
-            element: [PitchSpeller.AssignedNode]) -> [PitchSpeller.AssignedNode] in
+        }.reduce([]) { (result: [PitchSpeller.InternalAssignedNode],
+            element: [PitchSpeller.InternalAssignedNode]) -> [PitchSpeller.InternalAssignedNode] in
             return result + element
         }
 }
@@ -70,13 +70,13 @@ private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.As
 /// - Returns: The value of a node at the given offset (index of a `Pitch.Spelling` within `spellings`),
 /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
 /// the given `Pitch.Spelling`.)
-private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling) -> PitchSpeller.AssignedNode {
+private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling) -> PitchSpeller.InternalAssignedNode {
     let pitchCategory = Pitch.Spelling.Category.category(
         for: pitchSpelling.pitchClass
         )!
     let direction = pitchCategory.directionToModifier[value: pitchSpelling.modifier]!
     let tendencies = pitchCategory.tendenciesToDirection[value: direction]!
-    return .init(.internal(.init(offset, index)), index == .up ? tendencies.a : tendencies.b)
+    return .init((.init(offset, index)), index == .up ? tendencies.a : tendencies.b)
 //    return .init(.init(offset, index), index == .up ? tendencies.a : tendencies.b)
 }
 
@@ -104,49 +104,6 @@ extension DirectedGraph where Node == PitchSpeller.AssignedNode {
                 let other = mapInternal(otherInternalNode)
                 insertEdge(from: node, to: other)
             }
-        }
-    }
-    
-    init(internalNodes: [PitchSpeller.AssignedNode]) {
-        self.init()
-        let source = PitchSpeller.AssignedNode(.source, .down)
-        let sink = PitchSpeller.AssignedNode(.sink, .up)
-        self.insert(source)
-        self.insert(sink)
-        internalNodes.lazy.filter { node in
-            switch node.index {
-            case .source, .sink: return false
-            case .internal(let index): return index.b == .down
-            }
-            }.forEach { node in
-                insertEdge(from: source, to: node)
-                internalNodes.lazy.filter { other in
-                    switch other.index {
-                    case .source, .sink: return false
-                    case .internal(let otherIndex): return other != node && otherIndex.b == .down
-                    }
-                    }.forEach { other in
-                        insertEdge(from: node, to: other)
-            }
-        }
-        internalNodes.lazy.filter { node in
-            switch node.index {
-            case .source, .sink: return false
-            case .internal(let index): return index.b == .up
-            }
-            }.forEach { node in
-                insertEdge(from: node, to: sink)
-                insertEdge(from: node, to: internalNodes.first { downVersion in
-                    downVersion != node && downVersion.index.int! == node.index.int!
-                }!)
-                internalNodes.lazy.filter { other in
-                    switch other.index {
-                    case .source, .sink: return false
-                    case .internal(let otherIndex): return other != node && otherIndex.b == .up
-                    }
-                    }.forEach { other in
-                        insertEdge(from: node, to: other)
-                }
         }
     }
     
