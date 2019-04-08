@@ -36,10 +36,10 @@ extension SpellingInverter {
         }
         self.pitchClass = { int in spellings[int]?.pitchClass }
         
-        let specificEdgeScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> = upDownEdgeScheme.pullback(nodeMapper) * connectDifferentInts
-            * DirectedGraphScheme<Int?>({ !$0.contains(8) }).pullback { $0.index.int }
+        let specificEdgeScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> = (upDownEdgeScheme.pullback(nodeMapper) + sameEdgeScheme.pullback(nodeMapper))
+        * connectDifferentInts
         
-        let sameEdgesScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
+        let sameIntEdgesScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
             sameIntsScheme * connectSameInts
         
         let specificSourceScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
@@ -49,7 +49,7 @@ extension SpellingInverter {
             sourceEdgeLookupScheme.pullback(nodeMapper)
         
         let maskScheme: DirectedGraphScheme<PitchSpeller.AssignedNode> =
-            [specificEdgeScheme, sameEdgesScheme, specificSourceScheme, specificSinkScheme].reduce(DirectedGraphScheme { _ in true }, +)
+            [specificEdgeScheme, sameIntEdgesScheme, specificSourceScheme, specificSinkScheme].reduce(DirectedGraphScheme { _ in true }, +)
                 .pullback({ $0.unassigned })
         
         self.flowNetwork.mask(maskScheme)
@@ -395,6 +395,15 @@ private let upDownEdgeScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Te
         switch (edge.a, edge.b) {
         case (.internal(let source), .internal(let destination)):
             return source.b != destination.b && upDownEdgeLookup.contains(.init(source.a, destination.a))
+        default: return false
+        }
+        }.directed
+
+private let sameEdgeScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
+    GraphScheme { edge in
+        switch (edge.a, edge.b) {
+        case (.internal(let source), .internal(let destination)):
+            return source.b == destination.b && !upDownEdgeLookup.contains(.init(source.a, destination.a))
         default: return false
         }
         }.directed
