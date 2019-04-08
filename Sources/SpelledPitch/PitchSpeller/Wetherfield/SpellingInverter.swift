@@ -35,6 +35,24 @@ extension SpellingInverter {
             }
         }
         self.pitchClass = { int in spellings[int]?.pitchClass }
+        
+        let specificEdgeScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> = upDownEdgeScheme.pullback(nodeMapper) * connectDifferentInts
+            * DirectedGraphScheme<Int?>({ !$0.contains(8) }).pullback { $0.index.int }
+        
+        let sameEdgesScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
+            sameIntsScheme * connectSameInts
+        
+        let specificSourceScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
+            sourceEdgeLookupScheme.pullback(nodeMapper)
+        
+        let specificSinkScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
+            sourceEdgeLookupScheme.pullback(nodeMapper)
+        
+        let maskScheme: DirectedGraphScheme<PitchSpeller.AssignedNode> =
+            [specificEdgeScheme, sameEdgesScheme, specificSourceScheme, specificSinkScheme].reduce(DirectedGraphScheme { _ in true }, +)
+                .pullback({ $0.unassigned })
+        
+        self.flowNetwork.mask(maskScheme)
     }
 }
 
@@ -66,6 +84,29 @@ extension DirectedGraph where Node == PitchSpeller.AssignedNode {
     
     /// Create a `FlowNetwork` which is hooked up as neccesary for the Wetherfield pitch-spelling
     /// process.
+    init(internalNodes: [PitchSpeller.InternalAssignedNode]) {
+        self.init()
+        let source = PitchSpeller.AssignedNode(.source, .down)
+        let sink = PitchSpeller.AssignedNode(.sink, .up)
+        self.insert(source)
+        self.insert(sink)
+        
+        var mapInternal: (PitchSpeller.InternalAssignedNode) -> PitchSpeller.AssignedNode {
+            return { .init(.internal($0.index), $0.assignment) }
+        }
+        
+        for internalNode in internalNodes {
+            let node = mapInternal(internalNode)
+            insert(node)
+            insertEdge(from: source, to: node)
+            insertEdge(from: node, to: sink)
+            for otherInternalNode in internalNodes where otherInternalNode != internalNode {
+                let other = mapInternal(otherInternalNode)
+                insertEdge(from: node, to: other)
+            }
+        }
+    }
+    
     init(internalNodes: [PitchSpeller.AssignedNode]) {
         self.init()
         let source = PitchSpeller.AssignedNode(.source, .down)
@@ -106,6 +147,14 @@ extension DirectedGraph where Node == PitchSpeller.AssignedNode {
                     }.forEach { other in
                         insertEdge(from: node, to: other)
                 }
+        }
+    }
+    
+    mutating func mask <Scheme: UnweightedGraphSchemeProtocol> (_ adjacencyScheme: Scheme) where
+        Scheme.Node == Node
+    {
+        for edge in edges where !adjacencyScheme.containsEdge(from: edge.a, to: edge.b) {
+            remove(edge)
         }
     }
 }
@@ -318,6 +367,22 @@ extension SpellingInverter {
 private let sameIntsScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
     DirectedGraphScheme<Tendency?> {edge in edge.a == .up && edge.b == .down }
         .pullback { node in node.index.tendency}
+
+private let sourceEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
+    DirectedGraphScheme<FlowNode<Pitch.Class>> { edge in
+        edge.a == .source && edge.b != .internal(8)
+        }.pullback(bind({ (cross: Cross<Pitch.Class, Tendency>) -> Pitch.Class in cross.a }))
+    * DirectedGraphScheme<FlowNode<Tendency>> { edge in
+        edge.a == .source && edge.b == .internal(.down)
+        }.pullback(bind ({ cross in cross.b }))
+
+private let sinkEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
+    DirectedGraphScheme<FlowNode<Pitch.Class>> { edge in
+        edge.a != .internal(8) && edge.b == .sink
+        }.pullback(bind({ (cross: Cross<Pitch.Class, Tendency>) -> Pitch.Class in cross.a }))
+    * DirectedGraphScheme<FlowNode<Tendency>> { edge in
+        edge.a == .internal(.up) && edge.b == .sink
+        }.pullback(bind ({ cross in cross.b }))
 
 private let connectSameInts: GraphScheme<PitchSpeller.UnassignedNode> =
     GraphScheme<Int?> { edge in edge.a == edge.b && edge.a != nil }.pullback { node in node.index.int }
