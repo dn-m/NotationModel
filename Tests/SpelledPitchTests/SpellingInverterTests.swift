@@ -153,7 +153,7 @@ class SpellingInverterTests: XCTestCase {
         XCTAssertTrue(spellingInverterDown.contains((1,.down),.down))
     }
     
-    func testSpellingInverterEdgesPitchClass0() {
+    func testSpellingInverterEdgesPitchClass11() {
         let spellingInverterNeutral = SpellingInverter(spellings: [1: Pitch.Spelling(.b,.natural)])
         let spellingInverterUp = SpellingInverter(spellings: [1: Pitch.Spelling(.a,.doubleSharp)])
         let spellingInverterDown = SpellingInverter(spellings: [1: Pitch.Spelling(.c,.flat)])
