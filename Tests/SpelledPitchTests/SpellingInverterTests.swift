@@ -178,10 +178,20 @@ class SpellingInverterTests: XCTestCase {
         XCTAssertTrue(spellingInverter.containsSinkEdge(from: (1,.up)))
         
         XCTAssertTrue(spellingInverter.containsEdge(from: (2, .up), to: (2, .down)))
+        XCTAssertFalse(spellingInverter.containsEdge(from: (2, .down), to: (2, .up)))
         XCTAssertTrue(spellingInverter.containsSourceEdge(to: (2, .down)))
         XCTAssertTrue(spellingInverter.containsSinkEdge(from: (2,.up)))
         
+        XCTAssertTrue(spellingInverter.containsEdge(from: (1, .up), to: (2, .down)))
+        XCTAssertTrue(spellingInverter.containsEdge(from: (2, .up), to: (1, .down)))
         XCTAssertTrue(spellingInverter.containsEdge(from: (1, .down), to: (2, .up)))
+        XCTAssertTrue(spellingInverter.containsEdge(from: (2, .down), to: (1, .up)))
+
+        XCTAssertFalse(spellingInverter.containsEdge(from: (1, .up), to: (2, .up)))
+        XCTAssertFalse(spellingInverter.containsEdge(from: (2, .up), to: (1, .up)))
+        XCTAssertFalse(spellingInverter.containsEdge(from: (1, .down), to: (2, .down)))
+        XCTAssertFalse(spellingInverter.containsEdge(from: (2, .down), to: (1, .down)))
+
 //        let flowNetwork = spellingInverter.flowNetwork
 //        flowNetwork.contains
     }

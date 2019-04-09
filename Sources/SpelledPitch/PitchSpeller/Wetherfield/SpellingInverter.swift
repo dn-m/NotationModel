@@ -213,7 +213,7 @@ extension SpellingInverter {
         from source: (index: Int, offset: Tendency),
         to destination: (index: Int, offset: Tendency)
         ) -> Bool {
-        return [(.up,.up),(.up,.down),(.down,.down)].reduce(false) {
+        return [(.up,.up),(.up,.down),(.down,.down),(.down,.up)].reduce(false) {
             (accumulating: Bool, next: (Tendency, Tendency)) -> Bool in
             accumulating || containsEdge(from: (source.index, source.offset, next.0),
                                          to: (destination.index, destination.offset, next.1)
@@ -308,7 +308,7 @@ private let connectSameInts: GraphScheme<PitchSpeller.UnassignedNode> =
     GraphScheme<Int?> { edge in edge.a == edge.b && edge.a != nil }.pullback { node in node.index.int }
 
 private let connectDifferentInts: GraphScheme<PitchSpeller.UnassignedNode> =
-    GraphScheme<Int?> { edge in !(edge.a == edge.b && edge.a != nil) }.pullback { node in node.index.int }
+    GraphScheme<Int> { edge in edge.a != edge.b }.pullback { node in node.index.int! }
 
 private let upDownEdgeScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
     GraphScheme { edge in
