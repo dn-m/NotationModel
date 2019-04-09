@@ -291,7 +291,7 @@ private let sameIntsScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
 private let sourceEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
     DirectedGraphScheme<FlowNode<Pitch.Class>> { edge in
         edge.a == .source && edge.b != .internal(8)
-        }.pullback(bind({ (cross: Cross<Pitch.Class, Tendency>) -> Pitch.Class in cross.a }))
+        }.pullback(bind({ cross in cross.a }))
     * DirectedGraphScheme<FlowNode<Tendency>> { edge in
         edge.a == .source && edge.b == .internal(.down)
         }.pullback(bind ({ cross in cross.b }))
@@ -299,7 +299,7 @@ private let sourceEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Cla
 private let sinkEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
     DirectedGraphScheme<FlowNode<Pitch.Class>> { edge in
         edge.a != .internal(8) && edge.b == .sink
-        }.pullback(bind({ (cross: Cross<Pitch.Class, Tendency>) -> Pitch.Class in cross.a }))
+        }.pullback(bind({ cross in cross.a }))
     * DirectedGraphScheme<FlowNode<Tendency>> { edge in
         edge.a == .internal(.up) && edge.b == .sink
         }.pullback(bind ({ cross in cross.b }))
