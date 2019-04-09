@@ -168,7 +168,7 @@ class SpellingInverterTests: XCTestCase {
         XCTAssertTrue(spellingInverterDown.containsSinkEdge(from: (1,.up)))
     }
     
-    func testSpellingInverterWeightsFSharpASharp() {
+    func testSpellingInverterAdjacenciesFSharpASharp() {
         let spellingInverter = SpellingInverter(spellings: [
             1: Pitch.Spelling(.f,.sharp),
             2: Pitch.Spelling(.a, .sharp)
