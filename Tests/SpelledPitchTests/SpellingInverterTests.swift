@@ -173,6 +173,7 @@ class SpellingInverterTests: XCTestCase {
             1: Pitch.Spelling(.f,.sharp),
             2: Pitch.Spelling(.a, .sharp)
             ])
-        let weights = spellingInverter.weights
+        let flowNetwork = spellingInverter.flowNetwork
+//        flowNetwork.contains
     }
 }

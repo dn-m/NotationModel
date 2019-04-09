@@ -46,7 +46,7 @@ extension SpellingInverter {
             sourceEdgeLookupScheme.pullback(nodeMapper)
         
         let specificSinkScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
-            sourceEdgeLookupScheme.pullback(nodeMapper)
+            sinkEdgeLookupScheme.pullback(nodeMapper)
         
         let maskScheme: DirectedGraphScheme<PitchSpeller.AssignedNode> =
             [specificEdgeScheme, sameIntEdgesScheme, specificSourceScheme, specificSinkScheme].reduce(DirectedGraphScheme { _ in false }, +)
