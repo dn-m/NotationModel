@@ -37,7 +37,7 @@ extension SpellingInverter {
         self.pitchClass = { int in spellings[int]?.pitchClass }
         
         let specificEdgeScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> = (upDownEdgeScheme.pullback(nodeMapper) + sameEdgeScheme.pullback(nodeMapper))
-        * connectDifferentInts
+            * connectDifferentInts
         
         let sameIntEdgesScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
             sameIntsScheme * connectSameInts
