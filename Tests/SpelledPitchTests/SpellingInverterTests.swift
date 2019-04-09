@@ -173,7 +173,16 @@ class SpellingInverterTests: XCTestCase {
             1: Pitch.Spelling(.f,.sharp),
             2: Pitch.Spelling(.a, .sharp)
             ])
-        let flowNetwork = spellingInverter.flowNetwork
+        XCTAssertTrue(spellingInverter.containsEdge(from: (1, .up), to: (1, .down)))
+        XCTAssertTrue(spellingInverter.containsSourceEdge(to: (1, .down)))
+        XCTAssertTrue(spellingInverter.containsSinkEdge(from: (1,.up)))
+        
+        XCTAssertTrue(spellingInverter.containsEdge(from: (2, .up), to: (2, .down)))
+        XCTAssertTrue(spellingInverter.containsSourceEdge(to: (2, .down)))
+        XCTAssertTrue(spellingInverter.containsSinkEdge(from: (2,.up)))
+        
+        XCTAssertTrue(spellingInverter.containsEdge(from: (1, .down), to: (2, .up)))
+//        let flowNetwork = spellingInverter.flowNetwork
 //        flowNetwork.contains
     }
 }

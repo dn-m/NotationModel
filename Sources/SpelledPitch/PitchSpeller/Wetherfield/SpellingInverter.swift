@@ -334,7 +334,7 @@ private let upDownEdgeLookup: [UnorderedPair<Pitch.Class>] = [
     .init(00, 08),
     .init(01, 03),
     .init(01, 05),
-    .init(01, 09),
+    .init(01, 10),
     .init(03, 04),
     .init(03, 06),
     .init(03, 08),
@@ -343,7 +343,7 @@ private let upDownEdgeLookup: [UnorderedPair<Pitch.Class>] = [
     .init(05, 06),
     .init(05, 08),
     .init(05, 11),
-    .init(06, 09),
+    .init(06, 10),
     .init(07, 08),
     .init(08, 10),
     .init(10, 11)
