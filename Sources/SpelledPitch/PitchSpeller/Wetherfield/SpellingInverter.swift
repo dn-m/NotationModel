@@ -119,15 +119,15 @@ extension SpellingInverter {
     
     /// - Returns: A concrete distribution of weights to satisfy the weight relationships delimited by
     /// `weightDependencies`.
-    var weights: [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Double] {
+    var weights: [PitchedEdge: Double] {
         func dependeciesReducer (
-            _ weights: inout [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Double],
-            _ dependency: (key: UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>, value: Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>)
+            _ weights: inout [PitchedEdge: Double],
+            _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
             ) {
             
             func recursiveReducer (
-                _ weights: inout [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Double],
-                _ dependency: (key: UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>, value: Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>)
+                _ weights: inout [PitchedEdge: Double],
+                _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
                 ) -> Double {
                 return dependency.value.reduce(1.0) { result, edge in
                     if weights[edge] != nil { return weights[edge]! }
@@ -148,7 +148,7 @@ extension SpellingInverter {
         }
         
         return pitchedDependencies.reduce(
-            into: [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Double](), dependeciesReducer)
+            into: [PitchedEdge: Double](), dependeciesReducer)
     }
     
     var pitchClassMapper: (Cross<Int,Tendency>) -> Cross<Pitch.Class, Tendency> {
@@ -165,8 +165,7 @@ extension SpellingInverter {
         return { self.flowNodeMapper($0.index) }
     }
     
-    var pairMapper: (UnassignedEdge)
-        -> UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>> {
+    var pairMapper: (UnassignedEdge) -> PitchedEdge {
         return { pair in
             .init(self.nodeMapper(pair.a), self.nodeMapper(pair.b))
         }
@@ -201,18 +200,11 @@ extension SpellingInverter {
     
     /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights, the edge's weight
     /// must be greater than for the inverse spelling procedure to be valid.
-    var pitchedDependencies: [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
-    ] {
+    var pitchedDependencies: [PitchedEdge: Set<PitchedEdge>] {
         var residualNetwork = flowNetwork
-        var weightDependencies: [
-            UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
-            Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
-            ] = flowNetwork.edges.lazy
+        var weightDependencies: [PitchedEdge: Set<PitchedEdge>] = flowNetwork.edges.lazy
                 .map { .init(self.nodeMapper($0.a.unassigned), self.nodeMapper($0.b.unassigned)) }
-                .reduce(into: [
-                    UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
-                    Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
-                    ]()) { dependencies, edge in
+                .reduce(into: [PitchedEdge: Set<PitchedEdge>]()) { dependencies, edge in
                 dependencies[edge] = []
         }
         
@@ -222,10 +214,12 @@ extension SpellingInverter {
             let preCutIndex = augmentingPath.lastIndex { $0.assignment == .down }!
             let cutEdge = AssignedEdge(augmentingPath[preCutIndex], augmentingPath[preCutIndex+1])
             for edge in augmentingPath.pairs.map(AssignedEdge.init) where edge != cutEdge {
-                weightDependencies[UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>(
-                    self.nodeMapper(edge.a.unassigned), self.nodeMapper(edge.b.unassigned))]!.insert(
-                    UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>(
-                        self.nodeMapper(cutEdge.a.unassigned), self.nodeMapper(cutEdge.b.unassigned)
+                weightDependencies[PitchedEdge(
+                    self.nodeMapper(edge.a.unassigned),
+                    self.nodeMapper(edge.b.unassigned))
+                    ]!.insert(PitchedEdge(
+                        self.nodeMapper(cutEdge.a.unassigned),
+                        self.nodeMapper(cutEdge.b.unassigned)
                         )
                 )
             }
