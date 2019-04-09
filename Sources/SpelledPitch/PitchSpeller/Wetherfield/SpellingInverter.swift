@@ -18,7 +18,7 @@ struct SpellingInverter {
     
     typealias AssignedEdge = OrderedPair<PitchSpeller.AssignedNode>
     typealias UnassignedEdge = OrderedPair<PitchSpeller.UnassignedNode>
-    typealias PitchClassTendencyEdge = OrderedPair<Cross<Pitch.Class, Tendency>>
+    typealias PitchedEdge = UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>
     
     let pitchClass: (Int) -> Pitch.Class?
 }
