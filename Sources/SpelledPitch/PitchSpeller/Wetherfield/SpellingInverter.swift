@@ -239,6 +239,43 @@ extension SpellingInverter {
         return weightDependencies
     }
     
+    /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights, the edge's weight
+    /// must be greater than for the inverse spelling procedure to be valid.
+    var pitchedDependencies: [UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>: Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
+    ] {
+        var residualNetwork = flowNetwork
+        var weightDependencies: [
+            UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
+            Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
+            ] = flowNetwork.edges.lazy
+                .map { .init(self.nodeMapper($0.a.unassigned), self.nodeMapper($0.b.unassigned)) }
+                .reduce(into: [
+                    UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>:
+                    Set<UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>>
+                    ]()) { dependencies, edge in
+                dependencies[edge] = []
+        }
+        
+        let source = PitchSpeller.AssignedNode(.source, .down)
+        let sink = PitchSpeller.AssignedNode(.sink, .up)
+        while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
+            let preCutIndex = augmentingPath.lastIndex { $0.assignment == .down }!
+            let cutEdge = AssignedEdge(augmentingPath[preCutIndex], augmentingPath[preCutIndex+1])
+            for edge in augmentingPath.pairs.map(AssignedEdge.init) where edge != cutEdge {
+                weightDependencies[UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>(
+                    self.nodeMapper(edge.a.unassigned), self.nodeMapper(edge.b.unassigned))]!.insert(
+                    UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>(
+                        self.nodeMapper(cutEdge.a.unassigned), self.nodeMapper(cutEdge.b.unassigned)
+                        )
+                )
+            }
+            residualNetwork.remove(cutEdge)
+            residualNetwork.insertEdge(from: cutEdge.b, to: cutEdge.a)
+        }
+        
+        return weightDependencies
+    }
+    
     func contains(_ indexing: (index: Int, offset: Tendency), _ assignment: Tendency) -> Bool {
         return flowNetwork.contains(
             PitchSpeller.AssignedNode(.internal(Cross(indexing.index, indexing.offset)), assignment)
