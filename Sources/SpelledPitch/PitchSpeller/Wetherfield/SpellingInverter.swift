@@ -64,6 +64,9 @@ extension SpellingInverter {
     /// - Returns: A concrete distribution of weights to satisfy the weight relationships delimited by
     /// `weightDependencies`. Weights are parametrized by `Pitch.Class` and `Tendency` values.
     var weights: [PitchedEdge: Double] {
+        
+        let dependencies = pitchedDependencies
+        
         func dependeciesReducer (
             _ weights: inout [PitchedEdge: Double],
             _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
@@ -75,7 +78,7 @@ extension SpellingInverter {
                 ) -> Double {
                 let weight = dependency.value.reduce(1.0) { result, edge in
                     if weights[edge] != nil { return result + weights[edge]! }
-                    return result + recursiveReducer(&weights, (key: edge, value: pitchedDependencies[edge]!))
+                    return result + recursiveReducer(&weights, (key: edge, value: dependencies[edge]!))
                 }
                 weights[dependency.key] = weight
                 return weight
@@ -84,7 +87,7 @@ extension SpellingInverter {
             let _ = recursiveReducer(&weights, dependency)
         }
         
-        return pitchedDependencies.reduce(into: [PitchedEdge: Double](), dependeciesReducer)
+        return dependencies.reduce(into: [PitchedEdge: Double](), dependeciesReducer)
     }
     
     /// - Returns: getter for the pitched version of a node index
