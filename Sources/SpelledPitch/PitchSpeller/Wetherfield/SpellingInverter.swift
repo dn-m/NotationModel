@@ -146,6 +146,18 @@ extension SpellingInverter {
 
 extension SpellingInverter {
     
+    // MARK: - Instance Methods
+    
+    mutating func mask (_ adjacencyScheme: GraphScheme<FlowNode<Int>>) {
+        let temp: GraphScheme<FlowNode<Cross<Int, Tendency>>>
+            = adjacencyScheme.pullback(bind { cross in cross.a})
+        let mask: GraphScheme<PitchSpeller.AssignedNode> = temp.pullback { node in node.index }
+        flowNetwork.mask(mask)
+    }
+}
+
+extension SpellingInverter {
+    
     // MARK: - Convenience Functions
     
     /// Convenience function for testing presence of a given node in the `flowNetwork`
