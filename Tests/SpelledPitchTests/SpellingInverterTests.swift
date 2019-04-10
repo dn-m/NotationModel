@@ -248,7 +248,6 @@ class SpellingInverterTests: XCTestCase {
             1: Pitch.Spelling(.f,.sharp),
             2: Pitch.Spelling(.a, .sharp)
             ])
-        let dependencies = spellingInverter.pitchedDependencies
         let weights = spellingInverter.weights
         XCTAssertEqual(weights[SpellingInverter.PitchedEdge(
             .internal(Cross<Pitch.Class, Tendency>(6, .down)),

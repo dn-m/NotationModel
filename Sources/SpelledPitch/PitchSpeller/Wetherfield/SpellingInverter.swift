@@ -129,26 +129,18 @@ extension SpellingInverter {
                 _ weights: inout [PitchedEdge: Double],
                 _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
                 ) -> Double {
-                return dependency.value.reduce(1.0) { result, edge in
-                    if weights[edge] != nil { return weights[edge]! }
-                    guard let dependencies = pitchedDependencies[edge] else { return result }
-                    let edge = dependency.key
-                    if dependencies.isEmpty {
-                        weights[edge] = result
-                        return result
-                    } else {
-                        let result = result + recursiveReducer(&weights, (key: edge, value: dependencies))
-                        weights[edge] = result
-                        return result
-                    }
+                let weight = dependency.value.reduce(1.0) { result, edge in
+                    if weights[edge] != nil { return result + weights[edge]! }
+                    return result + recursiveReducer(&weights, (key: edge, value: pitchedDependencies[edge]!))
                 }
+                weights[dependency.key] = weight
+                return weight
             }
             
             let _ = recursiveReducer(&weights, dependency)
         }
         
-        return pitchedDependencies.reduce(
-            into: [PitchedEdge: Double](), dependeciesReducer)
+        return pitchedDependencies.reduce(into: [PitchedEdge: Double](), dependeciesReducer)
     }
     
     var pitchClassMapper: (Cross<Int,Tendency>) -> Cross<Pitch.Class, Tendency> {
