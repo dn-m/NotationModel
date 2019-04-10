@@ -276,4 +276,19 @@ class SpellingInverterTests: XCTestCase {
             .sink
         )], 2)
     }
+    
+    func testCycleCheckFSharpASharpGFlatBFlat() {
+        var spellingInverter = SpellingInverter(spellings: [
+            1: Pitch.Spelling(.f,.sharp),
+            2: Pitch.Spelling(.a,.sharp),
+            3: Pitch.Spelling(.g,.flat),
+            4: Pitch.Spelling(.b,.flat)
+            ])
+        let scheme = GraphScheme<FlowNode<Int>> { edge in
+            (edge.contains(.internal(1)) && edge.contains(.internal(2)))
+                || (edge.contains(.internal(3)) && edge.contains(.internal(4)))
+        }
+        spellingInverter.mask(scheme)
+        XCTAssertNil(spellingInverter.weights)
+    }
 }
