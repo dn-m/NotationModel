@@ -63,9 +63,10 @@ extension SpellingInverter {
     
     /// - Returns: A concrete distribution of weights to satisfy the weight relationships delimited by
     /// `weightDependencies`. Weights are parametrized by `Pitch.Class` and `Tendency` values.
-    var weights: [PitchedEdge: Double] {
+    var weights: [PitchedEdge: Double]? {
         
         let dependencies = pitchedDependencies
+        if findCycle(dependencies) { return nil }
         
         func dependeciesReducer (
             _ weights: inout [PitchedEdge: Double],
@@ -156,6 +157,32 @@ extension SpellingInverter {
             = adjacencyScheme.pullback(bind { cross in cross.a})
         let mask: GraphScheme<PitchSpeller.AssignedNode> = temp.pullback { node in node.index }
         flowNetwork.mask(mask)
+    }
+
+    func findCycle(_ dependencies: [PitchedEdge: Set<PitchedEdge>]) -> Bool {
+
+        func reducer (_ result: Bool, _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)) -> Bool {
+            
+            func depthFirstSearch (
+                _ data: inout (visited: Set<PitchedEdge>, graph: [PitchedEdge: Set<PitchedEdge>]),
+                _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)) -> Bool {
+                guard let first = keyValue.value.first else { return false }
+                data.graph[keyValue.key]!.remove(first)
+                if !data.visited.contains(keyValue.key)
+                    && data.graph[keyValue.key]!.reduce(false, { $0 || data.visited.contains($1) }) {
+                    return true
+                }
+                data.visited.insert(keyValue.key)
+                return depthFirstSearch(&data, (first, data.graph[first]!))
+            }
+            
+            var data: (visited: Set<PitchedEdge>, graph: [PitchedEdge: Set<PitchedEdge>])
+                = ([], dependencies)
+            
+            return depthFirstSearch(&data, keyValue)
+        }
+
+        return dependencies.reduce(false, reducer)
     }
 }
 
