@@ -14,8 +14,6 @@ struct SpellingInverter {
     // would solve to the set of spellings passed into the `SpellingInverter`.
     var flowNetwork: DirectedGraph<PitchSpeller.AssignedNode>
     
-    let pitchSpelling: (PitchSpellingNode.Index) -> Pitch.Spelling?
-    
     typealias AssignedEdge = OrderedPair<PitchSpeller.AssignedNode>
     typealias UnassignedEdge = OrderedPair<PitchSpeller.UnassignedNode>
     typealias PitchedEdge = UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>
@@ -29,14 +27,6 @@ extension SpellingInverter {
     
     init(spellings: [Int: Pitch.Spelling], parsimonyPivot: Pitch.Spelling = .init(.d)) {
         self.flowNetwork = DirectedGraph(internalNodes: internalNodes(spellings: spellings))
-        self.pitchSpelling = { index in
-            switch index {
-            case .source, .sink:
-                return parsimonyPivot
-            case .internal(let cross):
-                return spellings[cross.a]
-            }
-        }
         self.pitchClass = { int in spellings[int]?.pitchClass }
         
         let specificEdgeScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> = (upDownEdgeScheme.pullback(nodeMapper) + sameEdgeScheme.pullback(nodeMapper))
