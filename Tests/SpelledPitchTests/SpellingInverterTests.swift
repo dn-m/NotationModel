@@ -192,4 +192,54 @@ class SpellingInverterTests: XCTestCase {
         XCTAssertFalse(spellingInverter.containsEdge(from: (1, .down), to: (2, .down)))
         XCTAssertFalse(spellingInverter.containsEdge(from: (2, .down), to: (1, .down)))
     }
+    
+    func testDependenciesFSharpASharp() {
+        let spellingInverter = SpellingInverter(spellings: [
+            1: Pitch.Spelling(.f,.sharp),
+            2: Pitch.Spelling(.a, .sharp)
+            ])
+        let dependencies = spellingInverter.pitchedDependencies
+        XCTAssertEqual(dependencies[SpellingInverter.PitchedEdge(
+            .internal(Cross<Pitch.Class, Tendency>(6, .down)),
+            .internal(Cross<Pitch.Class, Tendency>(10, .up))
+        )], Set([]))
+        XCTAssertEqual(dependencies[SpellingInverter.PitchedEdge(
+            .source,
+            .internal(Cross<Pitch.Class, Tendency>(10, .down))
+        )], Set([]))
+        
+        XCTAssertEqual(dependencies[SpellingInverter.PitchedEdge(
+            .source,
+            .internal(Cross<Pitch.Class, Tendency>(6, .down))
+        )], Set([SpellingInverter.PitchedEdge(
+            .internal(Cross<Pitch.Class, Tendency>(6, .down)),
+            .internal(Cross<Pitch.Class, Tendency>(10, .up))
+            )]
+        ))
+        XCTAssertEqual(dependencies[SpellingInverter.PitchedEdge(
+            .internal(Cross<Pitch.Class, Tendency>(10, .up)),
+            .sink
+        )], Set([SpellingInverter.PitchedEdge(
+            .internal(Cross<Pitch.Class, Tendency>(6, .down)),
+            .internal(Cross<Pitch.Class, Tendency>(10, .up))
+            )]
+        ))
+        
+        XCTAssertEqual(dependencies[SpellingInverter.PitchedEdge(
+            .internal(Cross<Pitch.Class, Tendency>(10, .down)),
+            .internal(Cross<Pitch.Class, Tendency>(6, .up))
+        )], Set([SpellingInverter.PitchedEdge(
+            .source,
+            .internal(Cross<Pitch.Class, Tendency>(10, .down))
+            )]
+        ))
+        XCTAssertEqual(dependencies[SpellingInverter.PitchedEdge(
+            .internal(Cross<Pitch.Class, Tendency>(6, .up)),
+            .sink
+        )], Set([SpellingInverter.PitchedEdge(
+            .source,
+            .internal(Cross<Pitch.Class, Tendency>(10, .down))
+            )]
+        ))
+    }
 }
