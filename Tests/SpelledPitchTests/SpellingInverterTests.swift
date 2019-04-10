@@ -287,6 +287,7 @@ class SpellingInverterTests: XCTestCase {
         let scheme = GraphScheme<FlowNode<Int>> { edge in
             (edge.contains(.internal(1)) && edge.contains(.internal(2)))
                 || (edge.contains(.internal(3)) && edge.contains(.internal(4)))
+            || edge.contains(.sink) || edge.contains(.source)
         }
         spellingInverter.mask(scheme)
         XCTAssertNil(spellingInverter.weights)
