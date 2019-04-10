@@ -309,7 +309,7 @@ private let sinkEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class
 
 /// Adjacency scheme that connects nodes with the same `int` value
 private let connectSameInts: GraphScheme<PitchSpeller.UnassignedNode> =
-    GraphScheme<Int?> { edge in edge.a == edge.b && edge.a != nil }.pullback { node in node.index.int }
+    GraphScheme<Int> { edge in edge.a == edge.b }.pullback { node in node.index.int! }
 
 /// Adjacency scheme that connects nodes with different `int` values
 private let connectDifferentInts: GraphScheme<PitchSpeller.UnassignedNode> =
