@@ -62,7 +62,9 @@ extension SpellingInverter {
     // MARK: - Computed Properties
     
     /// - Returns: A concrete distribution of weights to satisfy the weight relationships delimited by
-    /// `weightDependencies`. Weights are parametrized by `Pitch.Class` and `Tendency` values.
+    /// `weightDependencies` or `nil` if no such distribution is possible, i.e. there are cyclical
+    /// dependencies between edge types. In the latter case, the spellings fed in are *inconsistent*.
+    /// Weights are parametrized by `Pitch.Class` and `Tendency` values.
     var weights: [PitchedEdge: Double]? {
         
         let dependencies = pitchedDependencies
@@ -182,8 +184,6 @@ extension SpellingInverter {
             
             let _ = dependencies.reduce(into: [], depthFirstSearch)
             return flag
-//            depthFirstSearch(&data, keyValue)
-//            return data.flag
         }
 
         return dependencies.reduce(false, reducer)

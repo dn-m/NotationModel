@@ -291,5 +291,6 @@ class SpellingInverterTests: XCTestCase {
         }
         spellingInverter.mask(scheme)
         XCTAssertTrue(spellingInverter.findCycle(spellingInverter.pitchedDependencies))
+        XCTAssertNil(spellingInverter.weights)
     }
 }
