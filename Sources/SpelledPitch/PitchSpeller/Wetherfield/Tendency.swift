@@ -31,8 +31,7 @@ extension Pitch.Spelling {
     init?(pitchClass: Pitch.Class, tendencies: TendencyPair) {
         guard
             let category = Pitch.Spelling.Category.category(for: pitchClass),
-            let tendencyConverter = category as? TendencyConverting.Type,
-            let modifierDirection = tendencyConverter.modifierDirection(for: tendencies)
+            let modifierDirection = category.modifierDirection(for: tendencies)
         else {
             return nil
         }
