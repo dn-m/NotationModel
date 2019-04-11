@@ -290,6 +290,6 @@ class SpellingInverterTests: XCTestCase {
             || edge.contains(.sink) || edge.contains(.source)
         }
         spellingInverter.mask(scheme)
-        XCTAssertNil(spellingInverter.weights)
+        XCTAssertTrue(spellingInverter.findCycle(spellingInverter.pitchedDependencies))
     }
 }
