@@ -159,6 +159,28 @@ extension SpelledPitchTests {
     ]
 }
 
+extension SpellingInverterTests {
+    static let __allTests = [
+        ("testCycleCheckFSharpASharpGFlatBFlat", testCycleCheckFSharpASharpGFlatBFlat),
+        ("testDependenciesFSharpASharp", testDependenciesFSharpASharp),
+        ("testSpellingInverterAdjacenciesFSharpASharp", testSpellingInverterAdjacenciesFSharpASharp),
+        ("testSpellingInverterEdgesPitchClass11", testSpellingInverterEdgesPitchClass11),
+        ("testSpellingInverterPitchClass0", testSpellingInverterPitchClass0),
+        ("testSpellingInverterPitchClass1", testSpellingInverterPitchClass1),
+        ("testSpellingInverterPitchClass10", testSpellingInverterPitchClass10),
+        ("testSpellingInverterPitchClass11", testSpellingInverterPitchClass11),
+        ("testSpellingInverterPitchClass2", testSpellingInverterPitchClass2),
+        ("testSpellingInverterPitchClass3", testSpellingInverterPitchClass3),
+        ("testSpellingInverterPitchClass4", testSpellingInverterPitchClass4),
+        ("testSpellingInverterPitchClass5", testSpellingInverterPitchClass5),
+        ("testSpellingInverterPitchClass6", testSpellingInverterPitchClass6),
+        ("testSpellingInverterPitchClass7", testSpellingInverterPitchClass7),
+        ("testSpellingInverterPitchClass8", testSpellingInverterPitchClass8),
+        ("testSpellingInverterPitchClass9", testSpellingInverterPitchClass9),
+        ("testWeightsFSharpASharp", testWeightsFSharpASharp),
+    ]
+}
+
 extension UnorderedIntervalDescriptorTests {
     static let __allTests = [
         ("testBFlatDSharpAugmentedThird", testBFlatDSharpAugmentedThird),
@@ -205,6 +227,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(PitchSpellingsTests.__allTests),
         testCase(SpelledDyadTests.__allTests),
         testCase(SpelledPitchTests.__allTests),
+        testCase(SpellingInverterTests.__allTests),
         testCase(UnorderedIntervalDescriptorTests.__allTests),
         testCase(WeightLabelTests.__allTests),
         testCase(WetherfieldTests.__allTests),
