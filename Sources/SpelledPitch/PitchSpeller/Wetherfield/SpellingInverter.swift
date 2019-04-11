@@ -163,25 +163,27 @@ extension SpellingInverter {
 
         func reducer (_ result: Bool, _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)) -> Bool {
             
+            var graph = dependencies
+            var flag = false
+            
             func depthFirstSearch (
-                _ data: inout (visited: Set<PitchedEdge>, graph: [PitchedEdge: Set<PitchedEdge>], flag: Bool),
+                _ visited: inout Set<PitchedEdge>,
                 _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)) {
-                if data.flag == true { return }
-                guard let first = data.graph[keyValue.key]?.first else { return }
-                data.graph[keyValue.key]!.remove(first)
-                if !data.visited.contains(keyValue.key) && data.visited.contains(first) {
-                    data.flag = true
+                if flag == true { return }
+                guard let first = graph[keyValue.key]?.first else { return }
+                graph[keyValue.key]!.remove(first)
+                if !visited.contains(keyValue.key) && visited.contains(first) {
+                    flag = true
                     return
                 }
-                data.visited.insert(keyValue.key)
-                depthFirstSearch(&data, (first, data.graph[first]!))
+                visited.insert(keyValue.key)
+                depthFirstSearch(&visited, (first, graph[first]!))
             }
             
-            var data: (visited: Set<PitchedEdge>, graph: [PitchedEdge: Set<PitchedEdge>], flag: Bool)
-                = ([], dependencies, false)
-            
-            depthFirstSearch(&data, keyValue)
-            return data.flag
+            let _ = dependencies.reduce(into: [], depthFirstSearch)
+            return flag
+//            depthFirstSearch(&data, keyValue)
+//            return data.flag
         }
 
         return dependencies.reduce(false, reducer)
