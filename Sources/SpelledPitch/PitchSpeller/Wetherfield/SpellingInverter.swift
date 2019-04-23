@@ -48,8 +48,15 @@ extension SpellingInverter {
         let specificSinkScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
             sinkEdgeLookupScheme.pullback(nodeMapper)
         
+        let allSchemes: [DirectedGraphScheme<PitchSpeller.UnassignedNode>] = [
+            specificEdgeScheme,
+            sameIntEdgesScheme,
+            specificSourceScheme,
+            specificSinkScheme
+        ]
+        
         let maskScheme: DirectedGraphScheme<PitchSpeller.AssignedNode> =
-            [specificEdgeScheme, sameIntEdgesScheme, specificSourceScheme, specificSinkScheme].reduce(DirectedGraphScheme { _ in false }, +)
+            allSchemes.reduce(DirectedGraphScheme { _ in false }, +)
                 .pullback({ $0.unassigned })
         
         // Apply masking of specific manifestations of the general global adjacency schemes
