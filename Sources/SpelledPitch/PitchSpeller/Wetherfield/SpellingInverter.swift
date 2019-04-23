@@ -32,7 +32,7 @@ extension SpellingInverter {
     
     // MARK: - Initializers
     
-    init(spellings: [Int: Pitch.Spelling], parsimonyPivot: Pitch.Spelling = .init(.d)) {
+    init(spellings: [Int: Pitch.Spelling], parsimonyPivot: Pitch.Spelling = .d) {
         self.flowNetwork = DirectedGraph(internalNodes: internalNodes(spellings: spellings))
         self.pitchClass = { int in spellings[int]?.pitchClass }
         
