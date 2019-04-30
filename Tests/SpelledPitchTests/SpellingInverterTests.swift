@@ -198,7 +198,7 @@ class SpellingInverterTests: XCTestCase {
             1: Pitch.Spelling(.f,.sharp),
             2: Pitch.Spelling(.a, .sharp)
             ])
-        let dependencies = spellingInverter.pitchedDependencies
+        let dependencies = spellingInverter.findDependencies()
         XCTAssertEqual(dependencies[SpellingInverter.PitchedEdge(
             .internal(Cross<Pitch.Class, Tendency>(6, .down)),
             .internal(Cross<Pitch.Class, Tendency>(10, .up))
@@ -248,7 +248,7 @@ class SpellingInverterTests: XCTestCase {
             1: Pitch.Spelling(.f,.sharp),
             2: Pitch.Spelling(.a, .sharp)
             ])
-        let weights = spellingInverter.weights
+        let weights = spellingInverter.generateWeights()
         XCTAssertEqual(weights[SpellingInverter.PitchedEdge(
             .internal(Cross<Pitch.Class, Tendency>(6, .down)),
             .internal(Cross<Pitch.Class, Tendency>(10, .up))
@@ -290,6 +290,6 @@ class SpellingInverterTests: XCTestCase {
             || edge.contains(.sink) || edge.contains(.source)
         }
         spellingInverter.mask(scheme)
-        XCTAssertTrue(spellingInverter.findCycle(spellingInverter.pitchedDependencies))
+        XCTAssertTrue(spellingInverter.findCycle(spellingInverter.findDependencies()))
     }
 }
