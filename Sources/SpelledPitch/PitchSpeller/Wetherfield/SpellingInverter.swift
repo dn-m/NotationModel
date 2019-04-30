@@ -73,6 +73,7 @@ extension SpellingInverter {
     /// dependencies between edge types. In the latter case, the spellings fed in are *inconsistent*.
     /// Weights are parametrized by `Pitch.Class` and `Tendency` values.
     var weights: [PitchedEdge: Double] {
+        let pitchedDependencies = findDependencies()
         precondition(!findCycle(pitchedDependencies))
         func dependeciesReducer (
             _ weights: inout [PitchedEdge: Double],
@@ -125,7 +126,7 @@ extension SpellingInverter {
     
     /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights the edge's weight
     /// must be greater than for the inverse spelling procedure to be valid.
-    var pitchedDependencies: [PitchedEdge: Set<PitchedEdge>] {
+    func findDependencies () -> [PitchedEdge: Set<PitchedEdge>] {
         var residualNetwork = flowNetwork
         var weightDependencies: [PitchedEdge: Set<PitchedEdge>] = flowNetwork.edges.lazy
             .map { .init(self.nodeMapper($0.a.unassigned), self.nodeMapper($0.b.unassigned)) }
