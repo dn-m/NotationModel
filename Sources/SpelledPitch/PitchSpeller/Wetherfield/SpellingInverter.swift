@@ -55,9 +55,9 @@ extension SpellingInverter {
             specificSinkScheme
         ]
         
-        let maskScheme: DirectedGraphScheme<PitchSpeller.AssignedNode> =
-            allSchemes.reduce(DirectedGraphScheme { _ in false }, +)
-                .pullback({ $0.unassigned })
+        let maskScheme: DirectedGraphScheme<PitchSpeller.AssignedNode> = allSchemes
+            .reduce(DirectedGraphScheme { _ in false }, +)
+            .pullback({ $0.unassigned })
         
         // Apply masking of specific manifestations of the general global adjacency schemes
         self.flowNetwork.mask(maskScheme)
@@ -73,31 +73,30 @@ extension SpellingInverter {
     /// dependencies between edge types. In the latter case, the spellings fed in are *inconsistent*.
     /// Weights are parametrized by `Pitch.Class` and `Tendency` values.
     var weights: [PitchedEdge: Double] {
-        
-        let dependencies = pitchedDependencies
-        precondition(!findCycle(dependencies))
-        
+        precondition(!findCycle(pitchedDependencies))
         func dependeciesReducer (
             _ weights: inout [PitchedEdge: Double],
             _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
-            ) {
-            
+        )
+        {
             func recursiveReducer (
                 _ weights: inout [PitchedEdge: Double],
                 _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
-                ) -> Double {
+            ) -> Double
+            {
                 let weight = dependency.value.reduce(1.0) { result, edge in
                     if weights[edge] != nil { return result + weights[edge]! }
-                    return result + recursiveReducer(&weights, (key: edge, value: dependencies[edge]!))
+                    return (
+                        result +
+                        recursiveReducer(&weights, (key: edge, value: pitchedDependencies[edge]!))
+                    )
                 }
                 weights[dependency.key] = weight
                 return weight
             }
-            
             let _ = recursiveReducer(&weights, dependency)
         }
-        
-        return dependencies.reduce(into: [PitchedEdge: Double](), dependeciesReducer)
+        return pitchedDependencies.reduce(into: [:], dependeciesReducer)
     }
     
     /// - Returns: getter for the pitched version of a node index
@@ -129,30 +128,29 @@ extension SpellingInverter {
     var pitchedDependencies: [PitchedEdge: Set<PitchedEdge>] {
         var residualNetwork = flowNetwork
         var weightDependencies: [PitchedEdge: Set<PitchedEdge>] = flowNetwork.edges.lazy
-                .map { .init(self.nodeMapper($0.a.unassigned), self.nodeMapper($0.b.unassigned)) }
-                .reduce(into: [PitchedEdge: Set<PitchedEdge>]()) { dependencies, edge in
-                dependencies[edge] = []
-        }
-        
+            .map { .init(self.nodeMapper($0.a.unassigned), self.nodeMapper($0.b.unassigned)) }
+            .reduce(into: [:]) { dependencies, edge in dependencies[edge] = [] }
         let source = PitchSpeller.AssignedNode(.source, .down)
         let sink = PitchSpeller.AssignedNode(.sink, .up)
         while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
             let preCutIndex = augmentingPath.lastIndex { $0.assignment == .down }!
             let cutEdge = AssignedEdge(augmentingPath[preCutIndex], augmentingPath[preCutIndex+1])
             for edge in augmentingPath.pairs.map(AssignedEdge.init) where edge != cutEdge {
-                weightDependencies[PitchedEdge(
-                    self.nodeMapper(edge.a.unassigned),
-                    self.nodeMapper(edge.b.unassigned))
-                    ]!.insert(PitchedEdge(
+                weightDependencies[
+                    PitchedEdge(
+                        self.nodeMapper(edge.a.unassigned),
+                        self.nodeMapper(edge.b.unassigned)
+                    )
+                ]!.insert(
+                    PitchedEdge(
                         self.nodeMapper(cutEdge.a.unassigned),
                         self.nodeMapper(cutEdge.b.unassigned)
-                        )
+                    )
                 )
             }
             residualNetwork.remove(cutEdge)
             residualNetwork.insertEdge(from: cutEdge.b, to: cutEdge.a)
         }
-        
         return weightDependencies
     }
 }
@@ -177,9 +175,10 @@ extension SpellingInverter {
             
             func depthFirstSearch (
                 _ visited: inout Set<PitchedEdge>,
-                _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)) {
-                if flag == true { return }
-                guard let first = graph[keyValue.key]?.first else { return }
+                _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)
+            )
+            {
+                guard let first = graph[keyValue.key]?.first, flag == false else { return }
                 graph[keyValue.key]!.remove(first)
                 if !visited.contains(keyValue.key) && visited.contains(first) {
                     flag = true
@@ -188,7 +187,7 @@ extension SpellingInverter {
                 visited.insert(keyValue.key)
                 depthFirstSearch(&visited, (first, graph[first]!))
             }
-            
+
             let _ = dependencies.reduce(into: [], depthFirstSearch)
             return flag
         }
@@ -212,11 +211,17 @@ extension SpellingInverter {
     func containsEdge(
         from source: (index: Int, offset: Tendency),
         to destination: (index: Int, offset: Tendency)
-        ) -> Bool {
-        return [(.up,.up),(.up,.down),(.down,.down),(.down,.up)].reduce(false) {
-            (accumulating: Bool, next: (Tendency, Tendency)) -> Bool in
-            accumulating || containsEdge(from: (source.index, source.offset, next.0),
-                                         to: (destination.index, destination.offset, next.1)
+    ) -> Bool {
+        return [
+            (.up,.up),
+            (.up,.down),
+            (.down,.down),
+            (.down,.up)
+        ].reduce(false) { (accumulating: Bool, next: (Tendency, Tendency)) -> Bool in
+            accumulating ||
+            containsEdge(
+                from: (source.index, source.offset, next.0),
+                to: (destination.index, destination.offset, next.1)
             )
         }
     }
@@ -225,7 +230,7 @@ extension SpellingInverter {
     func containsEdge(
         from source: (index: Int, offset: Tendency, assignment: Tendency),
         to destination: (index: Int, offset: Tendency, assignment: Tendency)
-        ) -> Bool {
+    ) -> Bool {
         return flowNetwork.containsEdge(
             from: PitchSpeller.AssignedNode(
                 .internal(Cross(source.index, source.offset)), source.assignment
@@ -233,15 +238,12 @@ extension SpellingInverter {
             to: PitchSpeller.AssignedNode(
                 .internal(Cross(destination.index, destination.offset)), destination.assignment
             )
-            )
+        )
     }
     
     /// Convenience function for testing presence of edge from source (ignoring assignment)
-    func containsSourceEdge(
-        to destination: (index: Int, offset: Tendency)
-        ) -> Bool {
-        return [.up, .down].reduce(false) {
-            (accumulating: Bool, next: Tendency) -> Bool in
+    func containsSourceEdge(to destination: (index: Int, offset: Tendency)) -> Bool {
+        return [.up, .down].reduce(false) { accumulating, next in
             accumulating || containsSourceEdge(
                 from: .down,
                 to: (destination.index, destination.offset, next)
@@ -250,11 +252,8 @@ extension SpellingInverter {
     }
     
     /// Convenience function for testing presence of edge to sink (ignoring assignment)
-    func containsSinkEdge(
-        from source: (index: Int, offset: Tendency)
-        ) -> Bool {
-        return [.up, .down].reduce(false) {
-            (accumulating: Bool, next: Tendency) -> Bool in
+    func containsSinkEdge(from source: (index: Int, offset: Tendency)) -> Bool {
+        return [.up, .down].reduce(false) { accumulating, next in
             accumulating || containsSinkEdge(
                 from: (source.index, source.offset, next),
                 to: .up
@@ -266,12 +265,12 @@ extension SpellingInverter {
     func containsSourceEdge(
         from sourceTendency: Tendency,
         to destination: (index: Int, offset: Tendency, assignment: Tendency)
-        ) -> Bool {
+    ) -> Bool {
         return flowNetwork.containsEdge(
             from: PitchSpeller.AssignedNode(.source, sourceTendency),
             to: PitchSpeller.AssignedNode(
                 .internal(Cross(destination.index, destination.offset)), destination.assignment
-        )
+            )
         )
     }
     
@@ -279,7 +278,7 @@ extension SpellingInverter {
     func containsSinkEdge(
         from source: (index: Int, offset: Tendency, assignment: Tendency),
         to destinationTendency: Tendency
-        ) -> Bool {
+    ) -> Bool {
         return flowNetwork.containsEdge(
             from: PitchSpeller.AssignedNode(
                 .internal(Cross(source.index, source.offset)), source.assignment
@@ -291,26 +290,26 @@ extension SpellingInverter {
 
 /// Adjacency scheme that connects `.up` tendencies to `.down` tendencies
 private let sameIntsScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
-    DirectedGraphScheme<Tendency?> {edge in edge.a == .up && edge.b == .down }
+    DirectedGraphScheme<Tendency?> { edge in edge.a == .up && edge.b == .down }
         .pullback { node in node.index.tendency}
 
 /// Adjacency scheme that connects `.source` to `.down` tendencies and not pitch class `8`
 private let sourceEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
     DirectedGraphScheme<FlowNode<Pitch.Class>> { edge in
         edge.a == .source && edge.b != .internal(8)
-        }.pullback(bind({ cross in cross.a }))
+    }.pullback(bind({ cross in cross.a }))
         * DirectedGraphScheme<FlowNode<Tendency>> { edge in
             edge.a == .source && edge.b == .internal(.down)
-            }.pullback(bind ({ cross in cross.b }))
+    }.pullback(bind ({ cross in cross.b }))
 
 /// Adjacency scheme that connects `.up` tendencies and not pitch class `8` to `.sink`
 private let sinkEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
     DirectedGraphScheme<FlowNode<Pitch.Class>> { edge in
         edge.a != .internal(8) && edge.b == .sink
-        }.pullback(bind({ cross in cross.a }))
+    }.pullback(bind({ cross in cross.a }))
         * DirectedGraphScheme<FlowNode<Tendency>> { edge in
             edge.a == .internal(.up) && edge.b == .sink
-            }.pullback(bind ({ cross in cross.b }))
+    }.pullback(bind ({ cross in cross.b }))
 
 /// Adjacency scheme that connects nodes with the same `int` value
 private let connectSameInts: GraphScheme<PitchSpeller.UnassignedNode> =
@@ -326,10 +325,14 @@ private let upDownEdgeScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Te
     GraphScheme { edge in
         switch (edge.a, edge.b) {
         case (.internal(let source), .internal(let destination)):
-            return source.b != destination.b && upDownEdgeLookup.contains(.init(source.a, destination.a))
-        default: return false
+            return (
+                source.b != destination.b &&
+                upDownEdgeLookup.contains(.init(source.a, destination.a))
+            )
+        default:
+            return false
         }
-        }.directed
+    }.directed
 
 /// Adjacency scheme that connects nodes with the same tendency provided the pitch classes of the nodes
 /// are *not* connected per `upDownEdgeLookup`
@@ -337,10 +340,14 @@ private let sameEdgeScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tend
     GraphScheme { edge in
         switch (edge.a, edge.b) {
         case (.internal(let source), .internal(let destination)):
-            return source.b == destination.b && !upDownEdgeLookup.contains(.init(source.a, destination.a))
-        default: return false
+            return (
+                source.b == destination.b &&
+                !upDownEdgeLookup.contains(.init(source.a, destination.a))
+            )
+        default:
+            return false
         }
-        }.directed
+    }.directed
 
 /// Pairs of pitch classes that have a different skew, such that `ModifierDirection.neutral` for one node is
 /// sharp or 'up' in absolute terms and for the other node it is down
@@ -408,22 +415,18 @@ extension DirectedGraph where Node == PitchSpeller.AssignedNode {
 
 /// - Returns: Index and assignment of all internal nodes of the `flowNetwork`.
 private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.InternalAssignedNode] {
-    return spellings.map {
-        let (offset,pitchSpelling) = $0
-        return [.down,.up].map { index in node(offset, index, pitchSpelling) }
-        }.reduce([]) { (result: [PitchSpeller.InternalAssignedNode],
-            element: [PitchSpeller.InternalAssignedNode]) -> [PitchSpeller.InternalAssignedNode] in
-            return result + element
-    }
+    return spellings
+        .map { offset, spelling in [.down,.up].map { index in node(offset, index, spelling) } }
+        .reduce([], +)
 }
 
 /// - Returns: The value of a node at the given offset (index of a `Pitch.Spelling` within `spellings`),
 /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
 /// the given `Pitch.Spelling`.)
-private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling) -> PitchSpeller.InternalAssignedNode {
-    let pitchCategory = Pitch.Spelling.Category.category(
-        for: pitchSpelling.pitchClass
-        )!
+private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling)
+    -> PitchSpeller.InternalAssignedNode
+{
+    let pitchCategory = Pitch.Spelling.Category.category(for: pitchSpelling.pitchClass)!
     let direction = pitchCategory.directionToModifier[value: pitchSpelling.modifier]!
     let tendencies = pitchCategory.tendenciesToDirection[value: direction]!
     return .init(.init(offset, index), index == .up ? tendencies.a : tendencies.b)
