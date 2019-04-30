@@ -100,13 +100,20 @@ extension PitchSpeller {
         }
     }
 
-    struct InternalAssignedNode {
+    struct InternalAssignedNode: Hashable {
         let index: Cross<Int, Tendency>
         let assignment: Tendency
         init(_ index: Cross<Int, Tendency>, _ assignment: Tendency) {
             self.index = index
             self.assignment = assignment
         }
+    }
+}
+
+extension PitchSpeller.AssignedNode {
+    
+    var unassigned: PitchSpeller.UnassignedNode {
+        return .init(index: index)
     }
 }
 

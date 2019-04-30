@@ -76,7 +76,7 @@ class PitchSpellingCategoryTests: XCTestCase {
     }
 
     func testPCTwoDown_EDoubleFlat() {
-        let expected = Pitch.Spelling(.e, .flat)
+        let expected = Pitch.Spelling(.e, .doubleFlat)
         XCTAssertEqual(Pitch.Spelling(pitchClass: 2, modifierDirection: .down), expected)
     }
 

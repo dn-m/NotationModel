@@ -10,7 +10,7 @@ import Math
 import Pitch
 
 /// Interface for the six pitch spelling categories.
-protocol PitchSpellingCategoryProtocol {
+protocol PitchSpellingCategoryProtocol: TendencyConverting {
     typealias ModifierLookup = Bimap<ModifierDirection,Pitch.Spelling.Modifier>
     /// The available `Pitch.Spelling.Modifier` value by the given `ModifierDirection`.
     static var directionToModifier: ModifierLookup { get }
@@ -42,7 +42,7 @@ extension Pitch.Spelling {
         /// Category for pitch classes `2`, `7`, and `9`.
         struct Two: PitchSpellingCategoryProtocol {
             static let directionToModifier: ModifierLookup = [
-                .down: .flat,
+                .down: .doubleFlat,
                 .neutral: .natural,
                 .up: .doubleSharp
             ]
@@ -76,6 +76,10 @@ extension Pitch.Spelling {
 
         /// - Returns: The type of `PitchSpellingCategoryProtocol` in which the given `pitchClass`
         /// resides, if the `pitchClass` is an integral value. Otherwise, `nil`.
+        //
+        // TODO: The proposal for static subscripts was accepted:
+        // https://github.com/apple/swift-evolution/blob/master/proposals/0254-static-subscripts.md
+        // This would be a nice use case for that.
         static func category(for pitchClass: Pitch.Class) -> PitchSpellingCategoryProtocol.Type? {
             switch pitchClass {
             case 0,5: return Zero.self
