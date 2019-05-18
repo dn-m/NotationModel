@@ -167,7 +167,7 @@ extension SpellingInverter {
         flowNetwork.mask(mask)
     }
 
-    func findCycle(_ dependencies: [PitchedEdge: Set<PitchedEdge>]) -> Bool {
+    func findCycle (_ dependencies: [PitchedEdge: Set<PitchedEdge>]) -> Bool {
 
         func reducer (_ result: Bool, _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)) -> Bool {
             
@@ -202,14 +202,14 @@ extension SpellingInverter {
     // MARK: - Convenience Functions
     
     /// Convenience function for testing presence of a given node in the `flowNetwork`
-    func contains(_ indexing: (index: Int, offset: Tendency), _ assignment: Tendency) -> Bool {
+    func contains (_ indexing: (index: Int, offset: Tendency), _ assignment: Tendency) -> Bool {
         return flowNetwork.contains(
             PitchSpeller.AssignedNode(.internal(Cross(indexing.index, indexing.offset)), assignment)
         )
     }
     
     /// Convenience function for testing presence of an internal edge (ignoring assignments)
-    func containsEdge(
+    func containsEdge (
         from source: (index: Int, offset: Tendency),
         to destination: (index: Int, offset: Tendency)
     ) -> Bool {
@@ -228,7 +228,7 @@ extension SpellingInverter {
     }
     
     /// Convenience function for testing presence of internal edge (with assignments)
-    func containsEdge(
+    func containsEdge (
         from source: (index: Int, offset: Tendency, assignment: Tendency),
         to destination: (index: Int, offset: Tendency, assignment: Tendency)
     ) -> Bool {
@@ -243,7 +243,7 @@ extension SpellingInverter {
     }
     
     /// Convenience function for testing presence of edge from source (ignoring assignment)
-    func containsSourceEdge(to destination: (index: Int, offset: Tendency)) -> Bool {
+    func containsSourceEdge (to destination: (index: Int, offset: Tendency)) -> Bool {
         return [.up, .down].reduce(false) { accumulating, next in
             accumulating || containsSourceEdge(
                 from: .down,
@@ -263,7 +263,7 @@ extension SpellingInverter {
     }
     
     /// Convenience function for testing presence of edge from source (with assignments)
-    func containsSourceEdge(
+    func containsSourceEdge (
         from sourceTendency: Tendency,
         to destination: (index: Int, offset: Tendency, assignment: Tendency)
     ) -> Bool {
@@ -276,7 +276,7 @@ extension SpellingInverter {
     }
     
     /// Convenience function for testing presence of edge to sink (with assignments)
-    func containsSinkEdge(
+    func containsSinkEdge (
         from source: (index: Int, offset: Tendency, assignment: Tendency),
         to destinationTendency: Tendency
     ) -> Bool {
@@ -415,7 +415,7 @@ extension DirectedGraph where Node == PitchSpeller.AssignedNode {
 }
 
 /// - Returns: Index and assignment of all internal nodes of the `flowNetwork`.
-private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.InternalAssignedNode] {
+private func internalNodes (spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.InternalAssignedNode] {
     return spellings
         .map { offset, spelling in [.down,.up].map { index in node(offset, index, spelling) } }
         .reduce([], +)
@@ -424,7 +424,7 @@ private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.In
 /// - Returns: The value of a node at the given offset (index of a `Pitch.Spelling` within `spellings`),
 /// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
 /// the given `Pitch.Spelling`.)
-private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling)
+private func node (_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling)
     -> PitchSpeller.InternalAssignedNode
 {
     let pitchCategory = Pitch.Spelling.Category.category(for: pitchSpelling.pitchClass)!
