@@ -32,6 +32,14 @@ extension SpellingInverter {
     
     // MARK: - Initializers
     
+    init(spellings: [Pitch.Spelling], parsimonyPivot: Pitch.Spelling = .d) {
+        let indexed: [Int: Pitch.Spelling] = spellings.enumerated().reduce(into: [:]) { indexedSpellings, indexedSpelling in
+            let (index, spelling) = indexedSpelling
+            indexedSpellings[index] = spelling
+        }
+        self.init(spellings: indexed, parsimonyPivot: parsimonyPivot)
+    }
+    
     init(spellings: [Int: Pitch.Spelling], parsimonyPivot: Pitch.Spelling = .d) {
         self.flowNetwork = DirectedGraph(internalNodes: internalNodes(spellings: spellings))
         self.pitchClass = { int in spellings[int]?.pitchClass }
@@ -74,7 +82,9 @@ extension SpellingInverter {
     /// Weights are parametrized by `Pitch.Class` and `Tendency` values.
     func generateWeights () -> [PitchedEdge: Double] {
         let pitchedDependencies = findDependencies()
-        precondition(!findCycle(pitchedDependencies))
+        if pitchedDependencies.containsCycle() {
+            return generateWeightsFromCycles(pitchedDependencies)
+        }
         func dependeciesReducer (
             _ weights: inout [PitchedEdge: Double],
             _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
@@ -86,10 +96,10 @@ extension SpellingInverter {
             ) -> Double
             {
                 let weight = dependency.value.reduce(1.0) { result, edge in
-                    if weights[edge] != nil { return result + weights[edge]! }
+                    if let edgeWeight = weights[edge] { return result + edgeWeight }
                     return (
                         result +
-                        recursiveReducer(&weights, (key: edge, value: pitchedDependencies[edge]!))
+                        recursiveReducer(&weights, (key: edge, value: pitchedDependencies.adjacencies[edge]!))
                     )
                 }
                 weights[dependency.key] = weight
@@ -97,7 +107,44 @@ extension SpellingInverter {
             }
             let _ = recursiveReducer(&weights, dependency)
         }
-        return pitchedDependencies.reduce(into: [:], dependeciesReducer)
+        return pitchedDependencies.adjacencies.reduce(into: [:], dependeciesReducer)
+    }
+    
+    func generateWeightsFromCycles (_ dependencies: AdjacencyList<PitchedEdge>)
+        -> [PitchedEdge: Double] {
+            let directedAcyclicGraph = dependencies.DAGify()
+            let groupedWeights: [Set<PitchedEdge>: Double] = generateWeights(from: directedAcyclicGraph)
+            return groupedWeights.reduce(into: [PitchedEdge: Double]()) { runningWeights, pair in
+                pair.key.forEach { pitchedEdge in
+                    runningWeights[pitchedEdge] = pair.value
+                }
+            }
+    }
+    
+    func generateWeights<Node> (from dependencies: AdjacencyList<Node>) -> [Node: Double] {
+        func dependeciesReducer (
+            _ weights: inout [Node: Double],
+            _ dependency: (key: Node, value: Set<Node>)
+            )
+        {
+            func recursiveReducer (
+                _ weights: inout [Node: Double],
+                _ dependency: (key: Node, value: Set<Node>)
+                ) -> Double
+            {
+                let weight = dependency.value.reduce(1.0) { result, edge in
+                    if weights[edge] != nil { return result + weights[edge]! }
+                    return (
+                        result +
+                            recursiveReducer(&weights, (key: edge, value: dependencies.adjacencies[edge]!))
+                    )
+                }
+                weights[dependency.key] = weight
+                return weight
+            }
+            let _ = recursiveReducer(&weights, dependency)
+        }
+        return dependencies.adjacencies.reduce(into: [:], dependeciesReducer)
     }
     
     /// - Returns: getter for the pitched version of a node index
@@ -126,7 +173,7 @@ extension SpellingInverter {
     
     /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights the edge's weight
     /// must be greater than for the inverse spelling procedure to be valid.
-    func findDependencies () -> [PitchedEdge: Set<PitchedEdge>] {
+    func findDependencies () -> AdjacencyList<PitchedEdge> {
         var residualNetwork = flowNetwork
         var weightDependencies: [PitchedEdge: Set<PitchedEdge>] = flowNetwork.edges.lazy
             .map { .init(self.nodeMapper($0.a.unassigned), self.nodeMapper($0.b.unassigned)) }
@@ -152,7 +199,7 @@ extension SpellingInverter {
             residualNetwork.remove(cutEdge)
             residualNetwork.insertEdge(from: cutEdge.b, to: cutEdge.a)
         }
-        return weightDependencies
+        return AdjacencyList(weightDependencies)
     }
 }
 
@@ -160,40 +207,23 @@ extension SpellingInverter {
     
     // MARK: - Instance Methods
     
+    mutating func partition (_ indices: [Int: Int]) {
+        let adjacencyScheme = GraphScheme<FlowNode<Int>> { edge in
+            switch (edge.a, edge.b) {
+            case let (.internal(a), .internal(b)):
+                return indices[a] == indices[b]
+            default:
+                return true
+            }
+        }
+        mask(adjacencyScheme)
+    }
+    
     mutating func mask (_ adjacencyScheme: GraphScheme<FlowNode<Int>>) {
         let temp: GraphScheme<FlowNode<Cross<Int, Tendency>>>
             = adjacencyScheme.pullback(bind { cross in cross.a})
         let mask: GraphScheme<PitchSpeller.AssignedNode> = temp.pullback { node in node.index }
         flowNetwork.mask(mask)
-    }
-
-    func findCycle (_ dependencies: [PitchedEdge: Set<PitchedEdge>]) -> Bool {
-
-        func reducer (_ result: Bool, _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)) -> Bool {
-            
-            var graph = dependencies
-            var flag = false
-            
-            func depthFirstSearch (
-                _ visited: inout Set<PitchedEdge>,
-                _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)
-            )
-            {
-                guard let first = graph[keyValue.key]?.first, flag == false else { return }
-                graph[keyValue.key]!.remove(first)
-                if !visited.contains(keyValue.key) && visited.contains(first) {
-                    flag = true
-                    return
-                }
-                visited.insert(keyValue.key)
-                depthFirstSearch(&visited, (first, graph[first]!))
-            }
-
-            let _ = dependencies.reduce(into: [], depthFirstSearch)
-            return flag
-        }
-
-        return dependencies.reduce(false, reducer)
     }
 }
 

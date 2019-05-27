@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
           "branch": null,
-          "revision": "bd3f7a00636788b519171703305801d814cc1894",
-          "version": "0.11.0"
+          "revision": "37779cef6a8ba93b117d44d477ecb6f2a123f335",
+          "version": "0.13.1"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
           "branch": null,
-          "revision": "662db5b0fd934fd1be148167e96d3747e4193e5f",
-          "version": "0.19.4"
+          "revision": "d699d35bc2d6b65303d23ec95a6c1eb66e65c2e7",
+          "version": "0.22.0"
         }
       }
     ]

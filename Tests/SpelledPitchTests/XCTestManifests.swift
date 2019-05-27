@@ -161,8 +161,16 @@ extension SpelledPitchTests {
 
 extension SpellingInverterTests {
     static let __allTests = [
+        ("testConsistentBasicExample", testConsistentBasicExample),
         ("testCycleCheckFSharpASharpGFlatBFlat", testCycleCheckFSharpASharpGFlatBFlat),
+        ("testCycleCheckFSharpASharpGFlatBFlatSubGraphs", testCycleCheckFSharpASharpGFlatBFlatSubGraphs),
+        ("testCycleCheckFSharpASharpGFlatBFlatSubGraphsAfterStronglyConnectedComponentsClumped", testCycleCheckFSharpASharpGFlatBFlatSubGraphsAfterStronglyConnectedComponentsClumped),
         ("testDependenciesFSharpASharp", testDependenciesFSharpASharp),
+        ("testLargeSetOfDyadsWithoutCycles", testLargeSetOfDyadsWithoutCycles),
+        ("testMajorThirds", testMajorThirds),
+        ("testMinorThirds", testMinorThirds),
+        ("testPerfectFourths", testPerfectFourths),
+        ("testSemitones", testSemitones),
         ("testSpellingInverterAdjacenciesFSharpASharp", testSpellingInverterAdjacenciesFSharpASharp),
         ("testSpellingInverterEdgesPitchClass11", testSpellingInverterEdgesPitchClass11),
         ("testSpellingInverterPitchClass0", testSpellingInverterPitchClass0),
@@ -177,6 +185,8 @@ extension SpellingInverterTests {
         ("testSpellingInverterPitchClass7", testSpellingInverterPitchClass7),
         ("testSpellingInverterPitchClass8", testSpellingInverterPitchClass8),
         ("testSpellingInverterPitchClass9", testSpellingInverterPitchClass9),
+        ("testTones", testTones),
+        ("testWeightsDerivationWithSimpleCycle", testWeightsDerivationWithSimpleCycle),
         ("testWeightsFSharpASharp", testWeightsFSharpASharp),
     ]
 }

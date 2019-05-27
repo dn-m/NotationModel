@@ -11,7 +11,7 @@ let package = Package(
         .library(name: "StaffModel", targets: ["StaffModel"])
     ],
     dependencies: [
-        .package(url: "https://github.com/dn-m/Structure", from: "0.19.4"),
+        .package(url: "https://github.com/dn-m/Structure", from: "0.22.0"),
         .package(url: "https://github.com/dn-m/Math", from: "0.2.0"),
         .package(url: "https://github.com/dn-m/Music", from: "0.10.0")
     ],
