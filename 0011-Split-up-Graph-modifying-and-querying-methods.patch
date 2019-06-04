@@ -1,0 +1,37 @@
+From e7ea1d0afeb9f3b4f41b3c8da14193e94785f90c Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Fri, 21 Sep 2018 16:53:11 -0400
+Subject: [PATCH 11/66] Split up Graph modifying and querying methods
+
+---
+ .../PitchSpeller/Wetherfield/Data Structures/Graph.swift   | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift
+index 16d1606..880cbc9 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift	
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift	
+@@ -115,7 +115,7 @@ extension Graph {
+ 
+ extension Graph {
+ 
+-    // MARK: - Instance Methods
++    // MARK: - Modifying a `Graph`
+ 
+     mutating func insertNode (_ node: Node) {
+         nodes.insert(node)
+@@ -146,6 +146,11 @@ extension Graph {
+     mutating func removeEdge (from source: Node, to destination: Node) {
+         adjacents[Pair(source, destination)] = nil
+     }
++}
++
++extension Graph {
++
++    // MARK: - Querying a `Graph`
+ 
+     /// - Returns: `true` if the graph contains this `node`, else `false`
+     func contains (_ node: Node) -> Bool {
+-- 
+2.17.2 (Apple Git-113)
+

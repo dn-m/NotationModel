@@ -1,0 +1,715 @@
+From 1771f110b34ee7f2c1236d6421513f98d8baedc7 Mon Sep 17 00:00:00 2001
+From: bwetherfield <bwetherfield@gmail.com>
+Date: Tue, 30 Apr 2019 18:32:37 -0400
+Subject: [PATCH 64/66] Inverse problem (#207)
+
+* Implement setup for SpellingInverter from a numbered list of spellings
+
+* Simplify SpellingInverter FlowNetwork to a DirectedGraph
+
+* Add signature for getWeights
+
+* Add weight-generating inverse process
+
+* Add and fix test for pitch class 2
+
+* Add test for pitch class 0
+
+* Add test for pitch class 1
+
+* Rename variables in tests
+
+* Add test for pitch class 3
+
+* Add test for pitch class 4
+
+* Add test for pitch class 5
+
+* Add test for pitch class 6
+
+* Add test pitch class 7
+
+* Add test for pitch class 9
+
+* Add test for pitch class 10
+
+* Add test for pitch class 11
+
+* Add test for pitch class 8
+
+* Remove unused getWeieights function
+
+* Add convenience function for checking membership in Nodes
+
+* Implement tests with convenience function
+
+* Fix test typo
+
+* Fix test typo
+
+* Switch in AssignedNode types for FlowNodes
+
+* Add de-assignment conversion
+
+* Replace assigned edge implementation by unassigned implementation
+
+* Fix weightDependencies initialization
+
+* Remove extraneous self
+
+* Remove extraneous typealias
+
+* Fix new contains syntax
+
+* Refactor
+
+* Fix edge initialization
+
+* Add containsEdge convenience functions
+
+* Pass simple edge test
+
+* Add containsSinkEdge functions
+
+* Add convenience assertion check functions
+
+* Add to test pass
+
+* Add to test passes
+
+* Fix dynamic programming in recursive reducer
+
+* Reorder functions
+
+* Remove infinity storage in weights
+
+* Add converter of dependency information from Int to Pitch Class
+
+* Replace weights with a map over edges of pitch classes
+
+* Add adjacency scheme gadgets
+
+* Implement mask
+
+* Fix mask
+
+* Fix maskScheme
+
+* Switch implementation to rewritten graph populator
+
+* Refactor simplify parentheses
+
+* Refactor pitched edge dependency implementation
+
+* Remove dictionary mapping aparatus
+
+* Add PitchedEdge typalias
+
+* Refactor typealias
+
+* Fix indent
+
+* Remove non-pitched dependencies
+
+* Remove redundant signatures
+
+* Fix sink edge populator
+
+* Rename test
+
+* Fix lookup numbers
+
+* Pass test by fixing containsEdge function
+
+* Rename test
+
+* Remove dead code
+
+* Pass test for pitched dependencies on a small example
+
+* Fail weights test with off-by-1 error
+
+* Fix and simplify recursiveReducer
+
+* Add comments
+
+* Remove unused function type value
+
+* Remove optional from scheme
+
+* Add MARKs
+
+* Add graph segmenter
+
+* Fix pitchedDependencies state
+
+* Add cycle check before running recursion
+
+* Fail cycle check test
+
+* Alter test
+
+* Fix cycle finder
+
+* Fix use of reduce
+
+* Deploy weights with nil case for inconsistent spellings
+
+* Resolve always-succeeding conditional downcast warning (#209)
+
+* Generate linux tests (#208)
+
+* Refactor AllSchemes
+
+* Use convenience initializer for pitch spelling
+
+* Add precondition logic
+
+* [NFC] Lint SpellingInverter (#210)
+
+* Format
+
+* Inferrence
+
+* Use function convention
+
+* Fix tests
+---
+ .../Wetherfield/Pitch.Spelling.Category.swift |   8 +-
+ .../Wetherfield/SpellingInverter.swift        | 434 ++++++++++++++++++
+ .../PitchSpeller/Wetherfield/Tendency.swift   |   3 +-
+ .../UnweightedGraphSchemeProtocol.swift       |   2 +-
+ .../Wetherfield/Wetherfield.swift             |   9 +-
+ 5 files changed, 450 insertions(+), 6 deletions(-)
+ create mode 100644 Sources/SpelledPitch/PitchSpeller/Wetherfield/SpellingInverter.swift
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
+index 24961e2..4356b5e 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
+@@ -10,7 +10,7 @@ import Math
+ import Pitch
+ 
+ /// Interface for the six pitch spelling categories.
+-protocol PitchSpellingCategoryProtocol {
++protocol PitchSpellingCategoryProtocol: TendencyConverting {
+     typealias ModifierLookup = Bimap<ModifierDirection,Pitch.Spelling.Modifier>
+     /// The available `Pitch.Spelling.Modifier` value by the given `ModifierDirection`.
+     static var directionToModifier: ModifierLookup { get }
+@@ -42,7 +42,7 @@ extension Pitch.Spelling {
+         /// Category for pitch classes `2`, `7`, and `9`.
+         struct Two: PitchSpellingCategoryProtocol {
+             static let directionToModifier: ModifierLookup = [
+-                .down: .flat,
++                .down: .doubleFlat,
+                 .neutral: .natural,
+                 .up: .doubleSharp
+             ]
+@@ -76,6 +76,10 @@ extension Pitch.Spelling {
+ 
+         /// - Returns: The type of `PitchSpellingCategoryProtocol` in which the given `pitchClass`
+         /// resides, if the `pitchClass` is an integral value. Otherwise, `nil`.
++        //
++        // TODO: The proposal for static subscripts was accepted:
++        // https://github.com/apple/swift-evolution/blob/master/proposals/0254-static-subscripts.md
++        // This would be a nice use case for that.
+         static func category(for pitchClass: Pitch.Class) -> PitchSpellingCategoryProtocol.Type? {
+             switch pitchClass {
+             case 0,5: return Zero.self
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/SpellingInverter.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/SpellingInverter.swift
+new file mode 100644
+index 0000000..8f9611b
+--- /dev/null
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/SpellingInverter.swift
+@@ -0,0 +1,434 @@
++//
++//  SpellingInverter.swift
++//  SpelledPitch
++//
++//  Created by Benjamin Wetherfield on 2/14/19.
++//
++
++import DataStructures
++import Pitch
++
++struct SpellingInverter {
++    
++    // MARK: - Instance Properties
++    
++    // The pre-assigned `DirectedGraph` which stands in for the `FlowNetwork` that
++    // would solve to the set of spellings passed into the `SpellingInverter`.
++    var flowNetwork: DirectedGraph<PitchSpeller.AssignedNode>
++    
++    let pitchClass: (Int) -> Pitch.Class?
++}
++
++extension SpellingInverter {
++    
++    // MARK: - Type Aliases
++    
++    typealias AssignedEdge = OrderedPair<PitchSpeller.AssignedNode>
++    typealias UnassignedEdge = OrderedPair<PitchSpeller.UnassignedNode>
++    typealias PitchedEdge = UnorderedPair<FlowNode<Cross<Pitch.Class,Tendency>>>
++}
++
++extension SpellingInverter {
++    
++    // MARK: - Initializers
++    
++    init(spellings: [Int: Pitch.Spelling], parsimonyPivot: Pitch.Spelling = .d) {
++        self.flowNetwork = DirectedGraph(internalNodes: internalNodes(spellings: spellings))
++        self.pitchClass = { int in spellings[int]?.pitchClass }
++        
++        let specificEdgeScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> = (upDownEdgeScheme.pullback(nodeMapper) + sameEdgeScheme.pullback(nodeMapper))
++            * connectDifferentInts
++        
++        let sameIntEdgesScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
++            sameIntsScheme * connectSameInts
++        
++        let specificSourceScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
++            sourceEdgeLookupScheme.pullback(nodeMapper)
++        
++        let specificSinkScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
++            sinkEdgeLookupScheme.pullback(nodeMapper)
++        
++        let allSchemes: [DirectedGraphScheme<PitchSpeller.UnassignedNode>] = [
++            specificEdgeScheme,
++            sameIntEdgesScheme,
++            specificSourceScheme,
++            specificSinkScheme
++        ]
++        
++        let maskScheme: DirectedGraphScheme<PitchSpeller.AssignedNode> = allSchemes
++            .reduce(DirectedGraphScheme { _ in false }, +)
++            .pullback({ $0.unassigned })
++        
++        // Apply masking of specific manifestations of the general global adjacency schemes
++        self.flowNetwork.mask(maskScheme)
++    }
++}
++
++extension SpellingInverter {
++    
++    // MARK: - Computed Properties
++    
++    /// - Returns: A concrete distribution of weights to satisfy the weight relationships delimited by
++    /// `weightDependencies` or `nil` if no such distribution is possible, i.e. there are cyclical
++    /// dependencies between edge types. In the latter case, the spellings fed in are *inconsistent*.
++    /// Weights are parametrized by `Pitch.Class` and `Tendency` values.
++    func generateWeights () -> [PitchedEdge: Double] {
++        let pitchedDependencies = findDependencies()
++        precondition(!findCycle(pitchedDependencies))
++        func dependeciesReducer (
++            _ weights: inout [PitchedEdge: Double],
++            _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
++        )
++        {
++            func recursiveReducer (
++                _ weights: inout [PitchedEdge: Double],
++                _ dependency: (key: PitchedEdge, value: Set<PitchedEdge>)
++            ) -> Double
++            {
++                let weight = dependency.value.reduce(1.0) { result, edge in
++                    if weights[edge] != nil { return result + weights[edge]! }
++                    return (
++                        result +
++                        recursiveReducer(&weights, (key: edge, value: pitchedDependencies[edge]!))
++                    )
++                }
++                weights[dependency.key] = weight
++                return weight
++            }
++            let _ = recursiveReducer(&weights, dependency)
++        }
++        return pitchedDependencies.reduce(into: [:], dependeciesReducer)
++    }
++    
++    /// - Returns: getter for the pitched version of a node index
++    var pitchClassMapper: (Cross<Int,Tendency>) -> Cross<Pitch.Class, Tendency> {
++        return { input in
++            Cross<Pitch.Class, Tendency>(self.pitchClass(input.a)!, input.b)
++        }
++    }
++    
++    /// - Returns: getter for the `FlowNode` version of `pitchClassMapper`
++    var flowNodeMapper: (FlowNode<Cross<Int,Tendency>>) -> FlowNode<Cross<Pitch.Class,Tendency>> {
++        return bind(pitchClassMapper)
++    }
++    
++    /// - Returns: getter from a `PitchSpeller.UnassignedNode` to a flow network pitched node
++    var nodeMapper: (PitchSpeller.UnassignedNode) -> FlowNode<Cross<Pitch.Class,Tendency>> {
++        return { self.flowNodeMapper($0.index) }
++    }
++    
++    /// - Returns: getter from an `UnassignedEdge` to a `PitchedEdge`
++    var pairMapper: (UnassignedEdge) -> PitchedEdge {
++        return { pair in
++            .init(self.nodeMapper(pair.a), self.nodeMapper(pair.b))
++        }
++    }
++    
++    /// - Returns: For each `Edge`, a `Set` of `Edge` values, the sum of whose weights the edge's weight
++    /// must be greater than for the inverse spelling procedure to be valid.
++    func findDependencies () -> [PitchedEdge: Set<PitchedEdge>] {
++        var residualNetwork = flowNetwork
++        var weightDependencies: [PitchedEdge: Set<PitchedEdge>] = flowNetwork.edges.lazy
++            .map { .init(self.nodeMapper($0.a.unassigned), self.nodeMapper($0.b.unassigned)) }
++            .reduce(into: [:]) { dependencies, edge in dependencies[edge] = [] }
++        let source = PitchSpeller.AssignedNode(.source, .down)
++        let sink = PitchSpeller.AssignedNode(.sink, .up)
++        while let augmentingPath = residualNetwork.shortestUnweightedPath(from: source, to: sink) {
++            let preCutIndex = augmentingPath.lastIndex { $0.assignment == .down }!
++            let cutEdge = AssignedEdge(augmentingPath[preCutIndex], augmentingPath[preCutIndex+1])
++            for edge in augmentingPath.pairs.map(AssignedEdge.init) where edge != cutEdge {
++                weightDependencies[
++                    PitchedEdge(
++                        self.nodeMapper(edge.a.unassigned),
++                        self.nodeMapper(edge.b.unassigned)
++                    )
++                ]!.insert(
++                    PitchedEdge(
++                        self.nodeMapper(cutEdge.a.unassigned),
++                        self.nodeMapper(cutEdge.b.unassigned)
++                    )
++                )
++            }
++            residualNetwork.remove(cutEdge)
++            residualNetwork.insertEdge(from: cutEdge.b, to: cutEdge.a)
++        }
++        return weightDependencies
++    }
++}
++
++extension SpellingInverter {
++    
++    // MARK: - Instance Methods
++    
++    mutating func mask (_ adjacencyScheme: GraphScheme<FlowNode<Int>>) {
++        let temp: GraphScheme<FlowNode<Cross<Int, Tendency>>>
++            = adjacencyScheme.pullback(bind { cross in cross.a})
++        let mask: GraphScheme<PitchSpeller.AssignedNode> = temp.pullback { node in node.index }
++        flowNetwork.mask(mask)
++    }
++
++    func findCycle(_ dependencies: [PitchedEdge: Set<PitchedEdge>]) -> Bool {
++
++        func reducer (_ result: Bool, _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)) -> Bool {
++            
++            var graph = dependencies
++            var flag = false
++            
++            func depthFirstSearch (
++                _ visited: inout Set<PitchedEdge>,
++                _ keyValue: (key: PitchedEdge, value: Set<PitchedEdge>)
++            )
++            {
++                guard let first = graph[keyValue.key]?.first, flag == false else { return }
++                graph[keyValue.key]!.remove(first)
++                if !visited.contains(keyValue.key) && visited.contains(first) {
++                    flag = true
++                    return
++                }
++                visited.insert(keyValue.key)
++                depthFirstSearch(&visited, (first, graph[first]!))
++            }
++
++            let _ = dependencies.reduce(into: [], depthFirstSearch)
++            return flag
++        }
++
++        return dependencies.reduce(false, reducer)
++    }
++}
++
++extension SpellingInverter {
++    
++    // MARK: - Convenience Functions
++    
++    /// Convenience function for testing presence of a given node in the `flowNetwork`
++    func contains(_ indexing: (index: Int, offset: Tendency), _ assignment: Tendency) -> Bool {
++        return flowNetwork.contains(
++            PitchSpeller.AssignedNode(.internal(Cross(indexing.index, indexing.offset)), assignment)
++        )
++    }
++    
++    /// Convenience function for testing presence of an internal edge (ignoring assignments)
++    func containsEdge(
++        from source: (index: Int, offset: Tendency),
++        to destination: (index: Int, offset: Tendency)
++    ) -> Bool {
++        return [
++            (.up,.up),
++            (.up,.down),
++            (.down,.down),
++            (.down,.up)
++        ].reduce(false) { (accumulating: Bool, next: (Tendency, Tendency)) -> Bool in
++            accumulating ||
++            containsEdge(
++                from: (source.index, source.offset, next.0),
++                to: (destination.index, destination.offset, next.1)
++            )
++        }
++    }
++    
++    /// Convenience function for testing presence of internal edge (with assignments)
++    func containsEdge(
++        from source: (index: Int, offset: Tendency, assignment: Tendency),
++        to destination: (index: Int, offset: Tendency, assignment: Tendency)
++    ) -> Bool {
++        return flowNetwork.containsEdge(
++            from: PitchSpeller.AssignedNode(
++                .internal(Cross(source.index, source.offset)), source.assignment
++            ),
++            to: PitchSpeller.AssignedNode(
++                .internal(Cross(destination.index, destination.offset)), destination.assignment
++            )
++        )
++    }
++    
++    /// Convenience function for testing presence of edge from source (ignoring assignment)
++    func containsSourceEdge(to destination: (index: Int, offset: Tendency)) -> Bool {
++        return [.up, .down].reduce(false) { accumulating, next in
++            accumulating || containsSourceEdge(
++                from: .down,
++                to: (destination.index, destination.offset, next)
++            )
++        }
++    }
++    
++    /// Convenience function for testing presence of edge to sink (ignoring assignment)
++    func containsSinkEdge(from source: (index: Int, offset: Tendency)) -> Bool {
++        return [.up, .down].reduce(false) { accumulating, next in
++            accumulating || containsSinkEdge(
++                from: (source.index, source.offset, next),
++                to: .up
++            )
++        }
++    }
++    
++    /// Convenience function for testing presence of edge from source (with assignments)
++    func containsSourceEdge(
++        from sourceTendency: Tendency,
++        to destination: (index: Int, offset: Tendency, assignment: Tendency)
++    ) -> Bool {
++        return flowNetwork.containsEdge(
++            from: PitchSpeller.AssignedNode(.source, sourceTendency),
++            to: PitchSpeller.AssignedNode(
++                .internal(Cross(destination.index, destination.offset)), destination.assignment
++            )
++        )
++    }
++    
++    /// Convenience function for testing presence of edge to sink (with assignments)
++    func containsSinkEdge(
++        from source: (index: Int, offset: Tendency, assignment: Tendency),
++        to destinationTendency: Tendency
++    ) -> Bool {
++        return flowNetwork.containsEdge(
++            from: PitchSpeller.AssignedNode(
++                .internal(Cross(source.index, source.offset)), source.assignment
++            ),
++            to: PitchSpeller.AssignedNode(.sink, destinationTendency)
++        )
++    }
++}
++
++/// Adjacency scheme that connects `.up` tendencies to `.down` tendencies
++private let sameIntsScheme: DirectedGraphScheme<PitchSpeller.UnassignedNode> =
++    DirectedGraphScheme<Tendency?> { edge in edge.a == .up && edge.b == .down }
++        .pullback { node in node.index.tendency}
++
++/// Adjacency scheme that connects `.source` to `.down` tendencies and not pitch class `8`
++private let sourceEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
++    DirectedGraphScheme<FlowNode<Pitch.Class>> { edge in
++        edge.a == .source && edge.b != .internal(8)
++    }.pullback(bind({ cross in cross.a }))
++        * DirectedGraphScheme<FlowNode<Tendency>> { edge in
++            edge.a == .source && edge.b == .internal(.down)
++    }.pullback(bind ({ cross in cross.b }))
++
++/// Adjacency scheme that connects `.up` tendencies and not pitch class `8` to `.sink`
++private let sinkEdgeLookupScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
++    DirectedGraphScheme<FlowNode<Pitch.Class>> { edge in
++        edge.a != .internal(8) && edge.b == .sink
++    }.pullback(bind({ cross in cross.a }))
++        * DirectedGraphScheme<FlowNode<Tendency>> { edge in
++            edge.a == .internal(.up) && edge.b == .sink
++    }.pullback(bind ({ cross in cross.b }))
++
++/// Adjacency scheme that connects nodes with the same `int` value
++private let connectSameInts: GraphScheme<PitchSpeller.UnassignedNode> =
++    GraphScheme<Int> { edge in edge.a == edge.b }.pullback { node in node.index.int! }
++
++/// Adjacency scheme that connects nodes with different `int` values
++private let connectDifferentInts: GraphScheme<PitchSpeller.UnassignedNode> =
++    GraphScheme<Int> { edge in edge.a != edge.b }.pullback { node in node.index.int! }
++
++/// Adjacency scheme that connects `.up` tendencies to `.down` tendencies and vice versa provided
++/// the pitch classes of the nodes are connected per `upDownEdgeLookup`
++private let upDownEdgeScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
++    GraphScheme { edge in
++        switch (edge.a, edge.b) {
++        case (.internal(let source), .internal(let destination)):
++            return (
++                source.b != destination.b &&
++                upDownEdgeLookup.contains(.init(source.a, destination.a))
++            )
++        default:
++            return false
++        }
++    }.directed
++
++/// Adjacency scheme that connects nodes with the same tendency provided the pitch classes of the nodes
++/// are *not* connected per `upDownEdgeLookup`
++private let sameEdgeScheme: DirectedGraphScheme<FlowNode<Cross<Pitch.Class, Tendency>>> =
++    GraphScheme { edge in
++        switch (edge.a, edge.b) {
++        case (.internal(let source), .internal(let destination)):
++            return (
++                source.b == destination.b &&
++                !upDownEdgeLookup.contains(.init(source.a, destination.a))
++            )
++        default:
++            return false
++        }
++    }.directed
++
++/// Pairs of pitch classes that have a different skew, such that `ModifierDirection.neutral` for one node is
++/// sharp or 'up' in absolute terms and for the other node it is down
++private let upDownEdgeLookup: [UnorderedPair<Pitch.Class>] = [
++    .init(00, 01),
++    .init(00, 04),
++    .init(00, 08),
++    .init(01, 03),
++    .init(01, 05),
++    .init(01, 10),
++    .init(03, 04),
++    .init(03, 06),
++    .init(03, 08),
++    .init(03, 11),
++    .init(04, 05),
++    .init(05, 06),
++    .init(05, 08),
++    .init(05, 11),
++    .init(06, 10),
++    .init(07, 08),
++    .init(08, 10),
++    .init(10, 11)
++]
++
++extension DirectedGraph where Node == PitchSpeller.AssignedNode {
++    
++    // MARK: - Initializers
++    
++    /// Create a `DirectedGraph` which is hooked up as neccesary for the Wetherfield inverse-spelling
++    /// process.
++    init(internalNodes: [PitchSpeller.InternalAssignedNode]) {
++        self.init()
++        let source = PitchSpeller.AssignedNode(.source, .down)
++        let sink = PitchSpeller.AssignedNode(.sink, .up)
++        self.insert(source)
++        self.insert(sink)
++        
++        var mapInternal: (PitchSpeller.InternalAssignedNode) -> PitchSpeller.AssignedNode {
++            return { .init(.internal($0.index), $0.assignment) }
++        }
++        
++        for internalNode in internalNodes {
++            let node = mapInternal(internalNode)
++            insert(node)
++            insertEdge(from: source, to: node)
++            insertEdge(from: node, to: sink)
++            for otherInternalNode in internalNodes where otherInternalNode != internalNode {
++                let other = mapInternal(otherInternalNode)
++                insertEdge(from: node, to: other)
++            }
++        }
++    }
++    
++    // MARK: - Instance Methods
++    
++    /// Lazily removes adjacencies from the `flowNetwork` according to `adjacencyScheme`
++    mutating func mask <Scheme: UnweightedGraphSchemeProtocol> (_ adjacencyScheme: Scheme) where
++        Scheme.Node == Node
++    {
++        for edge in edges where !adjacencyScheme.containsEdge(from: edge.a, to: edge.b) {
++            remove(edge)
++        }
++    }
++}
++
++/// - Returns: Index and assignment of all internal nodes of the `flowNetwork`.
++private func internalNodes(spellings: [Int: Pitch.Spelling]) -> [PitchSpeller.InternalAssignedNode] {
++    return spellings
++        .map { offset, spelling in [.down,.up].map { index in node(offset, index, spelling) } }
++        .reduce([], +)
++}
++
++/// - Returns: The value of a node at the given offset (index of a `Pitch.Spelling` within `spellings`),
++/// and an index (either `0` or `1`, which of the two nodes in the `FlowNetwork` that represent
++/// the given `Pitch.Spelling`.)
++private func node(_ offset: Int, _ index: Tendency, _ pitchSpelling: Pitch.Spelling)
++    -> PitchSpeller.InternalAssignedNode
++{
++    let pitchCategory = Pitch.Spelling.Category.category(for: pitchSpelling.pitchClass)!
++    let direction = pitchCategory.directionToModifier[value: pitchSpelling.modifier]!
++    let tendencies = pitchCategory.tendenciesToDirection[value: direction]!
++    return .init(.init(offset, index), index == .up ? tendencies.a : tendencies.b)
++}
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Tendency.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Tendency.swift
+index f49b3d0..dadcc84 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Tendency.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Tendency.swift
+@@ -31,8 +31,7 @@ extension Pitch.Spelling {
+     init?(pitchClass: Pitch.Class, tendencies: TendencyPair) {
+         guard
+             let category = Pitch.Spelling.Category.category(for: pitchClass),
+-            let tendencyConverter = category as? TendencyConverting.Type,
+-            let modifierDirection = tendencyConverter.modifierDirection(for: tendencies)
++            let modifierDirection = category.modifierDirection(for: tendencies)
+         else {
+             return nil
+         }
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/UnweightedGraphSchemeProtocol.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/UnweightedGraphSchemeProtocol.swift
+index 1da832c..7abe645 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/UnweightedGraphSchemeProtocol.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/UnweightedGraphSchemeProtocol.swift
+@@ -29,7 +29,7 @@ extension UnweightedGraphSchemeProtocol {
+     }
+ }
+ 
+-extension UnweightedGraphSchemeProtocol where Self: UndirectedGraphSchemeProtocol {
++extension UnweightedGraphSchemeProtocol {
+     
+     static func * (lhs: Self, rhs: Self) -> Self {
+         return Self { edge in lhs.contains(edge) && rhs.contains(edge) }
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+index 3ef892c..0a3c8f8 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+@@ -100,7 +100,7 @@ extension PitchSpeller {
+         }
+     }
+ 
+-    struct InternalAssignedNode {
++    struct InternalAssignedNode: Hashable {
+         let index: Cross<Int, Tendency>
+         let assignment: Tendency
+         init(_ index: Cross<Int, Tendency>, _ assignment: Tendency) {
+@@ -110,6 +110,13 @@ extension PitchSpeller {
+     }
+ }
+ 
++extension PitchSpeller.AssignedNode {
++    
++    var unassigned: PitchSpeller.UnassignedNode {
++        return .init(index: index)
++    }
++}
++
+ extension PitchSpeller {
+ 
+     // MARK: - Initializers
+-- 
+2.17.2 (Apple Git-113)
+

@@ -1,0 +1,58 @@
+From 721438d19eab6798cf4312c140452401e5318b3d Mon Sep 17 00:00:00 2001
+From: bwetherfield <bwetherfield@gmail.com>
+Date: Sun, 4 Nov 2018 23:03:32 -0500
+Subject: [PATCH 38/66] Remove tendency graph (#160)
+
+---
+ .../Wetherfield/Wetherfield.swift             | 26 +++++--------------
+ 1 file changed, 7 insertions(+), 19 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+index 2b9e496..b3b8e0a 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+@@ -53,18 +53,6 @@ struct PitchSpeller {
+         }
+     }
+     
+-    // FIXME: Flesh out for all tendencies
+-    static let tendencyGraph: Graph<Tendency> = Graph(
+-        [
+-            .up,
+-            .down
+-        ],
+-        [
+-            UnorderedPair(.up,.up),
+-            UnorderedPair(.down,.down)
+-        ]
+-    )
+-    
+     // For each `Pitch.Class` `n`, denotes which of `(n, .up)` and `(n, .down)` should
+     // be connected to `(8, .up)` in the spelling dependency model.
+     static let eightTendencyLink: [(Pitch.Class, Tendency)] = [
+@@ -91,15 +79,15 @@ struct PitchSpeller {
+         }
+     )
+     
+-    static let sameTendencyScheme: GraphScheme = tendencyGraph.adjacencyScheme()
+     static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index>
+-        = sameTendencyScheme.pullback { node in
+-            switch node {
+-            case .source: return .down
+-            case .sink: return .up
+-            case .internal(let index): return index.b
++        = GraphScheme<Tendency> { edge in edge.a == edge.b }
++            .pullback { node in
++                switch node {
++                case .source: return .down
++                case .sink: return .up
++                case .internal(let index): return index.b
++                }
+             }
+-    }
+     
+     static func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
+         func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
+-- 
+2.17.2 (Apple Git-113)
+

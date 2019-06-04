@@ -1,0 +1,87 @@
+From 188f4c789649b6b125092809aad981450e7b0c97 Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Fri, 21 Sep 2018 16:36:50 -0400
+Subject: [PATCH 08/66] Remove unused DirectedEdge and UndirectedEdge
+
+---
+ .../Data Structures/DirectedEdge.swift        | 30 -------------------
+ .../Data Structures/UndirectedEdge.swift      | 30 -------------------
+ 2 files changed, 60 deletions(-)
+ delete mode 100644 Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/DirectedEdge.swift
+ delete mode 100644 Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/UndirectedEdge.swift
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/DirectedEdge.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/DirectedEdge.swift
+deleted file mode 100644
+index d5ba60c..0000000
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/DirectedEdge.swift	
++++ /dev/null
+@@ -1,30 +0,0 @@
+-//
+-//  DirectedEdge.swift
+-//  PitchSpeller
+-//
+-//  Created by Benjamin Wetherfield on 7/1/18.
+-//
+-
+-public struct DirectedEdge <Node,Weight>: EdgeLike {
+-
+-    // MARK: - Associated Types
+-
+-    typealias Pair = OrderedPair<Node>
+-
+-    // MARK: - Instance Properties
+-
+-    var weight: Weight
+-    let nodes: Pair
+-
+-    // MARK: - Initializers
+-    
+-    init (_ source: Node, _ destination: Node, _ weight: Weight) {
+-        self.nodes = Pair(source, destination)
+-        self.weight = weight
+-    }
+-    
+-    init (_ nodes: Pair, _ weight: Weight) {
+-        self.nodes = nodes
+-        self.weight = weight
+-    }
+-}
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/UndirectedEdge.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/UndirectedEdge.swift
+deleted file mode 100644
+index 8b10c70..0000000
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/UndirectedEdge.swift	
++++ /dev/null
+@@ -1,30 +0,0 @@
+-//
+-//  UndirectedEdge.swift
+-//  PitchSpeller
+-//
+-//  Created by Benjamin Wetherfield on 7/1/18.
+-//
+-
+-public struct UndirectedEdge <Node,Weight>: EdgeLike {
+-
+-    // MARK: - Associated Types
+-
+-    typealias Pair = UnorderedPair<Node>
+-
+-    // MARK: - Instance Properties
+-
+-    var weight: Weight
+-    let nodes: Pair
+-
+-    // MARK: - Initializers
+-    
+-    init (_ source: Node, _ destination: Node, _ weight: Weight) {
+-        self.nodes = Pair(source, destination)
+-        self.weight = weight
+-    }
+-    
+-    init (_ nodes: Pair, _ weight: Weight) {
+-        self.nodes = nodes
+-        self.weight = weight
+-    }
+-}
+-- 
+2.17.2 (Apple Git-113)
+

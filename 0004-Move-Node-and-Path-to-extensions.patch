@@ -1,0 +1,117 @@
+From 42941a5e0164626875b61267eaf1a13e68861c2b Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Fri, 21 Sep 2018 16:31:33 -0400
+Subject: [PATCH 04/66] Move Node and Path to extensions
+
+---
+ .../Wetherfield/Data Structures/Graph.swift   | 87 ++++++++++---------
+ 1 file changed, 47 insertions(+), 40 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift
+index 2a75e8a..ad0492e 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift	
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift	
+@@ -33,46 +33,7 @@ enum WithoutWeights: Unweighted {
+ struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable>
+     where Pair.A: Hashable
+ {
+-    
+-    // MARK: - Typealiases
+-    
+-    typealias Node = Pair.A
+-    
+-    struct Edge {
+-        
+-        // MARK: - Instance Properties
+-        
+-        let nodes: Pair
+-        let weight: Weight
+-        
+-        // MARK: - Initializers
+-        
+-        init (_ a: Graph.Node, _ b: Graph.Node, withWeight weight: Weight) {
+-            self.nodes = Pair(a, b)
+-            self.weight = weight
+-        }
+-        
+-        init (_ nodes: Pair, withWeight weight: Weight) {
+-            self.nodes = nodes
+-            self.weight = weight
+-        }
+-    }
+-    
+-    struct Path {
+-        
+-        // MARK: - Instance Properties
+-        
+-        let nodes: [Node]
+-        let weights: [Pair: Weight]
+-        
+-        // MARK: - Initializers
+-        
+-        init (_ nodes: [Node], _ weights: [Pair: Weight]) {
+-            self.nodes = nodes
+-            self.weights = weights
+-        }
+-    }
+-    
++
+     // MARK: - Instance Properties
+      
+     var nodes: Set<Node>
+@@ -170,6 +131,52 @@ struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashabl
+     }
+ }
+ 
++extension Graph {
++
++    // MARK: - Type Aliases
++
++    typealias Node = Pair.A
++}
++
++extension Graph {
++
++    // MARK: - Nested Types
++
++    struct Edge {
++
++        // MARK: - Instance Properties
++
++        let nodes: Pair
++        let weight: Weight
++
++        // MARK: - Initializers
++
++        init (_ a: Graph.Node, _ b: Graph.Node, withWeight weight: Weight) {
++            self.nodes = Pair(a, b)
++            self.weight = weight
++        }
++
++        init (_ nodes: Pair, withWeight weight: Weight) {
++            self.nodes = nodes
++            self.weight = weight
++        }
++    }
++
++    struct Path {
++
++        // MARK: - Instance Properties
++
++        let nodes: [Node]
++        let weights: [Pair: Weight]
++
++        // MARK: - Initializers
++
++        init (_ nodes: [Node], _ weights: [Pair: Weight]) {
++            self.nodes = nodes
++            self.weights = weights
++        }
++    }
++}
+ 
+ extension Graph where Weight == WithoutWeights {
+     
+-- 
+2.17.2 (Apple Git-113)
+

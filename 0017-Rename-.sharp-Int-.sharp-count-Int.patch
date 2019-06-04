@@ -1,0 +1,65 @@
+From e942dd4161a7a521fa0a87a00d00b777ad84f3ea Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Thu, 18 Oct 2018 10:39:56 -0400
+Subject: [PATCH 17/66] Rename .sharp(Int) -> .sharp(count: Int)
+
+---
+ .../Wetherfield/Pitch.Spelling.Category.swift        | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
+index 9e249f6..1513197 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
+@@ -23,42 +23,42 @@ extension Pitch.Spelling {
+         /// Category for pitch classes `0` and `5`.
+         struct Zero: PitchSpellingCategoryProtocol {
+             static var modifiers: ModifierMap {
+-                return [.down: .flat(2), .neutral: .natural, .up: .sharp(1)]
++                return [.down: .flat(2), .neutral: .natural, .up: .sharp(count: 1)]
+             }
+         }
+ 
+         /// Category for pitch classes `1` and `6`.
+         struct One: PitchSpellingCategoryProtocol {
+             static var modifiers: ModifierMap {
+-                return [.down: .flat(1), .neutral: .sharp(1), .up: .sharp(2)]
++                return [.down: .flat(1), .neutral: .sharp(count: 1), .up: .sharp(count: 2)]
+             }
+         }
+ 
+         /// Category for pitch classes `2`, `7`, and `9`.
+         struct Two: PitchSpellingCategoryProtocol {
+             static var modifiers: ModifierMap {
+-                return [.down: .flat(2), .neutral: .natural, .up: .sharp(2)]
++                return [.down: .flat(2), .neutral: .natural, .up: .sharp(count: 2)]
+             }
+         }
+ 
+         /// Category for pitch classes `3`, and `10`.
+         struct Three: PitchSpellingCategoryProtocol {
+             static var modifiers: ModifierMap {
+-                return [.down: .flat(2), .neutral: .flat(1), .up: .sharp(1)]
++                return [.down: .flat(2), .neutral: .flat(1), .up: .sharp(count: 1)]
+             }
+         }
+ 
+         /// Category for pitch classes `4`, and `11`.
+         struct Four: PitchSpellingCategoryProtocol {
+             static var modifiers: ModifierMap {
+-                return [.down: .flat(1), .neutral: .natural, .up: .sharp(2)]
++                return [.down: .flat(1), .neutral: .natural, .up: .sharp(count: 2)]
+             }
+         }
+ 
+         /// Category for pitch class `8`.
+         struct Five: PitchSpellingCategoryProtocol {
+             static var modifiers: ModifierMap {
+-                return [.down: .flat(1), .up: .sharp(1)]
++                return [.down: .flat(1), .up: .sharp(count: 1)]
+             }
+         }
+ 
+-- 
+2.17.2 (Apple Git-113)
+

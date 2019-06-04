@@ -1,0 +1,62 @@
+From 054813fb5c5527ce47df42d928e2ec56c55160d2 Mon Sep 17 00:00:00 2001
+From: James Bean <jbean46@gmail.com>
+Date: Sun, 4 Nov 2018 23:43:22 -0500
+Subject: [PATCH 40/66] [NFC] Use FlowNode.tendency (#162)
+
+---
+ .../Wetherfield/Wetherfield.swift             | 24 +++++++------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+index c6e1e3a..29c9656 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+@@ -14,21 +14,21 @@ enum FlowNode<Index>: Hashable where Index: Hashable {
+     case sink
+ }
+ 
+-protocol PitchSpellingNode: Hashable {
+-    typealias Index = FlowNode<Cross<Int,Tendency>>
+-    var index: Index { get }
+-}
+-
+ extension FlowNode where Index == Cross<Int,Tendency> {
+     var tendency: Tendency {
+         switch self {
+         case .source: return .down
+-        case.sink: return .up
+-        case.internal(let index): return index.b
++        case .sink: return .up
++        case .internal(let index): return index.b
+         }
+     }
+ }
+ 
++protocol PitchSpellingNode: Hashable {
++    typealias Index = FlowNode<Cross<Int,Tendency>>
++    var index: Index { get }
++}
++
+ struct PitchSpeller {
+ 
+     struct UnassignedNode: PitchSpellingNode {
+@@ -74,15 +74,7 @@ struct PitchSpeller {
+         PitchSpeller.eightTendencyLink.lazy.map(Cross.init).map { UnorderedPair($0, .init(8, .up)) }
+     )
+     
+-    static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index>
+-        = GraphScheme<Tendency> { edge in edge.a == edge.b }
+-            .pullback { node in
+-                switch node {
+-                case .source: return .down
+-                case .sink: return .up
+-                case .internal(let index): return index.b
+-                }
+-            }
++    static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> = GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency }
+     
+     static func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
+         func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
+-- 
+2.17.2 (Apple Git-113)
+

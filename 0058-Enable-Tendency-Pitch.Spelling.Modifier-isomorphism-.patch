@@ -1,0 +1,34 @@
+From 63100da4f16940d7d578d56d24c626808fe22231 Mon Sep 17 00:00:00 2001
+From: James Bean <jbean46@gmail.com>
+Date: Thu, 15 Nov 2018 19:55:44 -0500
+Subject: [PATCH 58/66] Enable Tendency <-> Pitch.Spelling.Modifier isomorphism
+ (#196)
+
+---
+ .../PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift   | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
+index dc60079..18fa1f9 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
+@@ -5,13 +5,14 @@
+ //  Created by James Bean on 6/10/18.
+ //
+ 
++import DataStructures
+ import Math
+ import Pitch
+ 
+ /// Interface for the six pitch spelling categories.
+ protocol PitchSpellingCategoryProtocol {
+-    typealias ModifierMap = [ModifierDirection: Pitch.Spelling.Modifier]
+-    /// The available `QuarterStepModifier` value by the given `ModifierDirection`.
++    typealias ModifierMap = Bimap<ModifierDirection,Pitch.Spelling.Modifier>
++    /// The available `Pitch.Spelling.Modifier` value by the given `ModifierDirection`.
+     static var modifiers: ModifierMap { get }
+ }
+ 
+-- 
+2.17.2 (Apple Git-113)
+

@@ -1,0 +1,68 @@
+From ce6cd417a0965ea31eb0cff512a8ad09bc6030f5 Mon Sep 17 00:00:00 2001
+From: James Bean <jbean46@gmail.com>
+Date: Fri, 2 Nov 2018 19:57:40 -0400
+Subject: [PATCH 31/66] Spell individual pitches (#148)
+
+---
+ .../Wetherfield/WeightCarrying.swift            |  2 +-
+ .../PitchSpeller/Wetherfield/Wetherfield.swift  | 17 ++++++++++++++++-
+ 2 files changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/WeightCarrying.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/WeightCarrying.swift
+index 0a935e5..947c35a 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/WeightCarrying.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/WeightCarrying.swift
+@@ -16,7 +16,7 @@ struct WeightCarrying<G: WeightedGraphProtocol> {
+     
+     func weight (from start: G.Node, to end: G.Node) -> G.Weight? {
+         return weight(G.Edge(start, end))
+-		}
++    }
+ 
+     func pullback <H: WeightedGraphProtocol> (_ f: @escaping (H.Node) -> G.Node) -> WeightCarrying<H>
+         where H.Weight == G.Weight
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+index 8d91ead..211e5b2 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+@@ -15,6 +15,21 @@ protocol PitchSpellingNode: Hashable {
+ 
+ struct PitchSpeller {
+ 
++    // FIXME: Flesh out for all tendencies
++    static let tendencyGraph: WeightedGraph<Tendency,Double> = WeightedGraph(
++        [
++            .up,
++            .down
++        ],
++        [
++            UnorderedPair(.up,.up): 1,
++            UnorderedPair(.down, .down): 1
++        ]
++    )
++
++    static let weightCarrying = WeightCarrying.build(from: PitchSpeller.tendencyGraph)
++    static let tendencyMask: WeightCarrying<WeightedGraph<Cross<Int,Tendency>,Double>> = weightCarrying.pullback { $0.b }
++
+     struct UnassignedNode: PitchSpellingNode {
+         let index: Index
+     }
+@@ -75,6 +90,7 @@ struct PitchSpeller {
+             sink: PitchSpellingNode.Index(-1, .up),
+             internalNodes: pitchNodes
+         )
++        flowNetwork.mask(PitchSpeller.tendencyMask)
+     }
+ 
+     /// - Returns: An array of `SpelledPitch` values with the same indices as the original
+@@ -89,7 +105,6 @@ struct PitchSpeller {
+             let upNodes = sinkSide.map { index in AssignedNode(index, .up) }
+             return downNodes + upNodes
+         }
+-
+         return assignedNodes
+             .reduce(into: [Int: (AssignedNode, AssignedNode)]()) { pairs, node in
+                 if !pairs.keys.contains(node.index.a) {
+-- 
+2.17.2 (Apple Git-113)
+

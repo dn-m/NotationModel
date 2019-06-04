@@ -1,0 +1,121 @@
+From b20c2a3d5e5fd788338d867ba8f17928d16cf821 Mon Sep 17 00:00:00 2001
+From: bwetherfield <bwetherfield@gmail.com>
+Date: Sun, 21 Oct 2018 12:42:10 -0400
+Subject: [PATCH 22/66] Refactor neutralLetterName calculation (#118)
+
+---
+ .../Wetherfield/Pitch.Spelling.Category.swift | 83 ++++++-------------
+ 1 file changed, 25 insertions(+), 58 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
+index 2df7b20..060a1f9 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Pitch.Spelling.Category.swift
+@@ -85,10 +85,10 @@ extension Pitch.Spelling {
+     /// `modifierDirection` can be converted into a `QuarterStepModifier` within the
+     /// `PitchSpellingCategoryProtocol` in which the given `pitchClass` resides. Otherwise, `nil`.
+     init?(pitchClass: Pitch.Class, modifierDirection: ModifierDirection) {
++        let letterName = Pitch.Spelling.letterName(pitchClass: pitchClass, with: modifierDirection)
+         guard
+             let category = Category.category(for: pitchClass),
+-            let modifier = category.modifiers[modifierDirection],
+-            let letterName = LetterName(pitchClass: pitchClass, modifierDirection: modifierDirection)
++            let modifier = category.modifiers[modifierDirection]
+         else {
+             return nil
+         }
+@@ -96,68 +96,35 @@ extension Pitch.Spelling {
+     }
+ }
+ 
+-extension LetterName {
+-
+-    /// Create a `LetterName` with the given `pitchClass` and `modifierDirection`.
+-    init?(pitchClass: Pitch.Class, modifierDirection: ModifierDirection) {
+-        if pitchClass == 8 {
+-            switch modifierDirection {
+-            case .down: self = .a
+-            case .up: self = .g
+-            default: return nil
+-            }
+-            return
+-        }
+-        guard
+-            let neutral = LetterName.neutral(for: pitchClass),
+-            let adjusted = neutral.adjusted(for: pitchClass, with: modifierDirection)
+-        else {
+-            return nil
+-        }
+-        self = adjusted
+-    }
+-
++extension Pitch.Spelling {
++    
+     /// - Returns: The `LetterName` which corresponds to the `.neutral` `ModifierDirection` for the
+     /// the given `pitchClass`, if such a `LetterName` exists. Otherwise, `nil`.
+-    static func neutral(for pitchClass: Pitch.Class) -> LetterName? {
+-        switch pitchClass {
+-        // Category "Five" pitch classes have no neutral `LetterName`
+-        case 8:
+-            return nil
+-        // Category "One" pitch classes need to be shifted down
+-        case 1,6:
+-            return LetterName.default(for: pitchClass - 1)!
+-        // Category "Three" pitch classes need to be shifted up
+-        case 3,10:
+-            return LetterName.default(for: pitchClass + 1)!
+-        // `Pitch.Class` values which can be spelled with a `natural` modifier need no adjustment
+-        case 0...11:
+-            return LetterName.default(for: pitchClass)!
++    static func neutralLetterName(for pitchClass: Pitch.Class) -> LetterName? {
++        guard let category = Category.category(for: pitchClass) else { return nil }
++        guard let modifier = category.modifiers[.neutral] else { return nil }
++        switch modifier {
++        case .natural:
++            return LetterName.default(for: pitchClass)
++        case .flat:
++            return LetterName.default(for: pitchClass + 1)
++        case .sharp:
++            return LetterName.default(for: pitchClass - 1)
+         default:
+-            return nil
++            fatalError("Unsupported Pitch.Spelling.Modifier \(modifier)")
+         }
+     }
+-
+-    /// - Returns: A `LetterName` adjusted for the given `pitchClass` and the given
+-    /// `modifierDirection`, if such a `LetterName` value exists. Otherwise, `nil`.
+-    func adjusted(for pitchClass: Pitch.Class, with modifierDirection: ModifierDirection)
+-        -> LetterName?
++   
++    /// Create a `LetterName` with the given `pitchClass` and `modifierDirection`.
++    static func letterName(pitchClass: Pitch.Class,
++                            with modifierDirection: ModifierDirection) -> LetterName
+     {
+-        switch pitchClass {
+-        case 8:
+-            switch modifierDirection {
+-            case .down: return .a
+-            case .up: return .g
+-            default: return nil
+-            }
+-        case 0...11:
+-            switch modifierDirection {
+-            case .down: return successor
+-            case .neutral: return self
+-            case .up: return predecessor
+-            }
+-        default:
+-            return nil
++        guard let neutralLetterName = Pitch.Spelling.neutralLetterName(for: pitchClass)
++            else { return modifierDirection == .down ? .a : .g }
++        switch modifierDirection {
++        case .down: return neutralLetterName.successor
++        case .neutral: return neutralLetterName
++        case .up: return neutralLetterName.predecessor
+         }
+     }
+ }
+-- 
+2.17.2 (Apple Git-113)
+

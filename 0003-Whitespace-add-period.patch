@@ -1,0 +1,29 @@
+From 581733f8b48a45d3940c31e17466532bbe7fdd72 Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Fri, 21 Sep 2018 16:29:48 -0400
+Subject: [PATCH 03/66] Whitespace, add period
+
+---
+ .../PitchSpeller/Wetherfield/Data Structures/Graph.swift    | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift
+index eb4406f..2a75e8a 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift	
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift	
+@@ -29,8 +29,10 @@ enum WithoutWeights: Unweighted {
+     case unweighted
+ }
+ 
+-// Weightable, directable implementation of a Graph structure
+-struct Graph<Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable> where Pair.A: Hashable {
++// Weightable, directable implementation of a Graph structure.
++struct Graph <Weight: Weightedness, Pair: SymmetricPair & Directedness & Hashable>
++    where Pair.A: Hashable
++{
+     
+     // MARK: - Typealiases
+     
+-- 
+2.17.2 (Apple Git-113)
+

@@ -1,0 +1,29 @@
+From 442ce55b0e2cd8e94382cbfd8eb1cba01d661db6 Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Mon, 5 Nov 2018 21:59:13 -0500
+Subject: [PATCH 51/66] Verticalize parameter list
+
+---
+ .../SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+index df35d73..ef5c6f7 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+@@ -166,7 +166,11 @@ extension PitchSpeller {
+             }.mapValues(spellPitch)
+     }
+ 
+-    private func spellPitch(_ up: InternalAssignedNode, _ down: InternalAssignedNode) -> SpelledPitch {
++    private func spellPitch(
++        _ up: InternalAssignedNode,
++        _ down: InternalAssignedNode
++    ) -> SpelledPitch
++    {
+         let pitch = self.pitch(.internal(up.index))!
+         let tendencies = TendencyPair(up.assignment, down.assignment)
+         let spelling = Pitch.Spelling(pitchClass: pitch.class, tendencies: tendencies)!
+-- 
+2.17.2 (Apple Git-113)
+

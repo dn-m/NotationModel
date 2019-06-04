@@ -1,0 +1,31 @@
+From 674fdd183e6cfc1532823f15e0cfdba349f3f10d Mon Sep 17 00:00:00 2001
+From: James Bean <jbean46@gmail.com>
+Date: Sun, 4 Nov 2018 23:27:50 -0500
+Subject: [PATCH 39/66] [NFC] Streamline eightLookup chained lazy map functions
+ (#161)
+
+---
+ .../PitchSpeller/Wetherfield/Wetherfield.swift             | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+index b3b8e0a..c6e1e3a 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+@@ -71,12 +71,7 @@ struct PitchSpeller {
+     
+     // Maps `eightTendencyLink` to a `Set` of `Edge` values (to check for membership)
+     static let eightLookup = Set<UnorderedPair<Cross<Pitch.Class, Tendency>>> (
+-        PitchSpeller.eightTendencyLink.lazy
+-            .map { pitchClass, tendency in
+-                .init(pitchClass, tendency)
+-            }.map { cross in
+-                .init(cross, .init(8, .up))
+-        }
++        PitchSpeller.eightTendencyLink.lazy.map(Cross.init).map { UnorderedPair($0, .init(8, .up)) }
+     )
+     
+     static let connectSameTendencies: GraphScheme<PitchSpellingNode.Index>
+-- 
+2.17.2 (Apple Git-113)
+

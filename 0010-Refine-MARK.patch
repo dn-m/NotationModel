@@ -1,0 +1,25 @@
+From fbaf2a03730420ee12359d1069c1a9ba139af913 Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Fri, 21 Sep 2018 16:37:55 -0400
+Subject: [PATCH 10/66] Refine // MARK:
+
+---
+ .../PitchSpeller/Wetherfield/Data Structures/FlowNetwork.swift  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/FlowNetwork.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/FlowNetwork.swift
+index 1caec82..1df2a5b 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/FlowNetwork.swift	
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/FlowNetwork.swift	
+@@ -5,7 +5,7 @@
+ //  Created by James Bean on 5/24/18.
+ //
+ 
+-// MARK: typealiases
++// MARK: Type Aliases
+ typealias DirectedGraph<Node: Hashable> = Graph<Double, DirectedOver<Node>>
+ typealias UnweightedGraph<Node: Hashable> = Graph<WithoutWeights, DirectedOver<Node>>
+ 
+-- 
+2.17.2 (Apple Git-113)
+

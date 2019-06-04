@@ -1,0 +1,99 @@
+From ddf5b3f1f992e59d175078422a7bac76072a633a Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Mon, 5 Nov 2018 22:03:23 -0500
+Subject: [PATCH 52/66] Refactor adjacencyScheme out to free func
+
+---
+ .../Wetherfield/Wetherfield.swift             | 48 ++++++++-----------
+ 1 file changed, 21 insertions(+), 27 deletions(-)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+index ef5c6f7..ead9b47 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Wetherfield.swift
+@@ -76,6 +76,11 @@ extension PitchSpeller {
+ 
+     /// Create a `PitchSpeller` to spell the given `pitches`, with the given `parsimonyPivot`.
+     init(pitches: [Int: Pitch], parsimonyPivot: Pitch.Spelling = .init(.d)) {
++        self.flowNetwork = FlowNetwork(
++            source: .source,
++            sink: .sink,
++            internalNodes: internalNodes(pitches: pitches)
++        )
+         self.pitch = { index in
+             switch index {
+             case .source, .sink:
+@@ -93,11 +98,7 @@ extension PitchSpeller {
+             }
+         }
+         self.getPitchClass = getPitchClass
+-        self.flowNetwork = FlowNetwork(
+-            source: .source,
+-            sink: .sink,
+-            internalNodes: internalNodes(pitches: pitches)
+-        )
++
+         let specificToEight = GraphScheme<Cross<Pitch.Class, Tendency>>(eightLookup.contains)
+         let connectToEight: GraphScheme<PitchSpellingNode.Index> = specificToEight.pullback { flowNode in
+             .init(getPitchClass(flowNode), flowNode.tendency)
+@@ -111,25 +112,6 @@ extension PitchSpeller {
+     }
+ }
+ 
+-extension PitchSpeller {
+-
+-    // MARK: - Type Properties
+-
+-    static func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
+-        func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
+-            return GraphScheme<Pitch.Class> { edge in
+-                edge.contains(pitchClass)
+-            }
+-        }
+-        func pitchClassNonAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
+-            return GraphScheme<Pitch.Class> { edge in
+-                !edge.contains(pitchClass)
+-            }
+-        }
+-        return contains ? pitchClassAdjacencyScheme : pitchClassNonAdjacencyScheme
+-    }
+-}
+-
+ extension PitchSpeller {
+ 
+     // MARK: - Instance Methods
+@@ -181,9 +163,7 @@ extension PitchSpeller {
+     /// `let whereEdge: (Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index>`
+     func whereEdge (contains: Bool) -> (Pitch.Class) -> GraphScheme<PitchSpellingNode.Index> {
+         return { pitchClass in
+-            return PitchSpeller
+-                .adjacencyScheme(contains: contains)(pitchClass)
+-                .pullback(self.getPitchClass)
++            adjacencyScheme(contains: contains)(pitchClass).pullback(self.getPitchClass)
+         }
+     }
+ }
+@@ -201,6 +181,20 @@ private func node(_ offset: Int, _ index: Tendency) -> PitchSpellingNode.Index {
+     return .internal(.init(offset, index))
+ }
+ 
++private func adjacencyScheme (contains: Bool) -> (Pitch.Class) -> GraphScheme<Pitch.Class> {
++    func pitchClassAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
++        return GraphScheme<Pitch.Class> { edge in
++            edge.contains(pitchClass)
++        }
++    }
++    func pitchClassNonAdjacencyScheme (pitchClass: Pitch.Class) -> GraphScheme<Pitch.Class> {
++        return GraphScheme<Pitch.Class> { edge in
++            !edge.contains(pitchClass)
++        }
++    }
++    return contains ? pitchClassAdjacencyScheme : pitchClassNonAdjacencyScheme
++}
++
+ let connectSameTendencies: GraphScheme<PitchSpellingNode.Index> =
+     GraphScheme<Tendency> { edge in edge.a == edge.b }.pullback { node in node.tendency }
+ 
+-- 
+2.17.2 (Apple Git-113)
+

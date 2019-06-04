@@ -1,0 +1,27 @@
+From 5321d016aa6982e0906d0ad3cf4c1de6aa88fc3e Mon Sep 17 00:00:00 2001
+From: James <jbean46@gmail.com>
+Date: Fri, 21 Sep 2018 16:54:25 -0400
+Subject: [PATCH 12/66] Add doc comment
+
+---
+ .../PitchSpeller/Wetherfield/Data Structures/Graph.swift      | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift
+index 880cbc9..cd7576e 100644
+--- a/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift	
++++ b/Sources/SpelledPitch/PitchSpeller/Wetherfield/Data Structures/Graph.swift	
+@@ -108,6 +108,10 @@ extension Graph {
+ 
+     // MARK: - Computed Properties
+ 
++    /// - Returns: All of the `Edge` values contained herein.
++    ///
++    /// - TODO: Consider returning a `Set` instead of an `Array`, as order does not have
++    /// significance.
+     var edges: [Edge] {
+         return adjacents.map(Edge.init)
+     }
+-- 
+2.17.2 (Apple Git-113)
+
