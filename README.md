@@ -18,10 +18,6 @@ The `SpelledPitch` module exposes structures for describing abstract pitches (e.
 
 The [`Pitch.Spelling`](https://github.com/dn-m/NotationModel/blob/master/Sources/SpelledPitch/Pitch.Spelling.swift) structure provides a model of the [Helmholtz-Ellis](http://www.marcsabat.com/pdfs/notation.pdf) notation system. This notation system scales elegantly from the Western common practice [twelve-note equal division of the octave](https://en.wikipedia.org/wiki/Equal_temperament) tuning system to that of high-limit [just intonation](https://en.wikipedia.org/wiki/Just_intonation). This system is represented in the [SMuFL specification](http://www.smufl.org/version/1.2/range/extendedHelmholtzEllisAccidentalsJustIntonation/), making a mapping of these structures into a rendering context as seamless as possible.
 
-#### Pitch Speller
-
-The `SpelledPitch` module contains work toward a flexible [pitch spelling algorithm](https://github.com/dn-m/NotationModel/tree/master/Sources/SpelledPitch/PitchSpeller/Wetherfield), formalized by @bwetherfield. This project aims to take unspelled pitch information (e.g., MIDI note numbers), and produce optimal spelled versions of them, given the musical context and user preference.
-
 ### [`SpelledRhythm`](https://github.com/dn-m/NotationModel/tree/master/Sources/SpelledRhythm)
 
 The `SpelledRhythm` module defines models of beams, ties, and dots.
