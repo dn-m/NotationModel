@@ -253,3 +253,58 @@ extension Pitch.Spelling {
         return LineOfFifths.distance(ofPitchSpelling: self)
     }
 }
+
+//extension Pitch.Spelling: Codable { }
+//extension Pitch.Spelling.Modifier: Codable { }
+
+extension Pitch.Spelling.Modifier.Alteration: Codable {
+    
+    private enum CodingKeys: String, CodingKey {
+        case ptolemaic
+        case septimal
+        case undecimal
+        case tridecimal
+        case cents
+    }
+    
+    enum CodingError: Error {
+        case decoding(String)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        if let amount = try? values.decode(Int.self, forKey: .ptolemaic) {
+            self = .ptolemaic(amount)
+            return
+        } else if let amount = try? values.decode(Int.self, forKey: .septimal) {
+            self = .septimal(amount)
+            return
+        } else if let amount = try? values.decode(Int.self, forKey: .undecimal) {
+            self = .undecimal(amount)
+            return
+        } else if let amount = try? values.decode(Int.self, forKey: .tridecimal) {
+            self = .tridecimal(amount)
+            return
+        } else if let number = try? values.decode(Double.self, forKey: .cents) {
+            self = .cents(number)
+            return
+        }
+        throw CodingError.decoding("Decoding Error: \(dump(values))")
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .ptolemaic(let amount):
+            try container.encode(amount, forKey: .ptolemaic)
+        case .septimal(let amount):
+            try container.encode(amount, forKey: .septimal)
+        case .undecimal(let amount):
+            try container.encode(amount, forKey: .undecimal)
+        case .tridecimal(let amount):
+            try container.encode(amount, forKey: .tridecimal)
+        case .cents(let number):
+            try container.encode(number, forKey: .cents)
+        }
+    }
+}
