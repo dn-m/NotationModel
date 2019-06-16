@@ -257,6 +257,7 @@ extension Pitch.Spelling {
 //extension Pitch.Spelling: Codable { }
 //extension Pitch.Spelling.Modifier: Codable { }
 
+extension Pitch.Spelling.Modifier.Pythagorean: Codable { }
 extension Pitch.Spelling.Modifier.Alteration: Codable {
     
     private enum CodingKeys: String, CodingKey {
