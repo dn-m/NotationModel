@@ -13,5 +13,6 @@ class PlotModelTests: XCTestCase {
 
     func testPlotModel() {
         // TODO
+        XCTAssert(true)
     }
 }
