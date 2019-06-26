@@ -14,8 +14,8 @@
         "package": "Music",
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
-          "branch": "pitchspeller-dependency",
-          "revision": "5b450bf617f6a078ea72f77476d92dc09fbf0b56",
+          "branch": "swift-5",
+          "revision": "abf9bbc27ee72f38ce9ed6ec3e6ca238b1962a92",
           "version": null
         }
       },
@@ -32,8 +32,8 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "pitchspeller-dependency",
-          "revision": "1e7f08f69faa37c37b6917e710a4d39be3e0e8e7",
+          "branch": "swift-5",
+          "revision": "8f67514cba950f60ee992a8d0996d4f11d9654b0",
           "version": null
         }
       }
