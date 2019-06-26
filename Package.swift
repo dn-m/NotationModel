@@ -12,7 +12,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", .branch("pitchspeller-dependency")),
-        .package(url: "https://github.com/dn-m/Math", from: "0.2.0"),
+//        .package(url: "https://github.com/dn-m/Math", from: "0.2.0"),
         .package(url: "https://github.com/dn-m/Music", .branch("pitchspeller-dependency"))
     ],
     targets: [
