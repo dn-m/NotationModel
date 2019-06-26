@@ -14,9 +14,9 @@
         "package": "Music",
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
-          "branch": "swift-5",
-          "revision": "abf9bbc27ee72f38ce9ed6ec3e6ca238b1962a92",
-          "version": null
+          "branch": null,
+          "revision": "162a47fa43496a348d38f3b2b5a34a98f3bf5043",
+          "version": "0.14.0"
         }
       },
       {
@@ -32,9 +32,9 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "swift-5",
-          "revision": "8f67514cba950f60ee992a8d0996d4f11d9654b0",
-          "version": null
+          "branch": null,
+          "revision": "fc7d6a9dbaeb9c750988a6a142d5f67e395ddf69",
+          "version": "0.23.0"
         }
       }
     ]
