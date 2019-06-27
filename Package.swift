@@ -12,8 +12,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/dn-m/Structure", from: "0.23.0"),
-        .package(url: "https://github.com/dn-m/Math", from: "0.7.0"),
-        .package(url: "https://github.com/dn-m/Music", from: "0.14.0")
+        .package(url: "https://github.com/dn-m/Math", from: "0.7.1"),
+        .package(url: "https://github.com/dn-m/Music", .branch("pitchspeller-dependency"))
     ],
     targets: [
         // Sources
