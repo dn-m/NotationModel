@@ -45,9 +45,8 @@ extension PitchSpellingModifier {
 
     // MARK: - Hashable
 
-    /// - Returns: The `hashValue` of the `adjustment` property.
-    public var hashValue: Int {
-        return adjustment.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(adjustment)
     }
 }
 
