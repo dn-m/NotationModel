@@ -1,6 +1,6 @@
 # NotationModel
 
-![Swift Version](https://img.shields.io/badge/Swift-4.2-orange.svg)
+![Swift Version](https://img.shields.io/badge/Swift-5.0-orange.svg)
 ![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey.svg)
 [![Build Status](https://travis-ci.org/dn-m/NotationModel.svg?branch=master)](https://travis-ci.org/dn-m/NotationModel)
 
@@ -17,10 +17,6 @@ For work on the graphical representation of music in Swift, see [dn-m/NotationVi
 The `SpelledPitch` module exposes structures for describing abstract pitches (e.g., what you get if you press a key on a MIDI keyboard) with letter names and accidentals. This is done in a progressively-disclosed and type-safe manner: it is easy to describe common pitch scenarios, linearly more difficult to describe more-rare pitch scenarios, and it is impossible to describe logically-invalid pitch scenarios.
 
 The [`Pitch.Spelling`](https://github.com/dn-m/NotationModel/blob/master/Sources/SpelledPitch/Pitch.Spelling.swift) structure provides a model of the [Helmholtz-Ellis](http://www.marcsabat.com/pdfs/notation.pdf) notation system. This notation system scales elegantly from the Western common practice [twelve-note equal division of the octave](https://en.wikipedia.org/wiki/Equal_temperament) tuning system to that of high-limit [just intonation](https://en.wikipedia.org/wiki/Just_intonation). This system is represented in the [SMuFL specification](http://www.smufl.org/version/1.2/range/extendedHelmholtzEllisAccidentalsJustIntonation/), making a mapping of these structures into a rendering context as seamless as possible.
-
-#### Pitch Speller
-
-The `SpelledPitch` module contains work toward a flexible [pitch spelling algorithm](https://github.com/dn-m/NotationModel/tree/master/Sources/SpelledPitch/PitchSpeller/Wetherfield), formalized by @bwetherfield. This project aims to take unspelled pitch information (e.g., MIDI note numbers), and produce optimal spelled versions of them, given the musical context and user preference.
 
 ### [`SpelledRhythm`](https://github.com/dn-m/NotationModel/tree/master/Sources/SpelledRhythm)
 

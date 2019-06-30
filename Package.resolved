@@ -5,18 +5,18 @@
         "package": "Math",
         "repositoryURL": "https://github.com/dn-m/Math",
         "state": {
-          "branch": "swift-5",
-          "revision": "4096d7d5a33f43c6e7b393926ba82d799050e365",
-          "version": null
+          "branch": null,
+          "revision": "0bf8de5d353b7b7957cb2231395f6818bc575b47",
+          "version": "0.7.1"
         }
       },
       {
         "package": "Music",
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
-          "branch": "swift-5",
-          "revision": "abf9bbc27ee72f38ce9ed6ec3e6ca238b1962a92",
-          "version": null
+          "branch": null,
+          "revision": "db4313f1954f1cc2c6bb0d4a0e2a2e5eec3d013b",
+          "version": "0.15.0"
         }
       },
       {
@@ -32,9 +32,9 @@
         "package": "Structure",
         "repositoryURL": "https://github.com/dn-m/Structure",
         "state": {
-          "branch": "swift-5",
-          "revision": "8f67514cba950f60ee992a8d0996d4f11d9654b0",
-          "version": null
+          "branch": null,
+          "revision": "fc7d6a9dbaeb9c750988a6a142d5f67e395ddf69",
+          "version": "0.23.0"
         }
       }
     ]

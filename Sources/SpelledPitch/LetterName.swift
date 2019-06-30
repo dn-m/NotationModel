@@ -106,3 +106,5 @@ extension LetterName {
         return .init(steps: self.steps + steps)
     }
 }
+
+extension LetterName: Codable { }
