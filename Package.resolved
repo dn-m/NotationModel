@@ -14,9 +14,9 @@
         "package": "Music",
         "repositoryURL": "https://github.com/dn-m/Music",
         "state": {
-          "branch": "pitchspeller-dependency",
-          "revision": "09289cf01bb397835232732281f59126c9a614f0",
-          "version": null
+          "branch": null,
+          "revision": "db4313f1954f1cc2c6bb0d4a0e2a2e5eec3d013b",
+          "version": "0.15.0"
         }
       },
       {
