@@ -57,7 +57,7 @@ func beamCount(_ duration: Duration) -> Int {
     let powers = powersOfTwo(upTo: reduced.numerator, overshooting: true)
     let powersMinusOne = powers.map { $0 - 1 }
     for (offset,divisor) in powersMinusOne.dropFirst().enumerated() {
-        if reduced.numerator.isDivisible(by: divisor) {
+        if reduced.numerator.isMultiple(of: divisor) {
             let dotCount = offset + 1
             return subdivisionCount - dotCount
         }

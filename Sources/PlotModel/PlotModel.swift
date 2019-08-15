@@ -9,7 +9,7 @@
 import DataStructures
 
 /// Model represented by a `PlotView`.
-public protocol PlotModel: CollectionWrapping {
+public protocol PlotModel: Collection {
 
     /// Model of a single point within a `PlotModel`.
     associatedtype Point: PointModel
@@ -26,9 +26,32 @@ public protocol PlotModel: CollectionWrapping {
 
 extension PlotModel {
 
-    // MARK: - CollectionWrapping
+    // MARK: - Collection
+
+    public typealias Base = [Position: [Point]]
 
     public var base: [Position: [Point]] {
         return points
     }
+
+    /// Start index.
+    public var startIndex: Base.Index {
+        return base.startIndex
+    }
+
+    /// End index.
+    public var endIndex: Base.Index {
+        return base.endIndex
+    }
+
+    /// Index after given index `i`.
+    public func index(after i: Base.Index) -> Base.Index {
+        return base.index(after: i)
+    }
+
+    /// - returns: Element at the given `index`.
+    public subscript (index: Base.Index) -> Base.Element {
+        return base[index]
+    }
 }
+

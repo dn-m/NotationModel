@@ -105,9 +105,34 @@ extension Rhythm {
     }
 }
 
-extension Rhythm.Spelling: CollectionWrapping {
+extension Rhythm.Spelling: Collection {
+
+    // MARK: - Collection
+
+    public typealias Base = [Item]
+
     public var base: [Item] {
         return items
+    }
+
+    /// Start index.
+    public var startIndex: Base.Index {
+        return base.startIndex
+    }
+
+    /// End index.
+    public var endIndex: Base.Index {
+        return base.endIndex
+    }
+
+    /// Index after given index `i`.
+    public func index(after i: Base.Index) -> Base.Index {
+        return base.index(after: i)
+    }
+
+    /// - returns: Element at the given `index`.
+    public subscript (index: Base.Index) -> Base.Element {
+        return base[index]
     }
 }
 
@@ -192,7 +217,7 @@ func dotCount(_ duration: Duration) -> Int {
     let powers = powersOfTwo(upTo: beats, overshooting: true)
     let powersMinusOne = powers.map { $0 - 1 }
     for (offset,divisor) in powersMinusOne.dropFirst().enumerated() {
-        if beats.isDivisible(by: divisor) { return offset + 1 }
+        if beats.isMultiple(of: divisor) { return offset + 1 }
     }
     fatalError("\(duration) is not representable with beams")
 }
