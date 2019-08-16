@@ -2,7 +2,7 @@
 
 ![Swift Version](https://img.shields.io/badge/Swift-5.0-orange.svg)
 ![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey.svg)
-[![Build Status](https://travis-ci.org/dn-m/NotationModel.svg?branch=master)](https://travis-ci.org/dn-m/NotationModel)
+[![Build Status](https://travis-ci.org/dn-m/NotationModel.svg?branch=latest)](https://travis-ci.org/dn-m/NotationModel)
 
 The `NotationModel` package contains modules for the purposes of defining a model of musical notations.
 
